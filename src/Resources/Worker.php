@@ -12,6 +12,20 @@ class Worker extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
+     * The id of the site.
+     *
+     * @var integer
+     */
+    public $siteId;
+
+    /**
      * The connection name the worker uses.
      *
      * @var string

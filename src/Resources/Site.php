@@ -12,6 +12,13 @@ class Site extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
      * The name of the site.
      *
      * @var string

@@ -16,7 +16,9 @@ trait ManagesWorkers
     public function workers($serverId, $siteId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/sites/$siteId/workers")['workers'], Worker::class
+            $this->get("servers/$serverId/sites/$siteId/workers")['workers'],
+            Worker::class,
+            ['server_id' => $serverId, 'site_id' => $siteId]
         );
     }
 
@@ -30,7 +32,10 @@ trait ManagesWorkers
      */
     public function worker($serverId, $siteId, $workerId)
     {
-        return new Worker($this->get("servers/$serverId/sites/$siteId/workers/$workerId")['worker']);
+        return new Worker(
+            $this->get("servers/$serverId/sites/$siteId/workers/$workerId")['worker']
+            + ['server_id' => $serverId, 'site_id' => $siteId], $this
+        );
     }
 
     /**
@@ -54,7 +59,7 @@ trait ManagesWorkers
             });
         }
 
-        return new Worker($worker);
+        return new Worker($worker + ['server_id' => $serverId, 'site_id' => $siteId], $this);
     }
 
     /**

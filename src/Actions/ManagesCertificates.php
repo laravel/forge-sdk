@@ -16,7 +16,9 @@ trait ManagesCertificates
     public function certificates($serverId, $siteId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/sites/$siteId/certificates")['certificates'], Certificate::class
+            $this->get("servers/$serverId/sites/$siteId/certificates")['certificates'],
+            Certificate::class,
+            ['server_id' => $serverId, 'site_id' => $siteId]
         );
     }
 
@@ -30,7 +32,10 @@ trait ManagesCertificates
      */
     public function certificate($serverId, $siteId, $certificateId)
     {
-        return new Certificate($this->get("servers/$serverId/sites/$siteId/certificates/$certificateId")['certificate']);
+        return new Certificate(
+            $this->get("servers/$serverId/sites/$siteId/certificates/$certificateId")['certificate']
+            + ['server_id' => $serverId, 'site_id' => $siteId], $this
+        );
     }
 
     /**
@@ -54,7 +59,7 @@ trait ManagesCertificates
             });
         }
 
-        return new Certificate($certificate);
+        return new Certificate($certificate + ['server_id' => $serverId, 'site_id' => $siteId], $this);
     }
 
     /**

@@ -12,6 +12,13 @@ class MysqlUser extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
      * The name of the database user.
      *
      * @var string

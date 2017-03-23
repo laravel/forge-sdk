@@ -12,6 +12,20 @@ class Certificate extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
+     * The id of the site.
+     *
+     * @var integer
+     */
+    public $siteId;
+
+    /**
      * The domain name.
      *
      * @var string

@@ -15,7 +15,9 @@ trait ManagesMysqlUsers
     public function mysqlUsers($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/mysql-users")['users'], MysqlUser::class
+            $this->get("servers/$serverId/mysql-users")['users'],
+            MysqlUser::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesMysqlUsers
      */
     public function mysqlUser($serverId, $userId)
     {
-        return new MysqlUser($this->get("servers/$serverId/mysql-users/$userId")['user']);
+        return new MysqlUser(
+            $this->get("servers/$serverId/mysql-users/$userId")['user'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesMysqlUsers
             });
         }
 
-        return new MysqlUser($user);
+        return new MysqlUser($user + ['server_id' => $serverId], $this);
     }
 
     /**
@@ -64,7 +68,10 @@ trait ManagesMysqlUsers
      */
     public function updateMysqlUser($serverId, $userId, array $data)
     {
-        return new MysqlUser($this->put("servers/$serverId/mysql-users/$userId", $data)['user']);
+        return new MysqlUser(
+            $this->put("servers/$serverId/mysql-users/$userId", $data)['user']
+            + ['server_id' => $serverId], $this
+        );
     }
 
     /**

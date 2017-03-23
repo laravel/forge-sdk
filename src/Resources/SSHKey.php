@@ -12,6 +12,13 @@ class SSHKey extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
      * The name of the key.
      *
      * @var string

@@ -15,7 +15,9 @@ trait ManagesJobs
     public function jobs($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/jobs")['jobs'], Job::class
+            $this->get("servers/$serverId/jobs")['jobs'],
+            Job::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesJobs
      */
     public function job($serverId, $jobId)
     {
-        return new Job($this->get("servers/$serverId/jobs/$jobId")['job']);
+        return new Job(
+            $this->get("servers/$serverId/jobs/$jobId")['job'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesJobs
             });
         }
 
-        return new Job($job);
+        return new Job($job + ['server_id' => $serverId], $this);
     }
 
     /**

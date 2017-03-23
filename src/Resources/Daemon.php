@@ -12,6 +12,13 @@ class Daemon extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
      * The command the daemon runs.
      *
      * @var string

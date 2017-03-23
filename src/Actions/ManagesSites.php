@@ -15,7 +15,9 @@ trait ManagesSites
     public function sites($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/sites")['sites'], Site::class
+            $this->get("servers/$serverId/sites")['sites'],
+            Site::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesSites
      */
     public function site($serverId, $siteId)
     {
-        return new Site($this->get("servers/$serverId/sites/$siteId")['site']);
+        return new Site(
+            $this->get("servers/$serverId/sites/$siteId")['site'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesSites
             });
         }
 
-        return new Site($site);
+        return new Site($site + ['server_id' => $serverId], $this);
     }
 
     /**
@@ -64,7 +68,10 @@ trait ManagesSites
      */
     public function updateSite($serverId, $siteId, array $data)
     {
-        return new Site($this->put("servers/$serverId/sites/$siteId", $data)['site']);
+        return new Site(
+            $this->put("servers/$serverId/sites/$siteId", $data)['site']
+            + ['server_id' => $serverId], $this
+        );
     }
 
     /**

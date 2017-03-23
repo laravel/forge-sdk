@@ -12,6 +12,13 @@ class FirewallRule extends Resource
     public $id;
 
     /**
+     * The id of the server.
+     *
+     * @var integer
+     */
+    public $serverId;
+
+    /**
      * The name of the rule.
      *
      * @var string

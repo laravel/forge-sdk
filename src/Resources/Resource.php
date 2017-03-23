@@ -2,6 +2,8 @@
 
 namespace Laravel\Forge\Resources;
 
+use Laravel\Forge\Forge;
+
 class Resource
 {
     /**
@@ -12,14 +14,23 @@ class Resource
     public $attributes;
 
     /**
+     * The Forge SDK instance.
+     *
+     * @var Forge
+     */
+    private $forge;
+
+    /**
      * Create a new resource instance.
      *
      * @param  array $attributes
+     * @param  Forge $forge
      * @return void
      */
-    public function __construct(array $attributes)
+    public function __construct(array $attributes, $forge = null)
     {
         $this->attributes = $attributes;
+        $this->forge = $forge;
 
         $this->fill();
     }

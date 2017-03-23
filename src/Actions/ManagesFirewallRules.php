@@ -15,7 +15,9 @@ trait ManagesFirewallRules
     public function firewallRules($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/firewall-rules")['rules'], FirewallRule::class
+            $this->get("servers/$serverId/firewall-rules")['rules'],
+            FirewallRule::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesFirewallRules
      */
     public function firewallRule($serverId, $ruleId)
     {
-        return new FirewallRule($this->get("servers/$serverId/firewall-rules/$ruleId")['rule']);
+        return new FirewallRule(
+            $this->get("servers/$serverId/firewall-rules/$ruleId")['rule'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesFirewallRules
             });
         }
 
-        return new FirewallRule($rule);
+        return new FirewallRule($rule + ['server_id' => $serverId], $this);
     }
 
     /**

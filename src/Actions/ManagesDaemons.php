@@ -15,7 +15,9 @@ trait ManagesDaemons
     public function daemons($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/daemons")['daemons'], Daemon::class
+            $this->get("servers/$serverId/daemons")['daemons'],
+            Daemon::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesDaemons
      */
     public function daemon($serverId, $daemonId)
     {
-        return new Daemon($this->get("servers/$serverId/daemons/$daemonId")['daemon']);
+        return new Daemon(
+            $this->get("servers/$serverId/daemons/$daemonId")['daemon'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesDaemons
             });
         }
 
-        return new Daemon($daemon);
+        return new Daemon($daemon + ['server_id' => $serverId], $this);
     }
 
     /**

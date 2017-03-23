@@ -15,7 +15,9 @@ trait ManagesSSHKeys
     public function keys($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/keys")['keys'], SSHKey::class
+            $this->get("servers/$serverId/keys")['keys'],
+            SSHKey::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesSSHKeys
      */
     public function SSHKey($serverId, $keyId)
     {
-        return new SSHKey($this->get("servers/$serverId/keys/$keyId")['key']);
+        return new SSHKey(
+            $this->get("servers/$serverId/keys/$keyId")['key'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesSSHKeys
             });
         }
 
-        return new SSHKey($key);
+        return new SSHKey($key + ['server_id' => $serverId], $this);
     }
 
     /**

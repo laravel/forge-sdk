@@ -61,12 +61,13 @@ class Forge
      *
      * @param  array $collection
      * @param  string $class
+     * @param  array $extraData
      * @return array
      */
-    protected function transformCollection($collection, $class)
+    protected function transformCollection($collection, $class, $extraData = [])
     {
-        return array_map(function ($data) use ($class) {
-            return new $class($data);
+        return array_map(function ($data) use ($class, $extraData) {
+            return new $class($data + $extraData, $this);
         }, $collection);
     }
 }

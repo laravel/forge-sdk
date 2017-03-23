@@ -15,7 +15,9 @@ trait ManagesMysqlDatabases
     public function mysqlDatabases($serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/mysql")['databases'], MysqlDatabase::class
+            $this->get("servers/$serverId/mysql")['databases'],
+            MysqlDatabase::class,
+            ['server_id' => $serverId]
         );
     }
 
@@ -28,7 +30,9 @@ trait ManagesMysqlDatabases
      */
     public function mysqlDatabase($serverId, $databaseId)
     {
-        return new MysqlDatabase($this->get("servers/$serverId/mysql/$databaseId")['database']);
+        return new MysqlDatabase(
+            $this->get("servers/$serverId/mysql/$databaseId")['database'] + ['server_id' => $serverId], $this
+        );
     }
 
     /**
@@ -51,7 +55,7 @@ trait ManagesMysqlDatabases
             });
         }
 
-        return new MysqlDatabase($database);
+        return new MysqlDatabase($database + ['server_id' => $serverId], $this);
     }
 
     /**
@@ -64,7 +68,10 @@ trait ManagesMysqlDatabases
      */
     public function updateMysqlDatabase($serverId, $databaseId, array $data)
     {
-        return new MysqlDatabase($this->put("servers/$serverId/mysql/$databaseId", $data)['database']);
+        return new MysqlDatabase(
+            $this->put("servers/$serverId/mysql/$databaseId", $data)['database']
+            + ['server_id' => $serverId], $this
+        );
     }
 
     /**
