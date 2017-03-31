@@ -97,10 +97,10 @@ $forge->deleteSSHKey($serverId, $keyId)
 ## Server Scheduled Jobs
 
 ```php
-$forgejobs($serverId)
-$forgejob($serverId, $jobId)
-$forgecreateJob($serverId, array $data, $wait = true)
-$forgedeleteJob($serverId, $jobId)
+$forge->jobs($serverId)
+$forge->job($serverId, $jobId)
+$forge->createJob($serverId, array $data, $wait = true)
+$forge->deleteJob($serverId, $jobId)
 ```
 
 ## Managing Services
