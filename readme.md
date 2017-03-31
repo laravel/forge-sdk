@@ -55,59 +55,19 @@ These parameters will be used in the POST request sent to Forge servers, you can
 [Forge's official API documentation](https://forge.laravel.com/api-documentation).
 
 Notice that this request for example will only start the server creation process, your server might need a few minutes before it completes provisioning, you'll need to check
-the Server's `$isReady` property to know if it's ready or not.
+the Server's `$isReady` property to know if it's ready or not yet.
 
-## Managing Servers
+Some SDK methods however waits for the action to complete on Forge's end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
 
 ```php
-// The collection of servers.
-$forge->servers();
+$forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
+```
 
-// Get a server instance.
-$forge->server($serverId);
+This method will ping Forge servers every 5 seconds and see if the newly created Site's status is `installed` and only return when it's so, in case the waiting exceeded 30 seconds
+a `Themsaid\Forge\Exceptions\TimeoutException` will be thrown.
 
-// Create a new server.
-$forge->createServer($data);
+You can easily stop this behaviour be setting the `$wait` argument to false:
 
-// Update the given server.
-$forge->updateServer($serverId, $data);
-
-// Delete the given server.
-$forge->deleteServer($serverId);
-
-// Revoke forge access to the server.
-$forge->revokeAccessToServer($serverId);
-
-// Reconnect the server to Forge with a new key.
-$forge->reconnectToServer($serverId);
-
-// Reactivate a revoked server.
-$forge->reactivateToServer($serverId);
-
-// Reboot MySQL on the server.
-$forge->rebootMysql($serverId);
-
-// Stop MySQL on the server.
-$forge->stopMysql($serverId);
-
-// Reboot Postgres on the server.
-$forge->rebootPostgres($serverId);
-
-// Stop Postgres on the server.
-$forge->stopPostgres($serverId);
-
-// Reboot Nginx on the server.
-$forge->rebootNginx($serverId);
-
-// Stop Nginx on the server.
-$forge->stopNginx($serverId);
-
-// Install Blackfire on the server.
-$forge->installBlackfire($serverId, $data);
-
-// Install Papertrail on the server.
-$forge->installPapertrail($serverId, $data);
-
-// Remove Papertrail from the server.
-$forge->removePapertrail($serverId);
+```php
+$forge->createSite(SERVER_ID, [SITE_PARAMETERS], false);
 ```
