@@ -1,8 +1,6 @@
 <?php
 
 
-use Laravel\Forge\Http;
-
 class ForgeSdkTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -12,7 +10,7 @@ class ForgeSdkTest extends PHPUnit_Framework_TestCase
 
     public function test_making_basic_requests()
     {
-        $forge = new \Laravel\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
+        $forge = new \Themsaid\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
             $response = Mockery::mock('GuzzleHttp\Psr7\Response')
@@ -26,7 +24,7 @@ class ForgeSdkTest extends PHPUnit_Framework_TestCase
 
     public function test_handling_validation_errors()
     {
-        $forge = new \Laravel\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
+        $forge = new \Themsaid\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
             $response = Mockery::mock('GuzzleHttp\Psr7\Response')
@@ -37,7 +35,7 @@ class ForgeSdkTest extends PHPUnit_Framework_TestCase
 
         try {
             $forge->recipes();
-        } catch (\Laravel\Forge\Exceptions\ValidationException $e) {
+        } catch (\Themsaid\Forge\Exceptions\ValidationException $e) {
         }
 
         $this->assertEquals(['name' => ['The name is required.']], $e->errors());
@@ -45,9 +43,9 @@ class ForgeSdkTest extends PHPUnit_Framework_TestCase
 
     public function test_handling_404_errors()
     {
-        $this->expectException(\Laravel\Forge\Exceptions\NotFoundException::class);
+        $this->expectException(\Themsaid\Forge\Exceptions\NotFoundException::class);
 
-        $forge = new \Laravel\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
+        $forge = new \Themsaid\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
             $response = Mockery::mock('GuzzleHttp\Psr7\Response')
@@ -60,7 +58,7 @@ class ForgeSdkTest extends PHPUnit_Framework_TestCase
 
     public function test_handling_failed_action_errors()
     {
-        $forge = new \Laravel\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
+        $forge = new \Themsaid\Forge\Forge('123', $http = Mockery::mock('GuzzleHttp\Client'));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
             $response = Mockery::mock('GuzzleHttp\Psr7\Response')
@@ -71,7 +69,7 @@ class ForgeSdkTest extends PHPUnit_Framework_TestCase
 
         try {
             $forge->recipes();
-        } catch (\Laravel\Forge\Exceptions\FailedActionException $e) {
+        } catch (\Themsaid\Forge\Exceptions\FailedActionException $e) {
         }
 
         $this->assertEquals('Error!', $e->getMessage());
