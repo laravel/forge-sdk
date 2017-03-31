@@ -1,6 +1,4 @@
-# Forge PHP SDK
-
-## Installation
+# Forge PHP SDK (Unofficial)
 
 To install the SDK in your project you need to require the package via composer:
 
@@ -17,7 +15,7 @@ require __DIR__.'/../vendor/autoload.php';
 And finally create an instance of the SDK:
 
 ```php
-$forge = new \Themsaid\Forge\Forge($TOKEN_HERE);
+$forge = new Themsaid\Forge\Forge($TOKEN_HERE);
 ```
 
 ## Usage
@@ -37,7 +35,7 @@ You may also retrieve a single server using:
 $server = $forge->server(SERVER_ID_HERE);
 ```
 
-On multiple actions this SDK supports you may need to pass some parameters, for example when creating a new server:
+On multiple actions supported by this SDK you may need to pass some parameters, for example when creating a new server:
 
 ```php
 $server = $forge->createServer([

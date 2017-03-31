@@ -1,6 +1,6 @@
 {
     "name": "themsaid/forge-sdk",
-    "description": "Laravel Forge PHP SDK.",
+    "description": "Laravel Forge PHP SDK (Unofficial)",
     "keywords": ["laravel", "forge"],
     "license": "MIT",
     "authors": [
