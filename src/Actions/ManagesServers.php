@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge\Actions;
+namespace Themsaid\Forge\Actions;
 
-use Laravel\Forge\Resources\Server;
+use Themsaid\Forge\Resources\Server;
 
 trait ManagesServers
 {

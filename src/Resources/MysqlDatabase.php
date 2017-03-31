@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Forge\Resources;
+namespace Themsaid\Forge\Resources;
 
 class MysqlDatabase extends Resource
 {

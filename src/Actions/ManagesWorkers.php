@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge\Actions;
+namespace Themsaid\Forge\Actions;
 
-use Laravel\Forge\Resources\Worker;
+use Themsaid\Forge\Resources\Worker;
 
 trait ManagesWorkers
 {

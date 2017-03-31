@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Forge;
+namespace Themsaid\Forge;
 
 use GuzzleHttp\Client as HttpClient;
 

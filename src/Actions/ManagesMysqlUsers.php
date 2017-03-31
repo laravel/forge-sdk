@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge\Actions;
+namespace Themsaid\Forge\Actions;
 
-use Laravel\Forge\Resources\MysqlUser;
+use Themsaid\Forge\Resources\MysqlUser;
 
 trait ManagesMysqlUsers
 {

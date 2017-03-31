@@ -1,12 +1,12 @@
 <?php
 
-namespace Laravel\Forge;
+namespace Themsaid\Forge;
 
-use Laravel\Forge\Exceptions\TimeoutException;
 use Psr\Http\Message\ResponseInterface;
-use Laravel\Forge\Exceptions\NotFoundException;
-use Laravel\Forge\Exceptions\ValidationException;
-use Laravel\Forge\Exceptions\FailedActionException;
+use Themsaid\Forge\Exceptions\TimeoutException;
+use Themsaid\Forge\Exceptions\NotFoundException;
+use Themsaid\Forge\Exceptions\ValidationException;
+use Themsaid\Forge\Exceptions\FailedActionException;
 
 trait MakesHttpRequests
 {

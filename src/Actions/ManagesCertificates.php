@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge\Actions;
+namespace Themsaid\Forge\Actions;
 
-use Laravel\Forge\Resources\Certificate;
+use Themsaid\Forge\Resources\Certificate;
 
 trait ManagesCertificates
 {
