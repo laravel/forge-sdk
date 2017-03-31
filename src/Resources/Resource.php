@@ -18,7 +18,7 @@ class Resource
      *
      * @var Forge
      */
-    private $forge;
+    protected $forge;
 
     /**
      * Create a new resource instance.
