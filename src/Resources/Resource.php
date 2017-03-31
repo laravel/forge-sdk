@@ -2,7 +2,7 @@
 
 namespace Themsaid\Forge\Resources;
 
-use Laravel\Forge\Forge;
+use Themsaid\Forge\Forge;
 
 class Resource
 {
