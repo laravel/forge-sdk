@@ -122,6 +122,7 @@ $forge->updateSiteNginxFile($serverId, $siteId, $content)
 
 // Blackfire
 $forge->installBlackfire($serverId, array $data)
+$forge->removeBlackfire($serverId)
 
 // Papertrail
 $forge->installPapertrail($serverId, array $data)
