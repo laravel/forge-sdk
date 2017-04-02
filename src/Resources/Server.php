@@ -91,7 +91,7 @@ class Server extends Resource
     /**
      * The date/time the server was created.
      *
-     * @var bool
+     * @var string
      */
     public $createdAt;
 
