@@ -78,7 +78,7 @@ trait ManagesServers
      * Reconnect the server to Forge with a new key.
      *
      * @param  string $serverId
-     * @return string
+     * @return void
      */
     public function reconnectToServer($serverId)
     {
@@ -178,7 +178,7 @@ trait ManagesServers
      *
      * @param  string $serverId
      * @param  array $data
-     * @return Server
+     * @return void
      */
     public function installBlackfire($serverId, array $data)
     {
@@ -201,7 +201,7 @@ trait ManagesServers
      *
      * @param  string $serverId
      * @param  array $data
-     * @return Server
+     * @return void
      */
     public function installPapertrail($serverId, array $data)
     {
@@ -213,7 +213,7 @@ trait ManagesServers
      *
      * @param  string $serverId
      * @param  array $data
-     * @return Server
+     * @return void
      */
     public function removePapertrail($serverId)
     {
