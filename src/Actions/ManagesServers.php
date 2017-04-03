@@ -186,6 +186,17 @@ trait ManagesServers
     }
 
     /**
+     * Remove Blackfire from the server.
+     *
+     * @param  string $serverId
+     * @return void
+     */
+    public function removeBlackfire($serverId)
+    {
+        $this->delete("servers/$serverId/blackfire/remove");
+    }
+
+    /**
      * Install Papertrail on the server.
      *
      * @param  string $serverId
