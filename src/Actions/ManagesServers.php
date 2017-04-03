@@ -97,6 +97,17 @@ trait ManagesServers
     }
 
     /**
+     * Reboot the server.
+     *
+     * @param  string $serverId
+     * @return void
+     */
+    public function rebootServer($serverId)
+    {
+        $this->post("servers/$serverId/reboot");
+    }
+
+    /**
      * Reboot MySQL on the server.
      *
      * @param  string $serverId
