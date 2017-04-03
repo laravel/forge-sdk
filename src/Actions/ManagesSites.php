@@ -79,7 +79,6 @@ trait ManagesSites
      *
      * @param  integer $serverId
      * @param  integer $siteId
-     * @param  array $data
      * @return void
      */
     public function refreshSiteToken($serverId, $siteId)
