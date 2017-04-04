@@ -218,7 +218,7 @@ $forge->deploySite($serverId, $siteId);
 $forge->resetDeploymentState($serverId, $siteId);
 $forge->siteDeploymentLog($serverId, $siteId);
 
-// Motifications
+// Notifications
 $forge->enableHipchatNotifications($serverId, $siteId, array $data);
 $forge->disableHipchatNotifications($serverId, $siteId);
 
@@ -333,6 +333,7 @@ $forge->runRecipe($recipeId);
 On a Recipe Instance you may also call:
 
 ```php
+
 $recipe->update(array $data);
 $recipe->delete();
 $recipe->run();
