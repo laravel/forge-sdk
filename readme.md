@@ -1,4 +1,4 @@
-# Forge PHP SDK (Unofficial)
+# Forge PHP SDK
 
 To install the SDK in your project you need to require the package via composer:
 
