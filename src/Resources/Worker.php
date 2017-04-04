@@ -111,7 +111,7 @@ class Worker extends Resource
      * @param  boolean $wait
      * @return void
      */
-    public function restartWorker($wait = true)
+    public function restart($wait = true)
     {
         return $this->forge->restartWorker($this->serverId, $this->siteId, $this->id, $wait);
     }
