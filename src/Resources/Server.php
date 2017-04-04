@@ -101,4 +101,147 @@ class Server extends Resource
      * @var array
      */
     public $network = [];
+
+    /**
+     * Update the given server.
+     *
+     * @param  array $data
+     * @return Server
+     */
+    public function update(array $data)
+    {
+        return $this->forge->updateServer($this->id, $data);
+    }
+
+    /**
+     * Delete the given server.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteServer($this->id);
+    }
+
+    /**
+     * Revoke forge access to the server.
+     *
+     * @return void
+     */
+    public function revokeAccess()
+    {
+        return $this->forge->revokeAccessToServer($this->id);
+    }
+
+    /**
+     * Reconnect the server to Forge with a new key.
+     *
+     * @return string
+     */
+    public function reconnect()
+    {
+        return $this->forge->reconnectToServer($this->id);
+    }
+
+    /**
+     * Reactivate a revoked server.
+     *
+     * @return void
+     */
+    public function reactivate()
+    {
+        return $this->forge->reactivateToServer($this->id);
+    }
+
+    /**
+     * Reboot MySQL on the server.
+     *
+     * @return void
+     */
+    public function rebootMysql()
+    {
+        return $this->forge->rebootMysql($this->id);
+    }
+
+    /**
+     * Stop MySQL on the server.
+     *
+     * @return void
+     */
+    public function stopMysql()
+    {
+        return $this->forge->stopMysql($this->id);
+    }
+
+    /**
+     * Reboot Postgres on the server.
+     *
+     * @return void
+     */
+    public function rebootPostgres()
+    {
+        return $this->forge->rebootPostgres($this->id);
+    }
+
+    /**
+     * Stop Postgres on the server.
+     *
+     * @return void
+     */
+    public function stopPostgres($serverId)
+    {
+        return $this->forge->stopPostgres();
+    }
+
+    /**
+     * Reboot Nginx on the server.
+     *
+     * @return void
+     */
+    public function rebootNginx()
+    {
+        return $this->forge->rebootNginx($this->id);
+    }
+
+    /**
+     * Stop Nginx on the server.
+     *
+     * @return void
+     */
+    public function stopNginx()
+    {
+        return $this->forge->stopNginx($this->id);
+    }
+
+    /**
+     * Install Blackfire on the server.
+     *
+     * @param  array $data
+     * @return Server
+     */
+    public function installBlackfire(array $data)
+    {
+        return $this->forge->installBlackfire($this->id, $data);
+    }
+
+    /**
+     * Install Papertrail on the server.
+     *
+     * @param  array $data
+     * @return Server
+     */
+    public function installPapertrail(array $data)
+    {
+        return $this->forge->installPapertrail($this->id, $data);
+    }
+
+    /**
+     * Remove Papertrail from the server.
+     *
+     * @return Server
+     */
+    public function removePapertrail()
+    {
+        return $this->forge->removePapertrail($this->id);
+    }
 }
