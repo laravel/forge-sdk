@@ -188,9 +188,9 @@ class Server extends Resource
      *
      * @return void
      */
-    public function stopPostgres($serverId)
+    public function stopPostgres()
     {
-        return $this->forge->stopPostgres();
+        return $this->forge->stopPostgres($this->id);
     }
 
     /**

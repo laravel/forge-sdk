@@ -78,7 +78,6 @@ $forge->server($serverId)
 $forge->createServer(array $data)
 $forge->updateServer($serverId, array $data)
 $forge->deleteServer($serverId)
-$forge->rebootServer($serverId)
 
 // Server access
 $forge->revokeAccessToServer($serverId)
@@ -86,13 +85,39 @@ $forge->reconnectToServer($serverId)
 $forge->reactivateToServer($serverId)
 ```
 
+On a Server instance you may also call:
+
+```php
+$forge->update(array $data)
+$forge->delete()
+$forge->revokeAccess()
+$forge->reconnect()
+$forge->reactivate()
+$forge->rebootMysql()
+$forge->stopMysql()
+$forge->rebootPostgres()
+$forge->stopPostgres()
+$forge->rebootNginx()
+$forge->stopNginx()
+$forge->installBlackfire(array $data)
+$forge->removeBlackfire()
+$forge->installPapertrail(array $data)
+$forge->removePapertrail()
+```
+
 ## Server SSH Keys
 
 ```php
-$forge->keys($serverId)
-$forge->SSHKey($serverId, $keyId)
-$forge->createSSHKey($serverId, array $data, $wait = true)
-$forge->deleteSSHKey($serverId, $keyId)
+$server->keys($serverId)
+$server->SSHKey($serverId, $keyId)
+$server->createSSHKey($serverId, array $data, $wait = true)
+$server->deleteSSHKey($serverId, $keyId)
+```
+
+On a SSHKey Instance you may also call:
+
+```php
+$sshKey->delete();
 ```
 
 ## Server Scheduled Jobs
@@ -102,6 +127,12 @@ $forge->jobs($serverId)
 $forge->job($serverId, $jobId)
 $forge->createJob($serverId, array $data, $wait = true)
 $forge->deleteJob($serverId, $jobId)
+```
+
+On a Job Instance you may also call:
+
+```php
+$job->delete();
 ```
 
 ## Managing Services
@@ -123,7 +154,6 @@ $forge->updateSiteNginxFile($serverId, $siteId, $content)
 
 // Blackfire
 $forge->installBlackfire($serverId, array $data)
-$forge->removeBlackfire($serverId)
 
 // Papertrail
 $forge->installPapertrail($serverId, array $data)
@@ -140,6 +170,13 @@ $forge->restartDaemon($serverId, $daemonId, $wait = true)
 $forge->deleteDaemon($serverId, $daemonId)
 ```
 
+On a Daemon Instance you may also call:
+
+```php
+$daemon->restart($wait = true);
+$daemon->delete();
+```
+
 ## Server Firewall Rules
 
 ```php
@@ -147,6 +184,12 @@ $forge->firewallRules($serverId)
 $forge->firewallRule($serverId, $ruleId)
 $forge->createFirewallRule($serverId, array $data, $wait = true)
 $forge->deleteFirewallRule($serverId, $ruleId)
+```
+
+On a FirewallRule Instance you may also call:
+
+```php
+$rule->delete();
 ```
 
 ## Managing Sites
@@ -187,6 +230,26 @@ $forge->removeWordPress($serverId, $siteId)
 $forge->updateNodeBalancingConfiguration($serverId, $siteId, array $data)
 ```
 
+On a Site Instance you may also call:
+
+```php
+$site->refreshToken()
+$site->delete()
+$site->installGitRepository(array $data)
+$site->updateGitRepository(array $data)
+$site->destroyGitRepository()
+$site->getDeploymentScript()
+$site->updateDeploymentScript($content)
+$site->enableQuickDeploy()
+$site->disableQuickDeploy()
+$site->deploySite()
+$site->enableHipchatNotifications(array $data)
+$site->disableHipchatNotifications()
+$site->installWordPress($data)
+$site->removeWordPress()
+```
+
+
 ## Site Workers
 
 ```php
@@ -195,6 +258,13 @@ $forge->worker($serverId, $siteId, $workerId)
 $forge->createWorker($serverId, $siteId, array $data, $wait = true)
 $forge->deleteWorker($serverId, $siteId, $workerId)
 $forge->restartWorker($serverId, $siteId, $workerId, $wait = true)
+```
+
+On a Worker Instance you may also call:
+
+```php
+$worker->delete()
+$worker->restart($wait = true)
 ```
 
 ## Site SSL Certificates
@@ -207,6 +277,15 @@ $forge->deleteCertificate($serverId, $siteId, $certificateId)
 $forge->getCertificateSigningRequest($serverId, $siteId, $certificateId)
 $forge->installCertificate($serverId, $siteId, $certificateId, $wait = true)
 $forge->activateCertificate($serverId, $siteId, $certificateId, $wait = true)
+```
+
+On a Certificate Instance you may also call:
+
+```php
+$certificate->delete()
+$certificate->getSigningRequest()
+$certificate->install($wait = true)
+$certificate->activate($wait = true)
 ```
 
 ## Managing MySQL
@@ -226,6 +305,20 @@ $forge->updateMysqlUser($serverId, $userId, array $data)
 $forge->deleteMysqlUser($serverId, $userId)
 ```
 
+On a MysqlDatabase Instance you may also call:
+
+```php
+$database->update(array $data)
+$database->delete()
+```
+
+On a MysqlUser Instance you may also call:
+
+```php
+$databaseUser->update(array $data)
+$databaseUser->delete()
+```
+
 ## Managing Recipes
 
 ```php
@@ -235,4 +328,12 @@ $forge->createRecipe(array $data)
 $forge->updateRecipe($recipeId, array $data)
 $forge->deleteRecipe($recipeId)
 $forge->runRecipe($recipeId)
+```
+
+On a Recipe Instance you may also call:
+
+```php
+$recipe->update(array $data)
+$recipe->delete()
+$recipe->run()
 ```
