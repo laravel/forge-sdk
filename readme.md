@@ -88,30 +88,30 @@ $forge->reactivateToServer($serverId)
 On a Server instance you may also call:
 
 ```php
-$forge->update(array $data)
-$forge->delete()
-$forge->revokeAccess()
-$forge->reconnect()
-$forge->reactivate()
-$forge->rebootMysql()
-$forge->stopMysql()
-$forge->rebootPostgres()
-$forge->stopPostgres()
-$forge->rebootNginx()
-$forge->stopNginx()
-$forge->installBlackfire(array $data)
-$forge->removeBlackfire()
-$forge->installPapertrail(array $data)
-$forge->removePapertrail()
+$server->update(array $data)
+$server->delete()
+$server->revokeAccess()
+$server->reconnect()
+$server->reactivate()
+$server->rebootMysql()
+$server->stopMysql()
+$server->rebootPostgres()
+$server->stopPostgres()
+$server->rebootNginx()
+$server->stopNginx()
+$server->installBlackfire(array $data)
+$server->removeBlackfire()
+$server->installPapertrail(array $data)
+$server->removePapertrail()
 ```
 
 ## Server SSH Keys
 
 ```php
-$server->keys($serverId)
-$server->SSHKey($serverId, $keyId)
-$server->createSSHKey($serverId, array $data, $wait = true)
-$server->deleteSSHKey($serverId, $keyId)
+$forge->keys($serverId)
+$forge->SSHKey($serverId, $keyId)
+$forge->createSSHKey($serverId, array $data, $wait = true)
+$forge->deleteSSHKey($serverId, $keyId)
 ```
 
 On a SSHKey Instance you may also call:
