@@ -38,4 +38,14 @@ class SSHKey extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Delete the given key.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteSSHKey($this->serverId, $this->id);
+    }
 }

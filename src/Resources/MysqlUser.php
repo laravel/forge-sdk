@@ -38,4 +38,25 @@ class MysqlUser extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Update the given MySQL User.
+     *
+     * @param  array $data
+     * @return MysqlUser
+     */
+    public function update(array $data)
+    {
+        return $this->forge->updateMysqlUser($this->serverId, $this->id, $data);
+    }
+
+    /**
+     * Delete the given user.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteMysqlUser($this->serverId, $this->id);
+    }
 }

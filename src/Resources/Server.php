@@ -225,6 +225,16 @@ class Server extends Resource
     }
 
     /**
+     * Remove Blackfire from the server.
+     *
+     * @return Server
+     */
+    public function removeBlackfire()
+    {
+        return $this->forge->removeBlackfire($this->id);
+    }
+
+    /**
      * Install Papertrail on the server.
      *
      * @param  array $data

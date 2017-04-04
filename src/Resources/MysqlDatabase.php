@@ -38,4 +38,25 @@ class MysqlDatabase extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Update the given MySQL Database.
+     *
+     * @param  array $data
+     * @return MysqlDatabase
+     */
+    public function update(array $data)
+    {
+        return $this->forge->updateMysqlDatabase($this->serverId, $this->id, $data);
+    }
+
+    /**
+     * Delete the given database.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteMysqlDatabase($this->serverId, $this->id);
+    }
 }

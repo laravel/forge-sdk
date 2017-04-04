@@ -52,4 +52,14 @@ class FirewallRule extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Delete the given firewall rule.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        $this->forge->deleteFirewallRule($this->serverId, $this->id);
+    }
 }

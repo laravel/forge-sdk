@@ -94,4 +94,25 @@ class Worker extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Delete the given worker.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteWorker($this->serverId, $this->siteId, $this->id);
+    }
+
+    /**
+     * Restart the given worker.
+     *
+     * @param  boolean $wait
+     * @return void
+     */
+    public function restartWorker($wait = true)
+    {
+        return $this->forge->restartWorker($this->serverId, $this->siteId, $this->id, $wait);
+    }
 }

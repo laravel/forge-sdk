@@ -59,4 +59,14 @@ class Job extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Delete the given job.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        $this->forge->deleteJob($this->serverId, $this->id);
+    }
 }

@@ -45,4 +45,25 @@ class Daemon extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Restart the given daemon.
+     *
+     * @param  boolean $wait
+     * @return void
+     */
+    public function restart($wait = true)
+    {
+        return $this->forge->restartDaemon($this->serverId, $this->id, $wait);
+    }
+
+    /**
+     * Delete the given daemon.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteDaemon($this->serverId, $this->id);
+    }
 }

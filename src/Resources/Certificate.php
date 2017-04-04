@@ -81,4 +81,46 @@ class Certificate extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * Delete the given certificate.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        return $this->forge->deleteCertificate($this->serverId, $this->siteId, $this->id);
+    }
+
+    /**
+     * Get the SSL certificate signing request for the site.
+     *
+     * @return string
+     */
+    public function getSigningRequest()
+    {
+        return $this->forge->getCertificateSigningRequest($this->serverId, $this->siteId, $this->id);
+    }
+
+    /**
+     * Install the given certificate for the site.
+     *
+     * @param  boolean $wait
+     * @return void
+     */
+    public function install($wait = true)
+    {
+        return $this->forge->installCertificate($this->serverId, $this->siteId, $this->id, $wait);
+    }
+
+    /**
+     * Activate the given certificate for the site.
+     *
+     * @param  boolean $wait
+     * @return void
+     */
+    public function activate($wait = true)
+    {
+        return $this->forge->activateCertificate($this->serverId, $this->siteId, $this->id, $wait);
+    }
 }
