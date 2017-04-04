@@ -78,6 +78,7 @@ $forge->server($serverId)
 $forge->createServer(array $data)
 $forge->updateServer($serverId, array $data)
 $forge->deleteServer($serverId)
+$forge->rebootServer($serverId)
 
 // Server access
 $forge->revokeAccessToServer($serverId)
@@ -122,6 +123,7 @@ $forge->updateSiteNginxFile($serverId, $siteId, $content)
 
 // Blackfire
 $forge->installBlackfire($serverId, array $data)
+$forge->removeBlackfire($serverId)
 
 // Papertrail
 $forge->installPapertrail($serverId, array $data)
