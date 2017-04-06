@@ -5,14 +5,14 @@ namespace Themsaid\Forge\Resources;
 class Server extends Resource
 {
     /**
-     * The id of the recipe.
+     * The id of the server.
      *
      * @var integer
      */
     public $id;
 
     /**
-     * The name of the recipe.
+     * The name of the server.
      *
      * @var string
      */
