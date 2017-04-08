@@ -138,7 +138,6 @@ trait ManagesCertificates
      * @param  integer $serverId
      * @param  integer $siteId
      * @param  array $data Array of the domains obtain certificates for
-     * @param  boolean $wait
      * @return Certificate
      */
      public function obtainLetsEncryptCertificate($serverId, $siteId, array $data)
