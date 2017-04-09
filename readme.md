@@ -278,7 +278,7 @@ $forge->deleteCertificate($serverId, $siteId, $certificateId);
 $forge->getCertificateSigningRequest($serverId, $siteId, $certificateId);
 $forge->installCertificate($serverId, $siteId, $certificateId, $wait = true);
 $forge->activateCertificate($serverId, $siteId, $certificateId, $wait = true);
-$forge->obtainLetsEncryptCertificate($serverId, $siteId, $data, $wait = true);
+$forge->obtainLetsEncryptCertificate($serverId, $siteId, array $data);
 ```
 
 On a Certificate Instance you may also call:
