@@ -90,6 +90,7 @@ On a Server instance you may also call:
 ```php
 $server->update(array $data);
 $server->delete();
+$server->reboot();
 $server->revokeAccess();
 $server->reconnect();
 $server->reactivate();
