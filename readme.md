@@ -338,5 +338,5 @@ On a Recipe Instance you may also call:
 
 $recipe->update(array $data);
 $recipe->delete();
-$recipe->run();
+$recipe->run(array $data);
 ```
