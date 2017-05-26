@@ -78,6 +78,7 @@ $forge->server($serverId);
 $forge->createServer(array $data);
 $forge->updateServer($serverId, array $data);
 $forge->deleteServer($serverId);
+$forge->rebootServer($serverId);
 
 // Server access
 $forge->revokeAccessToServer($serverId);
