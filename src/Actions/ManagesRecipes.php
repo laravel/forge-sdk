@@ -67,10 +67,11 @@ trait ManagesRecipes
      * Run the given recipe.
      *
      * @param  string $recipeId
+     * @param  array  $data
      * @return void
      */
-    public function runRecipe($recipeId)
+    public function runRecipe($recipeId, array $data)
     {
-        $this->post("recipes/$recipeId/run");
+        $this->post("recipes/$recipeId/run", $data);
     }
 }

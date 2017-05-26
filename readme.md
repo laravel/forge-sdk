@@ -331,7 +331,7 @@ $forge->recipe($recipeId);
 $forge->createRecipe(array $data);
 $forge->updateRecipe($recipeId, array $data);
 $forge->deleteRecipe($recipeId);
-$forge->runRecipe($recipeId);
+$forge->runRecipe($recipeId, array $data);
 ```
 
 On a Recipe Instance you may also call:
@@ -340,5 +340,5 @@ On a Recipe Instance you may also call:
 
 $recipe->update(array $data);
 $recipe->delete();
-$recipe->run();
+$recipe->run(array $data);
 ```
