@@ -2,7 +2,7 @@
 
 To install the SDK in your project you need to require the package via composer:
 
-```
+```bash
 composer require themsaid/forge-sdk
 ```
 
