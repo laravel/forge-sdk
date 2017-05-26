@@ -124,6 +124,16 @@ class Server extends Resource
     }
 
     /**
+     * Reboot the server.
+     *
+     * @return void
+     */
+    public function reboot()
+    {
+        return $this->forge->rebootServer($this->id);
+    }
+
+    /**
      * Revoke forge access to the server.
      *
      * @return void
