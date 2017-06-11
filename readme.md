@@ -105,6 +105,7 @@ $server->installBlackfire(array $data);
 $server->removeBlackfire();
 $server->installPapertrail(array $data);
 $server->removePapertrail();
+$server->upgradePHP();
 ```
 
 ## Server SSH Keys
@@ -161,6 +162,9 @@ $forge->removeBlackfire($serverId);
 // Papertrail
 $forge->installPapertrail($serverId, array $data);
 $forge->removePapertrail($serverId);
+
+// PHP
+$forge->upgradePHP($serverId);
 ```
 
 ## Server Daemons

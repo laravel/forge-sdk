@@ -219,4 +219,15 @@ trait ManagesServers
     {
         $this->delete("servers/$serverId/papertrail/remove");
     }
+
+    /**
+     * Upgrade the PHP version on the server.
+     *
+     * @param  string $serverId
+     * @return void
+     */
+    public function upgradePHP($serverId)
+    {
+        $this->post("servers/$serverId/php/upgrade");
+    }
 }

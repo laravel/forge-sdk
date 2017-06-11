@@ -264,4 +264,14 @@ class Server extends Resource
     {
         return $this->forge->removePapertrail($this->id);
     }
+
+    /**
+     * Upgrade the PHP version on the server.
+     *
+     * @return Server
+     */
+    public function upgradePHP()
+    {
+        return $this->forge->upgradePHP($this->id);
+    }
 }
