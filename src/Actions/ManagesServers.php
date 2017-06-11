@@ -219,4 +219,26 @@ trait ManagesServers
     {
         $this->delete("servers/$serverId/papertrail/remove");
     }
+
+    /**
+     * Enable OPCache on the server.
+     *
+     * @param  string $serverId
+     * @return void
+     */
+    public function enableOPCache($serverId)
+    {
+        $this->post("servers/$serverId/php/opcache");
+    }
+
+    /**
+     * Disable OPCache on the server.
+     *
+     * @param  string $serverId
+     * @return void
+     */
+    public function disableOPCache($serverId)
+    {
+        $this->delete("servers/$serverId/php/opcache");
+    }
 }
