@@ -274,4 +274,3 @@ class Site extends Resource
         return $this->forge->removeWordPress($this->serverId, $this->id);
     }
 }
-
