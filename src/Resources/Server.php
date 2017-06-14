@@ -284,4 +284,14 @@ class Server extends Resource
     {
         return $this->forge->disableOPCache($this->id);
     }
+
+    /**
+     * Upgrade to latest PHP version.
+     *
+     * @return Server
+     */
+    public function upgradePHP()
+    {
+        return $this->forge->upgradePHP($this->id);
+    }
 }

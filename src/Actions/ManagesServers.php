@@ -241,4 +241,14 @@ trait ManagesServers
     {
         $this->delete("servers/$serverId/php/opcache");
     }
+
+    /**
+     * Upgrade to latest PHP version.
+     * 
+     * @param $serverId
+     */
+    public function upgradePHP($serverId)
+    {
+        $this->post("servers/$serverId/php/upgrade");
+    }
 }

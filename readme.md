@@ -107,6 +107,7 @@ $server->installPapertrail(array $data);
 $server->removePapertrail();
 $server->enableOPCache();
 $server->disableOPCache();
+$server->upgradePHP();
 ```
 
 ## Server SSH Keys
@@ -167,6 +168,9 @@ $forge->removePapertrail($serverId);
 // OPCache
 $forge->enableOPCache($serverId);
 $forge->disableOPCache($serverId);
+
+// PHP
+$forge->upgradePHP($serverId);
 ```
 
 ## Server Daemons
