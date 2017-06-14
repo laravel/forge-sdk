@@ -105,6 +105,8 @@ $server->installBlackfire(array $data);
 $server->removeBlackfire();
 $server->installPapertrail(array $data);
 $server->removePapertrail();
+$server->enableOPCache();
+$server->disableOPCache();
 ```
 
 ## Server SSH Keys
@@ -161,6 +163,10 @@ $forge->removeBlackfire($serverId);
 // Papertrail
 $forge->installPapertrail($serverId, array $data);
 $forge->removePapertrail($serverId);
+
+// OPCache
+$forge->enableOPCache($serverId);
+$forge->disableOPCache($serverId);
 ```
 
 ## Server Daemons
