@@ -68,7 +68,7 @@ trait ManagesDaemons
      */
     public function restartDaemon($serverId, $daemonId, $wait = true)
     {
-        $this->put("servers/$serverId/daemons/$daemonId/restart");
+        $this->post("servers/$serverId/daemons/$daemonId/restart");
 
         if ($wait) {
             $this->retry(30, function () use ($serverId, $daemonId) {
