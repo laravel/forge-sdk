@@ -48,7 +48,7 @@ trait ManagesSSHKeys
         $key = $this->post("servers/$serverId/keys", $data)['key'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $key) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $key) {
                 $key = $this->SSHKey($serverId, $key['id']);
 
                 return $key->status == 'installed' ? $key : null;

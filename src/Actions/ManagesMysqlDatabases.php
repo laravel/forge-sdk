@@ -48,7 +48,7 @@ trait ManagesMysqlDatabases
         $database = $this->post("servers/$serverId/mysql", $data)['database'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $database) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $database) {
                 $database = $this->mysqlDatabase($serverId, $database['id']);
 
                 return $database->status == 'installed' ? $database : null;

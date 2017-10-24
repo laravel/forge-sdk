@@ -52,7 +52,7 @@ trait ManagesWorkers
         $worker = $this->post("servers/$serverId/sites/$siteId/workers", $data)['worker'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $siteId, $worker) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $worker) {
                 $worker = $this->worker($serverId, $siteId, $worker['id']);
 
                 return $worker->status == 'installed' ? $worker : null;

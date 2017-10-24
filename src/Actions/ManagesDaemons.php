@@ -48,7 +48,7 @@ trait ManagesDaemons
         $daemon = $this->post("servers/$serverId/daemons", $data)['daemon'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $daemon) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $daemon) {
                 $daemon = $this->daemon($serverId, $daemon['id']);
 
                 return $daemon->status == 'installed' ? $daemon : null;
