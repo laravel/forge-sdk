@@ -35,7 +35,7 @@ class Forge
     public $guzzle;
 
     /**
-     * Timeout
+     * Number of seconds a request is retried.
      *
      * @var int
      */
@@ -80,13 +80,15 @@ class Forge
 
     /**
      * Set a new timeout
-     * 
+     *
      * @param  int $timeout
-     * @return \Themsaid\Forge\Forge
+     * @return $this
      */
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+
+        return $this;
     }
 
     /**
