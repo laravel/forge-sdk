@@ -48,7 +48,7 @@ trait ManagesSites
         $site = $this->post("servers/$serverId/sites", $data)['site'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $site) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $site) {
                 $site = $this->site($serverId, $site['id']);
 
                 return $site->status == 'installed' ? $site : null;

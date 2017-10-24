@@ -48,7 +48,7 @@ trait ManagesFirewallRules
         $rule = $this->post("servers/$serverId/firewall-rules", $data)['rule'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $rule) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $rule) {
                 $rule = $this->firewallRule($serverId, $rule['id']);
 
                 return $rule->status == 'installed' ? $rule : null;

@@ -48,7 +48,7 @@ trait ManagesJobs
         $job = $this->post("servers/$serverId/jobs", $data)['job'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $job) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $job) {
                 $job = $this->job($serverId, $job['id']);
 
                 return $job->status == 'installed' ? $job : null;

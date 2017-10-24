@@ -48,7 +48,7 @@ trait ManagesMysqlUsers
         $user = $this->post("servers/$serverId/mysql-users", $data)['user'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $user) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $user) {
                 $user = $this->mysqlUser($serverId, $user['id']);
 
                 return $user->status == 'installed' ? $user : null;

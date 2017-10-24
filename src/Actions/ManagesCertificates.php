@@ -52,7 +52,7 @@ trait ManagesCertificates
         $certificate = $this->post("servers/$serverId/sites/$siteId/certificates", $data)['certificate'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $siteId, $certificate) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $certificate) {
                 $certificate = $this->certificate($serverId, $siteId, $certificate['id']);
 
                 return $certificate->status == 'installed' ? $certificate : null;
@@ -146,7 +146,7 @@ trait ManagesCertificates
         $certificate = $this->post("servers/$serverId/sites/$siteId/certificates/letsencrypt", $data)['certificate'];
 
         if ($wait) {
-            return $this->retry(30, function () use ($serverId, $siteId, $certificate) {
+            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $certificate) {
                 $certificate = $this->certificate($serverId, $siteId, $certificate['id']);
 
                 return $certificate->status == 'installed' ? $certificate : null;
