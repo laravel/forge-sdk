@@ -70,6 +70,12 @@ You can easily stop this behaviour be setting the `$wait` argument to false:
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS], false);
 ```
 
+You can also set the desired timeout value:
+
+```php
+$forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
+```
+
 ## Managing Servers
 
 ```php
