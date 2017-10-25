@@ -111,7 +111,7 @@ trait ManagesCertificates
     }
 
     /**
-     * Install a existing certificate for the site.
+     * Install an existing certificate for the site.
      *
      * @param  integer $serverId
      * @param  integer $siteId
