@@ -111,6 +111,21 @@ trait ManagesCertificates
     }
 
     /**
+     * Install an existing certificate for the site.
+     *
+     * @param  integer $serverId
+     * @param  integer $siteId
+     * @param  array $data
+     * @return Certificate
+     */
+    public function installExistingCertificate($serverId, $siteId, array $data)
+    {
+        $certificate = $this->post("servers/$serverId/sites/$siteId/certificates", ['type' => 'existing'] + $data)['certificate'];
+
+        return new Certificate($certificate + ['server_id' => $serverId, 'site_id' => $siteId], $this);
+    }
+
+    /**
      * Activate the given certificate for the site.
      *
      * @param  integer $serverId
