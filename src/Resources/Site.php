@@ -189,7 +189,7 @@ class Site extends Resource
      */
     public function getDeploymentScript()
     {
-        return $this->forge->siteDeploymentLog($this->serverId, $this->id);
+        return $this->forge->siteDeploymentScript($this->serverId, $this->id);
     }
 
     /**
