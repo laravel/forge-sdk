@@ -37,6 +37,14 @@ trait ManagesServers
      */
     public function createServer(array $data)
     {
+
+        //Check if is a custom provider - show provision command and database_password
+        if($data['provider'] == 'custom') {
+            $response = $this->post('servers', $data);
+            $response['server'] = new Server($response['server'], $this);
+            return $response;
+        }
+
         return new Server($this->post('servers', $data)['server'], $this);
     }
 
