@@ -358,3 +358,12 @@ $recipe->update(array $data);
 $recipe->delete();
 $recipe->run(array $data);
 ```
+
+
+## Testing
+
+Run the tests with:
+
+``` bash
+vendor/bin/phpunit
+```
