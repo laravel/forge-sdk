@@ -117,6 +117,13 @@ class Site extends Resource
     public $slackChannel;
 
     /**
+     * The status of deployment.
+     *
+     * @var string
+     */
+    public $deploymentStatus;
+
+    /**
      * The status of load balancing.
      *
      * @var string
