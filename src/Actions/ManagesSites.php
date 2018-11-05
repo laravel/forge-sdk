@@ -154,7 +154,7 @@ trait ManagesSites
      * @param  integer $serverId
      * @param  integer $siteId
      * @param  array $data
-     * @param boolean $wait
+     * @param  boolean $wait
      * @return void
      */
     public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = false)
@@ -187,7 +187,7 @@ trait ManagesSites
      *
      * @param  integer $serverId
      * @param  integer $siteId
-     * @param boolean $wait
+     * @param  boolean $wait
      * @return void
      */
     public function destroySiteGitRepository($serverId, $siteId, $wait = false)
