@@ -256,7 +256,7 @@ trait ManagesSites
      *
      * @param  integer $serverId
      * @param  integer $siteId
-     * @param boolean $wait
+     * @param  boolean $wait
      * @return void
      */
     public function deploySite($serverId, $siteId, $wait = false)
