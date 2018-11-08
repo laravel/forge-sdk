@@ -256,11 +256,19 @@ trait ManagesSites
      *
      * @param  integer $serverId
      * @param  integer $siteId
+     * @param boolean $wait
      * @return void
      */
-    public function deploySite($serverId, $siteId)
+    public function deploySite($serverId, $siteId, $wait = false)
     {
         $this->post("servers/$serverId/sites/$siteId/deployment/deploy");
+
+        if ($wait) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
+                $site = $this->site($serverId, $siteId);
+                return is_null($site->deploymentStatus);
+            });
+        }
     }
 
     /**
