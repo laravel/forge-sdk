@@ -228,7 +228,7 @@ class Site extends Resource
     /**
      * Deploy the given site.
      *
-     * @param boolean $wait
+     * @param  boolean $wait
      * @return void
      */
     public function deploySite($wait = false)
