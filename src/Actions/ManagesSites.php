@@ -157,7 +157,7 @@ trait ManagesSites
      * @param  boolean $wait
      * @return void
      */
-    public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = false)
+    public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = true)
     {
         $this->post("servers/$serverId/sites/$siteId/git", $data);
 
@@ -189,7 +189,7 @@ trait ManagesSites
      * @param  boolean $wait
      * @return void
      */
-    public function destroySiteGitRepository($serverId, $siteId, $wait = false)
+    public function destroySiteGitRepository($serverId, $siteId, $wait = true)
     {
         $this->delete("servers/$serverId/sites/$siteId/git");
 
@@ -257,7 +257,7 @@ trait ManagesSites
      * @param  boolean $wait
      * @return void
      */
-    public function deploySite($serverId, $siteId, $wait = false)
+    public function deploySite($serverId, $siteId, $wait = true)
     {
         $this->post("servers/$serverId/sites/$siteId/deployment/deploy");
 

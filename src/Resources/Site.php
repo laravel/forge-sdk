@@ -164,7 +164,7 @@ class Site extends Resource
      * @param  boolean $wait
      * @return void
      */
-    public function installGitRepository(array $data, $wait = false)
+    public function installGitRepository(array $data, $wait = true)
     {
         return $this->forge->installGitRepositoryOnSite($this->serverId, $this->id, $data, $wait);
     }
@@ -186,7 +186,7 @@ class Site extends Resource
      * @param boolean $wait
      * @return void
      */
-    public function destroyGitRepository($wait = false)
+    public function destroyGitRepository($wait = true)
     {
         return $this->forge->destroySiteGitRepository($this->serverId, $this->id, $wait);
     }
@@ -238,7 +238,7 @@ class Site extends Resource
      * @param  boolean $wait
      * @return void
      */
-    public function deploySite($wait = false)
+    public function deploySite($wait = true)
     {
         return $this->forge->deploySite($this->serverId, $this->id, $wait);
     }
