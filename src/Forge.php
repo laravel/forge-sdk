@@ -53,6 +53,10 @@ class Forge
         if (! is_null($apiKey)) {
             $this->setApiKey($apiKey, $guzzle);
         }
+
+        if (! is_null($guzzle)) {
+            $this->guzzle = $guzzle;
+        }
     }
 
     /**

@@ -37,7 +37,14 @@ trait ManagesServers
      */
     public function createServer(array $data)
     {
-        return new Server($this->post('servers', $data)['server'], $this);
+        $response = $this->post('servers', $data);
+
+        $output = $response['server'];
+        $output['sudo_password'] = @$response['sudo_password'];
+        $output['database_password'] = @$response['database_password'];
+        $output['provision_command'] = @$response['provision_command'];
+
+        return new Server($output, $this);
     }
 
     /**
@@ -171,6 +178,17 @@ trait ManagesServers
     public function stopNginx($serverId)
     {
         $this->post("servers/$serverId/nginx/stop");
+    }
+
+    /**
+     * Reboot PHP on the server.
+     *
+     * @param  string $serverId
+     * @return void
+     */
+    public function rebootPHP($serverId)
+    {
+        $this->post("servers/$serverId/php/reboot");
     }
 
     /**

@@ -163,8 +163,7 @@ trait ManagesSites
 
         if ($wait) {
             $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-                return $site->repositoryStatus === 'installed';
+                return $this->site($serverId, $siteId)->repositoryStatus === 'installed';
             });
         }
     }
@@ -196,8 +195,7 @@ trait ManagesSites
 
         if ($wait) {
             $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-                return is_null($site->repositoryStatus);
+                return is_null($this->site($serverId, $siteId)->repositoryStatus);
             });
         }
     }
@@ -265,8 +263,7 @@ trait ManagesSites
 
         if ($wait) {
             $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-                return is_null($site->deploymentStatus);
+                return is_null($this->site($serverId, $siteId)->deploymentStatus);
             });
         }
     }

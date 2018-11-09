@@ -103,6 +103,27 @@ class Server extends Resource
     public $network = [];
 
     /**
+     * The sudo password of the new server.
+     *
+     * @var string
+     */
+    public $sudoPassword;
+
+    /**
+     * The database password of the new server.
+     *
+     * @var string
+     */
+    public $databasePassword;
+
+    /**
+     * The provision command of the new server.
+     *
+     * @var string
+     */
+    public $provisionCommand;
+
+    /**
      * Update the given server.
      *
      * @param  array $data
@@ -221,6 +242,16 @@ class Server extends Resource
     public function stopNginx()
     {
         return $this->forge->stopNginx($this->id);
+    }
+
+    /**
+     * Reboot PHP on the server.
+     *
+     * @return void
+     */
+    public function rebootPHP()
+    {
+        return $this->forge->rebootPHP($this->id);
     }
 
     /**
