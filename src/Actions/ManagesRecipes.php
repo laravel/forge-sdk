@@ -49,7 +49,7 @@ trait ManagesRecipes
      */
     public function updateRecipe($recipeId, array $data)
     {
-        return $this->put("recipes/$recipeId", $data)['recipe'];
+        return new Recipe($this->put("recipes/$recipeId", $data)['recipe']);
     }
 
     /**
