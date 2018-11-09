@@ -154,11 +154,19 @@ trait ManagesSites
      * @param  integer $serverId
      * @param  integer $siteId
      * @param  array $data
+     * @param  boolean $wait
      * @return void
      */
-    public function installGitRepositoryOnSite($serverId, $siteId, array $data)
+    public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = false)
     {
         $this->post("servers/$serverId/sites/$siteId/git", $data);
+
+        if ($wait) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
+                $site = $this->site($serverId, $siteId);
+                return $site->repositoryStatus === 'installed';
+            });
+        }
     }
 
     /**
@@ -179,11 +187,19 @@ trait ManagesSites
      *
      * @param  integer $serverId
      * @param  integer $siteId
+     * @param  boolean $wait
      * @return void
      */
-    public function destroySiteGitRepository($serverId, $siteId)
+    public function destroySiteGitRepository($serverId, $siteId, $wait = false)
     {
         $this->delete("servers/$serverId/sites/$siteId/git");
+
+        if ($wait) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
+                $site = $this->site($serverId, $siteId);
+                return is_null($site->repositoryStatus);
+            });
+        }
     }
 
     /**

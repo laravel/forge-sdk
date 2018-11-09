@@ -154,11 +154,12 @@ class Site extends Resource
      * Install a git repository on the given site.
      *
      * @param  array $data
+     * @param  boolean $wait
      * @return void
      */
-    public function installGitRepository(array $data)
+    public function installGitRepository(array $data, $wait = false)
     {
-        return $this->forge->installGitRepositoryOnSite($this->serverId, $this->id, $data);
+        return $this->forge->installGitRepositoryOnSite($this->serverId, $this->id, $data, $wait);
     }
 
     /**
@@ -175,11 +176,12 @@ class Site extends Resource
     /**
      * Destroy the git-based project installed on the site.
      *
+     * @param boolean $wait
      * @return void
      */
-    public function destroyGitRepository()
+    public function destroyGitRepository($wait = false)
     {
-        return $this->forge->destroySiteGitRepository($this->serverId, $this->id);
+        return $this->forge->destroySiteGitRepository($this->serverId, $this->id, $wait);
     }
 
     /**
