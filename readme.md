@@ -233,7 +233,7 @@ $forge->siteDeploymentScript($serverId, $siteId);
 $forge->updateSiteDeploymentScript($serverId, $siteId, $content);
 $forge->enableQuickDeploy($serverId, $siteId);
 $forge->disableQuickDeploy($serverId, $siteId);
-$forge->deploySite($serverId, $siteId);
+$forge->deploySite($serverId, $siteId, $wait = false);
 $forge->resetDeploymentState($serverId, $siteId);
 $forge->siteDeploymentLog($serverId, $siteId);
 
@@ -261,7 +261,7 @@ $site->getDeploymentScript();
 $site->updateDeploymentScript($content);
 $site->enableQuickDeploy();
 $site->disableQuickDeploy();
-$site->deploySite();
+$site->deploySite($wait = false);
 $site->enableHipchatNotifications(array $data);
 $site->disableHipchatNotifications();
 $site->installWordPress($data);
