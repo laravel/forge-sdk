@@ -105,12 +105,13 @@ class Certificate extends Resource
     /**
      * Install the given certificate for the site.
      *
+     * @param  array $data
      * @param  boolean $wait
      * @return void
      */
-    public function install($wait = true)
+    public function install(array $data, $wait = true)
     {
-        return $this->forge->installCertificate($this->serverId, $this->siteId, $this->id, $wait);
+        return $this->forge->installCertificate($this->serverId, $this->siteId, $this->id, $data, $wait);
     }
 
     /**
