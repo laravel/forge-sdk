@@ -82,6 +82,13 @@ class Site extends Resource
     public $quickDeploy;
 
     /**
+     * The status of the deployment.
+     *
+     * @var string|null
+     */
+    public $deploymentStatus;
+
+    /**
      * The type of the project installed on the site.
      *
      * @var string
