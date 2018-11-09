@@ -82,6 +82,13 @@ class Site extends Resource
     public $quickDeploy;
 
     /**
+     * The status of the deployment.
+     *
+     * @var string|null
+     */
+    public $deploymentStatus;
+
+    /**
      * The type of the project installed on the site.
      *
      * @var string
@@ -228,11 +235,12 @@ class Site extends Resource
     /**
      * Deploy the given site.
      *
+     * @param  boolean $wait
      * @return void
      */
-    public function deploySite()
+    public function deploySite($wait = false)
     {
-        return $this->forge->deploySite($this->serverId, $this->id);
+        return $this->forge->deploySite($this->serverId, $this->id, $wait);
     }
 
     /**
