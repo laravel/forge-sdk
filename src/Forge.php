@@ -25,7 +25,7 @@ class Forge
      *
      * @var string
      */
-    public $apiKey;
+    private $apiKey;
 
     /**
      * The Guzzle HTTP Client instance.
