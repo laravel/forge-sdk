@@ -48,8 +48,8 @@ trait ManagesServers
 
         if ($wait) {
             return $this->retry($timeout, function () use ($server) {
-                $server_check = $this->server($server['id']);
-                return $server_check->isReady ? new Server($server, $this) : null;
+                $server = $this->server($server['id']);
+                return $server->isReady ? $server : null;
             }, 120);
         }
 
