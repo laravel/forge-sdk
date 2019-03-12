@@ -19,11 +19,11 @@ class Job extends Resource
     public $serverId;
 
     /**
-     * The name of the job.
+     * The command of the job.
      *
      * @var string
      */
-    public $name;
+    public $command;
 
     /**
      * The user that runs the job on the server.

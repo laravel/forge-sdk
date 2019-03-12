@@ -94,12 +94,13 @@ trait ManagesCertificates
      * @param  integer $serverId
      * @param  integer $siteId
      * @param  integer $certificateId
+     * @param  array $data
      * @param  boolean $wait
      * @return void
      */
-    public function installCertificate($serverId, $siteId, $certificateId, $wait = true)
+    public function installCertificate($serverId, $siteId, $certificateId, array $data, $wait = true)
     {
-        $this->post("servers/$serverId/sites/$siteId/certificates/$certificateId/install");
+        $this->post("servers/$serverId/sites/$siteId/certificates/$certificateId/install", $data);
 
         if ($wait) {
             $this->retry(30, function () use ($serverId, $siteId, $certificateId) {

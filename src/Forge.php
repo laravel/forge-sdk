@@ -48,19 +48,11 @@ class Forge
      * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
-    public function __construct($apiKey, HttpClient $guzzle = null)
+    public function __construct($apiKey = null, HttpClient $guzzle = null)
     {
-        $this->apiKey = $apiKey;
-
-        $this->guzzle = $guzzle ?: new HttpClient([
-            'base_uri' => 'https://forge.laravel.com/api/v1/',
-            'http_errors' => false,
-            'headers' => [
-                'Authorization' => 'Bearer '.$this->apiKey,
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ]
-        ]);
+        if (! is_null($apiKey)) {
+            $this->setApiKey($apiKey, $guzzle);
+        }
     }
 
     /**
@@ -76,6 +68,29 @@ class Forge
         return array_map(function ($data) use ($class, $extraData) {
             return new $class($data + $extraData, $this);
         }, $collection);
+    }
+    
+    /**
+     * Set the api key and setup the guzzle request object
+     * 
+     * @param string $apiKey
+     * @return $this
+     */
+    public function setApiKey($apiKey, $guzzle)
+    {
+        $this->apiKey = $apiKey;
+        
+        $this->guzzle = $guzzle ?: new HttpClient([
+            'base_uri' => 'https://forge.laravel.com/api/v1/',
+            'http_errors' => false,
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->apiKey,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        
+        return $this;
     }
 
     /**

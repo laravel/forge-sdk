@@ -246,6 +246,7 @@ trait ManagesServers
      * Upgrade to latest PHP version.
      * 
      * @param $serverId
+     * @return void
      */
     public function upgradePHP($serverId)
     {
