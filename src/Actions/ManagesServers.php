@@ -30,7 +30,7 @@ trait ManagesServers
     }
 
     /**
-     * Create a new server. API recommended to increase timeout. 15min used
+     * Create a new server. API recommends a 2 minute delay between checks.
      *
      * @param  array $data
      * @param  boolean $wait
