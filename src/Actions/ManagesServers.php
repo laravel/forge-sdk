@@ -30,21 +30,30 @@ trait ManagesServers
     }
 
     /**
-     * Create a new server.
+     * Create a new server. API recommended to increase timeout. 15min used
      *
      * @param  array $data
+     * @param  boolean $wait
+     * @param  integer $timeout
      * @return Server
      */
-    public function createServer(array $data)
+    public function createServer(array $data, $wait = false, $timeout = 900)
     {
         $response = $this->post('servers', $data);
 
-        $output = $response['server'];
-        $output['sudo_password'] = @$response['sudo_password'];
-        $output['database_password'] = @$response['database_password'];
-        $output['provision_command'] = @$response['provision_command'];
+        $server = $response['server'];
+        $server['sudo_password'] = @$response['sudo_password'];
+        $server['database_password'] = @$response['database_password'];
+        $server['provision_command'] = @$response['provision_command'];
 
-        return new Server($output, $this);
+        if ($wait) {
+            return $this->retry($timeout, function () use ($server) {
+                $server_check = $this->server($server['id']);
+                return $server_check->isReady ? new Server($server, $this) : null;
+            }, 120);
+        }
+
+        return new Server($server, $this);
     }
 
     /**

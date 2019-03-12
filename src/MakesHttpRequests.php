@@ -106,9 +106,10 @@ trait MakesHttpRequests
      *
      * @param  integer $timeout
      * @param  callable $callback
+     * @param  integer $sleep
      * @return mixed
      */
-    public function retry($timeout, $callback)
+    public function retry($timeout, $callback, $sleep = 5)
     {
         $start = time();
 
@@ -119,7 +120,7 @@ trait MakesHttpRequests
         }
 
         if (time() - $start < $timeout) {
-            sleep(5);
+            sleep($sleep);
 
             goto beginning;
         }
