@@ -157,14 +157,13 @@ trait ManagesSites
      * @param  boolean $wait
      * @return void
      */
-    public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = false)
+    public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = true)
     {
         $this->post("servers/$serverId/sites/$siteId/git", $data);
 
         if ($wait) {
             $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-                return $site->repositoryStatus === 'installed';
+                return $this->site($serverId, $siteId)->repositoryStatus === 'installed';
             });
         }
     }
@@ -190,14 +189,13 @@ trait ManagesSites
      * @param  boolean $wait
      * @return void
      */
-    public function destroySiteGitRepository($serverId, $siteId, $wait = false)
+    public function destroySiteGitRepository($serverId, $siteId, $wait = true)
     {
         $this->delete("servers/$serverId/sites/$siteId/git");
 
         if ($wait) {
             $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-                return is_null($site->repositoryStatus);
+                return is_null($this->site($serverId, $siteId)->repositoryStatus);
             });
         }
     }
@@ -259,14 +257,13 @@ trait ManagesSites
      * @param  boolean $wait
      * @return void
      */
-    public function deploySite($serverId, $siteId, $wait = false)
+    public function deploySite($serverId, $siteId, $wait = true)
     {
         $this->post("servers/$serverId/sites/$siteId/deployment/deploy");
 
         if ($wait) {
             $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-                return is_null($site->deploymentStatus);
+                return is_null($this->site($serverId, $siteId)->deploymentStatus);
             });
         }
     }
