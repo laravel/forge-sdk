@@ -16,7 +16,7 @@ trait ManagesRedirectRules
     public function redirectRules($serverId, $siteId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/sites/$siteId/redirect-rules")['redirect-rules'],
+            $this->get("servers/$serverId/sites/$siteId/redirect-rules")['redirect_rules'],
             RedirectRule::class,
             ['server_id' => $serverId, 'site_id' => $siteId]
         );
