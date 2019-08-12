@@ -49,13 +49,13 @@ trait ManagesRedirectRules
      */
     public function createRedirectRule($serverId, $siteId, array $data, $wait = true)
     {
-        $worker = $this->post("servers/$serverId/sites/$siteId/redirect-rules", $data)['redirect_rule'];
+        $redirectRule = $this->post("servers/$serverId/sites/$siteId/redirect-rules", $data)['redirect_rule'];
 
         if ($wait) {
             return $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $redirectRule) {
                 $redirectRule = $this->redirectRule($serverId, $siteId, $redirectRule['id']);
 
-                return $redirectRule->status == 'installed' ? $worker : null;
+                return $redirectRule->status == 'installed' ? $redirectRule : null;
             });
         }
 
