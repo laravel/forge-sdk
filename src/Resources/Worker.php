@@ -102,17 +102,6 @@ class Worker extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteWorker($this->serverId, $this->siteId, $this->id);
-    }
-
-    /**
-     * Restart the given worker.
-     *
-     * @param  boolean $wait
-     * @return void
-     */
-    public function restart($wait = true)
-    {
-        return $this->forge->restartWorker($this->serverId, $this->siteId, $this->id, $wait);
+        return $this->forge->deleteRedirectRule($this->serverId, $this->siteId, $this->id);
     }
 }
