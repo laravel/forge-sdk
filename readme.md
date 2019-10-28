@@ -294,7 +294,7 @@ $forge->certificate($serverId, $siteId, $certificateId);
 $forge->createCertificate($serverId, $siteId, array $data, $wait = true);
 $forge->deleteCertificate($serverId, $siteId, $certificateId);
 $forge->getCertificateSigningRequest($serverId, $siteId, $certificateId);
-$forge->installCertificate($serverId, $siteId, $certificateId, $wait = true);
+$forge->installCertificate($serverId, $siteId, $certificateId, array $data, $wait = true);
 $forge->activateCertificate($serverId, $siteId, $certificateId, $wait = true);
 $forge->obtainLetsEncryptCertificate($serverId, $siteId, $data, $wait = true);
 ```
