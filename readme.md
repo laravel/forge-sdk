@@ -146,6 +146,13 @@ On a Job Instance you may also call:
 $job->delete();
 ```
 
+## Server Events
+
+```php
+$forge->events();
+$forge->events($serverId);
+```
+
 ## Managing Services
 
 ```php

@@ -2,6 +2,7 @@
 
 namespace Themsaid\Forge\Actions;
 
+use Themsaid\Forge\Resources\Event;
 use Themsaid\Forge\Resources\Server;
 
 trait ManagesServers
@@ -271,12 +272,27 @@ trait ManagesServers
 
     /**
      * Upgrade to latest PHP version.
-     * 
+     *
      * @param $serverId
      * @return void
      */
     public function upgradePHP($serverId)
     {
         $this->post("servers/$serverId/php/upgrade");
+    }
+
+    /**
+     * Get recent events
+     *
+     * @param $serverId
+     * @return void
+     */
+    public function events($serverId = null)
+    {
+        $endpoint = is_null($serverId) ? "servers/events" : "servers/events?server_id=" . $serverId;
+        return $this->transformCollection(
+            $this->get($endpoint),
+            Event::class
+        );
     }
 }
