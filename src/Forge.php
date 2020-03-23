@@ -3,6 +3,7 @@
 namespace Themsaid\Forge;
 
 use GuzzleHttp\Client as HttpClient;
+use Themsaid\Forge\Resources\User;
 
 class Forge
 {
@@ -31,7 +32,7 @@ class Forge
     /**
      * The Guzzle HTTP Client instance.
      *
-     * @var \GuzzleHttp\Client
+     * @var HttpClient
      */
     public $guzzle;
 
@@ -46,7 +47,7 @@ class Forge
      * Create a new Forge instance.
      *
      * @param  string $apiKey
-     * @param  \GuzzleHttp\Client $guzzle
+     * @param  HttpClient $guzzle
      * @return void
      */
     public function __construct($apiKey = null, HttpClient $guzzle = null)
@@ -74,17 +75,17 @@ class Forge
             return new $class($data + $extraData, $this);
         }, $collection);
     }
-    
+
     /**
      * Set the api key and setup the guzzle request object
-     * 
+     *
      * @param string $apiKey
      * @return $this
      */
     public function setApiKey($apiKey, $guzzle)
     {
         $this->apiKey = $apiKey;
-        
+
         $this->guzzle = $guzzle ?: new HttpClient([
             'base_uri' => 'https://forge.laravel.com/api/v1/',
             'http_errors' => false,
@@ -94,7 +95,7 @@ class Forge
                 'Content-Type' => 'application/json'
             ]
         ]);
-        
+
         return $this;
     }
 
@@ -119,5 +120,15 @@ class Forge
     public function getTimeout()
     {
         return $this->timeout;
+    }
+
+    /**
+     * Get an authenticated user instance.
+     *
+     * @return User
+     */
+    public function user()
+    {
+        return new User($this->get('user')['user']);
     }
 }

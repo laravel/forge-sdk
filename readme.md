@@ -76,6 +76,12 @@ You can also set the desired timeout value:
 $forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
 ```
 
+## Authenticated User
+
+```php
+$forge->user();
+```
+
 ## Managing Servers
 
 ```php
