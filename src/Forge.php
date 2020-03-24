@@ -15,6 +15,7 @@ class Forge
         Actions\ManagesWorkers,
         Actions\ManagesSSHKeys,
         Actions\ManagesRecipes,
+        Actions\ManagesWebhooks,
         Actions\ManagesMysqlUsers,
         Actions\ManagesCredentials,
         Actions\ManagesCertificates,

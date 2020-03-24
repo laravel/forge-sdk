@@ -299,6 +299,21 @@ $worker->delete();
 $worker->restart($wait = true);
 ```
 
+## Site Webhooks
+
+```php
+$forge->webhooks($serverId, $siteId);
+$forge->webhook($serverId, $siteId, $webhookId);
+$forge->createWebhook($serverId, $siteId, array $data);
+$forge->deleteWebhook($serverId, $siteId, $webhookId);
+```
+
+On a Webhook Instance you may also call:
+
+```php
+$webhook->delete();
+```
+
 ## Site SSL Certificates
 
 ```php
