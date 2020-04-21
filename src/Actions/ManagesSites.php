@@ -262,13 +262,16 @@ trait ManagesSites
      */
     public function deploySite($serverId, $siteId, $wait = true)
     {
-        $this->post("servers/$serverId/sites/$siteId/deployment/deploy");
+        $site = $this->post("servers/$serverId/sites/$siteId/deployment/deploy");
 
         if ($wait) {
-            $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                return is_null($this->site($serverId, $siteId)->deploymentStatus);
+            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
+                $site = $this->site($serverId, $siteId);
+                return !is_null($site->deploymentStatus) ? $site : null;
             });
         }
+
+        return new Site($site + ['server_id' => $serverId], $this);
     }
 
     /**
