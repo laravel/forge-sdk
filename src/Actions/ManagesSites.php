@@ -155,17 +155,20 @@ trait ManagesSites
      * @param  integer $siteId
      * @param  array $data
      * @param  boolean $wait
-     * @return void
+     * @return Site
      */
     public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = true)
     {
-        $this->post("servers/$serverId/sites/$siteId/git", $data);
+        $site = $this->post("servers/$serverId/sites/$siteId/git", $data);
 
         if ($wait) {
-            $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                return $this->site($serverId, $siteId)->repositoryStatus === 'installed';
+            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
+                $site = $this->site($serverId, $siteId);
+                return $site->repositoryStatus === 'installed' ? $site : null;
             });
         }
+
+        return new Site($site + ['server_id' => $serverId], $this);
     }
 
     /**
