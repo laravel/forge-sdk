@@ -48,7 +48,7 @@ trait ManagesBackups
     {
         $response = $this->post("servers/{$serverId}/backup-configs", $data);
 
-        return new BackupConfiguration($response['backup']+ ['server_id' => $serverId], $this);
+        return new BackupConfiguration($response['backup'] + ['server_id' => $serverId], $this);
     }
 
     /**
