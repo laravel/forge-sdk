@@ -387,6 +387,26 @@ $recipe->delete();
 $recipe->run(array $data);
 ```
 
+## Managing Backups
+
+```php
+$forge->backupConfigs($serverId);
+$forge->createBackupConfig($serverId, array $data);
+$forge->backupConfig($serverId, $backupConfigurationId);
+$forge->deleteBackupConfig($serverId, $backupConfigurationId);
+$forge->restoreBackup($serverId, $backupConfigurationId, $backupId);
+$forge->deleteBackup($serverId, $backupConfigurationId, $backupId);
+
+```
+
+On a BackupConfiguration Instance you may also call:
+
+```php
+
+$backupConfig->delete();
+$backupConfig->restoreBackup($backupId);
+$backupConfig->deleteBackup($backupId);
+```
 
 ## Testing
 
