@@ -58,14 +58,14 @@ class BackupConfiguration extends Resource
      *
      * Note: this is only available when getting a single configuration.
      *
-     * @var array
+     * @var \Themsaid\Forge\Resources\MysqlDatabase[]
      */
     public $databases;
 
     /**
      * The databases for this backup
      *
-     * @var array
+     * @var \Themsaid\Forge\Resources\Backup[]
      */
     public $backups;
 
