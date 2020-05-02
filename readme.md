@@ -390,10 +390,10 @@ $recipe->run(array $data);
 ## Managing Backups
 
 ```php
-$forge->backupConfigs($serverId);
-$forge->createBackupConfig($serverId, array $data);
-$forge->backupConfig($serverId, $backupConfigurationId);
-$forge->deleteBackupConfig($serverId, $backupConfigurationId);
+$forge->backupConfigurations($serverId);
+$forge->createBackupConfiguration($serverId, array $data);
+$forge->backupConfiguration($serverId, $backupConfigurationId);
+$forge->deleteBackupConfiguration($serverId, $backupConfigurationId);
 $forge->restoreBackup($serverId, $backupConfigurationId, $backupId);
 $forge->deleteBackup($serverId, $backupConfigurationId, $backupId);
 
@@ -406,6 +406,14 @@ On a BackupConfiguration Instance you may also call:
 $backupConfig->delete();
 $backupConfig->restoreBackup($backupId);
 $backupConfig->deleteBackup($backupId);
+```
+
+On a Backup Instance you may also call:
+
+```php
+
+$backupConfig->delete();
+$backupConfig->restore();
 ```
 
 ## Testing

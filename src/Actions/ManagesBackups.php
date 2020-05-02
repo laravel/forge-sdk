@@ -14,7 +14,7 @@ trait ManagesBackups
      * @param  string $serverId
      * @return \Themsaid\Forge\Resources\BackupConfiguration[]
      */
-    public function backupConfigs($serverId)
+    public function backupConfigurations($serverId)
     {
         return $this->transformCollection(
             $this->get("servers/$serverId/backup-configs")['backups'],
@@ -30,7 +30,7 @@ trait ManagesBackups
      * @param  string $backupConfigurationId
      * @return BackupConfiguration
      */
-    public function backupConfig($serverId, $backupConfigurationId)
+    public function backupConfiguration($serverId, $backupConfigurationId)
     {
         return new BackupConfiguration(
             $this->get("servers/{$serverId}/backup-configs/{$backupConfigurationId}")['backup']
@@ -44,7 +44,7 @@ trait ManagesBackups
      * @param  array $data
      * @return BackupConfiguration
      */
-    public function createBackupConfig($serverId, array $data)
+    public function createBackupConfiguration($serverId, array $data)
     {
         $response = $this->post("servers/{$serverId}/backup-configs", $data);
 
@@ -57,7 +57,7 @@ trait ManagesBackups
      * @param  string $serverId
      * @param  string $backupConfigurationId
      */
-    public function deleteBackupConfig($serverId, $backupConfigurationId)
+    public function deleteBackupConfiguration($serverId, $backupConfigurationId)
     {
          $this->delete("servers/{$serverId}/backup-configs/{$backupConfigurationId}");
     }

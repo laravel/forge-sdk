@@ -19,13 +19,6 @@ class BackupConfiguration extends Resource
     public $serverId;
 
     /**
-     * The id of the database.
-     *
-     * @var integer
-     */
-    public $databaseId;
-
-    /**
      * The day of the week: 0 (Sunday) - 6 (Saturday).
      *
      * @var int|null
@@ -61,7 +54,9 @@ class BackupConfiguration extends Resource
     public $lastBackupTime;
 
     /**
-     * The databases for this backup
+     * The databases for this backup.
+     *
+     * Note: this is only available when getting a single configuration.
      *
      * @var array
      */
@@ -70,26 +65,52 @@ class BackupConfiguration extends Resource
     /**
      * The databases for this backup
      *
-     * @var array|null
+     * @var array
      */
     public $backups;
 
-
     /**
-     * The date/time the certificate was created.
+     * The date/time the configuration was created.
      *
      * @var string
      */
     public $createdAt;
 
+    public function __construct(array $attributes, $forge = null)
+    {
+        parent::__construct($attributes, $forge);
+
+        $this->databases = $this->transformCollection(
+            $this->databases ?: [],
+            MysqlDatabase::class,
+            ['server_id' => $this->serverId]
+        );
+
+        $this->backups = $this->transformCollection(
+            $this->backups,
+            Backup::class,
+            ['server_id' => $this->serverId]
+        );
+    }
+
     /**
-     * Delete the given recipe.
+     * Get the given backup configuration.
+     *
+     * @return static
+     */
+    public function get()
+    {
+        return $this->forge->backupConfiguration($this->serverId, $this->id);
+    }
+
+    /**
+     * Delete the given configuration.
      *
      * @return void
      */
     public function delete()
     {
-        $this->forge->deleteBackupConfig($this->serverId, $this->id);
+        $this->forge->deleteBackupConfiguration($this->serverId, $this->id);
     }
 
     /**
@@ -105,7 +126,7 @@ class BackupConfiguration extends Resource
     }
 
     /**
-     * Delete the given recipe.
+     * Delete the given backup.
      *
      * @param $backupId
      *
