@@ -403,6 +403,7 @@ On a BackupConfiguration Instance you may also call:
 
 ```php
 
+$extendedConfig = $backupConfig->get(); // Load the databases also
 $backupConfig->delete();
 $backupConfig->restoreBackup($backupId);
 $backupConfig->deleteBackup($backupId);
