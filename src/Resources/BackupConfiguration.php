@@ -70,14 +70,7 @@ class BackupConfiguration extends Resource
     /**
      * The databases for this backup
      *
-     * @var array
-     */
-    public $logs;
-
-    /**
-     * The databases for this backup
-     *
-     * @var array
+     * @var array|null
      */
     public $backups;
 
