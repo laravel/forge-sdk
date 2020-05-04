@@ -94,16 +94,6 @@ class BackupConfiguration extends Resource
     }
 
     /**
-     * Get the given backup configuration.
-     *
-     * @return static
-     */
-    public function get()
-    {
-        return $this->forge->backupConfiguration($this->serverId, $this->id);
-    }
-
-    /**
      * Delete the given configuration.
      *
      * @return void
