@@ -22,7 +22,8 @@ class Forge
         Actions\ManagesCertificates,
         Actions\ManagesFirewallRules,
         Actions\ManagesRedirectRules,
-        Actions\ManagesMysqlDatabases;
+        Actions\ManagesMysqlDatabases,
+        Actions\ManagesMonitors;
 
     /**
      * The Forge API Key.
