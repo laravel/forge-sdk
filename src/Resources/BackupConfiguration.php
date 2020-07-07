@@ -87,7 +87,7 @@ class BackupConfiguration extends Resource
         );
 
         $this->backups = $this->transformCollection(
-            $this->backups,
+            $this->backups ?: [],
             Backup::class,
             ['server_id' => $this->serverId]
         );
