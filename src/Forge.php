@@ -22,6 +22,7 @@ class Forge
         Actions\ManagesCertificates,
         Actions\ManagesFirewallRules,
         Actions\ManagesRedirectRules,
+        Actions\ManagesSecurityRules,
         Actions\ManagesMysqlDatabases,
         Actions\ManagesMonitors;
 

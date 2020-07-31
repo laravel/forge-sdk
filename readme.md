@@ -299,6 +299,21 @@ $worker->delete();
 $worker->restart($wait = true);
 ```
 
+## Security Rules
+
+```php
+$forge->securityRules($serverId, $siteId);
+$forge->securityRule($serverId, $siteId, $ruleId);
+$forge->createSecurityRule($serverId, $siteId, array $data);
+$forge->deleteSecurityRule($serverId, $siteId, $ruleId);
+```
+
+On a SecurityRule Instance you may also call:
+
+```php
+$securityRule->delete();
+```
+
 ## Site Webhooks
 
 ```php
