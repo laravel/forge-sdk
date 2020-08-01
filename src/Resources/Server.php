@@ -249,9 +249,9 @@ class Server extends Resource
      *
      * @return void
      */
-    public function rebootPHP()
+    public function rebootPHP(array $data)
     {
-        return $this->forge->rebootPHP($this->id);
+        return $this->forge->rebootPHP($this->id, $data);
     }
 
     /**

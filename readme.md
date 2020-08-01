@@ -189,6 +189,7 @@ $forge->enableOPCache($serverId);
 $forge->disableOPCache($serverId);
 
 // PHP
+$forge->rebootPHP($serverId, $version);
 $forge->upgradePHP($serverId);
 ```
 
