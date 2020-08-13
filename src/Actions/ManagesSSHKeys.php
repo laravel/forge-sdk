@@ -9,8 +9,8 @@ trait ManagesSSHKeys
     /**
      * Get the collection of keys.
      *
-     * @param  integer $serverId
-     * @return SSHKey[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\SSHKey[]
      */
     public function keys($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesSSHKeys
     /**
      * Get an SSH key instance.
      *
-     * @param  integer $serverId
-     * @param  integer $keyId
-     * @return SSHKey
+     * @param  int  $serverId
+     * @param  int  $keyId
+     * @return \Laravel\Forge\Resources\SSHKey
      */
     public function SSHKey($serverId, $keyId)
     {
@@ -38,10 +38,10 @@ trait ManagesSSHKeys
     /**
      * Create a new SSH key.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return SSHKey
+     * @param  int  $serverId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\SSHKey
      */
     public function createSSHKey($serverId, array $data, $wait = true)
     {
@@ -61,8 +61,8 @@ trait ManagesSSHKeys
     /**
      * Delete the given key.
      *
-     * @param  integer $serverId
-     * @param  integer $keyId
+     * @param  int  $serverId
+     * @param  int  $keyId
      * @return void
      */
     public function deleteSSHKey($serverId, $keyId)

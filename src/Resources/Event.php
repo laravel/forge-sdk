@@ -4,11 +4,10 @@ namespace Laravel\Forge\Resources;
 
 class Event extends Resource
 {
-
     /**
-     * The id of the server where the event occured.
+     * The id of the server where the event occurred.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -20,7 +19,7 @@ class Event extends Resource
     public $ranAs;
 
     /**
-     * The name of the server the event occured.
+     * The name of the server the event occurred.
      *
      * @var string
      */
@@ -39,5 +38,4 @@ class Event extends Resource
      * @var string
      */
     public $createdAt;
-
 }

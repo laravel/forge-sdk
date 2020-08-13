@@ -9,8 +9,8 @@ trait ManagesMysqlDatabases
     /**
      * Get the collection of MySQL Databases.
      *
-     * @param  integer $serverId
-     * @return MysqlDatabase[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\MysqlDatabase[]
      */
     public function mysqlDatabases($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesMysqlDatabases
     /**
      * Get a MySQL Database instance.
      *
-     * @param  integer $serverId
-     * @param  integer $databaseId
-     * @return MysqlDatabase
+     * @param  int  $serverId
+     * @param  int  $databaseId
+     * @return \Laravel\Forge\Resources\MysqlDatabase
      */
     public function mysqlDatabase($serverId, $databaseId)
     {
@@ -38,10 +38,10 @@ trait ManagesMysqlDatabases
     /**
      * Create a new MySQL Database.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return MysqlDatabase
+     * @param  int  $serverId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\MysqlDatabase
      */
     public function createMysqlDatabase($serverId, array $data, $wait = true)
     {
@@ -61,10 +61,10 @@ trait ManagesMysqlDatabases
     /**
      * Update the given MySQL Database.
      *
-     * @param  integer $serverId
-     * @param  integer $databaseId
-     * @param  array $data
-     * @return MysqlDatabase
+     * @param  int  $serverId
+     * @param  int  $databaseId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\MysqlDatabase
      */
     public function updateMysqlDatabase($serverId, $databaseId, array $data)
     {
@@ -77,8 +77,8 @@ trait ManagesMysqlDatabases
     /**
      * Delete the given database.
      *
-     * @param  integer $serverId
-     * @param  integer $databaseId
+     * @param  int  $serverId
+     * @param  int  $databaseId
      * @return void
      */
     public function deleteMysqlDatabase($serverId, $databaseId)

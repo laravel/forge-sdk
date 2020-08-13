@@ -9,8 +9,8 @@ trait ManagesJobs
     /**
      * Get the collection of jobs.
      *
-     * @param  integer $serverId
-     * @return Job[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\Job[]
      */
     public function jobs($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesJobs
     /**
      * Get a job instance.
      *
-     * @param  integer $serverId
-     * @param  integer $jobId
-     * @return Job
+     * @param  int  $serverId
+     * @param  int  $jobId
+     * @return \Laravel\Forge\Resources\Job
      */
     public function job($serverId, $jobId)
     {
@@ -38,10 +38,10 @@ trait ManagesJobs
     /**
      * Create a new job.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return Job
+     * @param  int  $serverId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Job
      */
     public function createJob($serverId, array $data, $wait = true)
     {
@@ -61,8 +61,8 @@ trait ManagesJobs
     /**
      * Delete the given job.
      *
-     * @param  integer $serverId
-     * @param  integer $jobId
+     * @param  int  $serverId
+     * @param  int  $jobId
      * @return void
      */
     public function deleteJob($serverId, $jobId)

@@ -7,7 +7,7 @@ class Server extends Resource
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -21,7 +21,7 @@ class Server extends Resource
     /**
      * The id of the provider credential instance.
      *
-     * @var integer
+     * @var int
      */
     public $credentialId;
 
@@ -126,8 +126,8 @@ class Server extends Resource
     /**
      * Update the given server.
      *
-     * @param  array $data
-     * @return Server
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Server
      */
     public function update(array $data)
     {
@@ -141,7 +141,7 @@ class Server extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteServer($this->id);
+        $this->forge->deleteServer($this->id);
     }
 
     /**
@@ -151,7 +151,7 @@ class Server extends Resource
      */
     public function reboot()
     {
-        return $this->forge->rebootServer($this->id);
+        $this->forge->rebootServer($this->id);
     }
 
     /**
@@ -161,17 +161,17 @@ class Server extends Resource
      */
     public function revokeAccess()
     {
-        return $this->forge->revokeAccessToServer($this->id);
+        $this->forge->revokeAccessToServer($this->id);
     }
 
     /**
      * Reconnect the server to Forge with a new key.
      *
-     * @return string
+     * @return void
      */
     public function reconnect()
     {
-        return $this->forge->reconnectToServer($this->id);
+        $this->forge->reconnectToServer($this->id);
     }
 
     /**
@@ -181,7 +181,7 @@ class Server extends Resource
      */
     public function reactivate()
     {
-        return $this->forge->reactivateToServer($this->id);
+        $this->forge->reactivateToServer($this->id);
     }
 
     /**
@@ -191,7 +191,7 @@ class Server extends Resource
      */
     public function rebootMysql()
     {
-        return $this->forge->rebootMysql($this->id);
+        $this->forge->rebootMysql($this->id);
     }
 
     /**
@@ -201,7 +201,7 @@ class Server extends Resource
      */
     public function stopMysql()
     {
-        return $this->forge->stopMysql($this->id);
+        $this->forge->stopMysql($this->id);
     }
 
     /**
@@ -211,7 +211,7 @@ class Server extends Resource
      */
     public function rebootPostgres()
     {
-        return $this->forge->rebootPostgres($this->id);
+        $this->forge->rebootPostgres($this->id);
     }
 
     /**
@@ -221,7 +221,7 @@ class Server extends Resource
      */
     public function stopPostgres()
     {
-        return $this->forge->stopPostgres($this->id);
+        $this->forge->stopPostgres($this->id);
     }
 
     /**
@@ -231,7 +231,7 @@ class Server extends Resource
      */
     public function rebootNginx()
     {
-        return $this->forge->rebootNginx($this->id);
+        $this->forge->rebootNginx($this->id);
     }
 
     /**
@@ -241,7 +241,7 @@ class Server extends Resource
      */
     public function stopNginx()
     {
-        return $this->forge->stopNginx($this->id);
+        $this->forge->stopNginx($this->id);
     }
 
     /**
@@ -251,78 +251,78 @@ class Server extends Resource
      */
     public function rebootPHP()
     {
-        return $this->forge->rebootPHP($this->id);
+        $this->forge->rebootPHP($this->id);
     }
 
     /**
      * Install Blackfire on the server.
      *
-     * @param  array $data
-     * @return Server
+     * @param  array  $data
+     * @return void
      */
     public function installBlackfire(array $data)
     {
-        return $this->forge->installBlackfire($this->id, $data);
+        $this->forge->installBlackfire($this->id, $data);
     }
 
     /**
      * Remove Blackfire from the server.
      *
-     * @return Server
+     * @return void
      */
     public function removeBlackfire()
     {
-        return $this->forge->removeBlackfire($this->id);
+        $this->forge->removeBlackfire($this->id);
     }
 
     /**
      * Install Papertrail on the server.
      *
-     * @param  array $data
-     * @return Server
+     * @param  array  $data
+     * @return void
      */
     public function installPapertrail(array $data)
     {
-        return $this->forge->installPapertrail($this->id, $data);
+        $this->forge->installPapertrail($this->id, $data);
     }
 
     /**
      * Remove Papertrail from the server.
      *
-     * @return Server
+     * @return void
      */
     public function removePapertrail()
     {
-        return $this->forge->removePapertrail($this->id);
+        $this->forge->removePapertrail($this->id);
     }
 
     /**
      * Enable OPCache on the server.
      *
-     * @return Server
+     * @return void
      */
     public function enableOPCache()
     {
-        return $this->forge->enableOPCache($this->id);
+        $this->forge->enableOPCache($this->id);
     }
 
     /**
      * Disable OPCache on the server.
      *
-     * @return Server
+     * @return void
      */
     public function disableOPCache()
     {
-        return $this->forge->disableOPCache($this->id);
+        $this->forge->disableOPCache($this->id);
     }
 
     /**
      * Upgrade to latest PHP version.
      *
-     * @return Server
+     * @return void
      */
     public function upgradePHP()
     {
-        return $this->forge->upgradePHP($this->id);
+        $this->forge->upgradePHP($this->id);
     }
 }

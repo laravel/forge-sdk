@@ -9,8 +9,8 @@ trait ManagesMysqlUsers
     /**
      * Get the collection of MySQL users.
      *
-     * @param  integer $serverId
-     * @return MysqlUser[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\MysqlUser[]
      */
     public function mysqlUsers($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesMysqlUsers
     /**
      * Get a MySQL user instance.
      *
-     * @param  integer $serverId
-     * @param  integer $userId
-     * @return MysqlUser
+     * @param  int  $serverId
+     * @param  int  $userId
+     * @return \Laravel\Forge\Resources\MysqlUser
      */
     public function mysqlUser($serverId, $userId)
     {
@@ -38,10 +38,10 @@ trait ManagesMysqlUsers
     /**
      * Create a new MySQL User.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return MysqlUser
+     * @param  int  $serverId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\MysqlUser
      */
     public function createMysqlUser($serverId, array $data, $wait = true)
     {
@@ -61,10 +61,10 @@ trait ManagesMysqlUsers
     /**
      * Update the given MySQL User.
      *
-     * @param  integer $serverId
-     * @param  integer $userId
-     * @param  array $data
-     * @return MysqlUser
+     * @param  int  $serverId
+     * @param  int  $userId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\MysqlUser
      */
     public function updateMysqlUser($serverId, $userId, array $data)
     {
@@ -77,8 +77,8 @@ trait ManagesMysqlUsers
     /**
      * Delete the given user.
      *
-     * @param  integer $serverId
-     * @param  integer $userId
+     * @param  int  $serverId
+     * @param  int  $userId
      * @return void
      */
     public function deleteMysqlUser($serverId, $userId)

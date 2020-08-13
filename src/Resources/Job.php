@@ -7,14 +7,14 @@ class Job extends Resource
     /**
      * The id of the job.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 

@@ -7,21 +7,21 @@ class RedirectRule extends Resource
     /**
      * The id of the rule.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
     /**
      * The id of the site.
      *
-     * @var integer
+     * @var int
      */
     public $siteId;
 

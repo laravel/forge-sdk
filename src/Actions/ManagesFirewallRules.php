@@ -9,8 +9,8 @@ trait ManagesFirewallRules
     /**
      * Get the collection of firewall rules.
      *
-     * @param  integer $serverId
-     * @return FirewallRule[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\FirewallRule[]
      */
     public function firewallRules($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesFirewallRules
     /**
      * Get a firewall rule instance.
      *
-     * @param  integer $serverId
-     * @param  integer $ruleId
-     * @return FirewallRule
+     * @param  int  $serverId
+     * @param  int  $ruleId
+     * @return \Laravel\Forge\Resources\FirewallRule
      */
     public function firewallRule($serverId, $ruleId)
     {
@@ -38,10 +38,10 @@ trait ManagesFirewallRules
     /**
      * Create a new firewall rule.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return FirewallRule
+     * @param  int  $serverId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\FirewallRule
      */
     public function createFirewallRule($serverId, array $data, $wait = true)
     {
@@ -61,8 +61,8 @@ trait ManagesFirewallRules
     /**
      * Delete the given firewall rule.
      *
-     * @param  integer $serverId
-     * @param  integer $ruleId
+     * @param  int  $serverId
+     * @param  int  $ruleId
      * @return void
      */
     public function deleteFirewallRule($serverId, $ruleId)

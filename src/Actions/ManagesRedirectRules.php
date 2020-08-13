@@ -9,9 +9,9 @@ trait ManagesRedirectRules
     /**
      * Get the collection of redirect rules.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @return RedirectRule[]
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return \Laravel\Forge\Resources\RedirectRule[]
      */
     public function redirectRules($serverId, $siteId)
     {
@@ -25,10 +25,10 @@ trait ManagesRedirectRules
     /**
      * Get a redirect rule instance.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $ruleId
-     * @return RedirectRule
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $ruleId
+     * @return \Laravel\Forge\Resources\RedirectRule
      */
     public function redirectRule($serverId, $siteId, $ruleId)
     {
@@ -41,11 +41,11 @@ trait ManagesRedirectRules
     /**
      * Create a new redirect rule.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return RedirectRule
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\RedirectRule
      */
     public function createRedirectRule($serverId, $siteId, array $data, $wait = true)
     {
@@ -65,9 +65,9 @@ trait ManagesRedirectRules
     /**
      * Delete the given redirect rule.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $ruleId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $ruleId
      * @return void
      */
     public function deleteRedirectRule($serverId, $siteId, $ruleId)

@@ -7,14 +7,14 @@ class MysqlDatabase extends Resource
     /**
      * The id of the database.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -42,8 +42,8 @@ class MysqlDatabase extends Resource
     /**
      * Update the given MySQL Database.
      *
-     * @param  array $data
-     * @return MysqlDatabase
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\MysqlDatabase
      */
     public function update(array $data)
     {
@@ -57,6 +57,6 @@ class MysqlDatabase extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteMysqlDatabase($this->serverId, $this->id);
+        $this->forge->deleteMysqlDatabase($this->serverId, $this->id);
     }
 }

@@ -9,8 +9,8 @@ trait ManagesMonitors
     /**
      * Get the collection of monitors.
      *
-     * @param  integer $serverId
-     * @return Monitor[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\Monitor[]
      */
     public function monitors($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesMonitors
     /**
      * Get a monitor instance.
      *
-     * @param  integer $serverId
-     * @param  integer $monitorId
-     * @return Monitor
+     * @param  int  $serverId
+     * @param  int  $monitorId
+     * @return \Laravel\Forge\Resources\Monitor
      */
     public function monitor($serverId, $monitorId)
     {
@@ -38,9 +38,9 @@ trait ManagesMonitors
     /**
      * Create a new monitor.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @return Monitor
+     * @param  int  $serverId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Monitor
      */
     public function createMonitor($serverId, array $data)
     {
@@ -52,8 +52,8 @@ trait ManagesMonitors
     /**
      * Delete the given monitor.
      *
-     * @param  integer $serverId
-     * @param  integer $monitorId
+     * @param  int  $serverId
+     * @param  int  $monitorId
      * @return void
      */
     public function deleteMonitor($serverId, $monitorId)

@@ -16,6 +16,7 @@ class ValidationException extends Exception
     /**
      * Create a new exception instance.
      *
+     * @param  array  $errors
      * @return void
      */
     public function __construct(array $errors)

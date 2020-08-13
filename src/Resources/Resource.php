@@ -16,18 +16,18 @@ class Resource
     /**
      * The Forge SDK instance.
      *
-     * @var Forge
+     * @var \Laravel\Forge\Forge|null
      */
     protected $forge;
 
     /**
      * Create a new resource instance.
      *
-     * @param  array $attributes
-     * @param  Forge $forge
+     * @param  array  $attributes
+     * @param  \Laravel\Forge\Forge|null  $forge
      * @return void
      */
-    public function __construct(array $attributes, $forge = null)
+    public function __construct(array $attributes, Forge $forge = null)
     {
         $this->attributes = $attributes;
         $this->forge = $forge;
@@ -40,7 +40,7 @@ class Resource
      *
      * @return void
      */
-    private function fill()
+    protected function fill()
     {
         foreach ($this->attributes as $key => $value) {
             $key = $this->camelCase($key);
@@ -52,9 +52,10 @@ class Resource
     /**
      * Convert the key name to camel case.
      *
-     * @param $key
+     * @param  string  $key
+     * @return string
      */
-    private function camelCase($key)
+    protected function camelCase($key)
     {
         $parts = explode('_', $key);
 
@@ -70,12 +71,12 @@ class Resource
     /**
      * Transform the items of the collection to the given class.
      *
-     * @param  array $collection
-     * @param  string $class
-     * @param  array $extraData
+     * @param  array  $collection
+     * @param  string  $class
+     * @param  array  $extraData
      * @return array
      */
-    protected function transformCollection($collection, $class, $extraData = [])
+    protected function transformCollection(array $collection, $class, array $extraData = [])
     {
         return array_map(function ($data) use ($class, $extraData) {
             return new $class($data + $extraData, $this->forge);
