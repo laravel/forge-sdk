@@ -1,12 +1,24 @@
 {
-    "name": "themsaid/forge-sdk",
-    "description": "Laravel Forge PHP SDK (Unofficial)",
+    "name": "laravel/forge-sdk",
+    "description": "The official Laravel Forge PHP SDK.",
     "keywords": ["laravel", "forge"],
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/laravel/forge-sdk/issues",
+        "source": "https://github.com/laravel/forge-sdk"
+    },
     "authors": [
+        {
+            "name": "Taylor Otwell",
+            "email": "taylor@laravel.com"
+        },
         {
             "name": "Mohamed Said",
             "email": "mohamed@laravel.com"
+        },
+        {
+            "name": "Dries Vints",
+            "email": "dries@laravel.com"
         }
     ],
     "require": {
@@ -22,5 +34,14 @@
             "Themsaid\\Forge\\": "src/"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
