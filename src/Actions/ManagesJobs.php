@@ -1,8 +1,8 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Job;
+use Laravel\Forge\Resources\Job;
 
 trait ManagesJobs
 {

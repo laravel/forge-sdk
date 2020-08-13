@@ -1,8 +1,8 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Site;
+use Laravel\Forge\Resources\Site;
 
 trait ManagesSites
 {

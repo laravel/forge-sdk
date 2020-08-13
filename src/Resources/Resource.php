@@ -1,8 +1,8 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
-use Themsaid\Forge\Forge;
+use Laravel\Forge\Forge;
 
 class Resource
 {

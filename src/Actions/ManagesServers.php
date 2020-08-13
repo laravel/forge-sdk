@@ -1,9 +1,9 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Event;
-use Themsaid\Forge\Resources\Server;
+use Laravel\Forge\Resources\Event;
+use Laravel\Forge\Resources\Server;
 
 trait ManagesServers
 {

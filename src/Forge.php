@@ -1,9 +1,9 @@
 <?php
 
-namespace Themsaid\Forge;
+namespace Laravel\Forge;
 
 use GuzzleHttp\Client as HttpClient;
-use Themsaid\Forge\Resources\User;
+use Laravel\Forge\Resources\User;
 
 class Forge
 {

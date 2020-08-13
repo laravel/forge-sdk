@@ -1,6 +1,6 @@
 <?php
 
-namespace Themsaid\Forge\Exceptions;
+namespace Laravel\Forge\Exceptions;
 
 use Exception;
 
