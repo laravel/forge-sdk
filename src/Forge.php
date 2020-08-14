@@ -30,7 +30,7 @@ class Forge
      *
      * @var string
      */
-    public $apiKey;
+    protected $apiKey;
 
     /**
      * The Guzzle HTTP Client instance.
