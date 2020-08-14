@@ -1,20 +1,20 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Site extends Resource
 {
     /**
      * The id of the site.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -35,7 +35,7 @@ class Site extends Resource
     /**
      * Determine if the site allows Wildcard Sub-Domains.
      *
-     * @var boolean
+     * @var bool
      */
     public $wildcards;
 
@@ -77,7 +77,7 @@ class Site extends Resource
     /**
      * Determine if "Quick Deploy" is enabled for the site.
      *
-     * @var boolean
+     * @var bool
      */
     public $quickDeploy;
 
@@ -144,7 +144,7 @@ class Site extends Resource
      */
     public function refreshToken()
     {
-        return $this->forge->refreshSiteToken($this->serverId, $this->id);
+        $this->forge->refreshSiteToken($this->serverId, $this->id);
     }
 
     /**
@@ -160,9 +160,9 @@ class Site extends Resource
     /**
      * Install a git repository on the given site.
      *
-     * @param  array $data
-     * @param  boolean $wait
-     * @return void
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Site
      */
     public function installGitRepository(array $data, $wait = true)
     {
@@ -172,23 +172,23 @@ class Site extends Resource
     /**
      * Update the site's git repository parameters.
      *
-     * @param  array $data
+     * @param  array  $data
      * @return void
      */
     public function updateGitRepository(array $data)
     {
-        return $this->forge->updateSiteGitRepository($this->serverId, $this->id, $data);
+        $this->forge->updateSiteGitRepository($this->serverId, $this->id, $data);
     }
 
     /**
      * Destroy the git-based project installed on the site.
      *
-     * @param boolean $wait
+     * @param  bool  $wait
      * @return void
      */
     public function destroyGitRepository($wait = true)
     {
-        return $this->forge->destroySiteGitRepository($this->serverId, $this->id, $wait);
+        $this->forge->destroySiteGitRepository($this->serverId, $this->id, $wait);
     }
 
     /**
@@ -204,12 +204,12 @@ class Site extends Resource
     /**
      * Update the content of the site's deployment script.
      *
-     * @param  string $content
+     * @param  string  $content
      * @return void
      */
     public function updateDeploymentScript($content)
     {
-        return $this->forge->updateSiteDeploymentScript($this->serverId, $this->id, $content);
+        $this->forge->updateSiteDeploymentScript($this->serverId, $this->id, $content);
     }
 
     /**
@@ -219,7 +219,7 @@ class Site extends Resource
      */
     public function enableQuickDeploy()
     {
-        return $this->forge->enableQuickDeploy($this->serverId, $this->id);
+        $this->forge->enableQuickDeploy($this->serverId, $this->id);
     }
 
     /**
@@ -229,14 +229,14 @@ class Site extends Resource
      */
     public function disableQuickDeploy()
     {
-        return $this->forge->disableQuickDeploy($this->serverId, $this->id);
+        $this->forge->disableQuickDeploy($this->serverId, $this->id);
     }
 
     /**
      * Deploy the given site.
      *
-     * @param  boolean $wait
-     * @return void
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Site
      */
     public function deploySite($wait = true)
     {
@@ -246,12 +246,12 @@ class Site extends Resource
     /**
      * Enable Hipchat Notifications for the given site.
      *
-     * @param  array $data
+     * @param  array  $data
      * @return void
      */
     public function enableHipchatNotifications(array $data)
     {
-        return $this->forge->enableHipchatNotifications($this->serverId, $this->id, $data);
+        $this->forge->enableHipchatNotifications($this->serverId, $this->id, $data);
     }
 
     /**
@@ -261,17 +261,18 @@ class Site extends Resource
      */
     public function disableHipchatNotifications()
     {
-        return $this->forge->disableHipchatNotifications($this->serverId, $this->id);
+        $this->forge->disableHipchatNotifications($this->serverId, $this->id);
     }
 
     /**
      * Install a new WordPress project.
      *
+     * @param  array  $data
      * @return void
      */
-    public function installWordPress($data)
+    public function installWordPress(array $data)
     {
-        return $this->forge->installWordPress($this->serverId, $this->id, $data);
+        $this->forge->installWordPress($this->serverId, $this->id, $data);
     }
 
     /**
@@ -281,7 +282,7 @@ class Site extends Resource
      */
     public function removeWordPress()
     {
-        return $this->forge->removeWordPress($this->serverId, $this->id);
+        $this->forge->removeWordPress($this->serverId, $this->id);
     }
 }
 

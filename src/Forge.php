@@ -1,9 +1,9 @@
 <?php
 
-namespace Themsaid\Forge;
+namespace Laravel\Forge;
 
 use GuzzleHttp\Client as HttpClient;
-use Themsaid\Forge\Resources\User;
+use Laravel\Forge\Resources\User;
 
 class Forge
 {
@@ -35,7 +35,7 @@ class Forge
     /**
      * The Guzzle HTTP Client instance.
      *
-     * @var HttpClient
+     * @var \GuzzleHttp\Client
      */
     public $guzzle;
 
@@ -49,8 +49,8 @@ class Forge
     /**
      * Create a new Forge instance.
      *
-     * @param  string $apiKey
-     * @param  HttpClient $guzzle
+     * @param  string|null  $apiKey
+     * @param  \GuzzleHttp\Client|null  $guzzle
      * @return void
      */
     public function __construct($apiKey = null, HttpClient $guzzle = null)
@@ -67,9 +67,9 @@ class Forge
     /**
      * Transform the items of the collection to the given class.
      *
-     * @param  array $collection
-     * @param  string $class
-     * @param  array $extraData
+     * @param  array  $collection
+     * @param  string  $class
+     * @param  array  $extraData
      * @return array
      */
     protected function transformCollection($collection, $class, $extraData = [])
@@ -82,10 +82,11 @@ class Forge
     /**
      * Set the api key and setup the guzzle request object
      *
-     * @param string $apiKey
+     * @param  string  $apiKey
+     * @param  \GuzzleHttp\Client|null  $guzzle
      * @return $this
      */
-    public function setApiKey($apiKey, $guzzle)
+    public function setApiKey($apiKey, $guzzle = null)
     {
         $this->apiKey = $apiKey;
 
@@ -105,7 +106,7 @@ class Forge
     /**
      * Set a new timeout
      *
-     * @param  int $timeout
+     * @param  int  $timeout
      * @return $this
      */
     public function setTimeout($timeout)
@@ -118,7 +119,7 @@ class Forge
     /**
      * Get the timeout
      *
-     * @return  int
+     * @return int
      */
     public function getTimeout()
     {
@@ -128,7 +129,7 @@ class Forge
     /**
      * Get an authenticated user instance.
      *
-     * @return User
+     * @return \Laravel\Forge\Resources\User
      */
     public function user()
     {

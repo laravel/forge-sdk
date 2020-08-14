@@ -1,20 +1,22 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
+
+use Laravel\Forge\Forge;
 
 class BackupConfiguration extends Resource
 {
     /**
      * The id of the backup.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -35,7 +37,7 @@ class BackupConfiguration extends Resource
     /**
      * The provider (s3 or spaces)
      *
-     * @var boolean
+     * @var bool
      */
     public $provider;
 
@@ -58,14 +60,14 @@ class BackupConfiguration extends Resource
      *
      * Note: this is only available when getting a single configuration.
      *
-     * @var \Themsaid\Forge\Resources\MysqlDatabase[]
+     * @var \Laravel\Forge\Resources\MysqlDatabase[]
      */
     public $databases;
 
     /**
-     * The databases for this backup
+     * The databases for this backup.
      *
-     * @var \Themsaid\Forge\Resources\Backup[]
+     * @var \Laravel\Forge\Resources\Backup[]
      */
     public $backups;
 
@@ -76,7 +78,14 @@ class BackupConfiguration extends Resource
      */
     public $createdAt;
 
-    public function __construct(array $attributes, $forge = null)
+    /**
+     * Create a new BackupConfiguration instance.
+     *
+     * @param  array  $attributes
+     * @param  \Laravel\Forge\Forge|null  $forge
+     * @return void
+     */
+    public function __construct(array $attributes, Forge $forge = null)
     {
         parent::__construct($attributes, $forge);
 

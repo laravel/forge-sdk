@@ -1,6 +1,6 @@
 <?php
 
-namespace Themsaid\Forge\Exceptions;
+namespace Laravel\Forge\Exceptions;
 
 use Exception;
 
@@ -16,9 +16,10 @@ class TimeoutException extends Exception
     /**
      * Create a new exception instance.
      *
+     * @param  array  $output
      * @return void
      */
-    public function __construct($output)
+    public function __construct(array $output)
     {
         parent::__construct('Script timed out while waiting for the process to complete.');
 

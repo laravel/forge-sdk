@@ -1,20 +1,20 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Daemon extends Resource
 {
     /**
      * The id of the daemon.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -49,12 +49,12 @@ class Daemon extends Resource
     /**
      * Restart the given daemon.
      *
-     * @param  boolean $wait
+     * @param  bool  $wait
      * @return void
      */
     public function restart($wait = true)
     {
-        return $this->forge->restartDaemon($this->serverId, $this->id, $wait);
+        $this->forge->restartDaemon($this->serverId, $this->id, $wait);
     }
 
     /**
@@ -64,6 +64,6 @@ class Daemon extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteDaemon($this->serverId, $this->id);
+        $this->forge->deleteDaemon($this->serverId, $this->id);
     }
 }

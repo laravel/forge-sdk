@@ -1,19 +1,20 @@
 <?php
 
-namespace Themsaid\Forge;
+namespace Laravel\Forge;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Themsaid\Forge\Exceptions\TimeoutException;
-use Themsaid\Forge\Exceptions\NotFoundException;
-use Themsaid\Forge\Exceptions\ValidationException;
-use Themsaid\Forge\Exceptions\FailedActionException;
+use Laravel\Forge\Exceptions\TimeoutException;
+use Laravel\Forge\Exceptions\NotFoundException;
+use Laravel\Forge\Exceptions\ValidationException;
+use Laravel\Forge\Exceptions\FailedActionException;
 
 trait MakesHttpRequests
 {
     /**
      * Make a GET request to Forge servers and return the response.
      *
-     * @param  string $uri
+     * @param  string  $uri
      * @return mixed
      */
     public function get($uri)
@@ -24,8 +25,8 @@ trait MakesHttpRequests
     /**
      * Make a POST request to Forge servers and return the response.
      *
-     * @param  string $uri
-     * @param  array $payload
+     * @param  string  $uri
+     * @param  array  $payload
      * @return mixed
      */
     public function post($uri, array $payload = [])
@@ -36,8 +37,8 @@ trait MakesHttpRequests
     /**
      * Make a PUT request to Forge servers and return the response.
      *
-     * @param  string $uri
-     * @param  array $payload
+     * @param  string  $uri
+     * @param  array  $payload
      * @return mixed
      */
     public function put($uri, array $payload = [])
@@ -48,8 +49,8 @@ trait MakesHttpRequests
     /**
      * Make a DELETE request to Forge servers and return the response.
      *
-     * @param  string $uri
-     * @param  array $payload
+     * @param  string  $uri
+     * @param  array  $payload
      * @return mixed
      */
     public function delete($uri, array $payload = [])
@@ -60,12 +61,12 @@ trait MakesHttpRequests
     /**
      * Make request to Forge servers and return the response.
      *
-     * @param  string $verb
-     * @param  string $uri
-     * @param  array $payload
+     * @param  string  $verb
+     * @param  string  $uri
+     * @param  array  $payload
      * @return mixed
      */
-    private function request($verb, $uri, array $payload = [])
+    protected function request($verb, $uri, array $payload = [])
     {
         $response = $this->guzzle->request($verb, $uri,
             empty($payload) ? [] : ['form_params' => $payload]
@@ -81,10 +82,17 @@ trait MakesHttpRequests
     }
 
     /**
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * Handle the request error.
+     *
+     * @param  \Psr\Http\Message\ResponseInterface  $response
      * @return void
+     *
+     * @throws \Exception
+     * @throws \Laravel\Forge\Exceptions\FailedActionException
+     * @throws \Laravel\Forge\Exceptions\NotFoundException
+     * @throws \Laravel\Forge\Exceptions\ValidationException
      */
-    private function handleRequestError(ResponseInterface $response)
+    protected function handleRequestError(ResponseInterface $response)
     {
         if ($response->getStatusCode() == 422) {
             throw new ValidationException(json_decode((string) $response->getBody(), true));
@@ -98,16 +106,18 @@ trait MakesHttpRequests
             throw new FailedActionException((string) $response->getBody());
         }
 
-        throw new \Exception((string) $response->getBody());
+        throw new Exception((string) $response->getBody());
     }
 
     /**
      * Retry the callback or fail after x seconds.
      *
-     * @param  integer $timeout
-     * @param  callable $callback
-     * @param  integer $sleep
+     * @param  int  $timeout
+     * @param  callable  $callback
+     * @param  int  $sleep
      * @return mixed
+     *
+     * @throws \Laravel\Forge\Exceptions\TimeoutException
      */
     public function retry($timeout, $callback, $sleep = 5)
     {

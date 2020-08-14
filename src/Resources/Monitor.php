@@ -1,20 +1,20 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Monitor extends Resource
 {
     /**
      * The id of the monitor.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -42,14 +42,14 @@ class Monitor extends Resource
     /**
      * The threshold of the monitor.
      *
-     * @var integer
+     * @var int
      */
     public $threshold;
 
     /**
      * The minutes of the monitor.
      *
-     * @var integer
+     * @var int
      */
     public $minutes;
 

@@ -1,27 +1,27 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Backup extends Resource
 {
     /**
      * The id of the backup.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
     /**
      * The id of the database.
      *
-     * @var integer
+     * @var int
      */
     public $backupConfigurationId;
 
@@ -83,7 +83,6 @@ class Backup extends Resource
 
     /**
      * Restore this backup.
-     *
      *
      * @return void
      */

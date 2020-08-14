@@ -1,17 +1,17 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Worker;
+use Laravel\Forge\Resources\Worker;
 
 trait ManagesWorkers
 {
     /**
      * Get the collection of workers.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @return Worker[]
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return \Laravel\Forge\Resources\Worker[]
      */
     public function workers($serverId, $siteId)
     {
@@ -25,10 +25,10 @@ trait ManagesWorkers
     /**
      * Get a worker instance.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $workerId
-     * @return Worker
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $workerId
+     * @return \Laravel\Forge\Resources\Worker
      */
     public function worker($serverId, $siteId, $workerId)
     {
@@ -41,11 +41,11 @@ trait ManagesWorkers
     /**
      * Create a new worker.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return Worker
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Worker
      */
     public function createWorker($serverId, $siteId, array $data, $wait = true)
     {
@@ -65,9 +65,9 @@ trait ManagesWorkers
     /**
      * Delete the given worker.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $workerId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $workerId
      * @return void
      */
     public function deleteWorker($serverId, $siteId, $workerId)
@@ -78,10 +78,10 @@ trait ManagesWorkers
     /**
      * Restart the given worker.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $workerId
-     * @param  boolean $wait
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $workerId
+     * @param  bool  $wait
      * @return void
      */
     public function restartWorker($serverId, $siteId, $workerId, $wait = true)

@@ -1,13 +1,13 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class User extends Resource
 {
     /**
      * The id of the user.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -98,7 +98,7 @@ class User extends Resource
     /**
      * Determines if stripe is active.
      *
-     * @var integer
+     * @var int
      */
     public $stripeIsActive;
 
@@ -112,7 +112,7 @@ class User extends Resource
     /**
      * Determines if user is subscribed.
      *
-     * @var integer
+     * @var int
      */
     public $subscribed;
 

@@ -1,27 +1,27 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Certificate extends Resource
 {
     /**
      * The id of the certificate.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
     /**
      * The id of the site.
      *
-     * @var integer
+     * @var int
      */
     public $siteId;
 
@@ -42,7 +42,7 @@ class Certificate extends Resource
     /**
      * Determine if the certificate is an existing one.
      *
-     * @var boolean
+     * @var bool
      */
     public $existing;
 
@@ -63,7 +63,7 @@ class Certificate extends Resource
     /**
      * Determine if the certificate is active.
      *
-     * @var boolean
+     * @var bool
      */
     public $active;
 
@@ -73,7 +73,6 @@ class Certificate extends Resource
      * @var string
      */
     public $activationStatus;
-
 
     /**
      * The date/time the certificate was created.
@@ -89,7 +88,7 @@ class Certificate extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteCertificate($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteCertificate($this->serverId, $this->siteId, $this->id);
     }
 
     /**
@@ -105,23 +104,23 @@ class Certificate extends Resource
     /**
      * Install the given certificate for the site.
      *
-     * @param  array $data
-     * @param  boolean $wait
+     * @param  array  $data
+     * @param  bool  $wait
      * @return void
      */
     public function install(array $data, $wait = true)
     {
-        return $this->forge->installCertificate($this->serverId, $this->siteId, $this->id, $data, $wait);
+        $this->forge->installCertificate($this->serverId, $this->siteId, $this->id, $data, $wait);
     }
 
     /**
      * Activate the given certificate for the site.
      *
-     * @param  boolean $wait
+     * @param  bool  $wait
      * @return void
      */
     public function activate($wait = true)
     {
-        return $this->forge->activateCertificate($this->serverId, $this->siteId, $this->id, $wait);
+        $this->forge->activateCertificate($this->serverId, $this->siteId, $this->id, $wait);
     }
 }

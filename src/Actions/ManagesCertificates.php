@@ -1,17 +1,17 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Certificate;
+use Laravel\Forge\Resources\Certificate;
 
 trait ManagesCertificates
 {
     /**
      * Get the collection of certificates.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @return Certificate[]
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return \Laravel\Forge\Resources\Certificate[]
      */
     public function certificates($serverId, $siteId)
     {
@@ -25,10 +25,10 @@ trait ManagesCertificates
     /**
      * Get a certificate instance.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $certificateId
-     * @return Certificate
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $certificateId
+     * @return \Laravel\Forge\Resources\Certificate
      */
     public function certificate($serverId, $siteId, $certificateId)
     {
@@ -41,11 +41,11 @@ trait ManagesCertificates
     /**
      * Create a new certificate.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return Certificate
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Certificate
      */
     public function createCertificate($serverId, $siteId, array $data, $wait = true)
     {
@@ -65,9 +65,9 @@ trait ManagesCertificates
     /**
      * Delete the given certificate.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $certificateId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $certificateId
      * @return void
      */
     public function deleteCertificate($serverId, $siteId, $certificateId)
@@ -78,9 +78,9 @@ trait ManagesCertificates
     /**
      * Get the SSL certificate signing request for the site.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $certificateId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $certificateId
      * @return string
      */
     public function getCertificateSigningRequest($serverId, $siteId, $certificateId)
@@ -91,11 +91,11 @@ trait ManagesCertificates
     /**
      * Install the given certificate for the site.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $certificateId
-     * @param  array $data
-     * @param  boolean $wait
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $certificateId
+     * @param  array  $data
+     * @param  bool  $wait
      * @return void
      */
     public function installCertificate($serverId, $siteId, $certificateId, array $data, $wait = true)
@@ -114,10 +114,10 @@ trait ManagesCertificates
     /**
      * Activate the given certificate for the site.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $certificateId
-     * @param  boolean $wait
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $certificateId
+     * @param  bool  $wait
      * @return void
      */
     public function activateCertificate($serverId, $siteId, $certificateId, $wait = true)
@@ -136,11 +136,11 @@ trait ManagesCertificates
     /**
      * Add a LetsEncrypt certificate to a given site.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return Certificate
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Certificate
      */
     public function obtainLetsEncryptCertificate($serverId, $siteId, array $data, $wait = true)
     {

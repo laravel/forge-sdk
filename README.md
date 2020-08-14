@@ -1,25 +1,55 @@
-# Forge PHP SDK
+# Laravel Forge SDK
+
+<a href="https://github.com/laravel/forge-sdk/actions"><img src="https://github.com/laravel/forge-sdk/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/license.svg" alt="License"></a>
+
+The Laravel Forge SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
+
+- [Installation](#installation)
+- [Upgrading](#upgrading)
+- [Usage](#usage)
+    - [Authenticated User](#authenticated-user)
+    - [Managing Servers](#managing-servers)
+    - [Server SSH Keys](#server-ssh-keys)
+    - [Server Scheduled Jobs](#server-scheduled-jobs)
+    - [Server Events](#server-events)
+    - [Managing Services](#managing-services)
+    - [Server Daemons](#server-daemons)
+    - [Server Firewall Rules](#server-firewall-rules)
+    - [Managing Sites](#managing-sites)
+    - [Site Workers](#site-workers)
+    - [Site Webhooks](#site-webhooks)
+    - [Site SSL Certificates](#site-ssl-certificates)
+    - [Managing MySQL](#managing-mysql)
+    - [Managing Recipes](#managing-recipes)
+    - [Managing Backups](#backups)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Security Vulnerabilities](#security-vulnerabilities)
+- [License](#license)
+
+## Installation
 
 To install the SDK in your project you need to require the package via composer:
 
 ```bash
-composer require themsaid/forge-sdk
+composer require laravel/forge-sdk
 ```
 
-Then use Composer's autoload:
+## Upgrading
 
-```php
-require __DIR__.'/../vendor/autoload.php';
-```
-
-And finally create an instance of the SDK:
-
-```php
-$forge = new Themsaid\Forge\Forge(TOKEN_HERE);
-```
+When upgrading to a new major version of Forge SDK, it's important that you carefully review [the upgrade guide](https://github.com/laravel/forge-sdk/blob/master/UPGRADE.md).
 
 ## Usage
 
+You can create an instance of the SDK like so:
+
+```php
+$forge = new Laravel\Forge\Forge(TOKEN_HERE);
+```
+    
 Using the forge instance you may perform multiple actions as well as retrieve the different resources Forge's API provides:
 
 ```php
@@ -76,13 +106,13 @@ You can also set the desired timeout value:
 $forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
 ```
 
-## Authenticated User
+### Authenticated User
 
 ```php
 $forge->user();
 ```
 
-## Managing Servers
+### Managing Servers
 
 ```php
 $forge->servers();
@@ -122,7 +152,7 @@ $server->disableOPCache();
 $server->upgradePHP();
 ```
 
-## Server SSH Keys
+### Server SSH Keys
 
 ```php
 $forge->keys($serverId);
@@ -137,7 +167,7 @@ On a SSHKey Instance you may also call:
 $sshKey->delete();
 ```
 
-## Server Scheduled Jobs
+### Server Scheduled Jobs
 
 ```php
 $forge->jobs($serverId);
@@ -152,14 +182,14 @@ On a Job Instance you may also call:
 $job->delete();
 ```
 
-## Server Events
+### Server Events
 
 ```php
 $forge->events();
 $forge->events($serverId);
 ```
 
-## Managing Services
+### Managing Services
 
 ```php
 // MySQL
@@ -192,7 +222,7 @@ $forge->disableOPCache($serverId);
 $forge->upgradePHP($serverId);
 ```
 
-## Server Daemons
+### Server Daemons
 
 ```php
 $forge->daemons($serverId);
@@ -209,7 +239,7 @@ $daemon->restart($wait = true);
 $daemon->delete();
 ```
 
-## Server Firewall Rules
+### Server Firewall Rules
 
 ```php
 $forge->firewallRules($serverId);
@@ -224,7 +254,7 @@ On a FirewallRule Instance you may also call:
 $rule->delete();
 ```
 
-## Managing Sites
+### Managing Sites
 
 ```php
 $forge->sites($serverId);
@@ -281,8 +311,7 @@ $site->installWordPress($data);
 $site->removeWordPress();
 ```
 
-
-## Site Workers
+### Site Workers
 
 ```php
 $forge->workers($serverId, $siteId);
@@ -299,7 +328,7 @@ $worker->delete();
 $worker->restart($wait = true);
 ```
 
-## Site Webhooks
+### Site Webhooks
 
 ```php
 $forge->webhooks($serverId, $siteId);
@@ -314,7 +343,7 @@ On a Webhook Instance you may also call:
 $webhook->delete();
 ```
 
-## Site SSL Certificates
+### Site SSL Certificates
 
 ```php
 $forge->certificates($serverId, $siteId);
@@ -336,7 +365,7 @@ $certificate->install($wait = true);
 $certificate->activate($wait = true);
 ```
 
-## Managing MySQL
+### Managing MySQL
 
 ```php
 $forge->mysqlDatabases($serverId);
@@ -367,7 +396,7 @@ $databaseUser->update(array $data);
 $databaseUser->delete();
 ```
 
-## Managing Recipes
+### Managing Recipes
 
 ```php
 $forge->recipes();
@@ -381,13 +410,12 @@ $forge->runRecipe($recipeId, array $data);
 On a Recipe Instance you may also call:
 
 ```php
-
 $recipe->update(array $data);
 $recipe->delete();
 $recipe->run(array $data);
 ```
 
-## Managing Backups
+### Managing Backups
 
 ```php
 $forge->backupConfigurations($serverId);
@@ -396,13 +424,11 @@ $forge->backupConfiguration($serverId, $backupConfigurationId);
 $forge->deleteBackupConfiguration($serverId, $backupConfigurationId);
 $forge->restoreBackup($serverId, $backupConfigurationId, $backupId);
 $forge->deleteBackup($serverId, $backupConfigurationId, $backupId);
-
 ```
 
 On a BackupConfiguration Instance you may also call:
 
 ```php
-
 $extendedConfig = $backupConfig->get(); // Load the databases also
 $backupConfig->delete();
 $backupConfig->restoreBackup($backupId);
@@ -412,15 +438,23 @@ $backupConfig->deleteBackup($backupId);
 On a Backup Instance you may also call:
 
 ```php
-
 $backupConfig->delete();
 $backupConfig->restore();
 ```
 
-## Testing
+## Contributing
 
-Run the tests with:
+Thank you for considering contributing to Forge SDK! You can read the contribution guide [here](.github/CONTRIBUTING.md).
 
-``` bash
-vendor/bin/phpunit
-```
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+Please review [our security policy](https://github.com/laravel/forge-sdk/security/policy) on how to report security vulnerabilities.
+
+## License
+
+Laravel Forge SDK is open-sourced software licensed under the [MIT license](LICENSE.md).
+
