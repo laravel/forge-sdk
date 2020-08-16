@@ -1,6 +1,6 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class SecurityRule extends Resource
 {
