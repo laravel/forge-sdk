@@ -247,6 +247,7 @@ class Server extends Resource
     /**
      * Reboot PHP on the server.
      *
+     * @param  array  $data
      * @return void
      */
     public function rebootPHP(array $data)

@@ -193,11 +193,11 @@ trait ManagesServers
     /**
      * Reboot PHP on the server.
      *
-     * @param  string $serverId
-     * @param  array $data
+     * @param  string  $serverId
+     * @param  array   $data
      * @return void
      */
-    public function rebootPHP($serverId, array $data)
+    public function rebootPHP($serverId, $data)
     {
         $this->post("servers/$serverId/php/reboot", $data);
     }
