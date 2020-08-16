@@ -1,13 +1,13 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Credential extends Resource
 {
     /**
      * The id of the credential.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 

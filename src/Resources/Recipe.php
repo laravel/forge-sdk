@@ -1,13 +1,13 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Recipe extends Resource
 {
     /**
      * The id of the recipe.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
@@ -35,8 +35,8 @@ class Recipe extends Resource
     /**
      * Update the given recipe.
      *
-     * @param  array $data
-     * @return Recipe
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Recipe
      */
     public function update(array $data)
     {
@@ -50,17 +50,17 @@ class Recipe extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteRecipe($this->id);
+        $this->forge->deleteRecipe($this->id);
     }
 
     /**
      * Run the given recipe.
      *
-     * @param array $data
+     * @param  array  $data
      * @return void
      */
     public function run(array $data)
     {
-        return $this->forge->runRecipe($this->id, $data);
+        $this->forge->runRecipe($this->id, $data);
     }
 }

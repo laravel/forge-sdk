@@ -1,6 +1,6 @@
 <?php
 
-namespace Themsaid\Forge\Exceptions;
+namespace Laravel\Forge\Exceptions;
 
 use Exception;
 
@@ -16,6 +16,7 @@ class ValidationException extends Exception
     /**
      * Create a new exception instance.
      *
+     * @param  array  $errors
      * @return void
      */
     public function __construct(array $errors)

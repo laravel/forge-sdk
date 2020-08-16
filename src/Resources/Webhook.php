@@ -1,15 +1,29 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Webhook extends Resource
 {
     /**
      * The id of the webhook.
      *
-     * @var integer
+     * @var int
      */
     public $id;
+
+    /**
+     * The id of the server.
+     *
+     * @var int
+     */
+    public $serverId;
+
+    /**
+     * The id of the site.
+     *
+     * @var int
+     */
+    public $siteId;
 
     /**
      * The destination url.
@@ -32,6 +46,6 @@ class Webhook extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteWebhook($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteWebhook($this->serverId, $this->siteId, $this->id);
     }
 }

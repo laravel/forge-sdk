@@ -1,17 +1,17 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Webhook;
+use Laravel\Forge\Resources\Webhook;
 
 trait ManagesWebhooks
 {
     /**
      * Get the collection of webhooks.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @return Webhook[]
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return \Laravel\Forge\Resources\Webhook[]
      */
     public function webhooks($serverId, $siteId)
     {
@@ -25,10 +25,10 @@ trait ManagesWebhooks
     /**
      * Get a webhook instance.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $webhookId
-     * @return Webhook
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $webhookId
+     * @return \Laravel\Forge\Resources\Webhook
      */
     public function webhook($serverId, $siteId, $webhookId)
     {
@@ -41,10 +41,10 @@ trait ManagesWebhooks
     /**
      * Create a new webhook.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  array $data
-     * @return Webhook
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Webhook
      */
     public function createWebhook($serverId, $siteId, array $data)
     {
@@ -57,9 +57,9 @@ trait ManagesWebhooks
     /**
      * Delete the given webhook.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $webhookId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $webhookId
      * @return void
      */
     public function deleteWebhook($serverId, $siteId, $webhookId)

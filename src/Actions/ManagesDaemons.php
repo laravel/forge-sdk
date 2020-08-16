@@ -1,16 +1,16 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Daemon;
+use Laravel\Forge\Resources\Daemon;
 
 trait ManagesDaemons
 {
     /**
      * Get the collection of daemons.
      *
-     * @param  integer $serverId
-     * @return Daemon[]
+     * @param  int  $serverId
+     * @return \Laravel\Forge\Resources\Daemon[]
      */
     public function daemons($serverId)
     {
@@ -24,9 +24,9 @@ trait ManagesDaemons
     /**
      * Get a daemon instance.
      *
-     * @param  integer $serverId
-     * @param  integer $daemonId
-     * @return Daemon
+     * @param  int  $serverId
+     * @param  int  $daemonId
+     * @return \Laravel\Forge\Resources\Daemon
      */
     public function daemon($serverId, $daemonId)
     {
@@ -38,10 +38,10 @@ trait ManagesDaemons
     /**
      * Create a new daemon.
      *
-     * @param  integer $serverId
-     * @param  array $data
-     * @param  boolean $wait
-     * @return Daemon
+     * @param  int  $serverId
+     * @param  array  $data
+     * @param  bool  $wait
+     * @return \Laravel\Forge\Resources\Daemon
      */
     public function createDaemon($serverId, array $data, $wait = true)
     {
@@ -61,9 +61,9 @@ trait ManagesDaemons
     /**
      * Restart the given daemon.
      *
-     * @param  integer $serverId
-     * @param  integer $daemonId
-     * @param  boolean $wait
+     * @param  int  $serverId
+     * @param  int  $daemonId
+     * @param  bool  $wait
      * @return void
      */
     public function restartDaemon($serverId, $daemonId, $wait = true)
@@ -82,8 +82,8 @@ trait ManagesDaemons
     /**
      * Delete the given daemon.
      *
-     * @param  integer $serverId
-     * @param  integer $daemonId
+     * @param  int  $serverId
+     * @param  int  $daemonId
      * @return void
      */
     public function deleteDaemon($serverId, $daemonId)

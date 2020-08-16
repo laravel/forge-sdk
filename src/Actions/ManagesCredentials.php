@@ -1,15 +1,15 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Credential;
+use Laravel\Forge\Resources\Credential;
 
 trait ManagesCredentials
 {
     /**
      * Get the collection of recipes.
      *
-     * @return Credential[]
+     * @return \Laravel\Forge\Resources\Credential[]
      */
     public function credentials()
     {

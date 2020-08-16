@@ -1,15 +1,15 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\Recipe;
+use Laravel\Forge\Resources\Recipe;
 
 trait ManagesRecipes
 {
     /**
      * Get the collection of recipes.
      *
-     * @return Recipe[]
+     * @return \Laravel\Forge\Resources\Recipe[]
      */
     public function recipes()
     {
@@ -21,8 +21,8 @@ trait ManagesRecipes
     /**
      * Get a recipe instance.
      *
-     * @param  string $recipeId
-     * @return Recipe
+     * @param  string  $recipeId
+     * @return \Laravel\Forge\Resources\Recipe
      */
     public function recipe($recipeId)
     {
@@ -32,8 +32,8 @@ trait ManagesRecipes
     /**
      * Create a new recipe.
      *
-     * @param  array $data
-     * @return Recipe
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Recipe
      */
     public function createRecipe(array $data)
     {
@@ -43,9 +43,9 @@ trait ManagesRecipes
     /**
      * Update the given recipe.
      *
-     * @param  string $recipeId
-     * @param  array $data
-     * @return Recipe
+     * @param  string  $recipeId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Recipe
      */
     public function updateRecipe($recipeId, array $data)
     {
@@ -55,7 +55,7 @@ trait ManagesRecipes
     /**
      * Delete the given recipe.
      *
-     * @param  string $recipeId
+     * @param  string  $recipeId
      * @return void
      */
     public function deleteRecipe($recipeId)
@@ -66,7 +66,7 @@ trait ManagesRecipes
     /**
      * Run the given recipe.
      *
-     * @param  string $recipeId
+     * @param  string  $recipeId
      * @param  array  $data
      * @return void
      */

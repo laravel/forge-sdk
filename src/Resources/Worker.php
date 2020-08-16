@@ -1,27 +1,27 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class Worker extends Resource
 {
     /**
      * The id of the worker.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
     /**
      * The id of the site.
      *
-     * @var integer
+     * @var int
      */
     public $siteId;
 
@@ -49,21 +49,21 @@ class Worker extends Resource
     /**
      * The number of seconds a child process can run.
      *
-     * @var integer
+     * @var int
      */
     public $timeout;
 
     /**
      * The number of seconds to sleep when no job is available.
      *
-     * @var integer
+     * @var int
      */
     public $sleep;
 
     /**
      * The number of times to attempt a job before logging it failed.
      *
-     * @var integer
+     * @var int
      */
     public $tries;
 
@@ -77,7 +77,7 @@ class Worker extends Resource
     /**
      * Determine if the worker is in daemon mode.
      *
-     * @var integer
+     * @var int
      */
     public $daemon;
 
@@ -102,6 +102,6 @@ class Worker extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteRedirectRule($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteRedirectRule($this->serverId, $this->siteId, $this->id);
     }
 }

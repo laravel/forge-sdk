@@ -1,18 +1,16 @@
 <?php
 
-namespace Themsaid\Forge\Actions;
+namespace Laravel\Forge\Actions;
 
-use Themsaid\Forge\Resources\BackupConfiguration;
-use Themsaid\Forge\Resources\Event;
-use Themsaid\Forge\Resources\Server;
+use Laravel\Forge\Resources\BackupConfiguration;
 
 trait ManagesBackups
 {
     /**
      * Get the collection of backup configurations.
      *
-     * @param  string $serverId
-     * @return \Themsaid\Forge\Resources\BackupConfiguration[]
+     * @param  string  $serverId
+     * @return \Laravel\Forge\Resources\BackupConfiguration[]
      */
     public function backupConfigurations($serverId)
     {
@@ -26,9 +24,9 @@ trait ManagesBackups
     /**
      * Get a backup configuration.
      *
-     * @param  string $serverId
-     * @param  string $backupConfigurationId
-     * @return BackupConfiguration
+     * @param  string  $serverId
+     * @param  string  $backupConfigurationId
+     * @return \Laravel\Forge\Resources\BackupConfiguration
      */
     public function backupConfiguration($serverId, $backupConfigurationId)
     {
@@ -40,9 +38,9 @@ trait ManagesBackups
     /**
      * Create a new backup configuration.
      *
-     * @param  string $serverId
-     * @param  array $data
-     * @return BackupConfiguration
+     * @param  string  $serverId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\BackupConfiguration
      */
     public function createBackupConfiguration($serverId, array $data)
     {
@@ -54,8 +52,9 @@ trait ManagesBackups
     /**
      * Delete a backup configuration.
      *
-     * @param  string $serverId
-     * @param  string $backupConfigurationId
+     * @param  string  $serverId
+     * @param  string  $backupConfigurationId
+     * @return void
      */
     public function deleteBackupConfiguration($serverId, $backupConfigurationId)
     {
@@ -65,9 +64,10 @@ trait ManagesBackups
     /**
      * Restore a backup.
      *
-     * @param  string $serverId
-     * @param  string $backupConfigurationId
-     * @param  string $backupId
+     * @param  string  $serverId
+     * @param  string  $backupConfigurationId
+     * @param  string  $backupId
+     * @return void
      */
     public function restoreBackup($serverId, $backupConfigurationId, $backupId)
     {
@@ -77,9 +77,10 @@ trait ManagesBackups
     /**
      * Delete a backup.
      *
-     * @param  string $serverId
-     * @param  string $backupConfigurationId
-     * @param  string $backupId
+     * @param  string  $serverId
+     * @param  string  $backupConfigurationId
+     * @param  string  $backupId
+     * @return void
      */
     public function deleteBackup($serverId, $backupConfigurationId, $backupId)
     {

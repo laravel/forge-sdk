@@ -1,20 +1,20 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class FirewallRule extends Resource
 {
     /**
      * The id of the rule.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -28,7 +28,7 @@ class FirewallRule extends Resource
     /**
      * The port number used.
      *
-     * @var integer
+     * @var int
      */
     public $port;
 

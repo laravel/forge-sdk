@@ -1,20 +1,20 @@
 <?php
 
-namespace Themsaid\Forge\Resources;
+namespace Laravel\Forge\Resources;
 
 class SSHKey extends Resource
 {
     /**
      * The id of the key.
      *
-     * @var integer
+     * @var int
      */
     public $id;
 
     /**
      * The id of the server.
      *
-     * @var integer
+     * @var int
      */
     public $serverId;
 
@@ -46,6 +46,6 @@ class SSHKey extends Resource
      */
     public function delete()
     {
-        return $this->forge->deleteSSHKey($this->serverId, $this->id);
+        $this->forge->deleteSSHKey($this->serverId, $this->id);
     }
 }
