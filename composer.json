@@ -19,6 +19,10 @@
         {
             "name": "Dries Vints",
             "email": "dries@laravel.com"
+        },
+        {
+            "name": "James Brooks",
+            "email": "james@laravel.com"
         }
     ],
     "require": {
