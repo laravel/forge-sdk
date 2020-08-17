@@ -287,6 +287,10 @@ $forge->disableHipchatNotifications($serverId, $siteId);
 $forge->installWordPress($serverId, $siteId, array $data);
 $forge->removeWordPress($serverId, $siteId);
 
+// Installing phpMyAdmin
+$forge->installPhpMyAdmin($serverId, $siteId, array $data);
+$forge->removePhpMyAdmin($serverId, $siteId);
+
 // Updating Node balancing Configuration
 $forge->updateNodeBalancingConfiguration($serverId, $siteId, array $data);
 ```
@@ -308,6 +312,8 @@ $site->enableHipchatNotifications(array $data);
 $site->disableHipchatNotifications();
 $site->installWordPress($data);
 $site->removeWordPress();
+$site->installPhpMyAdmin($data);
+$site->removePhpMyAdmin();
 ```
 
 ### Site Workers
