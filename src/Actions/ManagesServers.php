@@ -3,6 +3,7 @@
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Event;
+use Laravel\Forge\Resources\PHPVersion;
 use Laravel\Forge\Resources\Server;
 
 trait ManagesServers
@@ -268,6 +269,20 @@ trait ManagesServers
     public function disableOPCache($serverId)
     {
         $this->delete("servers/$serverId/php/opcache");
+    }
+
+    /**
+     * Get the collection of PHP Versions.
+     *
+     * @param  int $serverId
+     * @return \Laravel\Forge\Resources\PHPVersion[]
+     */
+    public function phpVersions($serverId)
+    {
+        return $this->transformCollection(
+            $this->get("servers/$serverId/php"),
+            PHPVersion::class
+        );
     }
 
     /**
