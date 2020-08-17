@@ -7,28 +7,29 @@
 
 The Laravel Forge SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
 
-- [Installation](#installation)
-- [Upgrading](#upgrading)
-- [Usage](#usage)
-    - [Authenticated User](#authenticated-user)
-    - [Managing Servers](#managing-servers)
-    - [Server SSH Keys](#server-ssh-keys)
-    - [Server Scheduled Jobs](#server-scheduled-jobs)
-    - [Server Events](#server-events)
-    - [Managing Services](#managing-services)
-    - [Server Daemons](#server-daemons)
-    - [Server Firewall Rules](#server-firewall-rules)
-    - [Managing Sites](#managing-sites)
-    - [Site Workers](#site-workers)
-    - [Site Webhooks](#site-webhooks)
-    - [Site SSL Certificates](#site-ssl-certificates)
-    - [Managing MySQL](#managing-mysql)
-    - [Managing Recipes](#managing-recipes)
-    - [Managing Backups](#backups)
-- [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [License](#license)
+-   [Installation](#installation)
+-   [Upgrading](#upgrading)
+-   [Usage](#usage)
+    -   [Authenticated User](#authenticated-user)
+    -   [Managing Servers](#managing-servers)
+    -   [Server SSH Keys](#server-ssh-keys)
+    -   [Server Scheduled Jobs](#server-scheduled-jobs)
+    -   [Server Events](#server-events)
+    -   [Managing Services](#managing-services)
+    -   [Server Daemons](#server-daemons)
+    -   [Server Firewall Rules](#server-firewall-rules)
+    -   [Managing Sites](#managing-sites)
+    -   [Site Workers](#site-workers)
+    -   [Security Rules](#security-rules)
+    -   [Site Webhooks](#site-webhooks)
+    -   [Site SSL Certificates](#site-ssl-certificates)
+    -   [Managing MySQL](#managing-mysql)
+    -   [Managing Recipes](#managing-recipes)
+    -   [Managing Backups](#backups)
+-   [Contributing](#contributing)
+-   [Code of Conduct](#code-of-conduct)
+-   [Security Vulnerabilities](#security-vulnerabilities)
+-   [License](#license)
 
 ## Installation
 
@@ -49,7 +50,7 @@ You can create an instance of the SDK like so:
 ```php
 $forge = new Laravel\Forge\Forge(TOKEN_HERE);
 ```
-    
+
 Using the forge instance you may perform multiple actions as well as retrieve the different resources Forge's API provides:
 
 ```php
@@ -328,6 +329,21 @@ $worker->delete();
 $worker->restart($wait = true);
 ```
 
+### Security Rules
+
+```php
+$forge->securityRules($serverId, $siteId);
+$forge->securityRule($serverId, $siteId, $ruleId);
+$forge->createSecurityRule($serverId, $siteId, array $data);
+$forge->deleteSecurityRule($serverId, $siteId, $ruleId);
+```
+
+On a SecurityRule Instance you may also call:
+
+```php
+$securityRule->delete();
+```
+
 ### Site Webhooks
 
 ```php
@@ -457,4 +473,3 @@ Please review [our security policy](https://github.com/laravel/forge-sdk/securit
 ## License
 
 Laravel Forge SDK is open-sourced software licensed under the [MIT license](LICENSE.md).
-
