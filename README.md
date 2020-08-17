@@ -23,7 +23,7 @@ The Laravel Forge SDK provides an expressive interface for interacting with Forg
     - [Security Rules](#security-rules)
     - [Site Webhooks](#site-webhooks)
     - [Site SSL Certificates](#site-ssl-certificates)
-    - [Managing MySQL](#managing-mysql)
+    - [Managing Databases](#managing-databases)
     - [Managing Recipes](#managing-recipes)
     - [Managing Backups](#backups)
 - [Contributing](#contributing)
@@ -386,31 +386,31 @@ $certificate->install($wait = true);
 $certificate->activate($wait = true);
 ```
 
-### Managing MySQL
+### Managing Databases
 
 ```php
-$forge->mysqlDatabases($serverId);
-$forge->mysqlDatabase($serverId, $databaseId);
-$forge->createMysqlDatabase($serverId, array $data, $wait = true);
-$forge->updateMysqlDatabase($serverId, $databaseId, array $data);
-$forge->deleteMysqlDatabase($serverId, $databaseId);
+$forge->databases($serverId);
+$forge->database($serverId, $databaseId);
+$forge->createDatabase($serverId, array $data, $wait = true);
+$forge->updateDatabase($serverId, $databaseId, array $data);
+$forge->deleteDatabase($serverId, $databaseId);
 
 // Users
-$forge->mysqlUsers($serverId);
-$forge->mysqlUser($serverId, $userId);
-$forge->createMysqlUser($serverId, array $data, $wait = true);
-$forge->updateMysqlUser($serverId, $userId, array $data);
-$forge->deleteMysqlUser($serverId, $userId);
+$forge->databaseUsers($serverId);
+$forge->databaseUser($serverId, $userId);
+$forge->createDatabaseUser($serverId, array $data, $wait = true);
+$forge->updateDatabaseUser($serverId, $userId, array $data);
+$forge->deleteDatabaseUser($serverId, $userId);
 ```
 
-On a `MysqlDatabase` instance you may also call:
+On a `Database` instance you may also call:
 
 ```php
 $database->update(array $data);
 $database->delete();
 ```
 
-On a `MysqlUser` instance you may also call:
+On a `DatabaseUser` instance you may also call:
 
 ```php
 $databaseUser->update(array $data);

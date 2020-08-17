@@ -17,13 +17,13 @@ class Forge
         Actions\ManagesRecipes,
         Actions\ManagesBackups,
         Actions\ManagesWebhooks,
-        Actions\ManagesMysqlUsers,
+        Actions\ManagesDatabaseUsers,
         Actions\ManagesCredentials,
         Actions\ManagesCertificates,
         Actions\ManagesFirewallRules,
         Actions\ManagesRedirectRules,
         Actions\ManagesSecurityRules,
-        Actions\ManagesMysqlDatabases,
+        Actions\ManagesDatabases,
         Actions\ManagesMonitors;
 
     /**
