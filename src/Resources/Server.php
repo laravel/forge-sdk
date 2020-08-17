@@ -318,6 +318,16 @@ class Server extends Resource
     }
 
     /**
+     * Get the collection of PHP Versions.
+     *
+     * @return \Laravel\Forge\Resources\PHPVersion[]
+     */
+    public function phpVersions()
+    {
+        return $this->forge->phpVersions($this->id);
+    }
+
+    /**
      * Install a version of PHP.
      *
      * @param  string  $version

@@ -147,6 +147,7 @@ $server->installPapertrail(array $data);
 $server->removePapertrail();
 $server->enableOPCache();
 $server->disableOPCache();
+$server->phpVersions();
 $server->installPHP($version);
 $server->updatePHP($version);
 ```
