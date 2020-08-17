@@ -9,8 +9,8 @@ trait ManagesSecurityRules
     /**
      * Get the collection of security rules.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
+     * @param  int $serverId
+     * @param  int $siteId
      * @return SecurityRule[]
      */
     public function securityRules($serverId, $siteId)
@@ -25,9 +25,9 @@ trait ManagesSecurityRules
     /**
      * Get a security rule instance.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $ruleId
+     * @param  int $serverId
+     * @param  int $siteId
+     * @param  int $ruleId
      * @return SecurityRule
      */
     public function securityRule($serverId, $siteId, $ruleId)
@@ -41,8 +41,8 @@ trait ManagesSecurityRules
     /**
      * Create a new security rule.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
+     * @param  int $serverId
+     * @param  int $siteId
      * @param  array $data
      * @param  boolean $wait
      * @return SecurityRule
@@ -65,9 +65,9 @@ trait ManagesSecurityRules
     /**
      * Delete the given security rule.
      *
-     * @param  integer $serverId
-     * @param  integer $siteId
-     * @param  integer $ruleId
+     * @param  int $serverId
+     * @param  int $siteId
+     * @param  int $ruleId
      * @return void
      */
     public function deleteSecurityRule($serverId, $siteId, $ruleId)
