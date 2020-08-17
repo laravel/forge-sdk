@@ -23,7 +23,7 @@ class Forge
         Actions\ManagesFirewallRules,
         Actions\ManagesRedirectRules,
         Actions\ManagesSecurityRules,
-        Actions\ManagesDatabaseUsers,
+        Actions\ManagesDatabases,
         Actions\ManagesMonitors;
 
     /**
