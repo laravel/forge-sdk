@@ -420,7 +420,7 @@ $forge->deleteRecipe($recipeId);
 $forge->runRecipe($recipeId, array $data);
 ```
 
-On a Recipe instance you may also call:
+On a `Recipe` instance you may also call:
 
 ```php
 $recipe->update(array $data);
