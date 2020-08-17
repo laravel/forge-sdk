@@ -3,11 +3,11 @@
 namespace Laravel\Forge;
 
 use Exception;
-use Psr\Http\Message\ResponseInterface;
-use Laravel\Forge\Exceptions\TimeoutException;
-use Laravel\Forge\Exceptions\NotFoundException;
-use Laravel\Forge\Exceptions\ValidationException;
 use Laravel\Forge\Exceptions\FailedActionException;
+use Laravel\Forge\Exceptions\NotFoundException;
+use Laravel\Forge\Exceptions\TimeoutException;
+use Laravel\Forge\Exceptions\ValidationException;
+use Psr\Http\Message\ResponseInterface;
 
 trait MakesHttpRequests
 {

@@ -47,21 +47,21 @@ class Backup extends Resource
     public $archivePath;
 
     /**
-     * The size of the backup
+     * The size of the backup.
      *
      * @var int
      */
     public $size;
 
     /**
-     * The uuid of this backup
+     * The uuid of this backup.
      *
      * @var string
      */
     public $uuid;
 
     /**
-     * The duration of this backup
+     * The duration of this backup.
      *
      * @var string
      */

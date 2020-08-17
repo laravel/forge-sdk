@@ -44,7 +44,7 @@ trait ManagesSecurityRules
      * @param  int $serverId
      * @param  int $siteId
      * @param  array $data
-     * @param  boolean $wait
+     * @param  bool $wait
      * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function createSecurityRule($serverId, $siteId, array $data, $wait = true)

@@ -67,4 +67,3 @@ class Monitor extends Resource
      */
     public $stateChangedAt;
 }
-

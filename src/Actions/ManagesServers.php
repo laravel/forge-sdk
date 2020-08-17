@@ -51,6 +51,7 @@ trait ManagesServers
         if ($wait) {
             return $this->retry($timeout, function () use ($server) {
                 $server = $this->server($server['id']);
+
                 return $server->isReady ? $server : null;
             }, 120);
         }
@@ -310,14 +311,14 @@ trait ManagesServers
     }
 
     /**
-     * Get recent events
+     * Get recent events.
      *
      * @param  string|null  $serverId
      * @return \Laravel\Forge\Resources\Event[]
      */
     public function events($serverId = null)
     {
-        $endpoint = is_null($serverId) ? "servers/events" : "servers/events?server_id=" . $serverId;
+        $endpoint = is_null($serverId) ? 'servers/events' : 'servers/events?server_id='.$serverId;
 
         return $this->transformCollection(
             $this->get($endpoint),

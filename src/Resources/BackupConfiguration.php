@@ -35,21 +35,21 @@ class BackupConfiguration extends Resource
     public $time;
 
     /**
-     * The provider (s3 or spaces)
+     * The provider (s3 or spaces).
      *
      * @var bool
      */
     public $provider;
 
     /**
-     * The name for the provider
+     * The name for the provider.
      *
      * @var string
      */
     public $providerName;
 
     /**
-     * The last Backup time
+     * The last Backup time.
      *
      * @var string|null
      */
