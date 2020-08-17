@@ -11,7 +11,7 @@ trait ManagesSecurityRules
      *
      * @param  int $serverId
      * @param  int $siteId
-     * @return SecurityRule[]
+     * @return \Laravel\Forge\Resources\SecurityRule[]
      */
     public function securityRules($serverId, $siteId)
     {
@@ -28,7 +28,7 @@ trait ManagesSecurityRules
      * @param  int $serverId
      * @param  int $siteId
      * @param  int $ruleId
-     * @return SecurityRule
+     * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function securityRule($serverId, $siteId, $ruleId)
     {
@@ -45,7 +45,7 @@ trait ManagesSecurityRules
      * @param  int $siteId
      * @param  array $data
      * @param  boolean $wait
-     * @return SecurityRule
+     * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function createSecurityRule($serverId, $siteId, array $data, $wait = true)
     {
