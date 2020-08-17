@@ -66,7 +66,7 @@ trait ManagesMysqlDatabases
      * @param  array  $data
      * @return \Laravel\Forge\Resources\MysqlDatabase
      */
-    public function updateMysqlDatabase($serverId, $databaseId, array $data)
+    public function updateDatabase($serverId, $databaseId, array $data)
     {
         return new MysqlDatabase(
             $this->put("servers/$serverId/mysql/$databaseId", $data)['database']
@@ -81,7 +81,7 @@ trait ManagesMysqlDatabases
      * @param  int  $databaseId
      * @return void
      */
-    public function deleteMysqlDatabase($serverId, $databaseId)
+    public function deleteDatabase($serverId, $databaseId)
     {
         $this->delete("servers/$serverId/mysql/$databaseId");
     }

@@ -2,7 +2,7 @@
 
 namespace Laravel\Forge\Resources;
 
-class MysqlDatabase extends Resource
+class Database extends Resource
 {
     /**
      * The id of the database.
@@ -40,14 +40,14 @@ class MysqlDatabase extends Resource
     public $createdAt;
 
     /**
-     * Update the given MySQL Database.
+     * Update the given Database.
      *
      * @param  array  $data
-     * @return \Laravel\Forge\Resources\MysqlDatabase
+     * @return \Laravel\Forge\Resources\Database
      */
     public function update(array $data)
     {
-        return $this->forge->updateMysqlDatabase($this->serverId, $this->id, $data);
+        return $this->forge->updateDatabase($this->serverId, $this->id, $data);
     }
 
     /**
@@ -57,6 +57,6 @@ class MysqlDatabase extends Resource
      */
     public function delete()
     {
-        $this->forge->deleteMysqlDatabase($this->serverId, $this->id);
+        $this->forge->deleteDatabase($this->serverId, $this->id);
     }
 }
