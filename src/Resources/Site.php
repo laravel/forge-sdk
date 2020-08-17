@@ -284,5 +284,28 @@ class Site extends Resource
     {
         $this->forge->removeWordPress($this->serverId, $this->id);
     }
+
+
+
+    /**
+     * Install a new phpMyAdmin project.
+     *
+     * @param  array  $data
+     * @return void
+     */
+    public function installPhpMyAdmin(array $data)
+    {
+        $this->forge->installPhpMyAdmin($this->serverId, $this->id, $data);
+    }
+
+    /**
+     * Remove phpMyAdmin and revert the site back to a default state.
+     *
+     * @return void
+     */
+    public function removePhpMyAdmin()
+    {
+        $this->forge->removePhpMyAdmin($this->serverId, $this->id);
+    }
 }
 

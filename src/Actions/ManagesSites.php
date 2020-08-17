@@ -350,6 +350,31 @@ trait ManagesSites
     }
 
     /**
+     * Install a new phpMyAdmin project.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @return void
+     */
+    public function installPhpMyAdmin($serverId, $siteId, array $data)
+    {
+        $this->post("servers/$serverId/sites/$siteId/phpmyadmin", $data);
+    }
+
+    /**
+     * Remove phpMyAdmin and revert the site back to a default state.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return void
+     */
+    public function removePhpMyAdmin($serverId, $siteId)
+    {
+        $this->delete("servers/$serverId/sites/$siteId/phpmyadmin");
+    }
+
+    /**
      * Update the given site's balanced nodes.
      *
      * @param  int  $serverId
