@@ -147,7 +147,8 @@ $server->installPapertrail(array $data);
 $server->removePapertrail();
 $server->enableOPCache();
 $server->disableOPCache();
-$server->upgradePHP();
+$server->installPHP($version);
+$server->updatePHP($version);
 ```
 
 ### Server SSH Keys

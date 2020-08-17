@@ -271,14 +271,27 @@ trait ManagesServers
     }
 
     /**
-     * Upgrade to latest PHP version.
+     * Install a version of PHP.
      *
      * @param  string  $serverId
+     * @param  string  $version
      * @return void
      */
-    public function upgradePHP($serverId)
+    public function installPHP($serverId, $version)
     {
-        $this->post("servers/$serverId/php/upgrade");
+        $this->post("servers/$serverId/php", ['version' => $version]);
+    }
+
+    /**
+     * Patch the PHP version.
+     *
+     * @param  string  $serverId
+     * @param  string  $version
+     * @return void
+     */
+    public function updatePHP($serverId, $version)
+    {
+        $this->post("servers/$serverId/php/update", ['version' => $version]);
     }
 
     /**

@@ -318,12 +318,24 @@ class Server extends Resource
     }
 
     /**
-     * Upgrade to latest PHP version.
+     * Install a version of PHP.
      *
+     * @param  string  $version
      * @return void
      */
-    public function upgradePHP()
+    public function installPHP($version)
     {
-        $this->forge->upgradePHP($this->id);
+        $this->forge->installPHP($this->id, $version);
+    }
+
+    /**
+     * Patch the version of PHP.
+     *
+     * @param  string  $version
+     * @return void
+     */
+    public function updatePHP($version)
+    {
+        $this->forge->updatePHP($this->id, $version);
     }
 }
