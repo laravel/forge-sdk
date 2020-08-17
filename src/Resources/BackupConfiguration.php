@@ -60,7 +60,7 @@ class BackupConfiguration extends Resource
      *
      * Note: this is only available when getting a single configuration.
      *
-     * @var \Laravel\Forge\Resources\MysqlDatabase[]
+     * @var \Laravel\Forge\Resources\Database[]
      */
     public $databases;
 
@@ -91,7 +91,7 @@ class BackupConfiguration extends Resource
 
         $this->databases = $this->transformCollection(
             $this->databases ?: [],
-            MysqlDatabase::class,
+            Database::class,
             ['server_id' => $this->serverId]
         );
 
