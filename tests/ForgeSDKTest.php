@@ -4,12 +4,12 @@ namespace Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-use Mockery;
-use PHPUnit\Framework\TestCase;
 use Laravel\Forge\Exceptions\FailedActionException;
 use Laravel\Forge\Exceptions\NotFoundException;
 use Laravel\Forge\Exceptions\ValidationException;
 use Laravel\Forge\Forge;
+use Mockery;
+use PHPUnit\Framework\TestCase;
 
 class ForgeSDKTest extends TestCase
 {

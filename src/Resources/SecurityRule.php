@@ -53,8 +53,6 @@ class SecurityRule extends Resource
      */
     public $createdAt;
 
-
-
     /**
      * Delete the given redirect rule.
      *

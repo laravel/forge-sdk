@@ -81,7 +81,7 @@ class Forge
     }
 
     /**
-     * Set the api key and setup the guzzle request object
+     * Set the api key and setup the guzzle request object.
      *
      * @param  string  $apiKey
      * @param  \GuzzleHttp\Client|null  $guzzle
@@ -97,15 +97,15 @@ class Forge
             'headers' => [
                 'Authorization' => 'Bearer '.$this->apiKey,
                 'Accept' => 'application/json',
-                'Content-Type' => 'application/json'
-            ]
+                'Content-Type' => 'application/json',
+            ],
         ]);
 
         return $this;
     }
 
     /**
-     * Set a new timeout
+     * Set a new timeout.
      *
      * @param  int  $timeout
      * @return $this
@@ -118,7 +118,7 @@ class Forge
     }
 
     /**
-     * Get the timeout
+     * Get the timeout.
      *
      * @return int
      */

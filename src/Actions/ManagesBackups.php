@@ -58,7 +58,7 @@ trait ManagesBackups
      */
     public function deleteBackupConfiguration($serverId, $backupConfigurationId)
     {
-         $this->delete("servers/{$serverId}/backup-configs/{$backupConfigurationId}");
+        $this->delete("servers/{$serverId}/backup-configs/{$backupConfigurationId}");
     }
 
     /**
