@@ -5,7 +5,7 @@
 <a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/license.svg" alt="License"></a>
 
-The Laravel Forge SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
+The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
 
 - [Installation](#installation)
 - [Upgrading](#upgrading)
