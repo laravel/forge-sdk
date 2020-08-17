@@ -285,8 +285,6 @@ class Site extends Resource
         $this->forge->removeWordPress($this->serverId, $this->id);
     }
 
-
-
     /**
      * Install a new phpMyAdmin project.
      *
