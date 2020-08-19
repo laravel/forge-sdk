@@ -244,6 +244,26 @@ class Site extends Resource
     }
 
     /**
+     * Reset deployment status for a given site
+     *
+     * @return void
+     */
+    public function resetDeploymentState()
+    {
+        return $this->forge->resetDeploymentState($this->serverId, $this->id);
+    }
+
+    /**
+     * Get the last deployment log of the site.
+     *
+     * @return string
+     */
+    public function siteDeploymentLog()
+    {
+        return $this->forge->siteDeploymentLog($this->serverId, $this->id);
+    }
+
+    /**
      * Enable Hipchat Notifications for the given site.
      *
      * @param  array  $data
