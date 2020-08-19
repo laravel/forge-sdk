@@ -326,4 +326,3 @@ class Site extends Resource
         $this->forge->removePhpMyAdmin($this->serverId, $this->id);
     }
 }
-
