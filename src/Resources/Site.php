@@ -244,7 +244,7 @@ class Site extends Resource
     }
 
     /**
-     * Reset deployment status for a given site
+     * Reset deployment status for a given site.
      *
      * @return void
      */
