@@ -309,6 +309,8 @@ $site->updateDeploymentScript($content);
 $site->enableQuickDeploy();
 $site->disableQuickDeploy();
 $site->deploySite($wait = false);
+$site->resetDeploymentState();
+$site->siteDeploymentLog();
 $site->enableHipchatNotifications(array $data);
 $site->disableHipchatNotifications();
 $site->installWordPress($data);
