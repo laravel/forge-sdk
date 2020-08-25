@@ -217,9 +217,6 @@ $forge->removePapertrail($serverId);
 // OPCache
 $forge->enableOPCache($serverId);
 $forge->disableOPCache($serverId);
-
-// PHP
-$forge->upgradePHP($serverId);
 ```
 
 ### Server Daemons
