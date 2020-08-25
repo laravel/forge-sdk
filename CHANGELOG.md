@@ -3,7 +3,7 @@
 ## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.0.0...3.x)
 
 
-## [v3.0.0](https://github.com/laravel/forge-sdk/compare/v2.2...v3.0.0)
+## [v3.0.0 (2020-08-25)](https://github.com/laravel/forge-sdk/compare/v2.2...v3.0.0)
 
 ### Added
 - Security rules ([#83](https://github.com/laravel/forge-sdk/pull/83))
