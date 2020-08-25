@@ -4,7 +4,7 @@
 
 ### New Package Name
 
-The package has moved to the Laravel organisation and should now be referenced as `laravel/forge-sdk` in your `composer.json`.
+The package has moved to the Laravel organization and should now be referenced as `laravel/forge-sdk` in your `composer.json`.
 
 ### Namespace Changes
 
