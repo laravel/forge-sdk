@@ -28,7 +28,7 @@ trait ManagesSSHKeys
      * @param  int  $keyId
      * @return \Laravel\Forge\Resources\SSHKey
      */
-    public function SSHKey($serverId, $keyId)
+    public function sshKey($serverId, $keyId)
     {
         return new SSHKey(
             $this->get("servers/$serverId/keys/$keyId")['key'] + ['server_id' => $serverId], $this
@@ -49,7 +49,7 @@ trait ManagesSSHKeys
 
         if ($wait) {
             return $this->retry($this->getTimeout(), function () use ($serverId, $key) {
-                $key = $this->SSHKey($serverId, $key['id']);
+                $key = $this->sshKey($serverId, $key['id']);
 
                 return $key->status == 'installed' ? $key : null;
             });

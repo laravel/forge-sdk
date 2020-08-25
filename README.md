@@ -156,7 +156,7 @@ $server->updatePHP($version);
 
 ```php
 $forge->keys($serverId);
-$forge->SSHKey($serverId, $keyId);
+$forge->sshKey($serverId, $keyId);
 $forge->createSSHKey($serverId, array $data, $wait = true);
 $forge->deleteSSHKey($serverId, $keyId);
 ```
