@@ -102,6 +102,6 @@ class Worker extends Resource
      */
     public function delete()
     {
-        $this->forge->deleteRedirectRule($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteWorker($this->serverId, $this->siteId, $this->id);
     }
 }
