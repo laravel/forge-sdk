@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.0.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.1.0...3.x)
+
+
+## [v3.1.0 (2020-09-01)](https://github.com/laravel/forge-sdk/compare/v3.0.0...v3.1.0)
+
+### Added
+- Add restart worker ([d62ecb4](https://github.com/laravel/forge-sdk/commit/d62ecb4b654b0fa5db1dc5e8cb0131bb1ef92d27))
+
+### Fixed
+- Fix delete action for RedirectRule ([#91](https://github.com/laravel/forge-sdk/pull/91))
+- Fix Worker resource delete method ([#90](https://github.com/laravel/forge-sdk/pull/90))
 
 
 ## [v3.0.0 (2020-08-25)](https://github.com/laravel/forge-sdk/compare/v2.2...v3.0.0)
