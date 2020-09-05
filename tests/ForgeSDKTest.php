@@ -80,7 +80,7 @@ class ForgeSDKTest extends TestCase
         try {
             $forge->recipes();
         } catch (FailedActionException $e) {
-            $this->assertEquals('Error!', $e->getMessage());
+            $this->assertSame('Error!', $e->getMessage());
         }
     }
 }
