@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge;
+namespace Laravel\Forge\Resources;
 
-abstract class InstallableServices
+class InstallableServices
 {
     const PHP_56 = 'php56';
     const PHP_70 = 'php70';

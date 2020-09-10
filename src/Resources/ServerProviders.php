@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge;
+namespace Laravel\Forge\Resources;
 
-abstract class ServerProviders
+class ServerProviders
 {
     const AWS = 'aws';
     const CUSTOM = 'custom';

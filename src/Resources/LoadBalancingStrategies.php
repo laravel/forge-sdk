@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge;
+namespace Laravel\Forge\Resources;
 
-abstract class LoadBalancingStrategies
+class LoadBalancingStrategies
 {
     const ROUND_ROBIN = 'round_robin';
     const LEAST_CONNECTIONS = 'least_conn';

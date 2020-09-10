@@ -1,8 +1,8 @@
 <?php
 
-namespace Laravel\Forge;
+namespace Laravel\Forge\Resources;
 
-abstract class GitProviders
+class GitProviders
 {
     const BITBUCKET = 'bitbucket';
     const CUSTOM = 'custom';
