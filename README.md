@@ -261,6 +261,9 @@ $forge->updateSite($serverId, $siteId, array $data);
 $forge->refreshSiteToken($serverId, $siteId);
 $forge->deleteSite($serverId, $siteId);
 
+// Add Site Aliases
+$forge->addSiteAliases($serverId, $siteId, array $aliases);
+
 // Environment File
 $forge->siteEnvironmentFile($serverId, $siteId);
 $forge->updateSiteEnvironmentFile($serverId, $siteId, $content);
