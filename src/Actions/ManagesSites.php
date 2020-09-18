@@ -85,7 +85,7 @@ trait ManagesSites
     public function addSiteAliases($serverId, $siteId, array $aliases)
     {
         return new Site(
-            $this->put("servers/$serverId/sites/$siteId/aliases", compact("aliases"))['site']
+            $this->put("servers/$serverId/sites/$siteId/aliases", compact('aliases'))['site']
             + ['server_id' => $serverId], $this
         );
     }
