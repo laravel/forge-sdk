@@ -75,6 +75,22 @@ trait ManagesSites
     }
 
     /**
+     * Add Site Aliases.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $aliases
+     * @return \Laravel\Forge\Resources\Site
+     */
+    public function addSiteAliases($serverId, $siteId, array $aliases)
+    {
+        return new Site(
+            $this->put("servers/$serverId/sites/$siteId/aliases", compact("aliases"))['site']
+            + ['server_id' => $serverId], $this
+        );
+    }
+
+    /**
      * Refresh the site token.
      *
      * @param  int  $serverId
