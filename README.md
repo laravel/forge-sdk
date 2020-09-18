@@ -69,12 +69,13 @@ On multiple actions supported by this SDK you may need to pass some parameters, 
 
 ```php
 $server = $forge->createServer([
-    "provider"=> "ocean2",
+    "provider"=> ServerProviders::DIGITAL_OCEAN,
     "credential_id"=> 1,
     "name"=> "test-via-api",
     "size"=> "01",
     "database"=> "test123",
-    "php_version"=> "php71",
+    "database_type" => InstallableServices::POSTGRES,
+    "php_version"=> InstallableServices::PHP_71,
     "region"=> "ams2"
 ]);
 ```
