@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.1.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.2.0...3.x)
+
+
+## [v3.2.0 (2020-09-22)](https://github.com/laravel/forge-sdk/compare/v3.1.0...v3.2.0)
+
+### Added
+- Add site aliases function ([#95](https://github.com/laravel/forge-sdk/pull/95))
+- Forge defaults as class constants ([#94](https://github.com/laravel/forge-sdk/pull/94))
 
 
 ## [v3.1.0 (2020-09-01)](https://github.com/laravel/forge-sdk/compare/v3.0.0...v3.1.0)
