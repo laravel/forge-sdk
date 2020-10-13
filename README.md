@@ -25,7 +25,7 @@ The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interf
     - [Site SSL Certificates](#site-ssl-certificates)
     - [Managing Databases](#managing-databases)
     - [Managing Recipes](#managing-recipes)
-    - [Managing Backups](#backups)
+    - [Managing Backups](#managing-backups)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
 - [Security Vulnerabilities](#security-vulnerabilities)
