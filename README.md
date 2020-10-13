@@ -478,6 +478,21 @@ $backupConfig->delete();
 $backupConfig->restore();
 ```
 
+### Managing Redirects
+
+```php
+$forge->redirectRules($serverId, $siteId);
+$forge->redirectRule($serverId, $siteId, $ruleId);
+$forge->createRedirectRule($serverId, $siteId, array $data, $wait = true);
+$forge->deleteRedirectRule($serverId, $siteId, $ruleId);
+```
+
+On a `RedirectRule` instance you may also call:
+
+```php
+$redirectRule->delete();
+```
+
 ## Contributing
 
 Thank you for considering contributing to Forge SDK! You can read the contribution guide [here](.github/CONTRIBUTING.md).
