@@ -26,6 +26,7 @@ The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interf
     - [Managing Databases](#managing-databases)
     - [Managing Recipes](#managing-recipes)
     - [Managing Backups](#managing-backups)
+    - [Managing Redirects](#managing-redirects)
 - [Contributing](#contributing)
 - [Code of Conduct](#code-of-conduct)
 - [Security Vulnerabilities](#security-vulnerabilities)
@@ -464,6 +465,21 @@ On a `Backup` instance you may also call:
 ```php
 $backupConfig->delete();
 $backupConfig->restore();
+```
+
+### Managing Redirects
+
+```php
+$forge->redirectRules($serverId, $siteId);
+$forge->redirectRule($serverId, $siteId, $ruleId);
+$forge->createRedirectRule($serverId, $siteId, array $data, $wait = true);
+$forge->deleteRedirectRule($serverId, $siteId, $ruleId);
+```
+
+On a `RedirectRule` instance you may also call:
+
+```php
+$redirectRule->delete();
 ```
 
 ## Contributing
