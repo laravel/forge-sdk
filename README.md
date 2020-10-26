@@ -1,9 +1,9 @@
 # Laravel Forge SDK
 
 <a href="https://github.com/laravel/forge-sdk/actions"><img src="https://github.com/laravel/forge-sdk/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://poser.pugx.org/laravel/forge-sdk/license.svg" alt="License"></a>
+<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://img.shields.io/packagist/dt/laravel/forge-sdk" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://img.shields.io/packagist/v/laravel/forge-sdk" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/forge-sdk"><img src="https://img.shields.io/packagist/l/laravel/forge-sdk" alt="License"></a>
 
 ## Introduction
 
