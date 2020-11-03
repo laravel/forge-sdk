@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.2.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.3.0...3.x)
+
+
+## [v3.3.0 (2020-11-03)](https://github.com/laravel/forge-sdk/compare/v3.2.0...v3.3.0)
+
+### Added
+- PHP 8 Support ([#98](https://github.com/laravel/forge-sdk/pull/98))
 
 
 ## [v3.2.0 (2020-09-22)](https://github.com/laravel/forge-sdk/compare/v3.1.0...v3.2.0)
