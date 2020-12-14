@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.3.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.3.1...3.x)
+
+
+## [v3.3.1 (2020-12-14)](https://github.com/laravel/forge-sdk/compare/v3.3.0...v3.3.1)
+
+### Fixed
+
+- Fix deployments `$wait` ([9d24051](https://github.com/laravel/forge-sdk/commit/9d24051ae1cf5fd28109713b7d7712fcd80e194b))
 
 
 ## [v3.3.0 (2020-11-03)](https://github.com/laravel/forge-sdk/compare/v3.2.0...v3.3.0)
