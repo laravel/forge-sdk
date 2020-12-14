@@ -269,7 +269,7 @@ trait ManagesSites
             return $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
                 $site = $this->site($serverId, $siteId);
 
-                return ! is_null($site->deploymentStatus) ? $site : null;
+                return is_null($site->deploymentStatus) ? $site : null;
             });
         }
 
