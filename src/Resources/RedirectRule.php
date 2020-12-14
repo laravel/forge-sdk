@@ -67,6 +67,6 @@ class RedirectRule extends Resource
      */
     public function delete()
     {
-        // $this->forge->deleteFirewallRule($this->serverId, $this->id);
+        $this->forge->deleteRedirectRule($this->serverId, $this->siteId, $this->id);
     }
 }
