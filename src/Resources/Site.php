@@ -110,13 +110,6 @@ class Site extends Resource
     public $appStatus;
 
     /**
-     * Hipchat room for deployment notifications.
-     *
-     * @var string
-     */
-    public $hipchatRoom;
-
-    /**
      * Slack channel for deployment notifications.
      *
      * @var string
@@ -261,27 +254,6 @@ class Site extends Resource
     public function siteDeploymentLog()
     {
         return $this->forge->siteDeploymentLog($this->serverId, $this->id);
-    }
-
-    /**
-     * Enable Hipchat Notifications for the given site.
-     *
-     * @param  array  $data
-     * @return void
-     */
-    public function enableHipchatNotifications(array $data)
-    {
-        $this->forge->enableHipchatNotifications($this->serverId, $this->id, $data);
-    }
-
-    /**
-     * Disable Hipchat Notifications for the given site.
-     *
-     * @return void
-     */
-    public function disableHipchatNotifications()
-    {
-        $this->forge->disableHipchatNotifications($this->serverId, $this->id);
     }
 
     /**

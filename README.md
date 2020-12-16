@@ -286,10 +286,6 @@ $forge->deploySite($serverId, $siteId, $wait = false);
 $forge->resetDeploymentState($serverId, $siteId);
 $forge->siteDeploymentLog($serverId, $siteId);
 
-// Notifications
-$forge->enableHipchatNotifications($serverId, $siteId, array $data);
-$forge->disableHipchatNotifications($serverId, $siteId);
-
 // Installing Wordpress
 $forge->installWordPress($serverId, $siteId, array $data);
 $forge->removeWordPress($serverId, $siteId);
@@ -317,8 +313,6 @@ $site->disableQuickDeploy();
 $site->deploySite($wait = false);
 $site->resetDeploymentState();
 $site->siteDeploymentLog();
-$site->enableHipchatNotifications(array $data);
-$site->disableHipchatNotifications();
 $site->installWordPress($data);
 $site->removeWordPress();
 $site->installPhpMyAdmin($data);
