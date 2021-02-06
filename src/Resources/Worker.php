@@ -96,12 +96,23 @@ class Worker extends Resource
     public $createdAt;
 
     /**
+     * Restart the given worker.
+     *
+     * @param  bool  $wait
+     * @return void
+     */
+    public function restart($wait = true)
+    {
+        $this->forge->restartWorker($this->serverId, $this->siteId, $this->id, $wait);
+    }
+
+    /**
      * Delete the given worker.
      *
      * @return void
      */
     public function delete()
     {
-        $this->forge->deleteRedirectRule($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteWorker($this->serverId, $this->siteId, $this->id);
     }
 }
