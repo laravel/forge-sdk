@@ -9,4 +9,5 @@ class ServerTypes
     const LOADBALANCER = 'loadbalancer';
     const CACHE = 'cache';
     const DATABASE = 'database';
+    const WORKER = 'worker';
 }

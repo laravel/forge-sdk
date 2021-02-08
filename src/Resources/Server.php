@@ -19,7 +19,7 @@ class Server extends Resource
     public $name;
 
     /**
-     * The name of the server.
+     * The type of the server.
      *
      * @var string
      */
