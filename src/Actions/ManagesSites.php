@@ -317,31 +317,6 @@ trait ManagesSites
     }
 
     /**
-     * Enable Hipchat Notifications for the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  array  $data
-     * @return void
-     */
-    public function enableHipchatNotifications($serverId, $siteId, array $data)
-    {
-        $this->post("servers/$serverId/sites/$siteId/notify/hipchat", $data);
-    }
-
-    /**
-     * Disable Hipchat Notifications for the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function disableHipchatNotifications($serverId, $siteId)
-    {
-        $this->delete("servers/$serverId/sites/$siteId/notify/hipchat");
-    }
-
-    /**
      * Install a new WordPress project.
      *
      * @param  int  $serverId
