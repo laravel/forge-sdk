@@ -19,6 +19,13 @@ class Server extends Resource
     public $name;
 
     /**
+     * The type of the server.
+     *
+     * @var string
+     */
+    public $type;
+
+    /**
      * The id of the provider credential instance.
      *
      * @var int
