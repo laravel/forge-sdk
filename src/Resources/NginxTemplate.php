@@ -26,6 +26,13 @@ class NginxTemplate extends Resource
     public $name;
 
     /**
+     * The content of the nginx template.
+     *
+     * @var string
+     */
+    public $content;
+
+    /**
      * Update the given nginx template.
      *
      * @param  array  $data
