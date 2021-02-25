@@ -26,6 +26,7 @@ The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interf
     - [Security Rules](#security-rules)
     - [Site Webhooks](#site-webhooks)
     - [Site SSL Certificates](#site-ssl-certificates)
+    - [Nginx Templates](#nginx-templates)
     - [Managing Databases](#managing-databases)
     - [Managing Recipes](#managing-recipes)
     - [Managing Backups](#backups)
@@ -392,6 +393,23 @@ $certificate->delete();
 $certificate->getSigningRequest();
 $certificate->install($wait = true);
 $certificate->activate($wait = true);
+```
+### Nginx Templates
+
+```php
+$forge->nginxTemplates($serverId);
+$forge->nginxDefaultTemplate($serverId);
+$forge->nginxTemplate($serverId, $templateId);
+$forge->createNginxTemplate($serverId, array $data);
+$forge->updateNginxTemplate($serverId, $templateId, array $data);
+$forge->deleteNginxTemplate($serverId, $templateId);
+```
+
+On a `NginxTemplate` instance you may also call:
+
+```php
+$nginxTemplate->update(array $data);
+$nginxTemplate->delete();
 ```
 
 ### Managing Databases
