@@ -1,12 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.3.1...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.4.0...3.x)
+
+
+## [v3.4.0 (2021-03-02)](https://github.com/laravel/forge-sdk/compare/v3.3.1...v3.4.0)
+
+### Added
+- Add types to Server object ([#106](https://github.com/laravel/forge-sdk/pull/106))
+- Nginx Templates ([#107](https://github.com/laravel/forge-sdk/pull/107))
 
 
 ## [v3.3.1 (2020-12-14)](https://github.com/laravel/forge-sdk/compare/v3.3.0...v3.3.1)
 
 ### Fixed
-
 - Fix deployments `$wait` ([9d24051](https://github.com/laravel/forge-sdk/commit/9d24051ae1cf5fd28109713b7d7712fcd80e194b))
 
 
