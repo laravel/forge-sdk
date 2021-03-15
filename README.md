@@ -77,6 +77,7 @@ $server = $forge->createServer([
     "provider"=> ServerProviders::DIGITAL_OCEAN,
     "credential_id"=> 1,
     "name"=> "test-via-api",
+    "type"=> ServerTypes::APP,
     "size"=> "01",
     "database"=> "test123",
     "database_type" => InstallableServices::POSTGRES,
