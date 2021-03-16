@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.4.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.5.0...3.x)
+
+
+## [v3.5.0 (2021-03-02)](https://github.com/laravel/forge-sdk/compare/v3.4.0...v3.5.0)
+
+### Added
+- Added meilisearch to serverTypes ([#110](https://github.com/laravel/forge-sdk/pull/110))
+
+### Fixed
+- Allow TimeoutException to be passed `null` values ([#111](https://github.com/laravel/forge-sdk/pull/111))
 
 
 ## [v3.4.0 (2021-03-02)](https://github.com/laravel/forge-sdk/compare/v3.3.1...v3.4.0)
