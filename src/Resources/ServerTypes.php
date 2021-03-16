@@ -10,4 +10,5 @@ class ServerTypes
     const CACHE = 'cache';
     const DATABASE = 'database';
     const WORKER = 'worker';
+    const MEILISEARCH = 'meilisearch';
 }
