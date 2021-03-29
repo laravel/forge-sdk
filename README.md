@@ -9,32 +9,6 @@
 
 The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
 
-- [Official Documentation](#official-documentation)
-    - [Installation](#installation)
-    - [Upgrading](#upgrading)
-    - [Basic Usage](#basic-usage)
-    - [Authenticated User](#authenticated-user)
-    - [Managing Servers](#managing-servers)
-    - [Server SSH Keys](#server-ssh-keys)
-    - [Server Scheduled Jobs](#server-scheduled-jobs)
-    - [Server Events](#server-events)
-    - [Managing Services](#managing-services)
-    - [Server Daemons](#server-daemons)
-    - [Server Firewall Rules](#server-firewall-rules)
-    - [Managing Sites](#managing-sites)
-    - [Site Workers](#site-workers)
-    - [Security Rules](#security-rules)
-    - [Site Webhooks](#site-webhooks)
-    - [Site SSL Certificates](#site-ssl-certificates)
-    - [Nginx Templates](#nginx-templates)
-    - [Managing Databases](#managing-databases)
-    - [Managing Recipes](#managing-recipes)
-    - [Managing Backups](#backups)
-- [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [License](#license)
-
 ## Official Documentation
 
 ### Installation
