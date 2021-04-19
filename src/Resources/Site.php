@@ -325,4 +325,15 @@ class Site extends Resource
     {
         $this->forge->removePhpMyAdmin($this->serverId, $this->id);
     }
+
+    /**
+     * Change the site's PHP version.
+     *
+     * @param  string  $version
+     * @return void
+     */
+    public function changePHPVersion($version)
+    {
+        $this->forge->changeSitePHPVersion($this->serverId, $this->id, $version);
+    }
 }
