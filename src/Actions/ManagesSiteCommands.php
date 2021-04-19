@@ -35,7 +35,7 @@ trait ManagesSiteCommands
     }
 
     /**
-     * Get the output for a command
+     * Get the output for a command.
      *
      * @param  int  $serverId
      * @param  int  $siteId

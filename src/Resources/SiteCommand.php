@@ -52,35 +52,35 @@ class SiteCommand extends Resource
      * @var string
      */
     public $status;
-    
+
     /**
      * The created_at time for the command.
      *
      * @var string
      */
     public $createdAt;
-    
+
     /**
      * The The updated_at time for the command.
      *
      * @var string
      */
     public $updatedAt;
-    
+
     /**
      * The URL for the user creating the command.
      *
      * @var string
      */
     public $profilePhotoUrl;
-      
+
     /**
      * The user_name for the user creating the command.
      *
      * @var string
      */
     public $userName;
-      
+
     /**
      * The output from the command
      *
