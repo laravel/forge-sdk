@@ -82,7 +82,7 @@ class SiteCommand extends Resource
     public $userName;
 
     /**
-     * The output from the command
+     * The output from the command.
      *
      * @var string
      */
