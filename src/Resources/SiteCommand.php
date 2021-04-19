@@ -87,5 +87,4 @@ class SiteCommand extends Resource
      * @var string
      */
     public $output;
-
 }
