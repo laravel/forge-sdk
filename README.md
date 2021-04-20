@@ -351,7 +351,7 @@ $webhook->delete();
 ### Site Commands
 
 ```php
-$forge->createSiteCommand($serverId, $siteId, array $data);
+$forge->executeSiteCommand($serverId, $siteId, array $data);
 $forge->listCommandHistory($serverId, $siteId);
 $forge->getSiteCommand($serverId, $siteId, $commandId);
 ```

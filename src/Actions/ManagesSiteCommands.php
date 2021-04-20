@@ -7,14 +7,14 @@ use Laravel\Forge\Resources\SiteCommand;
 trait ManagesSiteCommands
 {
     /**
-     * Create a new site command.
+     * Runs a new site command.
      *
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  array  $data
      * @return \Laravel\Forge\Resources\SiteCommand
      */
-    public function createSiteCommand($serverId, $siteId, array $data)
+    public function executeSiteCommand($serverId, $siteId, array $data)
     {
         $this->post("servers/$serverId/sites/$siteId/commands", $data);
     }
