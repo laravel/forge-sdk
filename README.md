@@ -348,6 +348,14 @@ On a `Webhook` instance you may also call:
 $webhook->delete();
 ```
 
+### Site Commands
+
+```php
+$forge->executeSiteCommand($serverId, $siteId, array $data);
+$forge->listCommandHistory($serverId, $siteId);
+$forge->getSiteCommand($serverId, $siteId, $commandId);
+```
+
 ### Site SSL Certificates
 
 ```php
