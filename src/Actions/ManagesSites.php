@@ -392,6 +392,19 @@ trait ManagesSites
     }
 
     /**
+     * Change the given site's PHP version.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  string  $version
+     * @return void
+     */
+    public function changeSitePHPVersion($serverId, $siteId, $version)
+    {
+        $this->put("servers/$serverId/sites/$siteId/php", ['version' => $version]);
+    }
+
+    /**
      * Update the given site's balanced nodes.
      *
      * @param  int  $serverId
