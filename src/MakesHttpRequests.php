@@ -72,7 +72,9 @@ trait MakesHttpRequests
             empty($payload) ? [] : ['form_params' => $payload]
         );
 
-        if ($response->getStatusCode() != 200) {
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode < 200 || $statusCode > 299) {
             return $this->handleRequestError($response);
         }
 

@@ -9,33 +9,6 @@
 
 The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
 
-- [Official Documentation](#official-documentation)
-    - [Installation](#installation)
-    - [Upgrading](#upgrading)
-    - [Basic Usage](#basic-usage)
-    - [Authenticated User](#authenticated-user)
-    - [Managing Servers](#managing-servers)
-    - [Server SSH Keys](#server-ssh-keys)
-    - [Server Scheduled Jobs](#server-scheduled-jobs)
-    - [Server Events](#server-events)
-    - [Managing Services](#managing-services)
-    - [Server Daemons](#server-daemons)
-    - [Server Firewall Rules](#server-firewall-rules)
-    - [Managing Sites](#managing-sites)
-    - [Site Workers](#site-workers)
-    - [Security Rules](#security-rules)
-    - [Site Webhooks](#site-webhooks)
-    - [Site SSL Certificates](#site-ssl-certificates)
-    - [Nginx Templates](#nginx-templates)
-    - [Managing Databases](#managing-databases)
-    - [Managing Recipes](#managing-recipes)
-    - [Managing Backups](#managing-backups)
-    - [Managing Redirects](#managing-redirects)
-- [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [License](#license)
-
 ## Official Documentation
 
 ### Installation
@@ -289,6 +262,9 @@ $forge->deploySite($serverId, $siteId, $wait = false);
 $forge->resetDeploymentState($serverId, $siteId);
 $forge->siteDeploymentLog($serverId, $siteId);
 
+// PHP Version
+$forge->changeSitePHPVersion($serverId, $siteId, $version);
+
 // Installing Wordpress
 $forge->installWordPress($serverId, $siteId, array $data);
 $forge->removeWordPress($serverId, $siteId);
@@ -320,6 +296,7 @@ $site->installWordPress($data);
 $site->removeWordPress();
 $site->installPhpMyAdmin($data);
 $site->removePhpMyAdmin();
+$site->changePHPVersion($version);
 ```
 
 ### Site Workers
@@ -367,6 +344,14 @@ On a `Webhook` instance you may also call:
 
 ```php
 $webhook->delete();
+```
+
+### Site Commands
+
+```php
+$forge->executeSiteCommand($serverId, $siteId, array $data);
+$forge->listCommandHistory($serverId, $siteId);
+$forge->getSiteCommand($serverId, $siteId, $commandId);
 ```
 
 ### Site SSL Certificates
