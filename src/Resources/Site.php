@@ -26,6 +26,13 @@ class Site extends Resource
     public $name;
 
     /**
+     * The aliases of the site.
+     *
+     * @var array
+     */
+    public $aliases;
+
+    /**
      * The name of the directory housing the site.
      *
      * @var string
@@ -124,6 +131,41 @@ class Site extends Resource
     public $slackChannel;
 
     /**
+     * Telegram chat ID for deployment notifications.
+     *
+     * @var string
+     */
+    public $telegramChatId;
+
+    /**
+     * Telegram chat title (username) for deployment notifications.
+     *
+     * @var string
+     */
+    public $telegramChatTitle;
+
+    /**
+     * Microsoft Teams webhook URL for deployment notifications.
+     *
+     * @var string
+     */
+    public $teamsWebhookUrl;
+
+    /**
+     * Discord webhook URL for deployment notifications.
+     *
+     * @var string
+     */
+    public $discordWebhookUrl;
+
+    /**
+     * The username the site is running under.
+     *
+     * @var string
+     */
+    public $username;
+
+    /**
      * The status of load balancing.
      *
      * @var string
@@ -136,6 +178,27 @@ class Site extends Resource
      * @var string
      */
     public $createdAt;
+
+    /**
+     * The URL used to trigger a site deploy.
+     *
+     * @var string
+     */
+    public $deploymentUrl;
+
+    /**
+     * Is the site using HTTPS.
+     *
+     * @var bool
+     */
+    public $isSecured;
+
+    /**
+     * The aliases of the site.
+     *
+     * @var array
+     */
+    public $tags;
 
     /**
      * Refresh the site token.
