@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.5.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.6.0...3.x)
+
+
+## [v3.6.0 (2021-04-27)](https://github.com/laravel/forge-sdk/compare/v3.5.0...v3.6.0)
+
+### Added
+- Add Site commands to SDK ([#115](https://github.com/laravel/forge-sdk/pull/115))
+- Adds new/missing properties to Resources/Site ([#118](https://github.com/laravel/forge-sdk/pull/118))
+- Add change site PHP version methods to SDK ([#117](https://github.com/laravel/forge-sdk/pull/117))
 
 
 ## [v3.5.0 (2021-03-02)](https://github.com/laravel/forge-sdk/compare/v3.4.0...v3.5.0)
