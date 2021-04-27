@@ -265,10 +265,6 @@ $forge->siteDeploymentLog($serverId, $siteId);
 // PHP Version
 $forge->changeSitePHPVersion($serverId, $siteId, $version);
 
-// Notifications
-$forge->enableHipchatNotifications($serverId, $siteId, array $data);
-$forge->disableHipchatNotifications($serverId, $siteId);
-
 // Installing Wordpress
 $forge->installWordPress($serverId, $siteId, array $data);
 $forge->removeWordPress($serverId, $siteId);
@@ -296,8 +292,6 @@ $site->disableQuickDeploy();
 $site->deploySite($wait = false);
 $site->resetDeploymentState();
 $site->siteDeploymentLog();
-$site->enableHipchatNotifications(array $data);
-$site->disableHipchatNotifications();
 $site->installWordPress($data);
 $site->removeWordPress();
 $site->installPhpMyAdmin($data);
