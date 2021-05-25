@@ -50,6 +50,22 @@ trait ManagesBackups
     }
 
     /**
+     * Update the given backup configuration.
+     *
+     * @param  int  $serverId
+     * @param  int  $backupConfigurationId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\BackupConfiguration
+     */
+    public function updateBackupConfiguration($serverId, $backupConfigurationId, array $data)
+    {
+        return new BackupConfiguration(
+            $this->put("servers/$serverId/backup-configs/$backupConfigurationId", $data)['backup']
+            + ['server_id' => $serverId], $this
+        );
+    }
+
+    /**
      * Delete a backup configuration.
      *
      * @param  string  $serverId

@@ -448,6 +448,7 @@ $recipe->run(array $data);
 ```php
 $forge->backupConfigurations($serverId);
 $forge->createBackupConfiguration($serverId, array $data);
+$forge->updateBackupConfiguration($serverId, $backupConfigurationId, array $data);
 $forge->backupConfiguration($serverId, $backupConfigurationId);
 $forge->deleteBackupConfiguration($serverId, $backupConfigurationId);
 $forge->restoreBackup($serverId, $backupConfigurationId, $backupId);
@@ -458,6 +459,7 @@ On a `BackupConfiguration` instance you may also call:
 
 ```php
 $extendedConfig = $backupConfig->get(); // Load the databases also
+$backupConfig->update(array $data);
 $backupConfig->delete();
 $backupConfig->restoreBackup($backupId);
 $backupConfig->deleteBackup($backupId);
