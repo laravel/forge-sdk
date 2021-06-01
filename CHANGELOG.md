@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.6.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.7.0...3.x)
+
+
+## [v3.7.0 (2021-06-01)](https://github.com/laravel/forge-sdk/compare/v3.6.0...v3.7.0)
+
+### Added
+- Add ability to update backup configurations ([#120](https://github.com/laravel/forge-sdk/pull/120))
 
 
 ## [v3.6.0 (2021-04-27)](https://github.com/laravel/forge-sdk/compare/v3.5.0...v3.6.0)
