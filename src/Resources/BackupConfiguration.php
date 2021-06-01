@@ -103,6 +103,17 @@ class BackupConfiguration extends Resource
     }
 
     /**
+     * Update the given configuration.
+     *
+     * @param  array  $data
+     * @return void
+     */
+    public function update(array $data)
+    {
+        $this->forge->updateBackupConfiguration($this->serverId, $this->id, $data);
+    }
+
+    /**
      * Delete the given configuration.
      *
      * @return void
