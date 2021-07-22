@@ -16,7 +16,7 @@ trait ManagesSiteCommands
      */
     public function executeSiteCommand($serverId, $siteId, array $data)
     {
-        $this->post("servers/$serverId/sites/$siteId/commands", $data);
+        return new SiteCommand($this->post("servers/$serverId/sites/$siteId/commands", $data)['command']);
     }
 
     /**
