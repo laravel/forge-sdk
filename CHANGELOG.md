@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.7.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.8.0...3.x)
+
+
+## [v3.8.0 (2021-07-26)](https://github.com/laravel/forge-sdk/compare/v3.7.0...v3.8.0)
+
+### Added
+- `executeSiteCommand` now returns an instance of `SiteCommand::class` ([#121](https://github.com/laravel/forge-sdk/pull/121))
+- `id` property to the `Event::class` resource ([#121](https://github.com/laravel/forge-sdk/pull/121))
 
 
 ## [v3.7.0 (2021-06-01)](https://github.com/laravel/forge-sdk/compare/v3.6.0...v3.7.0)
