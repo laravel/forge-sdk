@@ -26,7 +26,8 @@ class Forge
         Actions\ManagesDatabases,
         Actions\ManagesMonitors,
         Actions\ManagesNginxTemplates,
-        Actions\ManagesSiteCommands;
+        Actions\ManagesSiteCommands,
+        Actions\ManagesRegions;
 
     /**
      * The Forge API Key.
