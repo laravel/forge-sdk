@@ -82,4 +82,18 @@ class Resource
             return new $class($data + $extraData, $this->forge);
         }, $collection);
     }
+
+    /**
+     * Transform the collection of tags to a string.
+     *
+     * @param  array  $tags
+     * @param  string|null  $separator
+     * @return string
+     */
+    protected function transformTags(array $tags, $separator = null)
+    {
+        $separator = $separator ?: ', ';
+
+        return implode($separator, array_column($tags ?? [], 'name'));
+    }
 }
