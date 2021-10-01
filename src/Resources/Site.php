@@ -399,4 +399,15 @@ class Site extends Resource
     {
         $this->forge->changeSitePHPVersion($this->serverId, $this->id, $version);
     }
+
+    /**
+     * Return the aliases associated with the site.
+     *
+     * @param  string|null  $separator
+     * @return string
+     */
+    public function tags($separator = null)
+    {
+        return $this->transformTags($this->tags, $separator);
+    }
 }
