@@ -9,8 +9,8 @@ trait ManagesSecurityRules
     /**
      * Get the collection of security rules.
      *
-     * @param  int $serverId
-     * @param  int $siteId
+     * @param  int  $serverId
+     * @param  int  $siteId
      * @return \Laravel\Forge\Resources\SecurityRule[]
      */
     public function securityRules($serverId, $siteId)
@@ -25,9 +25,9 @@ trait ManagesSecurityRules
     /**
      * Get a security rule instance.
      *
-     * @param  int $serverId
-     * @param  int $siteId
-     * @param  int $ruleId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $ruleId
      * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function securityRule($serverId, $siteId, $ruleId)
@@ -41,10 +41,10 @@ trait ManagesSecurityRules
     /**
      * Create a new security rule.
      *
-     * @param  int $serverId
-     * @param  int $siteId
-     * @param  array $data
-     * @param  bool $wait
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  array  $data
+     * @param  bool  $wait
      * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function createSecurityRule($serverId, $siteId, array $data, $wait = true)
@@ -65,9 +65,9 @@ trait ManagesSecurityRules
     /**
      * Delete the given security rule.
      *
-     * @param  int $serverId
-     * @param  int $siteId
-     * @param  int $ruleId
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $ruleId
      * @return void
      */
     public function deleteSecurityRule($serverId, $siteId, $ruleId)

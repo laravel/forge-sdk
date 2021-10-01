@@ -275,7 +275,7 @@ trait ManagesServers
     /**
      * Get the collection of PHP Versions.
      *
-     * @param  int $serverId
+     * @param  int  $serverId
      * @return \Laravel\Forge\Resources\PHPVersion[]
      */
     public function phpVersions($serverId)
