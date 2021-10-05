@@ -131,6 +131,13 @@ class Server extends Resource
     public $provisionCommand;
 
     /**
+     * The tags associated with the server.
+     *
+     * @var array
+     */
+    public $tags = [];
+
+    /**
      * Update the given server.
      *
      * @param  array  $data
@@ -354,5 +361,16 @@ class Server extends Resource
     public function updatePHP($version)
     {
         $this->forge->updatePHP($this->id, $version);
+    }
+
+    /**
+     * Return the tags associated with the server.
+     *
+     * @param  string|null  $separator
+     * @return string
+     */
+    public function tags($separator = null)
+    {
+        return $this->transformTags($this->tags, $separator);
     }
 }

@@ -5,6 +5,13 @@ namespace Laravel\Forge\Resources;
 class Event extends Resource
 {
     /**
+     * The id of the event.
+     *
+     * @var int
+     */
+    public $id;
+
+    /**
      * The id of the server where the event occurred.
      *
      * @var int

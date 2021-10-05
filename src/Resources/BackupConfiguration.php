@@ -126,7 +126,7 @@ class BackupConfiguration extends Resource
     /**
      * Restore a backup for this configuration.
      *
-     * @param  int $backupId
+     * @param  int  $backupId
      * @return void
      */
     public function restoreBackup($backupId)

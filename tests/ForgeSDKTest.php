@@ -23,11 +23,8 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
-            $response = Mockery::mock(Response::class)
+            new Response(200, [], '{"recipes": [{"key": "value"}]}')
         );
-
-        $response->shouldReceive('getStatusCode')->once()->andReturn(200);
-        $response->shouldReceive('getBody')->once()->andReturn('{"recipes": [{"key": "value"}]}');
 
         $this->assertCount(1, $forge->recipes());
     }
@@ -37,11 +34,8 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
-            $response = Mockery::mock(Response::class)
+            new Response(422, [], '{"name": ["The name is required."]}')
         );
-
-        $response->shouldReceive('getStatusCode')->andReturn(422);
-        $response->shouldReceive('getBody')->once()->andReturn('{"name": ["The name is required."]}');
 
         try {
             $forge->recipes();
@@ -58,10 +52,8 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
-            $response = Mockery::mock(Response::class)
+            new Response(404)
         );
-
-        $response->shouldReceive('getStatusCode')->andReturn(404);
 
         $forge->recipes();
     }
@@ -71,11 +63,8 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
-            $response = Mockery::mock(Response::class)
+            new Response(400, [], 'Error!')
         );
-
-        $response->shouldReceive('getStatusCode')->andReturn(400);
-        $response->shouldReceive('getBody')->once()->andReturn('Error!');
 
         try {
             $forge->recipes();
