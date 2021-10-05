@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.8.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.9.0...3.x)
+
+
+## [v3.9.0 (2021-10-05)](https://github.com/laravel/forge-sdk/compare/v3.8.0...v3.9.0)
+
+### Added
+- Add support for site and server tags in respective resources ([#126](https://github.com/laravel/forge-sdk/pull/126))
+- Add PHP 8 as an installable service ([#127](https://github.com/laravel/forge-sdk/pull/127))
 
 
 ## [v3.8.0 (2021-07-26)](https://github.com/laravel/forge-sdk/compare/v3.7.0...v3.8.0)
