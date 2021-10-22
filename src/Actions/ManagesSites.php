@@ -340,7 +340,7 @@ trait ManagesSites
     {
         return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId");
     }
-    
+
     /**
      * Get the output for a deployment of the site.
      *

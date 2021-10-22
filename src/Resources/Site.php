@@ -335,11 +335,11 @@ class Site extends Resource
     {
         return $this->forge->deploymentHistory($this->serverId, $this->id);
     }
-    
+
     /**
      * Get the deployments history of the site.
      *
-     * @param int $deploymentId
+     * @param  int  $deploymentId
      * @return string
      */
     public function getDeploymentHistoryDeployment($deploymentId)
