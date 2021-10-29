@@ -317,7 +317,7 @@ trait ManagesSites
     }
 
     /**
-     * Get the deployments history of the site.
+     * Get the deployment history of the site.
      *
      * @param  int  $serverId
      * @param  int  $siteId
@@ -329,7 +329,7 @@ trait ManagesSites
     }
 
     /**
-     * Get a single deployment from deployment history of the site.
+     * Get a single deployment from the deployment history of a site.
      *
      * @param  int  $serverId
      * @param  int  $siteId

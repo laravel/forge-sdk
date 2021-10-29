@@ -337,7 +337,7 @@ class Site extends Resource
     }
 
     /**
-     * Get the deployments history of the site.
+     * Get a single deployment from the deployment history of a site.
      *
      * @param  int  $deploymentId
      * @return string
