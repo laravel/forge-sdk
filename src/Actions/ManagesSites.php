@@ -317,6 +317,44 @@ trait ManagesSites
     }
 
     /**
+     * Get the deployment history of the site.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return string
+     */
+    public function deploymentHistory($serverId, $siteId)
+    {
+        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history");
+    }
+
+    /**
+     * Get a single deployment from the deployment history of a site.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $deploymentId
+     * @return string
+     */
+    public function deploymentHistoryDeployment($serverId, $siteId, $deploymentId)
+    {
+        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId");
+    }
+
+    /**
+     * Get the output for a deployment of the site.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @param  int  $deploymentId
+     * @return string
+     */
+    public function deploymentHistoryOutput($serverId, $siteId, $deploymentId)
+    {
+        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId/output");
+    }
+
+    /**
      * Enable Hipchat Notifications for the given site.
      *
      * @param  int  $serverId

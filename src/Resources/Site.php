@@ -327,6 +327,38 @@ class Site extends Resource
     }
 
     /**
+     * Get the deployments history of the site.
+     *
+     * @return string
+     */
+    public function getDeploymentHistory()
+    {
+        return $this->forge->deploymentHistory($this->serverId, $this->id);
+    }
+
+    /**
+     * Get a single deployment from the deployment history of a site.
+     *
+     * @param  int  $deploymentId
+     * @return string
+     */
+    public function getDeploymentHistoryDeployment($deploymentId)
+    {
+        return $this->forge->deploymentHistoryDeployment($this->serverId, $this->id, $deploymentId);
+    }
+
+    /**
+     * Get the output for a deployment of the site.
+     *
+     * @param  int  $deploymentId
+     * @return string
+     */
+    public function getDeploymentHistoryOutput($deploymentId)
+    {
+        return $this->forge->deploymentHistoryOutput($this->serverId, $this->id, $deploymentId);
+    }
+
+    /**
      * Enable Hipchat Notifications for the given site.
      *
      * @param  array  $data
