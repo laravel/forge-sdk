@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.9.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.10.0...3.x)
+
+
+## [v3.10.0 (2021-11-23)](https://github.com/laravel/forge-sdk/compare/v3.9.0...v3.10.0)
+
+### Added
+- Add deployment history ([#131](https://github.com/laravel/forge-sdk/pull/131))
 
 
 ## [v3.9.0 (2021-10-05)](https://github.com/laravel/forge-sdk/compare/v3.8.0...v3.9.0)
