@@ -261,6 +261,9 @@ $forge->disableQuickDeploy($serverId, $siteId);
 $forge->deploySite($serverId, $siteId, $wait = false);
 $forge->resetDeploymentState($serverId, $siteId);
 $forge->siteDeploymentLog($serverId, $siteId);
+$forge->deploymentHistory($serverId, $siteId);
+$forge->deploymentHistoryDeployment($serverId, $siteId, $deploymentId);
+$forge->deploymentHistoryOutput($serverId, $siteId, $deploymentId);
 
 // PHP Version
 $forge->changeSitePHPVersion($serverId, $siteId, $version);
@@ -292,6 +295,9 @@ $site->disableQuickDeploy();
 $site->deploySite($wait = false);
 $site->resetDeploymentState();
 $site->siteDeploymentLog();
+$site->getDeploymentHistory();
+$site->getDeploymentHistoryDeployment($deploymentId);
+$site->getDeploymentHistoryOutput($deploymentId);
 $site->installWordPress($data);
 $site->removeWordPress();
 $site->installPhpMyAdmin($data);
