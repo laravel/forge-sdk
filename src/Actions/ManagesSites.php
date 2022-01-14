@@ -69,7 +69,7 @@ trait ManagesSites
     public function updateSite($serverId, $siteId, array $data)
     {
         return new Site(
-            $this->put("servers/$serverId/sites/$siteId", $data)['site']
+            $this->request('PUT', "servers/$serverId/sites/$siteId", ['json' => $data])['site']
             + ['server_id' => $serverId], $this
         );
     }
