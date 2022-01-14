@@ -29,6 +29,21 @@ class ForgeSDKTest extends TestCase
         $this->assertCount(1, $forge->recipes());
     }
 
+    public function test_update_site()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'servers/123/sites/456', [
+            'json' => ['aliases' => ['foo.com']],
+        ])->andReturn(
+            new Response(200, [], '{"site": {"aliases": ["foo.com"]}}')
+        );
+
+        $this->assertSame(['foo.com'], $forge->updateSite('123', '456', [
+            'aliases' => ['foo.com'],
+        ])->aliases);
+    }
+
     public function test_handling_validation_errors()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
