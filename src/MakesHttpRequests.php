@@ -68,9 +68,11 @@ trait MakesHttpRequests
      */
     protected function request($verb, $uri, array $payload = [])
     {
-        $payload = isset($payload['json'])
-            ? ['json' => $payload['json']]
-            : ['form_params' => $payload];
+        if (isset($payload['json'])) {
+            $payload = ['json' => $payload['json']];
+        } else {
+            $payload = empty($payload) ? [] : ['form_params' => $payload];
+        }
 
         $response = $this->guzzle->request($verb, $uri, $payload);
 
