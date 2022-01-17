@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.10.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.11.0...3.x)
+
+
+## [v3.11.0 (2022-01-17)](https://github.com/laravel/forge-sdk/compare/v3.10.0...v3.11.0)
+
+### Fixed
+- Update site aliases ([#135](https://github.com/laravel/forge-sdk/pull/135))
 
 
 ## [v3.10.0 (2021-11-23)](https://github.com/laravel/forge-sdk/compare/v3.9.0...v3.10.0)
