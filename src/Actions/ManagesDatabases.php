@@ -87,7 +87,7 @@ trait ManagesDatabases
     }
 
     /**
-     * Sync the databases
+     * Sync the databases.
      *
      * @param  int  $serverId
      * @return void
