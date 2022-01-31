@@ -85,4 +85,15 @@ trait ManagesDatabases
     {
         $this->delete("servers/$serverId/databases/$databaseId");
     }
+
+    /**
+     * Sync the databases
+     *
+     * @param  int  $serverId
+     * @return void
+     */
+    public function syncDatabases($serverId)
+    {
+        $this->post("servers/$serverId/databases/sync");
+    }
 }
