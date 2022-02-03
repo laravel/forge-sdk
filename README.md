@@ -407,6 +407,7 @@ $forge->database($serverId, $databaseId);
 $forge->createDatabase($serverId, array $data, $wait = true);
 $forge->updateDatabase($serverId, $databaseId, array $data);
 $forge->deleteDatabase($serverId, $databaseId);
+$forge->syncDatabases($serverId);
 
 // Users
 $forge->databaseUsers($serverId);
