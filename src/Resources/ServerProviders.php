@@ -9,7 +9,7 @@ class ServerProviders
     const DIGITAL_OCEAN = 'ocean2';
     const HETZNER = 'hetzner';
     const LINODE = 'linode';
-    const LINODE4 = 'linode5';
+    const LINODE4 = 'linode4';
     const VULTR = 'vultr';
     const VULTR2 = 'vultr2';
 }
