@@ -303,6 +303,7 @@ $site->removeWordPress();
 $site->installPhpMyAdmin($data);
 $site->removePhpMyAdmin();
 $site->changePHPVersion($version);
+$site->siteLog();
 ```
 
 ### Site Workers

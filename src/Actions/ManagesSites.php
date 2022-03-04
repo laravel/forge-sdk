@@ -454,4 +454,16 @@ trait ManagesSites
     {
         $this->put("servers/$serverId/sites/$siteId/balancing", $data);
     }
+
+    /**
+     * Get the given site's log.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return string
+     */
+    public function siteLog($serverId, $siteId)
+    {
+        return $this->get("servers/$serverId/sites/$siteId/logs");
+    }
 }
