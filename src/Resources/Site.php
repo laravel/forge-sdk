@@ -444,7 +444,7 @@ class Site extends Resource
     }
 
     /**
-     * Get the last deployment log of the site.
+     * Get the log for this site.
      *
      * @return string
      */
