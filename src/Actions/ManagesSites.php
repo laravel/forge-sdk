@@ -31,7 +31,6 @@ trait ManagesSites
     public function site($serverId, $siteId)
     {
         return new Site(
-            $this->get("servers/$serverId/sites/$siteId")['site'] + ['server_id' => $serverId], $this
         );
     }
 
@@ -70,7 +69,6 @@ trait ManagesSites
     {
         return new Site(
             $this->request('PUT', "servers/$serverId/sites/$siteId", ['json' => $data])['site']
-            + ['server_id' => $serverId], $this
         );
     }
 
@@ -86,7 +84,6 @@ trait ManagesSites
     {
         return new Site(
             $this->put("servers/$serverId/sites/$siteId/aliases", compact('aliases'))['site']
-            + ['server_id' => $serverId], $this
         );
     }
 
@@ -453,5 +450,17 @@ trait ManagesSites
     public function updateNodeBalancingConfiguration($serverId, $siteId, array $data)
     {
         $this->put("servers/$serverId/sites/$siteId/balancing", $data);
+    }
+
+    /**
+     * Get the last deployment log of the site.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return string
+     */
+    public function siteLog($serverId, $siteId)
+    {
+        return $this->get("servers/$serverId/sites/$siteId/logs");
     }
 }

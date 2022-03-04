@@ -442,4 +442,14 @@ class Site extends Resource
     {
         return $this->transformTags($this->tags, $separator);
     }
+
+    /**
+     * Get the last deployment log of the site.
+     *
+     * @return string
+     */
+    public function siteLog()
+    {
+        return $this->forge->siteLog($this->serverId, $this->id);
+    }
 }
