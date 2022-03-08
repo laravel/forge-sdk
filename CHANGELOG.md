@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.12.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.0...3.x)
+
+## [v3.13.0](https://github.com/laravel/forge-sdk/compare/v3.12.0...v3.13.0) - 2022-03-08
+
+### Added
+
+- Add `siteLog` method to allow getting site logs by @duncanmcclean in https://github.com/laravel/forge-sdk/pull/138
 
 ## [v3.12.0](https://github.com/laravel/forge-sdk/compare/v3.11.0...v3.12.0) - 2022-02-08
 
