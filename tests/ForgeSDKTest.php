@@ -92,7 +92,8 @@ class ForgeSDKTest extends TestCase
 
     public function testRetryHandlesFalseResultFromClosure()
     {
-        $requestMaker = new class() {
+        $requestMaker = new class()
+        {
             use MakesHttpRequests;
         };
 
@@ -108,7 +109,8 @@ class ForgeSDKTest extends TestCase
 
     public function testRetryHandlesNullResultFromClosure()
     {
-        $requestMaker = new class() {
+        $requestMaker = new class()
+        {
             use MakesHttpRequests;
         };
 
@@ -124,7 +126,8 @@ class ForgeSDKTest extends TestCase
 
     public function testRetryHandlesFalseyStringResultFromClosure()
     {
-        $requestMaker = new class() {
+        $requestMaker = new class()
+        {
             use MakesHttpRequests;
         };
 
@@ -140,7 +143,8 @@ class ForgeSDKTest extends TestCase
 
     public function testRetryHandlesFalseyNumerResultFromClosure()
     {
-        $requestMaker = new class() {
+        $requestMaker = new class()
+        {
             use MakesHttpRequests;
         };
 
@@ -156,7 +160,8 @@ class ForgeSDKTest extends TestCase
 
     public function testRetryHandlesFalseyArrayResultFromClosure()
     {
-        $requestMaker = new class() {
+        $requestMaker = new class()
+        {
             use MakesHttpRequests;
         };
 
