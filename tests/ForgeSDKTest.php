@@ -97,7 +97,9 @@ class ForgeSDKTest extends TestCase
         };
 
         try {
-            $requestMaker->retry(0, fn () => false, 0);
+            $requestMaker->retry(0, function () {
+                return false;
+            }, 0);
             $this->fail();
         } catch (TimeoutException $e) {
             $this->assertSame([], $e->output());
@@ -111,7 +113,9 @@ class ForgeSDKTest extends TestCase
         };
 
         try {
-            $requestMaker->retry(0, fn () => null, 0);
+            $requestMaker->retry(0, function () {
+                return null;
+            }, 0);
             $this->fail();
         } catch (TimeoutException $e) {
             $this->assertSame([], $e->output());
@@ -125,7 +129,9 @@ class ForgeSDKTest extends TestCase
         };
 
         try {
-            $requestMaker->retry(0, fn () => '', 0);
+            $requestMaker->retry(0, function () {
+                return '';
+            }, 0);
             $this->fail();
         } catch (TimeoutException $e) {
             $this->assertSame([''], $e->output());
@@ -139,7 +145,9 @@ class ForgeSDKTest extends TestCase
         };
 
         try {
-            $requestMaker->retry(0, fn () => 0, 0);
+            $requestMaker->retry(0, function () {
+                return 0;
+            }, 0);
             $this->fail();
         } catch (TimeoutException $e) {
             $this->assertSame([0], $e->output());
@@ -153,7 +161,9 @@ class ForgeSDKTest extends TestCase
         };
 
         try {
-            $requestMaker->retry(0, fn () => [], 0);
+            $requestMaker->retry(0, function () {
+                return [];
+            }, 0);
             $this->fail();
         } catch (TimeoutException $e) {
             $this->assertSame([], $e->output());
