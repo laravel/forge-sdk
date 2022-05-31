@@ -141,6 +141,14 @@ trait MakesHttpRequests
             goto beginning;
         }
 
+        if ($output === null || $output === false) {
+            $output = [];
+        }
+
+        if (! is_array($output)) {
+            $output = [$output];
+        }
+
         throw new TimeoutException($output);
     }
 }
