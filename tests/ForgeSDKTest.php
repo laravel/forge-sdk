@@ -6,8 +6,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Laravel\Forge\Exceptions\FailedActionException;
 use Laravel\Forge\Exceptions\NotFoundException;
+use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\ValidationException;
 use Laravel\Forge\Forge;
+use Laravel\Forge\MakesHttpRequests;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -85,6 +87,76 @@ class ForgeSDKTest extends TestCase
             $forge->recipes();
         } catch (FailedActionException $e) {
             $this->assertSame('Error!', $e->getMessage());
+        }
+    }
+
+    public function testRetryHandlesFalseResultFromClosure()
+    {
+        $requestMaker = new class() {
+            use MakesHttpRequests;
+        };
+
+        try {
+            $requestMaker->retry(0, fn () => false, 0);
+            $this->fail();
+        } catch (TimeoutException $e) {
+            $this->assertSame([], $e->output());
+        }
+    }
+
+    public function testRetryHandlesNullResultFromClosure()
+    {
+        $requestMaker = new class() {
+            use MakesHttpRequests;
+        };
+
+        try {
+            $requestMaker->retry(0, fn () => null, 0);
+            $this->fail();
+        } catch (TimeoutException $e) {
+            $this->assertSame([], $e->output());
+        }
+    }
+
+    public function testRetryHandlesFalseyStringResultFromClosure()
+    {
+        $requestMaker = new class() {
+            use MakesHttpRequests;
+        };
+
+        try {
+            $requestMaker->retry(0, fn () => '', 0);
+            $this->fail();
+        } catch (TimeoutException $e) {
+            $this->assertSame([''], $e->output());
+        }
+    }
+
+    public function testRetryHandlesFalseyNumerResultFromClosure()
+    {
+        $requestMaker = new class() {
+            use MakesHttpRequests;
+        };
+
+        try {
+            $requestMaker->retry(0, fn () => 0, 0);
+            $this->fail();
+        } catch (TimeoutException $e) {
+            $this->assertSame([0], $e->output());
+        }
+    }
+
+    public function testRetryHandlesFalseyArrayResultFromClosure()
+    {
+        $requestMaker = new class() {
+            use MakesHttpRequests;
+        };
+
+        try {
+            $requestMaker->retry(0, fn () => [], 0);
+            $this->fail();
+        } catch (TimeoutException $e) {
+            $this->assertSame([], $e->output());
         }
     }
 }
