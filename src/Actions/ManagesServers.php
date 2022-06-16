@@ -68,7 +68,9 @@ trait ManagesServers
      */
     public function updateServer($serverId, array $data)
     {
-        return $this->put("servers/$serverId", $data)['server'];
+        $server = $this->put("servers/$serverId", $data)['server'];
+
+        return new Server($server, $this);
     }
 
     /**
