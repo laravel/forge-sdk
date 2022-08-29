@@ -66,7 +66,7 @@ These parameters will be used in the POST request sent to Forge servers, you can
 
 Notice that this request for example will only start the server creation process, your server might need a few minutes before it completes provisioning, you'll need to check the server's `$isReady` property to know if it's ready or not yet.
 
-Some SDK methods however waits for the action to complete on Forge's end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
+Some SDK methods however wait for the action to complete on Forge's end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
 
 ```php
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
@@ -74,7 +74,7 @@ $forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
 
 This method will ping Forge servers every 5 seconds and see if the newly created Site's status is `installed` and only return when it's so, in case the waiting exceeded 30 seconds a `Laravel\Forge\Exceptions\TimeoutException` will be thrown.
 
-You can easily stop this behaviour be setting the `$wait` argument to false:
+You can easily stop this behaviour by setting the `$wait` argument to false:
 
 ```php
 $forge->createSite(SERVER_ID, [SITE_PARAMETERS], false);
