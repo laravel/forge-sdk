@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Laravel\Forge\Exceptions\FailedActionException;
 use Laravel\Forge\Exceptions\NotFoundException;
+use Laravel\Forge\Exceptions\RateLimitExceededException;
 use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\ValidationException;
 use Laravel\Forge\Forge;
@@ -172,6 +173,40 @@ class ForgeSDKTest extends TestCase
             $this->fail();
         } catch (TimeoutException $e) {
             $this->assertSame([], $e->output());
+        }
+    }
+
+    public function testRateLimitExceededWithHeaderSet()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $timestamp = strtotime(date('Y-m-d H:i:s'));
+
+        $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
+            new Response(429, [
+                'x-ratelimit-reset' => $timestamp
+            ], 'Too Many Attempts.')
+        );
+
+        try {
+            $forge->recipes();
+        } catch (RateLimitExceededException $e) {
+            $this->assertSame($timestamp, $e->rateLimitResetsAt);
+        }
+    }
+
+    public function testRateLimitExceededWithHeaderNotAvailable()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
+            new Response(429, [], 'Too Many Attempts.')
+        );
+
+        try {
+            $forge->recipes();
+        } catch (RateLimitExceededException $e) {
+            $this->assertNull($e->rateLimitResetsAt);
         }
     }
 }
