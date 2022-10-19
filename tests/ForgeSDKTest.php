@@ -184,7 +184,7 @@ class ForgeSDKTest extends TestCase
 
         $http->shouldReceive('request')->once()->with('GET', 'recipes', [])->andReturn(
             new Response(429, [
-                'x-ratelimit-reset' => $timestamp
+                'x-ratelimit-reset' => $timestamp,
             ], 'Too Many Attempts.')
         );
 

@@ -7,7 +7,7 @@ use Exception;
 class RateLimitExceededException extends Exception
 {
     /**
-     * The timestamp that the rate limit will be reset
+     * The timestamp that the rate limit will be reset.
      *
      * @var int|null
      */

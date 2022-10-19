@@ -5,8 +5,8 @@ namespace Laravel\Forge;
 use Exception;
 use Laravel\Forge\Exceptions\FailedActionException;
 use Laravel\Forge\Exceptions\NotFoundException;
-use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\RateLimitExceededException;
+use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 
