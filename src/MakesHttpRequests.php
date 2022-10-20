@@ -114,7 +114,7 @@ trait MakesHttpRequests
             throw new FailedActionException((string) $response->getBody());
         }
 
-        if ($response->getStatusCode() == 429) {
+        if ($response->getStatusCode() === 429) {
             throw new RateLimitExceededException(
                 $response->hasHeader('x-ratelimit-reset')
                     ? (int) $response->getHeader('x-ratelimit-reset')[0]
