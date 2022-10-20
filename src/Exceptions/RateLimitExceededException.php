@@ -16,6 +16,7 @@ class RateLimitExceededException extends Exception
     /**
      * Create a new exception instance.
      *
+     * @param  int|null  $rateLimitReset
      * @return void
      */
     public function __construct($rateLimitReset)
