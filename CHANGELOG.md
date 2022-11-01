@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.1...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.2...3.x)
+
+## [v3.13.2](https://github.com/laravel/forge-sdk/compare/v3.13.1...v3.13.2) - 2022-11-01
+
+### Changed
+
+- Add Exception for Exceeding Forge API Rate Limit by @DexterHarrison in https://github.com/laravel/forge-sdk/pull/149
 
 ## [v3.13.1](https://github.com/laravel/forge-sdk/compare/v3.13.0...v3.13.1) - 2022-05-31
 
