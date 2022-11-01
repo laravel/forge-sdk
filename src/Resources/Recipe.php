@@ -12,6 +12,13 @@ class Recipe extends Resource
     public $id;
 
     /**
+     * The key of the recipe.
+     *
+     * @var string
+     */
+    public $key;
+
+    /**
      * The name of the recipe.
      *
      * @var string
