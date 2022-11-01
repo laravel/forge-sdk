@@ -21,7 +21,7 @@ class RateLimitExceededException extends Exception
      */
     public function __construct($rateLimitReset)
     {
-        parent::__construct('Too Many Attempts.');
+        parent::__construct('Too Many Requests.');
 
         $this->rateLimitResetsAt = $rateLimitReset;
     }
