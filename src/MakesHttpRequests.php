@@ -5,6 +5,7 @@ namespace Laravel\Forge;
 use Exception;
 use Laravel\Forge\Exceptions\FailedActionException;
 use Laravel\Forge\Exceptions\NotFoundException;
+use Laravel\Forge\Exceptions\RateLimitExceededException;
 use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
@@ -97,6 +98,7 @@ trait MakesHttpRequests
      * @throws \Laravel\Forge\Exceptions\FailedActionException
      * @throws \Laravel\Forge\Exceptions\NotFoundException
      * @throws \Laravel\Forge\Exceptions\ValidationException
+     * @throws \Laravel\Forge\Exceptions\RateLimitExceededException
      */
     protected function handleRequestError(ResponseInterface $response)
     {
@@ -110,6 +112,14 @@ trait MakesHttpRequests
 
         if ($response->getStatusCode() == 400) {
             throw new FailedActionException((string) $response->getBody());
+        }
+
+        if ($response->getStatusCode() === 429) {
+            throw new RateLimitExceededException(
+                $response->hasHeader('x-ratelimit-reset')
+                    ? (int) $response->getHeader('x-ratelimit-reset')[0]
+                    : null
+            );
         }
 
         throw new Exception((string) $response->getBody());
