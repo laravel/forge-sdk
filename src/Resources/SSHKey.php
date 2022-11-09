@@ -31,6 +31,13 @@ class SSHKey extends Resource
      * @var string
      */
     public $status;
+    
+    /**
+     * The username of the key.
+     *
+     * @var string
+     */
+    public $username;
 
     /**
      * The date/time the key was created.
