@@ -31,7 +31,7 @@ class SSHKey extends Resource
      * @var string
      */
     public $status;
-    
+
     /**
      * The username of the key.
      *
