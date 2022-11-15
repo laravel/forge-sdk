@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.2...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.3...3.x)
+
+## [v3.13.3](https://github.com/laravel/forge-sdk/compare/v3.13.2...v3.13.3) - 2022-11-09
+
+### Fixed
+
+- Add username to ssh key by @barryvdh in https://github.com/laravel/forge-sdk/pull/151
 
 ## [v3.13.2](https://github.com/laravel/forge-sdk/compare/v3.13.1...v3.13.2) - 2022-11-01
 
