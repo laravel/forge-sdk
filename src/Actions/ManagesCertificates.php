@@ -103,7 +103,7 @@ trait ManagesCertificates
         $this->post("servers/$serverId/sites/$siteId/certificates/$certificateId/install", $data);
 
         if ($wait) {
-            $this->retry(30, function () use ($serverId, $siteId, $certificateId) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $certificateId) {
                 $certificate = $this->certificate($serverId, $siteId, $certificateId);
 
                 return $certificate->status == 'installed';
@@ -125,7 +125,7 @@ trait ManagesCertificates
         $this->post("servers/$serverId/sites/$siteId/certificates/$certificateId/activate");
 
         if ($wait) {
-            $this->retry(30, function () use ($serverId, $siteId, $certificateId) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $certificateId) {
                 $certificate = $this->certificate($serverId, $siteId, $certificateId);
 
                 return $certificate->activationStatus == 'activated';
