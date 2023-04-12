@@ -89,7 +89,7 @@ trait ManagesWorkers
         $this->post("servers/$serverId/sites/$siteId/workers/$workerId/restart");
 
         if ($wait) {
-            $this->retry(30, function () use ($serverId, $siteId, $workerId) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $workerId) {
                 $key = $this->worker($serverId, $siteId, $workerId);
 
                 return $key->status == 'installed';
