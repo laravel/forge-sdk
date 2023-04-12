@@ -71,7 +71,7 @@ trait ManagesDaemons
         $this->post("servers/$serverId/daemons/$daemonId/restart");
 
         if ($wait) {
-            $this->retry(30, function () use ($serverId, $daemonId) {
+            $this->retry($this->getTimeout(), function () use ($serverId, $daemonId) {
                 $daemon = $this->daemon($serverId, $daemonId);
 
                 return $daemon->status == 'installed';
