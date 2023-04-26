@@ -4,6 +4,7 @@ namespace Laravel\Forge\Resources;
 
 use Laravel\Forge\Forge;
 
+#[\AllowDynamicProperties]
 class Resource
 {
     /**
