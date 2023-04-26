@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.3...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.4...3.x)
+
+## [v3.13.4](https://github.com/laravel/forge-sdk/compare/v3.13.3...v3.13.4) - 2023-04-26
+
+- Add PHP 8.2 to installable service constants by @AntonCooper in https://github.com/laravel/forge-sdk/pull/160
+- Dynamic properties on Resource class by @driesvints in https://github.com/laravel/forge-sdk/pull/159
 
 ## [v3.13.3](https://github.com/laravel/forge-sdk/compare/v3.13.2...v3.13.3) - 2022-11-09
 
