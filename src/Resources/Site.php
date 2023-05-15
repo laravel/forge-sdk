@@ -187,6 +187,13 @@ class Site extends Resource
     public $isSecured;
 
     /**
+     * The PHP Version of the site, if any.
+     *
+     * @var string|null
+     */
+    public $phpVersion;
+
+    /**
      * The aliases of the site.
      *
      * @var array
