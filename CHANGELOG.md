@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.4...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.5...3.x)
+
+## [v3.13.5](https://github.com/laravel/forge-sdk/compare/v3.13.4...v3.13.5) - 2023-05-16
+
+- Adds missing php version by @nunomaduro in https://github.com/laravel/forge-sdk/pull/162
 
 ## [v3.13.4](https://github.com/laravel/forge-sdk/compare/v3.13.3...v3.13.4) - 2023-04-26
 
