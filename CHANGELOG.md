@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.5...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.6...3.x)
+
+## [v3.13.6](https://github.com/laravel/forge-sdk/compare/v3.13.5...v3.13.6) - 2023-07-07
+
+- Fix for some functions using a hard coded timeout of 30 by [@lhelwingkh](https://github.com/lhelwingkh) in https://github.com/laravel/forge-sdk/pull/157
 
 ## [v3.13.5](https://github.com/laravel/forge-sdk/compare/v3.13.4...v3.13.5) - 2023-05-16
 
