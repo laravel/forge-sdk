@@ -275,11 +275,12 @@ class Site extends Resource
      * Update the content of the site's deployment script.
      *
      * @param  string  $content
+     * @param  bool  $autoSource
      * @return void
      */
-    public function updateDeploymentScript($content)
+    public function updateDeploymentScript($content, $autoSource = false)
     {
-        $this->forge->updateSiteDeploymentScript($this->serverId, $this->id, $content);
+        $this->forge->updateSiteDeploymentScript($this->serverId, $this->id, $content, $autoSource);
     }
 
     /**

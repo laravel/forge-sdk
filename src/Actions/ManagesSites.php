@@ -238,11 +238,15 @@ trait ManagesSites
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  string  $content
+     * @param  bool  $autoSource
      * @return void
      */
-    public function updateSiteDeploymentScript($serverId, $siteId, $content)
+    public function updateSiteDeploymentScript($serverId, $siteId, $content, $autoSource = false)
     {
-        $this->put("servers/$serverId/sites/$siteId/deployment/script", compact('content'));
+        $this->put("servers/$serverId/sites/$siteId/deployment/script", [
+            'content' => $content,
+            'auto_source' => $autoSource,
+        ]);
     }
 
     /**
