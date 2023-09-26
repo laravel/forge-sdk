@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.13.6...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.0...3.x)
+
+## [v3.14.0](https://github.com/laravel/forge-sdk/compare/v3.13.6...v3.14.0) - 2023-09-25
+
+- Allow setting of auto_source in deployment scripts by [@jbrooksuk](https://github.com/jbrooksuk) in https://github.com/laravel/forge-sdk/pull/167
 
 ## [v3.13.6](https://github.com/laravel/forge-sdk/compare/v3.13.5...v3.13.6) - 2023-07-07
 
