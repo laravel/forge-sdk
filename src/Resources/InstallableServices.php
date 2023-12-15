@@ -13,6 +13,7 @@ class InstallableServices
     const PHP_80 = 'php80';
     const PHP_81 = 'php81';
     const PHP_82 = 'php82';
+    const PHP_83 = 'php83';
 
     const MYSQL = 'mysql';
     const MYSQL_8 = 'mysql8';
