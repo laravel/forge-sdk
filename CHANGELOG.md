@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.1...3.x)
+
+## [v3.14.1](https://github.com/laravel/forge-sdk/compare/v3.14.0...v3.14.1) - 2023-12-15
+
+* [3.x] Adds L11 support by [@nunomaduro](https://github.com/nunomaduro) in https://github.com/laravel/forge-sdk/pull/171
+* Add PHP 8.3 to installable service constants by [@haugen86](https://github.com/haugen86) in https://github.com/laravel/forge-sdk/pull/172
 
 ## [v3.14.0](https://github.com/laravel/forge-sdk/compare/v3.13.6...v3.14.0) - 2023-09-25
 
