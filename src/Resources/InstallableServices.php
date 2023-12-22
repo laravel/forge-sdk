@@ -19,6 +19,12 @@ class InstallableServices
     const MYSQL_8 = 'mysql8';
 
     const MARIADB = 'mariadb';
+    const MARIADB_106 = 'mariadb106';
+    const MARIADB_1011 = 'mariadb1011';
 
     const POSTGRES = 'postgres';
+    const POSTGRES_13 = 'postgres13';
+    const POSTGRES_14 = 'postgres14';
+    const POSTGRES_15 = 'postgres15';
+    const POSTGRES_16 = 'postgres16';
 }
