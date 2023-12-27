@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.1...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.2...3.x)
+
+## [v3.14.2](https://github.com/laravel/forge-sdk/compare/v3.14.1...v3.14.2) - 2023-12-22
+
+* Add additional database services by [@jbrooksuk](https://github.com/jbrooksuk) in https://github.com/laravel/forge-sdk/pull/173
 
 ## [v3.14.1](https://github.com/laravel/forge-sdk/compare/v3.14.0...v3.14.1) - 2023-12-15
 
