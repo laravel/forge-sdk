@@ -44,9 +44,9 @@ trait ManagesServers
         $response = $this->post('servers', $data);
 
         $server = $response['server'];
-        $initialSudoPassword = @$response['sudo_password'];
-		$initialDatabasePassword = @$response['database_password'];
-		$initialProvisionCommand = @$response['provision_command'];
+        $initialSudoPassword = $response['sudo_password'] ?? null;
+		$initialDatabasePassword = $response['database_password'] ?? null;
+		$initialProvisionCommand = $response['provision_command'] ?? null;
         
         $server['sudo_password'] = $initialSudoPassword;
         $server['database_password'] = $initialDatabasePassword;
