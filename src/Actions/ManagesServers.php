@@ -45,9 +45,9 @@ trait ManagesServers
 
         $server = $response['server'];
         $initialSudoPassword = $response['sudo_password'] ?? null;
-		$initialDatabasePassword = $response['database_password'] ?? null;
-		$initialProvisionCommand = $response['provision_command'] ?? null;
-        
+        $initialDatabasePassword = $response['database_password'] ?? null;
+        $initialProvisionCommand = $response['provision_command'] ?? null;
+
         $server['sudo_password'] = $initialSudoPassword;
         $server['database_password'] = $initialDatabasePassword;
         $server['provision_command'] = $initialProvisionCommand;
@@ -56,9 +56,9 @@ trait ManagesServers
             return $this->retry($timeout, function () use ($server, $initialSudoPassword, $initialDatabasePassword, $initialProvisionCommand) {
                 $server = $this->server($server['id']);
                 $server->sudoPassword = $initialSudoPassword;
-				$server->databasePassword = $initialDatabasePassword;
-				$server->provisionCommand = $initialProvisionCommand;
-                
+                $server->databasePassword = $initialDatabasePassword;
+                $server->provisionCommand = $initialProvisionCommand;
+
                 return $server->isReady ? $server : null;
             }, 120);
         }
