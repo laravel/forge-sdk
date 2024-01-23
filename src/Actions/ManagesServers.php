@@ -44,14 +44,21 @@ trait ManagesServers
         $response = $this->post('servers', $data);
 
         $server = $response['server'];
-        $server['sudo_password'] = @$response['sudo_password'];
-        $server['database_password'] = @$response['database_password'];
-        $server['provision_command'] = @$response['provision_command'];
+        $initialSudoPassword = $response['sudo_password'] ?? null;
+		$initialDatabasePassword = $response['database_password'] ?? null;
+		$initialProvisionCommand = $response['provision_command'] ?? null;
+        
+        $server['sudo_password'] = $initialSudoPassword;
+        $server['database_password'] = $initialDatabasePassword;
+        $server['provision_command'] = $initialProvisionCommand;
 
         if ($wait) {
-            return $this->retry($timeout, function () use ($server) {
+            return $this->retry($timeout, function () use ($server, $initialSudoPassword, $initialDatabasePassword, $initialProvisionCommand) {
                 $server = $this->server($server['id']);
-
+                $server->sudoPassword = $initialSudoPassword;
+				$server->databasePassword = $initialDatabasePassword;
+				$server->provisionCommand = $initialProvisionCommand;
+                
                 return $server->isReady ? $server : null;
             }, 120);
         }
