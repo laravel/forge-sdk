@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.2...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.14.3...3.x)
+
+## [v3.14.3](https://github.com/laravel/forge-sdk/compare/v3.14.2...v3.14.3) - 2024-01-23
+
+* Preserve Initial Server Credentials During Creation Wait by [@dimger](https://github.com/dimger) in https://github.com/laravel/forge-sdk/pull/174
 
 ## [v3.14.2](https://github.com/laravel/forge-sdk/compare/v3.14.1...v3.14.2) - 2023-12-22
 
