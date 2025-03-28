@@ -132,6 +132,7 @@ use Laravel\Forge\ForgeManager;
  * @method static string deploymentHistoryOutput(int $serverId, int $siteId, int $deploymentId)
  * @method static void enableHipchatNotifications(int $serverId, int $siteId, array $data)
  * @method static void disableHipchatNotifications(int $serverId, int $siteId)
+ * @method static void setDeploymentFailureEmails(int $serverId, int $siteId, array $data)
  * @method static void installWordPress(int $serverId, int $siteId, array $data)
  * @method static void removeWordPress(int $serverId, int $siteId)
  * @method static void installPhpMyAdmin(int $serverId, int $siteId, array $data)

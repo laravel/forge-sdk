@@ -402,6 +402,18 @@ trait ManagesSites
     }
 
     /**
+     * Set the deployment failure emails for the given site.
+     *
+     * @param  int  $serverId
+     * @param  int  $siteId
+     * @return void
+     */
+    public function setDeploymentFailureEmails($serverId, $siteId, array $data)
+    {
+        $this->post("servers/$serverId/sites/$siteId/deployment-failure-emails", $data);
+    }
+
+    /**
      * Install a new WordPress project.
      *
      * @param  int  $serverId

@@ -405,6 +405,16 @@ class Site extends Resource
     }
 
     /**
+     * Set the deployment failure emails for a site.
+     *
+     * @return void
+     */
+    public function setDeploymentFailureEmails(array $data)
+    {
+        $this->forge->setDeploymentFailureEmails($this->serverId, $this->id, $data);
+    }
+
+    /**
      * Install a new WordPress project.
      *
      * @return void
