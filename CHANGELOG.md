@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.21.1...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.22.0...3.x)
+
+## [v3.22.0](https://github.com/laravel/forge-sdk/compare/v3.21.1...v3.22.0) - 2025-03-30
+
+### What's Changed
+
+* Added setDeploymentFailureEmails support to the sites class by [@CodyPChristian](https://github.com/CodyPChristian) in https://github.com/laravel/forge-sdk/pull/193
+
+### New Contributors
+
+* [@CodyPChristian](https://github.com/CodyPChristian) made their first contribution in https://github.com/laravel/forge-sdk/pull/193
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v3.21.1...v3.22.0
 
 ## [v3.21.1](https://github.com/laravel/forge-sdk/compare/v3.21.0...v3.21.1) - 2025-01-24
 
