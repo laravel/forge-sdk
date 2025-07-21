@@ -45,4 +45,6 @@ class InstallableServices
     const POSTGRES_15 = 'postgres15';
 
     const POSTGRES_16 = 'postgres16';
+
+    const POSTGRES_17 = 'postgres17';
 }
