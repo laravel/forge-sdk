@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.22.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.23.0...3.x)
+
+## [v3.23.0](https://github.com/laravel/forge-sdk/compare/v3.22.0...v3.23.0) - 2025-07-21
+
+* Adding Postgres 17 by [@mathiasgrimm](https://github.com/mathiasgrimm) in https://github.com/laravel/forge-sdk/pull/197
 
 ## [v3.22.0](https://github.com/laravel/forge-sdk/compare/v3.21.1...v3.22.0) - 2025-03-30
 
