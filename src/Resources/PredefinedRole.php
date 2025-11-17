@@ -2,26 +2,26 @@
 
 namespace Laravel\Forge\Resources;
 
-class Credential extends Resource
+class PredefinedRole extends Resource
 {
     /**
-     * The id of the credential.
+     * The id of the predefined role.
      *
      * @var int
      */
     public $id;
 
     /**
-     * The name of the credential.
+     * The name of the predefined role.
      *
      * @var string
      */
     public $name;
 
     /**
-     * The type of the credential.
+     * The description of the predefined role.
      *
      * @var string
      */
-    public $type;
+    public $description;
 }

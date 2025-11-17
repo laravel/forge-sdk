@@ -47,6 +47,17 @@ trait MakesHttpRequests
     }
 
     /**
+     * Make a PATCH request to Forge servers and return the response.
+     *
+     * @param  string  $uri
+     * @return mixed
+     */
+    public function patch($uri, array $payload = [])
+    {
+        return $this->request('PATCH', $uri, $payload);
+    }
+
+    /**
      * Make a DELETE request to Forge servers and return the response.
      *
      * @param  string  $uri

@@ -7,65 +7,91 @@ use Laravel\Forge\Resources\SSHKey;
 trait ManagesSSHKeys
 {
     /**
-     * Get the collection of keys.
+     * Get the collection of SSH keys.
      *
-     * @param  int  $serverId
+     * @param  string  $organizationId
+     * @param  string  $serverId
      * @return \Laravel\Forge\Resources\SSHKey[]
      */
-    public function keys($serverId)
+    public function sshKeys($organizationId, $serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/keys")['keys'],
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/ssh-keys")['data'] ?? [],
             SSHKey::class,
-            ['server_id' => $serverId]
+            ['organization_id' => $organizationId, 'server_id' => $serverId]
         );
     }
 
     /**
-     * Get an SSH key instance.
+     * Get a SSH key instance.
      *
-     * @param  int  $serverId
-     * @param  int  $keyId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $keyId
      * @return \Laravel\Forge\Resources\SSHKey
      */
-    public function sshKey($serverId, $keyId)
+    public function sshKey($organizationId, $serverId, $keyId)
     {
         return new SSHKey(
-            $this->get("servers/$serverId/keys/$keyId")['key'] + ['server_id' => $serverId], $this
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/ssh-keys/{$keyId}")['data'] ?? [],
+            $this
         );
     }
 
     /**
      * Create a new SSH key.
      *
-     * @param  int  $serverId
-     * @param  bool  $wait
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  array  $data
      * @return \Laravel\Forge\Resources\SSHKey
      */
-    public function createSSHKey($serverId, array $data, $wait = true)
+    public function createSSHKey($organizationId, $serverId, array $data)
     {
-        $key = $this->post("servers/$serverId/keys", $data)['key'];
+        $key = $this->post("orgs/{$organizationId}/servers/{$serverId}/ssh-keys", $data)['data'] ?? [];
 
-        if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($serverId, $key) {
-                $key = $this->sshKey($serverId, $key['id']);
-
-                return $key->status == 'installed' ? $key : null;
-            });
-        }
-
-        return new SSHKey($key + ['server_id' => $serverId], $this);
+        return new SSHKey($key + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
     }
 
     /**
-     * Delete the given key.
+     * Delete the given SSH key.
      *
-     * @param  int  $serverId
-     * @param  int  $keyId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $keyId
      * @return void
      */
-    public function deleteSSHKey($serverId, $keyId)
+    public function deleteSSHKey($organizationId, $serverId, $keyId)
     {
-        $this->delete("servers/$serverId/keys/$keyId");
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/ssh-keys/{$keyId}");
+    }
+
+    /**
+     * Get the server's public SSH key.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @return string
+     */
+    public function serverPublicKey($organizationId, $serverId)
+    {
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/key");
+
+        return $response['data']['public_key'] ?? $response['public_key'] ?? '';
+    }
+
+    /**
+     * Update the server's public SSH key.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  array  $data
+     * @return string
+     */
+    public function updateServerPublicKey($organizationId, $serverId, array $data)
+    {
+        $response = $this->put("orgs/{$organizationId}/servers/{$serverId}/key", $data);
+
+        return $response['data']['public_key'] ?? $response['public_key'] ?? '';
     }
 }

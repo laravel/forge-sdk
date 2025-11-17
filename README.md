@@ -7,7 +7,7 @@
 
 ## Introduction
 
-The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interface for interacting with Forge's API and managing Laravel Forge servers.
+The [Laravel Forge](https://forge.laravel.com) SDK provides an expressive interface for interacting with Forge's API v2 and managing Laravel Forge servers.
 
 ## Official Documentation
 
@@ -19,486 +19,578 @@ To install the SDK in your project you need to require the package via composer:
 composer require laravel/forge-sdk
 ```
 
-### Upgrading
+### Upgrading from v3.x
 
-When upgrading to a new major version of Forge SDK, it's important that you carefully review [the upgrade guide](https://github.com/laravel/forge-sdk/blob/master/UPGRADE.md).
+**Version 4.0 uses the Forge API v2 and introduces significant breaking changes.** All endpoints now require an organization ID as the first parameter.
+
+When upgrading from v3.x (API v1), carefully review the [upgrade guide](UPGRADE-4.0.md) for detailed migration instructions.
 
 ### Basic Usage
 
 You can create an instance of the SDK like so:
 
 ```php
-$forge = new Laravel\Forge\Forge(TOKEN_HERE);
+$forge = new Laravel\Forge\Forge($apiToken);
 ```
 
-Using the `Forge` instance you may perform multiple actions as well as retrieve the different resources Forge's API provides:
+#### Getting Your Organization ID
+
+All API v2 endpoints require an organization ID:
 
 ```php
-$servers = $forge->servers();
+// Get all organizations you have access to
+$organizations = $forge->organizations();
+
+// Use the organization ID
+$organizationId = $organizations[0]->id;
 ```
 
-This will give you an array of servers that you have access to, where each server is represented by an instance of `Laravel\Forge\Resources\Server`, this instance has multiple public properties like `$name`, `$id`, `$size`, `$region`, and others.
-
-You may also retrieve a single server using:
+Using the `Forge` instance you may perform multiple actions and retrieve resources:
 
 ```php
-$server = $forge->server(SERVER_ID_HERE);
-```
+// Get servers for your organization
+$servers = $forge->servers($organizationId);
 
-On multiple actions supported by this SDK you may need to pass some parameters, for example when creating a new server:
+// Get a specific server
+$server = $forge->server($organizationId, $serverId);
 
-```php
-$server = $forge->createServer([
-    "provider"=> ServerProviders::DIGITAL_OCEAN,
-    "credential_id"=> 1,
-    "name"=> "test-via-api",
-    "type"=> ServerTypes::APP,
-    "size"=> "01",
-    "database"=> "test123",
-    "database_type" => InstallableServices::POSTGRES,
-    "php_version"=> InstallableServices::PHP_84,
-    "region"=> "ams2"
+// Create a new server
+$server = $forge->createServer($organizationId, [
+    "provider" => "ocean2",
+    "credential_id" => 1,
+    "name" => "my-server",
+    "type" => "app",
+    "size" => "01",
+    "php_version" => "php84",
+    "region" => "nyc1"
 ]);
 ```
 
-These parameters will be used in the POST request sent to Forge servers, you can find more information about the parameters needed for each action on
-[Forge's official API documentation](https://forge.laravel.com/api-documentation).
+Each resource is represented by an instance like `Laravel\Forge\Resources\Server`, with public properties such as `$name`, `$id`, `$size`, `$region`, and others.
 
-Notice that this request for example will only start the server creation process, your server might need a few minutes before it completes provisioning, you'll need to check the server's `$isReady` property to know if it's ready or not yet.
+#### Waiting for Async Operations
 
-Some SDK methods however wait for the action to complete on Forge's end, we do this by periodically contacting Forge servers and checking if our action has completed, for example:
-
-```php
-$forge->createSite(SERVER_ID, [SITE_PARAMETERS]);
-```
-
-This method will ping Forge servers every 5 seconds and see if the newly created Site's status is `installed` and only return when it's so, in case the waiting exceeded 30 seconds a `Laravel\Forge\Exceptions\TimeoutException` will be thrown.
-
-You can easily stop this behaviour by setting the `$wait` argument to false:
+Some methods wait for the action to complete on Forge's end by periodically checking the resource status:
 
 ```php
-$forge->createSite(SERVER_ID, [SITE_PARAMETERS], false);
+// This will wait until the site is fully installed (max 30 seconds)
+$site = $forge->createSite($organizationId, $serverId, [
+    'domain' => 'example.com',
+    'type' => 'php',
+]);
 ```
 
-You can also set the desired timeout value:
+You can disable waiting or customize the timeout:
 
 ```php
-$forge->setTimeout(120)->createSite(SERVER_ID, [SITE_PARAMETERS]);
+// Don't wait
+$site = $forge->createSite($organizationId, $serverId, $data, false);
+
+// Wait up to 2 minutes
+$site = $forge->setTimeout(120)->createSite($organizationId, $serverId, $data);
 ```
+
+If waiting exceeds the timeout, a `Laravel\Forge\Exceptions\TimeoutException` will be thrown.
 
 ### Authenticated User
 
 ```php
-$forge->user();
+$user = $forge->user();
+// or
+$user = $forge->me();
+```
+
+### Managing Organizations
+
+```php
+// Get all organizations
+$organizations = $forge->organizations();
+
+// Get a specific organization
+$organization = $forge->organization($organizationId);
+
+// Get server credentials for an organization
+$credentials = $forge->serverCredentials($organizationId);
+$credential = $forge->serverCredential($organizationId, $credentialId);
 ```
 
 ### Managing Servers
 
 ```php
-$forge->servers();
-$forge->server($serverId);
-$forge->createServer(array $data);
-$forge->updateServer($serverId, array $data);
-$forge->deleteServer($serverId);
-$forge->rebootServer($serverId);
+// List servers in an organization
+$servers = $forge->servers($organizationId);
 
-// Server access
-$forge->revokeAccessToServer($serverId);
-$forge->reconnectToServer($serverId);
-$forge->reactivateToServer($serverId);
-```
+// Get a specific server
+$server = $forge->server($organizationId, $serverId);
 
-On a `Server` instance you may also call:
+// Create a new server
+$server = $forge->createServer($organizationId, $data);
 
-```php
-$server->update(array $data);
-$server->delete();
-$server->reboot();
-$server->revokeAccess();
-$server->reconnect();
-$server->reactivate();
-$server->rebootMysql();
-$server->stopMysql();
-$server->rebootPostgres();
-$server->stopPostgres();
-$server->rebootNginx();
-$server->stopNginx();
-$server->installBlackfire(array $data);
-$server->removeBlackfire();
-$server->installPapertrail(array $data);
-$server->removePapertrail();
-$server->enableOPCache();
-$server->disableOPCache();
-$server->phpVersions();
-$server->installPHP($version);
-$server->updatePHP($version);
-```
+// Delete a server
+$forge->deleteServer($organizationId, $serverId);
 
-### Server SSH Keys
+// Server actions
+$forge->createServerAction($organizationId, $serverId, ['action' => 'reboot']);
 
-```php
-$forge->keys($serverId);
-$forge->sshKey($serverId, $keyId);
-$forge->createSSHKey($serverId, array $data, $wait = true);
-$forge->deleteSSHKey($serverId, $keyId);
-```
-
-On a `SSHKey` instance you may also call:
-
-```php
-$sshKey->delete();
-```
-
-### Server Scheduled Jobs
-
-```php
-$forge->jobs($serverId);
-$forge->job($serverId, $jobId);
-$forge->createJob($serverId, array $data, $wait = true);
-$forge->deleteJob($serverId, $jobId);
-```
-
-On a `Job` instance you may also call:
-
-```php
-$job->delete();
-```
-
-### Server Events
-
-```php
-$forge->events();
-$forge->events($serverId);
-```
-
-### Managing Services
-
-```php
-// MySQL
-$forge->rebootMysql($serverId);
-$forge->stopMysql($serverId);
-
-// Postgres
-$forge->rebootPostgres($serverId);
-$forge->stopPostgres($serverId);
-
-// Nginx
-$forge->rebootNginx($serverId);
-$forge->stopNginx($serverId);
-$forge->siteNginxFile($serverId, $siteId);
-$forge->updateSiteNginxFile($serverId, $siteId, $content);
-
-// Blackfire
-$forge->installBlackfire($serverId, array $data);
-$forge->removeBlackfire($serverId);
-
-// Papertrail
-$forge->installPapertrail($serverId, array $data);
-$forge->removePapertrail($serverId);
-
-// OPCache
-$forge->enableOPCache($serverId);
-$forge->disableOPCache($serverId);
-```
-
-### Server Daemons
-
-```php
-$forge->daemons($serverId);
-$forge->daemon($serverId, $daemonId);
-$forge->createDaemon($serverId, array $data, $wait = true);
-$forge->restartDaemon($serverId, $daemonId, $wait = true);
-$forge->deleteDaemon($serverId, $daemonId);
-```
-
-On a `Daemon` instance you may also call:
-
-```php
-$daemon->restart($wait = true);
-$daemon->delete();
-```
-
-### Server Firewall Rules
-
-```php
-$forge->firewallRules($serverId);
-$forge->firewallRule($serverId, $ruleId);
-$forge->createFirewallRule($serverId, array $data, $wait = true);
-$forge->deleteFirewallRule($serverId, $ruleId);
-```
-
-On a `FirewallRule` instance you may also call:
-
-```php
-$rule->delete();
+// Archived servers
+$archivedServers = $forge->archivedServers($organizationId);
 ```
 
 ### Managing Sites
 
 ```php
-$forge->sites($serverId);
-$forge->site($serverId, $siteId);
-$forge->createSite($serverId, array $data, $wait = true);
-$forge->updateSite($serverId, $siteId, array $data);
-$forge->refreshSiteToken($serverId, $siteId);
-$forge->deleteSite($serverId, $siteId);
+// List all sites
+$allSites = $forge->sites();
 
-// Add Site Aliases
-$forge->addSiteAliases($serverId, $siteId, array $aliases);
+// List sites for an organization
+$orgSites = $forge->organizationSites($organizationId);
 
-// Environment File
-$forge->siteEnvironmentFile($serverId, $siteId);
-$forge->updateSiteEnvironmentFile($serverId, $siteId, $content);
+// List sites for a server
+$sites = $forge->serverSites($organizationId, $serverId);
 
-// Site Repositories and Deployments
-$forge->installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = false);
-$forge->updateSiteGitRepository($serverId, $siteId, array $data);
-$forge->destroySiteGitRepository($serverId, $siteId, $wait = false);
-$forge->createSiteDeployKey($serverId, $siteId);
-$forge->destroySiteDeployKey($serverId, $siteId);
-$forge->siteDeploymentScript($serverId, $siteId);
-$forge->updateSiteDeploymentScript($serverId, $siteId, $content);
-$forge->enableQuickDeploy($serverId, $siteId);
-$forge->disableQuickDeploy($serverId, $siteId);
-$forge->deploySite($serverId, $siteId, $wait = false);
-$forge->resetDeploymentState($serverId, $siteId);
-$forge->siteDeploymentLog($serverId, $siteId);
-$forge->deploymentHistory($serverId, $siteId);
-$forge->deploymentHistoryDeployment($serverId, $siteId, $deploymentId);
-$forge->deploymentHistoryOutput($serverId, $siteId, $deploymentId);
+// Get a specific site
+$site = $forge->organizationSite($organizationId, $siteId);
 
-// PHP Version
-$forge->changeSitePHPVersion($serverId, $siteId, $version);
+// Create a site
+$site = $forge->createSite($organizationId, $serverId, $data);
 
-// Installing Wordpress
-$forge->installWordPress($serverId, $siteId, array $data);
-$forge->removeWordPress($serverId, $siteId);
+// Update a site
+$site = $forge->updateSite($organizationId, $serverId, $siteId, $data);
 
-// Installing phpMyAdmin
-$forge->installPhpMyAdmin($serverId, $siteId, array $data);
-$forge->removePhpMyAdmin($serverId, $siteId);
-
-// Updating Node balancing Configuration
-$forge->updateNodeBalancingConfiguration($serverId, $siteId, array $data);
+// Delete a site
+$forge->deleteSite($organizationId, $serverId, $siteId);
 ```
 
-On a `Site` instance you may also call:
+### Site Domains & Certificates
 
 ```php
-$site->refreshToken();
-$site->delete();
-$site->installGitRepository(array $data, $wait = false);
-$site->updateGitRepository(array $data);
-$site->destroyGitRepository($wait = false);
-$site->createDeployKey();
-$site->destroyDeployKey();
-$site->getDeploymentScript();
-$site->updateDeploymentScript($content);
-$site->enableQuickDeploy();
-$site->disableQuickDeploy();
-$site->deploySite($wait = false);
-$site->resetDeploymentState();
-$site->siteDeploymentLog();
-$site->getDeploymentHistory();
-$site->getDeploymentHistoryDeployment($deploymentId);
-$site->getDeploymentHistoryOutput($deploymentId);
-$site->installWordPress($data);
-$site->removeWordPress();
-$site->installPhpMyAdmin($data);
-$site->removePhpMyAdmin();
-$site->changePHPVersion($version);
-$site->siteLog();
-$site->deleteSiteLog();
+// Manage domains
+$domains = $forge->domains($organizationId, $serverId, $siteId);
+$domain = $forge->createDomain($organizationId, $serverId, $siteId, $data);
+$forge->updateDomain($organizationId, $serverId, $siteId, $domainId, $data);
+$forge->deleteDomain($organizationId, $serverId, $siteId, $domainId);
+
+// Domain certificates
+$cert = $forge->domainCertificate($organizationId, $serverId, $siteId, $domainId);
+$forge->createDomainCertificate($organizationId, $serverId, $siteId, $domainId, $data);
+$forge->deleteDomainCertificate($organizationId, $serverId, $siteId, $domainId);
+```
+
+### Site Deployments
+
+```php
+// Deployment webhooks
+$webhooks = $forge->webhooks($organizationId, $serverId, $siteId);
+$webhook = $forge->createWebhook($organizationId, $serverId, $siteId, $data);
+
+// Deployment script
+$script = $forge->deploymentScript($organizationId, $serverId, $siteId);
+$forge->updateDeploymentScript($organizationId, $serverId, $siteId, $content);
+
+// Deploy a site
+$deployment = $forge->createDeployment($organizationId, $serverId, $siteId);
+
+// Deployment status
+$status = $forge->deploymentStatus($organizationId, $serverId, $siteId);
+$forge->updateDeploymentState($organizationId, $serverId, $siteId);
+
+// Push to deploy
+$forge->createPushToDeploy($organizationId, $serverId, $siteId, $data);
+$forge->deletePushToDeploy($organizationId, $serverId, $siteId);
+```
+
+### Laravel Integrations
+
+```php
+// Horizon
+$horizon = $forge->getHorizon($organizationId, $serverId, $siteId);
+$forge->createHorizon($organizationId, $serverId, $siteId, $data);
+$forge->deleteHorizon($organizationId, $serverId, $siteId);
+
+// Octane
+$octane = $forge->getOctane($organizationId, $serverId, $siteId);
+$forge->createOctane($organizationId, $serverId, $siteId, $data);
+$forge->deleteOctane($organizationId, $serverId, $siteId);
+
+// Reverb
+$reverb = $forge->getReverb($organizationId, $serverId, $siteId);
+$forge->createReverb($organizationId, $serverId, $siteId, $data);
+$forge->deleteReverb($organizationId, $serverId, $siteId);
+
+// Pulse
+$pulse = $forge->getPulse($organizationId, $serverId, $siteId);
+$forge->createPulse($organizationId, $serverId, $siteId, $data);
+$forge->deletePulse($organizationId, $serverId, $siteId);
+
+// Inertia
+$inertia = $forge->getInertia($organizationId, $serverId, $siteId);
+$forge->createInertia($organizationId, $serverId, $siteId, $data);
+
+// Laravel Maintenance
+$maintenance = $forge->getMaintenance($organizationId, $serverId, $siteId);
+$forge->createMaintenance($organizationId, $serverId, $siteId, $data);
+$forge->deleteMaintenance($organizationId, $serverId, $siteId);
+
+// Laravel Scheduler
+$scheduler = $forge->getScheduler($organizationId, $serverId, $siteId);
+$forge->createScheduler($organizationId, $serverId, $siteId, $data);
+$forge->deleteScheduler($organizationId, $serverId, $siteId);
 ```
 
 ### Site Workers
 
 ```php
-$forge->workers($serverId, $siteId);
-$forge->worker($serverId, $siteId, $workerId);
-$forge->createWorker($serverId, $siteId, array $data, $wait = true);
-$forge->deleteWorker($serverId, $siteId, $workerId);
-$forge->restartWorker($serverId, $siteId, $workerId, $wait = true);
+$workers = $forge->workers($organizationId, $serverId, $siteId);
+$worker = $forge->worker($organizationId, $serverId, $siteId, $workerId);
+$worker = $forge->createWorker($organizationId, $serverId, $siteId, $data);
+$forge->deleteWorker($organizationId, $serverId, $siteId, $workerId);
+
+// Worker actions
+$forge->createWorkerAction($organizationId, $serverId, $siteId, $workerId, ['action' => 'restart']);
 ```
 
-On a `Worker` instance you may also call:
+### Site Configuration
 
 ```php
-$worker->delete();
-$worker->restart($wait = true);
-```
+// Environment file
+$env = $forge->siteEnvironment($organizationId, $serverId, $siteId);
+$forge->updateSiteEnvironment($organizationId, $serverId, $siteId, $content);
 
-### Security Rules
+// Nginx configuration
+$nginx = $forge->siteNginx($organizationId, $serverId, $siteId);
+$forge->updateSiteNginx($organizationId, $serverId, $siteId, $content);
 
-```php
-$forge->securityRules($serverId, $siteId);
-$forge->securityRule($serverId, $siteId, $ruleId);
-$forge->createSecurityRule($serverId, $siteId, array $data);
-$forge->deleteSecurityRule($serverId, $siteId, $ruleId);
-```
-
-On a `SecurityRule` instance you may also call:
-
-```php
-$securityRule->delete();
-```
-
-### Site Webhooks
-
-```php
-$forge->webhooks($serverId, $siteId);
-$forge->webhook($serverId, $siteId, $webhookId);
-$forge->createWebhook($serverId, $siteId, array $data);
-$forge->deleteWebhook($serverId, $siteId, $webhookId);
-```
-
-On a `Webhook` instance you may also call:
-
-```php
-$webhook->delete();
+// PHP version
+$phpVersion = $forge->sitePhp($organizationId, $serverId, $siteId);
+$forge->updateSitePhp($organizationId, $serverId, $siteId, ['version' => 'php84']);
 ```
 
 ### Site Commands
 
 ```php
-$forge->executeSiteCommand($serverId, $siteId, array $data);
-$forge->listCommandHistory($serverId, $siteId);
-$forge->getSiteCommand($serverId, $siteId, $commandId);
+$commands = $forge->commands($organizationId, $serverId, $siteId);
+$command = $forge->command($organizationId, $serverId, $siteId, $commandId);
+$command = $forge->createCommand($organizationId, $serverId, $siteId, [
+    'command' => 'php artisan migrate'
+]);
+$output = $forge->commandOutput($organizationId, $serverId, $siteId, $commandId);
 ```
 
-### Site SSL Certificates
+### Site Logs
 
 ```php
-$forge->certificates($serverId, $siteId);
-$forge->certificate($serverId, $siteId, $certificateId);
-$forge->createCertificate($serverId, $siteId, array $data, $wait = true);
-$forge->deleteCertificate($serverId, $siteId, $certificateId);
-$forge->getCertificateSigningRequest($serverId, $siteId, $certificateId);
-$forge->installCertificate($serverId, $siteId, $certificateId, array $data, $wait = true);
-$forge->activateCertificate($serverId, $siteId, $certificateId, $wait = true);
-$forge->obtainLetsEncryptCertificate($serverId, $siteId, $data, $wait = true);
+// Nginx access log
+$log = $forge->siteNginxAccessLog($organizationId, $serverId, $siteId);
+$forge->deleteSiteNginxAccessLog($organizationId, $serverId, $siteId);
+
+// Nginx error log
+$log = $forge->siteNginxErrorLog($organizationId, $serverId, $siteId);
+$forge->deleteSiteNginxErrorLog($organizationId, $serverId, $siteId);
+
+// Application log
+$log = $forge->siteApplicationLog($organizationId, $serverId, $siteId);
+$forge->deleteSiteApplicationLog($organizationId, $serverId, $siteId);
 ```
 
-On a `Certificate` instance you may also call:
+### Site Heartbeats
 
 ```php
-$certificate->delete();
-$certificate->getSigningRequest();
-$certificate->install($wait = true);
-$certificate->activate($wait = true);
-```
-### Nginx Templates
-
-```php
-$forge->nginxTemplates($serverId);
-$forge->nginxDefaultTemplate($serverId);
-$forge->nginxTemplate($serverId, $templateId);
-$forge->createNginxTemplate($serverId, array $data);
-$forge->updateNginxTemplate($serverId, $templateId, array $data);
-$forge->deleteNginxTemplate($serverId, $templateId);
-```
-
-On a `NginxTemplate` instance you may also call:
-
-```php
-$nginxTemplate->update(array $data);
-$nginxTemplate->delete();
+$heartbeats = $forge->heartbeats($organizationId, $serverId, $siteId);
+$heartbeat = $forge->heartbeat($organizationId, $serverId, $siteId, $heartbeatId);
+$heartbeat = $forge->createHeartbeat($organizationId, $serverId, $siteId, $data);
+$forge->updateHeartbeat($organizationId, $serverId, $siteId, $heartbeatId, $data);
+$forge->deleteHeartbeat($organizationId, $serverId, $siteId, $heartbeatId);
 ```
 
 ### Managing Databases
 
 ```php
-$forge->databases($serverId);
-$forge->database($serverId, $databaseId);
-$forge->createDatabase($serverId, array $data, $wait = true);
-$forge->updateDatabase($serverId, $databaseId, array $data);
-$forge->deleteDatabase($serverId, $databaseId);
-$forge->syncDatabases($serverId);
+// Database schemas
+$databases = $forge->databases($organizationId, $serverId);
+$database = $forge->database($organizationId, $serverId, $databaseId);
+$database = $forge->createDatabase($organizationId, $serverId, $data, $wait = true);
+$forge->deleteDatabase($organizationId, $serverId, $databaseId);
+$forge->syncDatabases($organizationId, $serverId);
 
-// Users
-$forge->databaseUsers($serverId);
-$forge->databaseUser($serverId, $userId);
-$forge->createDatabaseUser($serverId, array $data, $wait = true);
-$forge->updateDatabaseUser($serverId, $userId, array $data);
-$forge->deleteDatabaseUser($serverId, $userId);
+// Database users
+$users = $forge->databaseUsers($organizationId, $serverId);
+$user = $forge->databaseUser($organizationId, $serverId, $userId);
+$user = $forge->createDatabaseUser($organizationId, $serverId, $data, $wait = true);
+$forge->updateDatabaseUser($organizationId, $serverId, $userId, $data);
+$forge->deleteDatabaseUser($organizationId, $serverId, $userId);
+
+// Database password
+$forge->updateDatabasePassword($organizationId, $serverId, ['password' => 'new-password']);
 ```
 
-On a `Database` instance you may also call:
+### Background Processes (formerly Daemons)
 
 ```php
-$database->update(array $data);
-$database->delete();
+$processes = $forge->backgroundProcesses($organizationId, $serverId);
+$process = $forge->backgroundProcess($organizationId, $serverId, $processId);
+$process = $forge->createBackgroundProcess($organizationId, $serverId, $data);
+$forge->updateBackgroundProcess($organizationId, $serverId, $processId, $data);
+$forge->deleteBackgroundProcess($organizationId, $serverId, $processId);
+
+// Process log
+$log = $forge->backgroundProcessLog($organizationId, $serverId, $processId);
 ```
 
-On a `DatabaseUser` instance you may also call:
+### Scheduled Jobs
 
 ```php
-$databaseUser->update(array $data);
-$databaseUser->delete();
+$jobs = $forge->scheduledJobs($organizationId, $serverId);
+$job = $forge->scheduledJob($organizationId, $serverId, $jobId);
+$job = $forge->createScheduledJob($organizationId, $serverId, $data);
+$forge->deleteScheduledJob($organizationId, $serverId, $jobId);
+
+// Job output
+$output = $forge->scheduledJobOutput($organizationId, $serverId, $jobId);
+```
+
+### Server Events
+
+```php
+$events = $forge->serverEvents($organizationId, $serverId);
+$event = $forge->serverEvent($organizationId, $serverId, $eventId);
+$output = $forge->serverEventOutput($organizationId, $serverId, $eventId);
+```
+
+### PHP Version Management
+
+```php
+// List installed PHP versions
+$versions = $forge->phpVersions($organizationId, $serverId);
+
+// Install a new PHP version
+$forge->installPhpVersion($organizationId, $serverId, ['version' => 'php84']);
+
+// Get/Update/Delete PHP version
+$version = $forge->phpVersion($organizationId, $serverId, $phpVersion);
+$forge->updatePhpVersion($organizationId, $serverId, $phpVersion, $data);
+$forge->deletePhpVersion($organizationId, $serverId, $phpVersion);
+
+// PHP configs
+$fpmConfig = $forge->phpFpmConfig($organizationId, $serverId, $phpVersion);
+$forge->updatePhpFpmConfig($organizationId, $serverId, $phpVersion, $content);
+
+$cliConfig = $forge->phpCliConfig($organizationId, $serverId, $phpVersion);
+$forge->updatePhpCliConfig($organizationId, $serverId, $phpVersion, $content);
+
+$poolConfig = $forge->phpPoolConfig($organizationId, $serverId, $phpVersion);
+$forge->updatePhpPoolConfig($organizationId, $serverId, $phpVersion, $content);
+
+// PHP CLI/Site versions
+$cliVersion = $forge->phpCliVersion($organizationId, $serverId);
+$forge->updatePhpCliVersion($organizationId, $serverId, ['version' => 'php84']);
+
+$siteVersion = $forge->phpSiteVersion($organizationId, $serverId);
+$forge->updatePhpSiteVersion($organizationId, $serverId, ['version' => 'php84']);
+
+// PHP settings
+$maxUploadSize = $forge->phpMaxUploadSize($organizationId, $serverId);
+$forge->updatePhpMaxUploadSize($organizationId, $serverId, ['size' => '256M']);
+
+$maxExecutionTime = $forge->phpMaxExecutionTime($organizationId, $serverId);
+$forge->updatePhpMaxExecutionTime($organizationId, $serverId, ['time' => '60']);
+
+// OPcache
+$opcache = $forge->phpOpcache($organizationId, $serverId);
+$forge->createPhpOpcache($organizationId, $serverId, $data);
+$forge->deletePhpOpcache($organizationId, $serverId);
+```
+
+### Server Service Actions
+
+```php
+// Nginx
+$forge->performNginxAction($organizationId, $serverId, ['action' => 'restart']);
+
+// MySQL
+$forge->performMySQLAction($organizationId, $serverId, ['action' => 'restart']);
+
+// PostgreSQL
+$forge->performPostgresAction($organizationId, $serverId, ['action' => 'restart']);
+
+// Redis
+$forge->performRedisAction($organizationId, $serverId, ['action' => 'restart']);
+
+// PHP
+$forge->performPHPAction($organizationId, $serverId, ['action' => 'restart']);
+
+// Supervisor
+$forge->performSupervisorAction($organizationId, $serverId, ['action' => 'restart']);
+```
+
+### Server SSH Keys
+
+```php
+$keys = $forge->sshKeys($organizationId, $serverId);
+$key = $forge->sshKey($organizationId, $serverId, $keyId);
+$key = $forge->createSSHKey($organizationId, $serverId, $data);
+$forge->deleteSSHKey($organizationId, $serverId, $keyId);
+
+// Server's public key
+$publicKey = $forge->serverPublicKey($organizationId, $serverId);
+$forge->updateServerPublicKey($organizationId, $serverId, $data);
+```
+
+### Firewall Rules
+
+```php
+$rules = $forge->firewallRules($organizationId, $serverId);
+$rule = $forge->firewallRule($organizationId, $serverId, $ruleId);
+$rule = $forge->createFirewallRule($organizationId, $serverId, $data);
+$forge->deleteFirewallRule($organizationId, $serverId, $ruleId);
+```
+
+### Server Monitors
+
+```php
+$monitors = $forge->monitors($organizationId, $serverId);
+$monitor = $forge->monitor($organizationId, $serverId, $monitorId);
+$monitor = $forge->createMonitor($organizationId, $serverId, $data);
+$forge->deleteMonitor($organizationId, $serverId, $monitorId);
+```
+
+### Server Logs
+
+```php
+$log = $forge->serverLog($organizationId, $serverId, $logKey);
+$forge->deleteServerLog($organizationId, $serverId, $logKey);
+```
+
+### Nginx Templates
+
+```php
+$templates = $forge->nginxTemplates($organizationId, $serverId);
+$template = $forge->nginxTemplate($organizationId, $serverId, $templateId);
+$template = $forge->createNginxTemplate($organizationId, $serverId, $data);
+$forge->updateNginxTemplate($organizationId, $serverId, $templateId, $data);
+$forge->deleteNginxTemplate($organizationId, $serverId, $templateId);
+```
+
+### Security Rules
+
+```php
+$rules = $forge->securityRules($organizationId, $serverId, $siteId);
+$rule = $forge->securityRule($organizationId, $serverId, $siteId, $ruleId);
+$rule = $forge->createSecurityRule($organizationId, $serverId, $siteId, $data);
+$forge->updateSecurityRule($organizationId, $serverId, $siteId, $ruleId, $data);
+$forge->deleteSecurityRule($organizationId, $serverId, $siteId, $ruleId);
+```
+
+### Redirect Rules
+
+```php
+$rules = $forge->redirectRules($organizationId, $serverId, $siteId);
+$rule = $forge->redirectRule($organizationId, $serverId, $siteId, $ruleId);
+$rule = $forge->createRedirectRule($organizationId, $serverId, $siteId, $data);
+$forge->deleteRedirectRule($organizationId, $serverId, $siteId, $ruleId);
 ```
 
 ### Managing Recipes
 
 ```php
-$forge->recipes();
-$forge->recipe($recipeId);
-$forge->createRecipe(array $data);
-$forge->updateRecipe($recipeId, array $data);
-$forge->deleteRecipe($recipeId);
-$forge->runRecipe($recipeId, array $data);
+// Organization recipes
+$recipes = $forge->recipes($organizationId);
+$recipe = $forge->recipe($organizationId, $recipeId);
+$recipe = $forge->createRecipe($organizationId, $data);
+$forge->updateRecipe($organizationId, $recipeId, $data);
+$forge->deleteRecipe($organizationId, $recipeId);
+
+// Recipe runs
+$runs = $forge->recipeRuns($organizationId, $recipeId);
+$run = $forge->recipeRun($organizationId, $recipeId, $logId);
+$run = $forge->createRecipeRun($organizationId, $recipeId, $data);
+
+// Forge-provided recipes
+$forgeRecipes = $forge->forgeRecipes();
+$forgeRecipe = $forge->forgeRecipe($forgeRecipeId);
+$forge->createForgeRecipeRun($forgeRecipeId, $data);
+
+// Team recipes
+$teamRecipes = $forge->teamRecipes($organizationId, $teamId);
+$forge->shareRecipeWithTeam($organizationId, $teamId, $data);
+$forge->deleteRecipeShare($organizationId, $teamId, $recipeId);
 ```
 
-On a `Recipe` instance you may also call:
+### Teams
 
 ```php
-$recipe->update(array $data);
-$recipe->delete();
-$recipe->run(array $data);
+$teams = $forge->teams($organizationId);
+$team = $forge->team($organizationId, $teamId);
+$team = $forge->createTeam($organizationId, $data);
+$forge->updateTeam($organizationId, $teamId, $data);
+$forge->deleteTeam($organizationId, $teamId);
+
+// Team members
+$members = $forge->teamMembers($organizationId, $teamId);
+$member = $forge->teamMember($organizationId, $teamId, $userId);
+$forge->updateTeamMember($organizationId, $teamId, $userId, $data);
+$forge->deleteTeamMember($organizationId, $teamId, $userId);
+
+// Team invitations
+$invitations = $forge->teamInvitations($organizationId, $teamId);
+$invitation = $forge->teamInvitation($organizationId, $teamId, $invitationId);
+$invitation = $forge->createTeamInvitation($organizationId, $teamId, $data);
+$forge->deleteTeamInvitation($organizationId, $teamId, $invitationId);
+
+// Team server shares
+$servers = $forge->teamServers($organizationId, $teamId);
+$forge->createTeamServerShare($organizationId, $teamId, $data);
+$forge->deleteTeamServerShare($organizationId, $teamId, $serverId);
+
+// Team credentials
+$credentials = $forge->teamServerCredentials($organizationId, $teamId);
+$forge->shareServerCredential($organizationId, $teamId, $data);
+$forge->deleteServerCredentialShare($organizationId, $teamId, $credentialId);
 ```
 
-### Managing Backups
+### Roles & Permissions
 
 ```php
-$forge->backupConfigurations($serverId);
-$forge->createBackupConfiguration($serverId, array $data);
-$forge->updateBackupConfiguration($serverId, $backupConfigurationId, array $data);
-$forge->backupConfiguration($serverId, $backupConfigurationId);
-$forge->deleteBackupConfiguration($serverId, $backupConfigurationId);
-$forge->restoreBackup($serverId, $backupConfigurationId, $backupId);
-$forge->deleteBackup($serverId, $backupConfigurationId, $backupId);
+// Predefined roles
+$predefinedRoles = $forge->predefinedRoles();
+$predefinedRole = $forge->predefinedRole($roleId);
+
+// Permissions
+$permissions = $forge->permissions();
+$permission = $forge->permission($permissionId);
+
+// Organization roles
+$roles = $forge->roles($organizationId);
+$role = $forge->role($organizationId, $roleId);
+$role = $forge->createRole($organizationId, $data);
+$forge->updateRole($organizationId, $roleId, $data);
+$forge->deleteRole($organizationId, $roleId);
+
+// Role permissions
+$permissions = $forge->rolePermissions($organizationId, $roleId);
 ```
 
-On a `BackupConfiguration` instance you may also call:
+### Providers
 
 ```php
-$extendedConfig = $backupConfig->get(); // Load the databases also
-$backupConfig->update(array $data);
-$backupConfig->delete();
-$backupConfig->restoreBackup($backupId);
-$backupConfig->deleteBackup($backupId);
+$providers = $forge->providers();
+$provider = $forge->provider($providerId);
+
+// Provider sizes
+$sizes = $forge->providerSizes($providerId);
+$size = $forge->providerSize($providerId, $sizeId);
+
+// Provider regions
+$regions = $forge->providerRegions($providerId);
+$region = $forge->providerRegion($providerId, $regionId);
+
+// Region sizes
+$regionSizes = $forge->providerRegionSizes($providerId, $regionId);
+$regionSize = $forge->providerRegionSize($providerId, $regionId, $sizeId);
 ```
 
-On a `Backup` instance you may also call:
+## API Documentation
 
-```php
-$backupConfig->delete();
-$backupConfig->restore();
-```
-
-### Managing Redirects
-
-```php
-$forge->redirectRules($serverId, $siteId);
-$forge->redirectRule($serverId, $siteId, $ruleId);
-$forge->createRedirectRule($serverId, $siteId, array $data, $wait = true);
-$forge->deleteRedirectRule($serverId, $siteId, $ruleId);
-```
-
-On a `RedirectRule` instance you may also call:
-
-```php
-$redirectRule->delete();
-```
+For detailed information about request parameters and response structures, see the [official Forge API documentation](https://forge.laravel.com/api/docs).
 
 ## Contributing
 
