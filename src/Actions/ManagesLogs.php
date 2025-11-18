@@ -31,4 +31,34 @@ trait ManagesLogs
     {
         $this->delete("orgs/{$organizationId}/servers/{$serverId}/logs/{$logKey}");
     }
+
+    /**
+     * Get site log content.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $logType
+     * @return string
+     */
+    public function siteLog($organizationId, $serverId, $siteId, $logType)
+    {
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/{$logType}");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
+    }
+
+    /**
+     * Delete site log content.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $logType
+     * @return void
+     */
+    public function deleteSiteLog($organizationId, $serverId, $siteId, $logType)
+    {
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/{$logType}");
+    }
 }
