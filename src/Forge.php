@@ -7,25 +7,28 @@ use Laravel\Forge\Resources\User;
 
 class Forge
 {
-    use Actions\ManagesBackups,
-        Actions\ManagesCertificates,
-        Actions\ManagesCredentials,
-        Actions\ManagesDaemons,
+    use Actions\ManagesBackgroundProcesses,
+        Actions\ManagesCommands,
         Actions\ManagesDatabases,
-        Actions\ManagesDatabaseUsers,
+        Actions\ManagesDeployments,
         Actions\ManagesFirewallRules,
-        Actions\ManagesJobs,
+        Actions\ManagesIntegrations,
+        Actions\ManagesLogs,
         Actions\ManagesMonitors,
-        Actions\ManagesNginxTemplates,
+        Actions\ManagesNginx,
+        Actions\ManagesOrganizations,
+        Actions\ManagesProviders,
         Actions\ManagesRecipes,
         Actions\ManagesRedirectRules,
+        Actions\ManagesRoles,
+        Actions\ManagesScheduledJobs,
         Actions\ManagesSecurityRules,
+        Actions\ManagesServerCredentials,
         Actions\ManagesServers,
-        Actions\ManagesSiteCommands,
         Actions\ManagesSites,
         Actions\ManagesSSHKeys,
-        Actions\ManagesWebhooks,
-        Actions\ManagesWorkers,
+        Actions\ManagesTeams,
+        Actions\ManagesUser,
         MakesHttpRequests;
 
     /**
@@ -91,13 +94,13 @@ class Forge
         $this->apiKey = $apiKey;
 
         $this->guzzle = $guzzle ?: new HttpClient([
-            'base_uri' => 'https://forge.laravel.com/api/v1/',
+            'base_uri' => 'https://forge.laravel.com/api/',
             'http_errors' => false,
             'headers' => [
                 'Authorization' => 'Bearer '.$this->apiKey,
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'User-Agent' => 'Laravel Forge PHP/3.0',
+                'Accept' => 'application/vnd.api+json',
+                'Content-Type' => 'application/vnd.api+json',
+                'User-Agent' => 'Laravel Forge PHP/4.0',
             ],
         ]);
 
@@ -134,6 +137,16 @@ class Forge
      */
     public function user()
     {
-        return new User($this->get('user')['user']);
+        return new User($this->get('user')['data'] ?? []);
+    }
+
+    /**
+     * Get "me" user instance (alias for user()).
+     *
+     * @return \Laravel\Forge\Resources\User
+     */
+    public function me()
+    {
+        return new User($this->get('me')['data'] ?? []);
     }
 }
