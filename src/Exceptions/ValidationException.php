@@ -20,7 +20,7 @@ class ValidationException extends Exception
      */
     public function __construct(array $errors)
     {
-        parent::__construct('The given data failed to pass validation.');
+        parent::__construct($this->resolveMessage($errors));
 
         $this->errors = $errors;
     }
@@ -33,5 +33,20 @@ class ValidationException extends Exception
     public function errors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Resolve the message based on the provided errors.
+     *
+     * @param  array  $errors  An array containing validation errors.
+     * @return string The resolved message string.
+     */
+    private function resolveMessage(array $errors): string
+    {
+        if (empty($errors)) {
+            return 'The given data failed to pass validation.';
+        }
+
+        return current(current($errors));
     }
 }
