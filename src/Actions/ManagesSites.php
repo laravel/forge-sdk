@@ -2,511 +2,650 @@
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\Resources\Certificate;
+use Laravel\Forge\Resources\Domain;
+use Laravel\Forge\Resources\Heartbeat;
 use Laravel\Forge\Resources\Site;
+use Laravel\Forge\Resources\Worker;
 
 trait ManagesSites
 {
     /**
-     * Get the collection of sites.
+     * Get the collection of all sites.
      *
-     * @param  int  $serverId
      * @return \Laravel\Forge\Resources\Site[]
      */
-    public function sites($serverId)
+    public function sites()
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/sites")['sites'],
+            $this->get('sites')['data'] ?? [],
+            Site::class
+        );
+    }
+
+    /**
+     * Get the collection of sites for an organization.
+     *
+     * @param  string  $organizationId
+     * @return \Laravel\Forge\Resources\Site[]
+     */
+    public function organizationSites($organizationId)
+    {
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationId}/sites")['data'] ?? [],
             Site::class,
-            ['server_id' => $serverId]
+            ['organization_id' => $organizationId]
         );
     }
 
     /**
      * Get a site instance.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Site
      */
-    public function site($serverId, $siteId)
+    public function organizationSite($organizationId, $siteId)
     {
         return new Site(
-            $this->get("servers/$serverId/sites/$siteId")['site'] + ['server_id' => $serverId], $this
+            $this->get("orgs/{$organizationId}/sites/{$siteId}")['data'] ?? [],
+            $this
+        );
+    }
+
+    /**
+     * Get the collection of sites for a server.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @return \Laravel\Forge\Resources\Site[]
+     */
+    public function serverSites($organizationId, $serverId)
+    {
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites")['data'] ?? [],
+            Site::class,
+            ['organization_id' => $organizationId, 'server_id' => $serverId]
         );
     }
 
     /**
      * Create a new site.
      *
-     * @param  int  $serverId
-     * @param  bool  $wait
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  array  $data
      * @return \Laravel\Forge\Resources\Site
      */
-    public function createSite($serverId, array $data, $wait = true)
+    public function createSite($organizationId, $serverId, array $data)
     {
-        $site = $this->post("servers/$serverId/sites", $data)['site'];
+        $site = $this->post("orgs/{$organizationId}/servers/{$serverId}/sites", $data)['data'] ?? [];
 
-        if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($serverId, $site) {
-                $site = $this->site($serverId, $site['id']);
-
-                return $site->status == 'installed' ? $site : null;
-            });
-        }
-
-        return new Site($site + ['server_id' => $serverId], $this);
+        return new Site($site + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
     }
 
     /**
-     * Update the given site.
+     * Update a site.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  array  $data
      * @return \Laravel\Forge\Resources\Site
      */
-    public function updateSite($serverId, $siteId, array $data)
+    public function updateSite($organizationId, $serverId, $siteId, array $data)
     {
-        return new Site(
-            $this->request('PUT', "servers/$serverId/sites/$siteId", ['json' => $data])['site']
-            + ['server_id' => $serverId], $this
-        );
-    }
+        $site = $this->put(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}",
+            $data
+        )['data'] ?? [];
 
-    /**
-     * Add Site Aliases.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Site
-     */
-    public function addSiteAliases($serverId, $siteId, array $aliases)
-    {
-        return new Site(
-            $this->put("servers/$serverId/sites/$siteId/aliases", compact('aliases'))['site']
-            + ['server_id' => $serverId], $this
-        );
-    }
-
-    /**
-     * Refresh the site token.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function refreshSiteToken($serverId, $siteId)
-    {
-        $this->post("servers/$serverId/sites/$siteId/refresh");
+        return new Site($site, $this);
     }
 
     /**
      * Delete the given site.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return void
      */
-    public function deleteSite($serverId, $siteId)
+    public function deleteSite($organizationId, $serverId, $siteId)
     {
-        $this->delete("servers/$serverId/sites/$siteId");
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}");
     }
 
     /**
-     * Get the content of the site's Nginx configuration file.
+     * Get the collection of domains for a site.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return string
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return \Laravel\Forge\Resources\Domain[]
      */
-    public function siteNginxFile($serverId, $siteId)
+    public function domains($organizationId, $serverId, $siteId)
     {
-        return $this->get("servers/$serverId/sites/$siteId/nginx");
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains")['data'] ?? [],
+            Domain::class,
+            ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId]
+        );
     }
 
     /**
-     * Update the content of the site's Nginx configuration file.
+     * Create a new domain.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  string  $content
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Domain
+     */
+    public function createDomain($organizationId, $serverId, $siteId, array $data)
+    {
+        $domain = $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains",
+            $data
+        )['data'] ?? [];
+
+        return new Domain($domain + ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+    }
+
+    /**
+     * Get a domain instance.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @return \Laravel\Forge\Resources\Domain
+     */
+    public function domain($organizationId, $serverId, $siteId, $domainId)
+    {
+        return new Domain(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}")['data'] ?? [],
+            $this
+        );
+    }
+
+    /**
+     * Update a domain.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Domain
+     */
+    public function updateDomain($organizationId, $serverId, $siteId, $domainId, array $data)
+    {
+        $domain = $this->patch(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}",
+            $data
+        )['data'] ?? [];
+
+        return new Domain($domain, $this);
+    }
+
+    /**
+     * Delete the given domain.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
      * @return void
      */
-    public function updateSiteNginxFile($serverId, $siteId, $content)
+    public function deleteDomain($organizationId, $serverId, $siteId, $domainId)
     {
-        $this->put("servers/$serverId/sites/$siteId/nginx", compact('content'));
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}");
     }
 
     /**
-     * Get the content of the site's Environment file.
+     * Get domain DNS configurations.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return string
-     */
-    public function siteEnvironmentFile($serverId, $siteId)
-    {
-        return $this->get("servers/$serverId/sites/$siteId/env");
-    }
-
-    /**
-     * Update the content of the site's Environment file.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  string  $content
-     * @return void
-     */
-    public function updateSiteEnvironmentFile($serverId, $siteId, $content)
-    {
-        $this->put("servers/$serverId/sites/$siteId/env", compact('content'));
-    }
-
-    /**
-     * Install a git repository on the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  bool  $wait
-     * @return Site
-     */
-    public function installGitRepositoryOnSite($serverId, $siteId, array $data, $wait = true)
-    {
-        $site = $this->post("servers/$serverId/sites/$siteId/git", $data);
-
-        if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-
-                return $site->repositoryStatus === 'installed' ? $site : null;
-            });
-        }
-
-        return new Site($site + ['server_id' => $serverId], $this);
-    }
-
-    /**
-     * Update the site's git repository parameters.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function updateSiteGitRepository($serverId, $siteId, array $data)
-    {
-        $this->put("servers/$serverId/sites/$siteId/git", $data);
-    }
-
-    /**
-     * Destroy the git-based project installed on the site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  bool  $wait
-     * @return void
-     */
-    public function destroySiteGitRepository($serverId, $siteId, $wait = true)
-    {
-        $this->delete("servers/$serverId/sites/$siteId/git");
-
-        if ($wait) {
-            $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                return is_null($this->site($serverId, $siteId)->repositoryStatus);
-            });
-        }
-    }
-
-    /**
-     * Create a new deploy key on the site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
      * @return array
      */
-    public function createSiteDeployKey($serverId, $siteId)
+    public function domainConfigurations($organizationId, $serverId, $siteId, $domainId)
     {
-        return $this->post("servers/$serverId/sites/$siteId/deploy-key");
+        return $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/configurations")['data'] ?? [];
     }
 
     /**
-     * Destroy the deploy key on the site.
+     * Create a domain action.
      *
-     * @param  mixed  $serverId
-     * @param  mixed  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @param  array  $data
+     * @return mixed
+     */
+    public function createDomainAction($organizationId, $serverId, $siteId, $domainId, array $data)
+    {
+        return $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/actions",
+            $data
+        );
+    }
+
+    /**
+     * Get a domain certificate.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @return \Laravel\Forge\Resources\Certificate
+     */
+    public function domainCertificate($organizationId, $serverId, $siteId, $domainId)
+    {
+        return new Certificate(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate")['data'] ?? [],
+            $this
+        );
+    }
+
+    /**
+     * Create a domain certificate.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Certificate
+     */
+    public function createDomainCertificate($organizationId, $serverId, $siteId, $domainId, array $data)
+    {
+        $certificate = $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate",
+            $data
+        )['data'] ?? [];
+
+        return new Certificate($certificate + ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+    }
+
+    /**
+     * Delete the given domain certificate.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
      * @return void
      */
-    public function destroySiteDeployKey($serverId, $siteId)
+    public function deleteDomainCertificate($organizationId, $serverId, $siteId, $domainId)
     {
-        $this->delete("servers/$serverId/sites/$siteId/deploy-key");
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate");
     }
 
     /**
-     * Get the content of the site's deployment script.
+     * Create a domain certificate action.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @param  array  $data
+     * @return mixed
+     */
+    public function createDomainCertificateAction($organizationId, $serverId, $siteId, $domainId, array $data)
+    {
+        return $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate/actions",
+            $data
+        );
+    }
+
+    /**
+     * Get the collection of workers for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return \Laravel\Forge\Resources\Worker[]
+     */
+    public function workers($organizationId, $serverId, $siteId)
+    {
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/workers")['data'] ?? [],
+            Worker::class,
+            ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId]
+        );
+    }
+
+    /**
+     * Create a new worker.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Worker
+     */
+    public function createWorker($organizationId, $serverId, $siteId, array $data)
+    {
+        $worker = $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/workers",
+            $data
+        )['data'] ?? [];
+
+        return new Worker($worker + ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+    }
+
+    /**
+     * Get a worker instance.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $workerId
+     * @return \Laravel\Forge\Resources\Worker
+     */
+    public function worker($organizationId, $serverId, $siteId, $workerId)
+    {
+        return new Worker(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/workers/{$workerId}")['data'] ?? [],
+            $this
+        );
+    }
+
+    /**
+     * Delete the given worker.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $workerId
+     * @return void
+     */
+    public function deleteWorker($organizationId, $serverId, $siteId, $workerId)
+    {
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/workers/{$workerId}");
+    }
+
+    /**
+     * Create a worker action.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $workerId
+     * @param  array  $data
+     * @return mixed
+     */
+    public function createWorkerAction($organizationId, $serverId, $siteId, $workerId, array $data)
+    {
+        return $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/workers/{$workerId}/actions",
+            $data
+        );
+    }
+
+    /**
+     * Get the site environment file.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return string
      */
-    public function siteDeploymentScript($serverId, $siteId)
+    public function siteEnvironment($organizationId, $serverId, $siteId)
     {
-        return $this->get("servers/$serverId/sites/$siteId/deployment/script");
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/environment");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
     }
 
     /**
-     * Update the content of the site's deployment script.
+     * Update the site environment file.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @param  string  $content
-     * @param  bool  $autoSource
      * @return void
      */
-    public function updateSiteDeploymentScript($serverId, $siteId, $content, $autoSource = false)
+    public function updateSiteEnvironment($organizationId, $serverId, $siteId, $content)
     {
-        $this->put("servers/$serverId/sites/$siteId/deployment/script", [
+        $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/environment", [
             'content' => $content,
-            'auto_source' => $autoSource,
         ]);
     }
 
     /**
-     * Enable "Quick Deploy" for the given site.
+     * Get the site Nginx configuration.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function enableQuickDeploy($serverId, $siteId)
-    {
-        $this->post("servers/$serverId/sites/$siteId/deployment");
-    }
-
-    /**
-     * Disable "Quick Deploy" for the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function disableQuickDeploy($serverId, $siteId)
-    {
-        $this->delete("servers/$serverId/sites/$siteId/deployment");
-    }
-
-    /**
-     * Deploy the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Site
-     */
-    public function deploySite($serverId, $siteId, $wait = true)
-    {
-        $site = $this->post("servers/$serverId/sites/$siteId/deployment/deploy");
-
-        if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId) {
-                $site = $this->site($serverId, $siteId);
-
-                return is_null($site->deploymentStatus) ? $site : null;
-            });
-        }
-
-        return new Site($site + ['server_id' => $serverId], $this);
-    }
-
-    /**
-     * Reset the deployment state of the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function resetDeploymentState($serverId, $siteId)
-    {
-        $this->post("servers/$serverId/sites/$siteId/deployment/reset");
-    }
-
-    /**
-     * Get the last deployment log of the site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return string
      */
-    public function siteDeploymentLog($serverId, $siteId)
+    public function siteNginx($organizationId, $serverId, $siteId)
     {
-        return $this->get("servers/$serverId/sites/$siteId/deployment/log");
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/nginx");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
     }
 
     /**
-     * Get the deployment history of the site.
+     * Update the site Nginx configuration.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $content
+     * @return void
+     */
+    public function updateSiteNginx($organizationId, $serverId, $siteId, $content)
+    {
+        $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/nginx", [
+            'content' => $content,
+        ]);
+    }
+
+    /**
+     * Get the site PHP version.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return array
+     */
+    public function sitePhp($organizationId, $serverId, $siteId)
+    {
+        return $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/php")['data'] ?? [];
+    }
+
+    /**
+     * Update the site PHP version.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  array  $data
+     * @return void
+     */
+    public function updateSitePhp($organizationId, $serverId, $siteId, array $data)
+    {
+        $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/php", $data);
+    }
+
+    /**
+     * Get the Nginx access log.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return string
      */
-    public function deploymentHistory($serverId, $siteId)
+    public function siteNginxAccessLog($organizationId, $serverId, $siteId)
     {
-        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history");
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/nginx-access");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
     }
 
     /**
-     * Get a single deployment from the deployment history of a site.
+     * Delete the Nginx access log.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  int  $deploymentId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return void
+     */
+    public function deleteSiteNginxAccessLog($organizationId, $serverId, $siteId)
+    {
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/nginx-access");
+    }
+
+    /**
+     * Get the Nginx error log.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return string
      */
-    public function deploymentHistoryDeployment($serverId, $siteId, $deploymentId)
+    public function siteNginxErrorLog($organizationId, $serverId, $siteId)
     {
-        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId");
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/nginx-error");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
     }
 
     /**
-     * Get the output for a deployment of the site.
+     * Delete the Nginx error log.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  int  $deploymentId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return void
+     */
+    public function deleteSiteNginxErrorLog($organizationId, $serverId, $siteId)
+    {
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/nginx-error");
+    }
+
+    /**
+     * Get the application log.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return string
      */
-    public function deploymentHistoryOutput($serverId, $siteId, $deploymentId)
+    public function siteApplicationLog($organizationId, $serverId, $siteId)
     {
-        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId/output");
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/application");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
     }
 
     /**
-     * Enable Hipchat Notifications for the given site.
+     * Delete the application log.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
      * @return void
      */
-    public function enableHipchatNotifications($serverId, $siteId, array $data)
+    public function deleteSiteApplicationLog($organizationId, $serverId, $siteId)
     {
-        $this->post("servers/$serverId/sites/$siteId/notify/hipchat", $data);
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/application");
     }
 
     /**
-     * Disable Hipchat Notifications for the given site.
+     * Get the collection of heartbeats for a site.
      *
-     * @param  int  $serverId
-     * @param  int  $siteId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return \Laravel\Forge\Resources\Heartbeat[]
+     */
+    public function heartbeats($organizationId, $serverId, $siteId)
+    {
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/heartbeats")['data'] ?? [],
+            Heartbeat::class,
+            ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId]
+        );
+    }
+
+    /**
+     * Create a new heartbeat.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Heartbeat
+     */
+    public function createHeartbeat($organizationId, $serverId, $siteId, array $data)
+    {
+        $heartbeat = $this->post(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/heartbeats",
+            $data
+        )['data'] ?? [];
+
+        return new Heartbeat($heartbeat + ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+    }
+
+    /**
+     * Get a heartbeat instance.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $heartbeatId
+     * @return \Laravel\Forge\Resources\Heartbeat
+     */
+    public function heartbeat($organizationId, $serverId, $siteId, $heartbeatId)
+    {
+        return new Heartbeat(
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}")['data'] ?? [],
+            $this
+        );
+    }
+
+    /**
+     * Update a heartbeat.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $heartbeatId
+     * @param  array  $data
+     * @return \Laravel\Forge\Resources\Heartbeat
+     */
+    public function updateHeartbeat($organizationId, $serverId, $siteId, $heartbeatId, array $data)
+    {
+        $heartbeat = $this->put(
+            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}",
+            $data
+        )['data'] ?? [];
+
+        return new Heartbeat($heartbeat, $this);
+    }
+
+    /**
+     * Delete the given heartbeat.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $heartbeatId
      * @return void
      */
-    public function disableHipchatNotifications($serverId, $siteId)
+    public function deleteHeartbeat($organizationId, $serverId, $siteId, $heartbeatId)
     {
-        $this->delete("servers/$serverId/sites/$siteId/notify/hipchat");
-    }
-
-    /**
-     * Set the deployment failure emails for the given site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function setDeploymentFailureEmails($serverId, $siteId, array $data)
-    {
-        $this->post("servers/$serverId/sites/$siteId/deployment-failure-emails", $data);
-    }
-
-    /**
-     * Install a new WordPress project.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function installWordPress($serverId, $siteId, array $data)
-    {
-        $this->post("servers/$serverId/sites/$siteId/wordpress", $data);
-    }
-
-    /**
-     * Remove the WordPress project installed on the site.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function removeWordPress($serverId, $siteId)
-    {
-        $this->delete("servers/$serverId/sites/$siteId/wordpress");
-    }
-
-    /**
-     * Install a new phpMyAdmin project.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function installPhpMyAdmin($serverId, $siteId, array $data)
-    {
-        $this->post("servers/$serverId/sites/$siteId/phpmyadmin", $data);
-    }
-
-    /**
-     * Remove phpMyAdmin and revert the site back to a default state.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function removePhpMyAdmin($serverId, $siteId)
-    {
-        $this->delete("servers/$serverId/sites/$siteId/phpmyadmin");
-    }
-
-    /**
-     * Change the given site's PHP version.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  string  $version
-     * @return void
-     */
-    public function changeSitePHPVersion($serverId, $siteId, $version)
-    {
-        $this->put("servers/$serverId/sites/$siteId/php", ['version' => $version]);
-    }
-
-    /**
-     * Update the given site's balanced nodes.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function updateNodeBalancingConfiguration($serverId, $siteId, array $data)
-    {
-        $this->put("servers/$serverId/sites/$siteId/balancing", $data);
-    }
-
-    /**
-     * Get the given site's log.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return string
-     */
-    public function siteLog($serverId, $siteId)
-    {
-        return $this->get("servers/$serverId/sites/$siteId/logs");
-    }
-
-    /**
-     * Remove the given site's log when the log formatting is single.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return void
-     */
-    public function deleteSiteLog($serverId, $siteId)
-    {
-        return $this->delete("servers/$serverId/sites/$siteId/logs");
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}");
     }
 }
