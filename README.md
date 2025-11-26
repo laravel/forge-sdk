@@ -56,7 +56,7 @@ $server = $forge->createServer([
     "size"=> "01",
     "database"=> "test123",
     "database_type" => InstallableServices::POSTGRES,
-    "php_version"=> InstallableServices::PHP_84,
+    "php_version"=> InstallableServices::PHP_85,
     "region"=> "ams2"
 ]);
 ```

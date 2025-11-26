@@ -22,7 +22,7 @@ body:
     attributes:
       label: PHP Version
       description: Provide the PHP version that you are using.
-      placeholder: 8.4.2
+      placeholder: 8.5.0
     validations:
       required: true
   - type: input
