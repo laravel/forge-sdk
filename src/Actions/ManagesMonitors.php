@@ -9,54 +9,60 @@ trait ManagesMonitors
     /**
      * Get the collection of monitors.
      *
-     * @param  int  $serverId
+     * @param  string  $organizationId
+     * @param  string  $serverId
      * @return \Laravel\Forge\Resources\Monitor[]
      */
-    public function monitors($serverId)
+    public function monitors($organizationId, $serverId)
     {
         return $this->transformCollection(
-            $this->get("servers/$serverId/monitors")['monitors'],
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/monitors")['data'] ?? [],
             Monitor::class,
-            ['server_id' => $serverId]
+            ['organization_id' => $organizationId, 'server_id' => $serverId]
         );
     }
 
     /**
      * Get a monitor instance.
      *
-     * @param  int  $serverId
-     * @param  int  $monitorId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $monitorId
      * @return \Laravel\Forge\Resources\Monitor
      */
-    public function monitor($serverId, $monitorId)
+    public function monitor($organizationId, $serverId, $monitorId)
     {
         return new Monitor(
-            $this->get("servers/$serverId/monitors/$monitorId")['monitor'] + ['server_id' => $serverId], $this
+            $this->get("orgs/{$organizationId}/servers/{$serverId}/monitors/{$monitorId}")['data'] ?? [],
+            $this
         );
     }
 
     /**
      * Create a new monitor.
      *
-     * @param  int  $serverId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  array  $data
      * @return \Laravel\Forge\Resources\Monitor
      */
-    public function createMonitor($serverId, array $data)
+    public function createMonitor($organizationId, $serverId, array $data)
     {
-        $monitor = $this->post("servers/$serverId/monitors", $data)['monitor'];
+        $monitor = $this->post("orgs/{$organizationId}/servers/{$serverId}/monitors", $data)['data'] ?? [];
 
-        return new Monitor($monitor + ['server_id' => $serverId], $this);
+        return new Monitor($monitor + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
     }
 
     /**
      * Delete the given monitor.
      *
-     * @param  int  $serverId
-     * @param  int  $monitorId
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $monitorId
      * @return void
      */
-    public function deleteMonitor($serverId, $monitorId)
+    public function deleteMonitor($organizationId, $serverId, $monitorId)
     {
-        $this->delete("servers/$serverId/monitors/$monitorId");
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/monitors/{$monitorId}");
     }
 }
