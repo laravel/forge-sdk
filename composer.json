@@ -23,10 +23,14 @@
         {
             "name": "James Brooks",
             "email": "james@laravel.com"
+        },
+        {
+            "name": "Pete Bishop",
+            "email": "peter.bishop@laravel.com"
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
+        "php": "^8.0",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3.1|^7.0"
     },
