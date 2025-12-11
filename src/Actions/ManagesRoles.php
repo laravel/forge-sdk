@@ -2,9 +2,9 @@
 
 namespace Laravel\Forge\Actions;
 
-use Laravel\Forge\Resources\Role;
 use Laravel\Forge\Resources\Permission;
 use Laravel\Forge\Resources\PredefinedRole;
+use Laravel\Forge\Resources\Role;
 
 trait ManagesRoles
 {
@@ -87,7 +87,6 @@ trait ManagesRoles
      * Create a new role.
      *
      * @param  string  $organizationId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Role
      */
     public function createRole($organizationId, array $data)
@@ -102,7 +101,6 @@ trait ManagesRoles
      *
      * @param  string  $organizationId
      * @param  string  $roleId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Role
      */
     public function updateRole($organizationId, $roleId, array $data)

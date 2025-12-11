@@ -43,7 +43,6 @@ trait ManagesScheduledJobs
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\ScheduledJob
      */
     public function createScheduledJob($organizationId, $serverId, array $data)

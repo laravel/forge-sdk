@@ -2,8 +2,8 @@
 
 namespace Laravel\Forge\Actions;
 
-use Laravel\Forge\Resources\Webhook;
 use Laravel\Forge\Resources\Deployment;
+use Laravel\Forge\Resources\Webhook;
 
 trait ManagesDeployments
 {
@@ -47,7 +47,6 @@ trait ManagesDeployments
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Webhook
      */
     public function createWebhook($organizationId, $serverId, $siteId, array $data)
@@ -117,7 +116,6 @@ trait ManagesDeployments
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Deployment
      */
     public function createDeployment($organizationId, $serverId, $siteId, array $data = [])
@@ -180,7 +178,6 @@ trait ManagesDeployments
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return void
      */
     public function updateDeploymentScript($organizationId, $serverId, $siteId, array $data)
@@ -209,7 +206,6 @@ trait ManagesDeployments
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return void
      */
     public function updateDeploymentTriggerUrl($organizationId, $serverId, $siteId, array $data)
@@ -223,7 +219,6 @@ trait ManagesDeployments
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return void
      */
     public function createPushToDeploy($organizationId, $serverId, $siteId, array $data)

@@ -43,7 +43,6 @@ trait ManagesBackgroundProcesses
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\BackgroundProcess
      */
     public function createBackgroundProcess($organizationId, $serverId, array $data)
@@ -59,7 +58,6 @@ trait ManagesBackgroundProcesses
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $processId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\BackgroundProcess
      */
     public function updateBackgroundProcess($organizationId, $serverId, $processId, array $data)

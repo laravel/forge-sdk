@@ -43,7 +43,6 @@ trait ManagesMonitors
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Monitor
      */
     public function createMonitor($organizationId, $serverId, array $data)

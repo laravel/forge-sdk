@@ -46,7 +46,6 @@ trait ManagesCommands
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Command
      */
     public function createCommand($organizationId, $serverId, $siteId, array $data)

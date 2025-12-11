@@ -74,7 +74,6 @@ trait ManagesSites
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Site
      */
     public function createSite($organizationId, $serverId, array $data)
@@ -90,7 +89,6 @@ trait ManagesSites
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Site
      */
     public function updateSite($organizationId, $serverId, $siteId, array $data)
@@ -139,7 +137,6 @@ trait ManagesSites
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Domain
      */
     public function createDomain($organizationId, $serverId, $siteId, array $data)
@@ -176,7 +173,6 @@ trait ManagesSites
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $domainId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Domain
      */
     public function updateDomain($organizationId, $serverId, $siteId, $domainId, array $data)
@@ -224,7 +220,6 @@ trait ManagesSites
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $domainId
-     * @param  array  $data
      * @return mixed
      */
     public function createDomainAction($organizationId, $serverId, $siteId, $domainId, array $data)
@@ -259,7 +254,6 @@ trait ManagesSites
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $domainId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Certificate
      */
     public function createDomainCertificate($organizationId, $serverId, $siteId, $domainId, array $data)
@@ -293,7 +287,6 @@ trait ManagesSites
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $domainId
-     * @param  array  $data
      * @return mixed
      */
     public function createDomainCertificateAction($organizationId, $serverId, $siteId, $domainId, array $data)
@@ -327,7 +320,6 @@ trait ManagesSites
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Worker
      */
     public function createWorker($organizationId, $serverId, $siteId, array $data)
@@ -378,7 +370,6 @@ trait ManagesSites
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $workerId
-     * @param  array  $data
      * @return mixed
      */
     public function createWorkerAction($organizationId, $serverId, $siteId, $workerId, array $data)
@@ -470,7 +461,6 @@ trait ManagesSites
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return void
      */
     public function updateSitePhp($organizationId, $serverId, $siteId, array $data)
@@ -585,7 +575,6 @@ trait ManagesSites
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Heartbeat
      */
     public function createHeartbeat($organizationId, $serverId, $siteId, array $data)
@@ -622,7 +611,6 @@ trait ManagesSites
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $heartbeatId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Heartbeat
      */
     public function updateHeartbeat($organizationId, $serverId, $siteId, $heartbeatId, array $data)

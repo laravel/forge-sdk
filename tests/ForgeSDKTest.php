@@ -2484,7 +2484,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/server-1/sites/site-1/nginx', [])->andReturn(
-            new Response(200, [], "{\"data\": {\"content\": \"server {\\n    listen 80;\\n    server_name example.com;\\n    root /home/forge/example.com;\\n\\n    location / {\\n        try_files \$uri \$uri/ /index.php?\$query_string;\\n    }\\n}\"}}")
+            new Response(200, [], '{"data": {"content": "server {\\n    listen 80;\\n    server_name example.com;\\n    root /home/forge/example.com;\\n\\n    location / {\\n        try_files $uri $uri/ /index.php?$query_string;\\n    }\\n}"}}')
         );
 
         $content = $forge->siteNginx('org-123', 'server-1', 'site-1');

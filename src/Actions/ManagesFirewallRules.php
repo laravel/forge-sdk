@@ -43,7 +43,6 @@ trait ManagesFirewallRules
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\FirewallRule
      */
     public function createFirewallRule($organizationId, $serverId, array $data)

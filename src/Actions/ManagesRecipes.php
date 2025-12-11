@@ -2,9 +2,9 @@
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\Resources\ForgeRecipe;
 use Laravel\Forge\Resources\Recipe;
 use Laravel\Forge\Resources\RecipeRun;
-use Laravel\Forge\Resources\ForgeRecipe;
 
 trait ManagesRecipes
 {
@@ -39,7 +39,6 @@ trait ManagesRecipes
      * Create a new recipe.
      *
      * @param  string  $organizationId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Recipe
      */
     public function createRecipe($organizationId, array $data)
@@ -54,7 +53,6 @@ trait ManagesRecipes
      *
      * @param  string  $organizationId
      * @param  string  $recipeId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Recipe
      */
     public function updateRecipe($organizationId, $recipeId, array $data)
@@ -113,7 +111,6 @@ trait ManagesRecipes
      *
      * @param  string  $organizationId
      * @param  string  $recipeId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\RecipeRun
      */
     public function createRecipeRun($organizationId, $recipeId, array $data)
@@ -144,7 +141,6 @@ trait ManagesRecipes
      *
      * @param  string  $organizationId
      * @param  string  $teamId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Recipe
      */
     public function shareRecipeWithTeam($organizationId, $teamId, array $data)
@@ -195,7 +191,6 @@ trait ManagesRecipes
      * Create a Forge recipe run.
      *
      * @param  string  $forgeRecipeId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\RecipeRun
      */
     public function createForgeRecipeRun($forgeRecipeId, array $data)

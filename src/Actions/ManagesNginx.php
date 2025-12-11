@@ -43,7 +43,6 @@ trait ManagesNginx
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\NginxTemplate
      */
     public function createNginxTemplate($organizationId, $serverId, array $data)
@@ -59,7 +58,6 @@ trait ManagesNginx
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $templateId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\NginxTemplate
      */
     public function updateNginxTemplate($organizationId, $serverId, $templateId, array $data)

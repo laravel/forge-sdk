@@ -44,7 +44,6 @@ trait ManagesDatabases
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @param  bool  $wait
      * @return \Laravel\Forge\Resources\Database
      */
@@ -55,6 +54,7 @@ trait ManagesDatabases
         if ($wait) {
             return $this->retry($this->getTimeout(), function () use ($organizationId, $serverId, $database) {
                 $db = $this->database($organizationId, $serverId, $database['id']);
+
                 return isset($db->status) && $db->status === 'installed' ? $db : null;
             });
         }
@@ -80,7 +80,6 @@ trait ManagesDatabases
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return mixed
      */
     public function syncDatabases($organizationId, $serverId, array $data = [])
@@ -125,7 +124,6 @@ trait ManagesDatabases
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @param  bool  $wait
      * @return \Laravel\Forge\Resources\DatabaseUser
      */
@@ -136,6 +134,7 @@ trait ManagesDatabases
         if ($wait) {
             return $this->retry($this->getTimeout(), function () use ($organizationId, $serverId, $user) {
                 $dbUser = $this->databaseUser($organizationId, $serverId, $user['id']);
+
                 return isset($dbUser->status) && $dbUser->status === 'installed' ? $dbUser : null;
             });
         }
@@ -149,7 +148,6 @@ trait ManagesDatabases
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $userId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\DatabaseUser
      */
     public function updateDatabaseUser($organizationId, $serverId, $userId, array $data)
@@ -180,7 +178,6 @@ trait ManagesDatabases
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return mixed
      */
     public function updateDatabasePassword($organizationId, $serverId, array $data)

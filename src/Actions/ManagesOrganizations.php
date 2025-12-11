@@ -68,7 +68,6 @@ trait ManagesOrganizations
      * @param  string  $organizationId
      * @param  string  $credentialId
      * @param  string  $region
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\VPC
      */
     public function createVpc($organizationId, $credentialId, $region, array $data = [])

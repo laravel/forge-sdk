@@ -3,8 +3,8 @@
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Team;
-use Laravel\Forge\Resources\TeamMember;
 use Laravel\Forge\Resources\TeamInvitation;
+use Laravel\Forge\Resources\TeamMember;
 
 trait ManagesTeams
 {
@@ -39,7 +39,6 @@ trait ManagesTeams
      * Create a new team.
      *
      * @param  string  $organizationId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Team
      */
     public function createTeam($organizationId, array $data)
@@ -54,7 +53,6 @@ trait ManagesTeams
      *
      * @param  string  $organizationId
      * @param  string  $teamId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Team
      */
     public function updateTeam($organizationId, $teamId, array $data)
@@ -114,7 +112,6 @@ trait ManagesTeams
      * @param  string  $organizationId
      * @param  string  $teamId
      * @param  string  $userId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\TeamMember
      */
     public function updateTeamMember($organizationId, $teamId, $userId, array $data)
@@ -174,7 +171,6 @@ trait ManagesTeams
      *
      * @param  string  $organizationId
      * @param  string  $teamId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\TeamInvitation
      */
     public function createTeamInvitation($organizationId, $teamId, array $data)

@@ -46,7 +46,6 @@ trait ManagesRedirectRules
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\RedirectRule
      */
     public function createRedirectRule($organizationId, $serverId, $siteId, array $data)

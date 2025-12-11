@@ -28,7 +28,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createHorizon($organizationId, $serverId, $siteId, array $data = [])
@@ -84,7 +83,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createOctane($organizationId, $serverId, $siteId, array $data = [])
@@ -140,7 +138,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createReverb($organizationId, $serverId, $siteId, array $data = [])
@@ -196,7 +193,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createInertia($organizationId, $serverId, $siteId, array $data = [])
@@ -239,7 +235,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createPulse($organizationId, $serverId, $siteId, array $data = [])
@@ -295,7 +290,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createMaintenance($organizationId, $serverId, $siteId, array $data = [])
@@ -351,7 +345,6 @@ trait ManagesIntegrations
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Integration
      */
     public function createScheduler($organizationId, $serverId, $siteId, array $data = [])

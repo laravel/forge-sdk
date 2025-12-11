@@ -43,7 +43,6 @@ trait ManagesSSHKeys
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\SSHKey
      */
     public function createSSHKey($organizationId, $serverId, array $data)
@@ -85,7 +84,6 @@ trait ManagesSSHKeys
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return string
      */
     public function updateServerPublicKey($organizationId, $serverId, array $data)

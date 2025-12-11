@@ -2,10 +2,10 @@
 
 namespace Tests;
 
+use Laravel\Forge\Forge;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
-use Laravel\Forge\Forge;
 
 /**
  * This test validates that the Forge SDK has complete coverage of all API v2 endpoints
@@ -14,11 +14,17 @@ use Laravel\Forge\Forge;
 class OpenAPIComplianceTest extends TestCase
 {
     private array $openApiSpec;
+
     private array $allEndpoints;
+
     private array $sdkMethods;
+
     private array $testMethods;
+
     private array $uncoveredEndpoints = [];
+
     private array $missingTests = [];
+
     private array $unmockedTests = [];
 
     protected function setUp(): void
@@ -47,14 +53,14 @@ class OpenAPIComplianceTest extends TestCase
             $path = $endpoint['path'];
             $signature = "$method $path";
 
-            if (!isset($mapping[$signature])) {
+            if (! isset($mapping[$signature])) {
                 $this->uncoveredEndpoints[] = $signature;
             }
         }
 
-        if (!empty($this->uncoveredEndpoints)) {
+        if (! empty($this->uncoveredEndpoints)) {
             $this->fail(
-                "The following " . count($this->uncoveredEndpoints) . " API endpoints do not have corresponding SDK methods:\n" .
+                'The following '.count($this->uncoveredEndpoints)." API endpoints do not have corresponding SDK methods:\n".
                 implode("\n", $this->uncoveredEndpoints)
             );
         }
@@ -82,21 +88,21 @@ class OpenAPIComplianceTest extends TestCase
             // Skip internal/helper methods
             $internalMethods = [
                 'transformCollection', 'setApiKey', 'setTimeout', 'getTimeout',
-                '__construct', 'get', 'post', 'put', 'patch', 'delete', 'retry'
+                '__construct', 'get', 'post', 'put', 'patch', 'delete', 'retry',
             ];
 
             if (in_array($methodName, $internalMethods)) {
                 continue;
             }
 
-            if (!isset($testedMethods[$methodName])) {
-                $this->missingTests[] = $methodName . ' (' . $methodInfo['class'] . ')';
+            if (! isset($testedMethods[$methodName])) {
+                $this->missingTests[] = $methodName.' ('.$methodInfo['class'].')';
             }
         }
 
-        if (!empty($this->missingTests)) {
+        if (! empty($this->missingTests)) {
             $this->fail(
-                "The following " . count($this->missingTests) . " SDK methods do not have tests:\n" .
+                'The following '.count($this->missingTests)." SDK methods do not have tests:\n".
                 implode("\n", $this->missingTests)
             );
         }
@@ -118,9 +124,9 @@ class OpenAPIComplianceTest extends TestCase
             }
         }
 
-        if (!empty($this->unmockedTests)) {
+        if (! empty($this->unmockedTests)) {
             $this->fail(
-                "The following " . count($this->unmockedTests) . " tests do not have mocked responses:\n" .
+                'The following '.count($this->unmockedTests)." tests do not have mocked responses:\n".
                 implode("\n", $this->unmockedTests)
             );
         }
@@ -132,7 +138,7 @@ class OpenAPIComplianceTest extends TestCase
     {
         $totalEndpoints = count($this->allEndpoints);
         $totalMethods = count(array_filter($this->sdkMethods, function ($method) {
-            return !in_array($method['name'], ['transformCollection', 'setApiKey', 'setTimeout', 'getTimeout']);
+            return ! in_array($method['name'], ['transformCollection', 'setApiKey', 'setTimeout', 'getTimeout']);
         }));
         $totalTests = count($this->testMethods);
 
@@ -144,15 +150,15 @@ class OpenAPIComplianceTest extends TestCase
         echo "Total SDK Methods: $totalMethods\n";
         echo "Total Tests: $totalTests\n";
         echo "\n";
-        echo "Endpoint Coverage: " . ($totalEndpoints > 0 ? round(($totalEndpoints - count($this->uncoveredEndpoints)) / $totalEndpoints * 100, 2) : 0) . "%\n";
-        echo "Method Test Coverage: " . ($totalMethods > 0 ? round(($totalMethods - count($this->missingTests)) / $totalMethods * 100, 2) : 0) . "%\n";
+        echo 'Endpoint Coverage: '.($totalEndpoints > 0 ? round(($totalEndpoints - count($this->uncoveredEndpoints)) / $totalEndpoints * 100, 2) : 0)."%\n";
+        echo 'Method Test Coverage: '.($totalMethods > 0 ? round(($totalMethods - count($this->missingTests)) / $totalMethods * 100, 2) : 0)."%\n";
         echo "=========================================\n\n";
     }
 
     private function downloadOpenApiSpec(): array
     {
         // First, try to load from local file if it exists (for offline testing)
-        $localPath = __DIR__ . '/../forge-openapi.json';
+        $localPath = __DIR__.'/../forge-openapi.json';
         if (file_exists($localPath)) {
             $spec = json_decode(file_get_contents($localPath), true);
             if ($spec) {
@@ -171,7 +177,7 @@ class OpenAPIComplianceTest extends TestCase
         $decoded = json_decode($spec, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->fail("Failed to parse OpenAPI spec JSON: " . json_last_error_msg());
+            $this->fail('Failed to parse OpenAPI spec JSON: '.json_last_error_msg());
         }
 
         // Save it locally for future runs
@@ -241,8 +247,8 @@ class OpenAPIComplianceTest extends TestCase
 
     private function extractTestMethods(): array
     {
-        $testFile = __DIR__ . '/ForgeSDKTest.php';
-        if (!file_exists($testFile)) {
+        $testFile = __DIR__.'/ForgeSDKTest.php';
+        if (! file_exists($testFile)) {
             $this->fail("Test file not found: $testFile");
         }
 

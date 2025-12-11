@@ -46,7 +46,6 @@ trait ManagesSecurityRules
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function createSecurityRule($organizationId, $serverId, $siteId, array $data)
@@ -69,7 +68,6 @@ trait ManagesSecurityRules
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $ruleId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\SecurityRule
      */
     public function updateSecurityRule($organizationId, $serverId, $siteId, $ruleId, array $data)

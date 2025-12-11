@@ -27,7 +27,6 @@ trait ManagesServerCredentials
      *
      * @param  string  $organizationId
      * @param  string  $teamId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\ServerCredential
      */
     public function shareServerCredential($organizationId, $teamId, array $data)

@@ -2,9 +2,9 @@
 
 namespace Laravel\Forge\Actions;
 
-use Laravel\Forge\Resources\Server;
 use Laravel\Forge\Resources\Event;
 use Laravel\Forge\Resources\PHPVersion;
+use Laravel\Forge\Resources\Server;
 
 trait ManagesServers
 {
@@ -42,7 +42,6 @@ trait ManagesServers
      * Create a new server.
      *
      * @param  string  $organizationId
-     * @param  array  $data
      * @param  bool  $wait
      * @return \Laravel\Forge\Resources\Server
      */
@@ -53,6 +52,7 @@ trait ManagesServers
         if ($wait) {
             return $this->retry($this->getTimeout(), function () use ($organizationId, $server) {
                 $srv = $this->server($organizationId, $server['id']);
+
                 return isset($srv->isReady) && $srv->isReady ? $srv : null;
             });
         }
@@ -91,7 +91,6 @@ trait ManagesServers
      * Create an archived server.
      *
      * @param  string  $organizationId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Server
      */
     public function createArchivedServer($organizationId, array $data)
@@ -118,7 +117,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function createServerAction($organizationId, $serverId, array $data)
@@ -132,7 +130,6 @@ trait ManagesServers
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $backgroundProcessId
-     * @param  array  $data
      * @return array
      */
     public function performBackgroundProcessAction($organizationId, $serverId, $backgroundProcessId, array $data)
@@ -145,7 +142,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function performNginxAction($organizationId, $serverId, array $data)
@@ -158,7 +154,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function performPostgresAction($organizationId, $serverId, array $data)
@@ -171,7 +166,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function performRedisAction($organizationId, $serverId, array $data)
@@ -184,7 +178,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function performMySQLAction($organizationId, $serverId, array $data)
@@ -197,7 +190,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function performPHPAction($organizationId, $serverId, array $data)
@@ -210,7 +202,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function performSupervisorAction($organizationId, $serverId, array $data)
@@ -280,7 +271,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpCliVersion($organizationId, $serverId, array $data)
@@ -305,7 +295,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpSiteVersion($organizationId, $serverId, array $data)
@@ -334,7 +323,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\PHPVersion
      */
     public function installPhpVersion($organizationId, $serverId, array $data)
@@ -366,7 +354,6 @@ trait ManagesServers
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $phpVersionId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\PHPVersion
      */
     public function updatePhpVersion($organizationId, $serverId, $phpVersionId, array $data)
@@ -408,7 +395,6 @@ trait ManagesServers
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $phpVersionId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpFpmConfig($organizationId, $serverId, $phpVersionId, array $data)
@@ -435,7 +421,6 @@ trait ManagesServers
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $phpVersionId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpCliConfig($organizationId, $serverId, $phpVersionId, array $data)
@@ -462,7 +447,6 @@ trait ManagesServers
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $phpVersionId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpPoolConfig($organizationId, $serverId, $phpVersionId, array $data)
@@ -487,7 +471,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpMaxUploadSize($organizationId, $serverId, array $data)
@@ -512,7 +495,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function updatePhpMaxExecutionTime($organizationId, $serverId, array $data)
@@ -537,7 +519,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $serverId
-     * @param  array  $data
      * @return array
      */
     public function createPhpOpcache($organizationId, $serverId, array $data)
@@ -578,7 +559,6 @@ trait ManagesServers
      *
      * @param  string  $organizationId
      * @param  string  $teamId
-     * @param  array  $data
      * @return \Laravel\Forge\Resources\Server
      */
     public function createTeamServerShare($organizationId, $teamId, array $data)
