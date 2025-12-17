@@ -636,4 +636,190 @@ trait ManagesSites
     {
         $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}");
     }
+
+    /**
+     * Get all sites (alias for sites()).
+     *
+     * @return \Laravel\Forge\Resources\Site[]
+     */
+    public function allSites()
+    {
+        return $this->sites();
+    }
+
+    /**
+     * Get the nginx configuration for a domain.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @return string
+     */
+    public function domainNginxConfig($organizationId, $serverId, $siteId, $domainId)
+    {
+        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx");
+
+        return $response['data']['content'] ?? $response['content'] ?? '';
+    }
+
+    /**
+     * Update the nginx configuration for a domain.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $domainId
+     * @return void
+     */
+    public function updateDomainNginxConfig($organizationId, $serverId, $siteId, $domainId, $content)
+    {
+        $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx", ['content' => $content]);
+    }
+
+    /**
+     * Get the health check configuration for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return array
+     */
+    public function siteHealthcheck($organizationId, $serverId, $siteId)
+    {
+        return $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/healthcheck")['data'] ?? [];
+    }
+
+    /**
+     * Update the health check configuration for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return void
+     */
+    public function updateSiteHealthcheck($organizationId, $serverId, $siteId, array $data)
+    {
+        $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/healthcheck", $data);
+    }
+
+    /**
+     * Get the nginx configuration for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return string
+     */
+    public function siteNginxConfig($organizationId, $serverId, $siteId)
+    {
+        return $this->siteNginx($organizationId, $serverId, $siteId);
+    }
+
+    /**
+     * Update the nginx configuration for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return void
+     */
+    public function updateSiteNginxConfig($organizationId, $serverId, $siteId, $content)
+    {
+        $this->updateSiteNginx($organizationId, $serverId, $siteId, $content);
+    }
+
+    /**
+     * Get composer credentials for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return array
+     */
+    public function composerCredentials($organizationId, $serverId, $siteId)
+    {
+        return $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/composer/credentials")['data'] ?? [];
+    }
+
+    /**
+     * Create a composer credential for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return array
+     */
+    public function createComposerCredential($organizationId, $serverId, $siteId, array $data)
+    {
+        return $this->post("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/composer/credentials", $data)['data'] ?? [];
+    }
+
+    /**
+     * Get a composer credential for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $repository
+     * @return array
+     */
+    public function composerCredential($organizationId, $serverId, $siteId, $repository)
+    {
+        return $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}")['data'] ?? [];
+    }
+
+    /**
+     * Update a composer credential for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $repository
+     * @return array
+     */
+    public function updateComposerCredential($organizationId, $serverId, $siteId, $repository, array $data)
+    {
+        return $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data)['data'] ?? [];
+    }
+
+    /**
+     * Delete a composer credential for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @param  string  $repository
+     * @return void
+     */
+    public function deleteComposerCredential($organizationId, $serverId, $siteId, $repository)
+    {
+        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}");
+    }
+
+    /**
+     * Get load balancing nodes for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return array
+     */
+    public function loadBalancingNodes($organizationId, $serverId, $siteId)
+    {
+        return $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes")['data'] ?? [];
+    }
+
+    /**
+     * Update load balancing nodes for a site.
+     *
+     * @param  string  $organizationId
+     * @param  string  $serverId
+     * @param  string  $siteId
+     * @return array
+     */
+    public function updateLoadBalancingNodes($organizationId, $serverId, $siteId, array $data)
+    {
+        return $this->put("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes", $data)['data'] ?? [];
+    }
 }

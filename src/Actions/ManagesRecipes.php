@@ -137,13 +137,13 @@ trait ManagesRecipes
     }
 
     /**
-     * Share a recipe with a team.
+     * Share a recipe with a team (create team recipes share).
      *
      * @param  string  $organizationId
      * @param  string  $teamId
      * @return \Laravel\Forge\Resources\Recipe
      */
-    public function shareRecipeWithTeam($organizationId, $teamId, array $data)
+    public function createTeamRecipesShare($organizationId, $teamId, array $data)
     {
         $recipe = $this->post("orgs/{$organizationId}/teams/{$teamId}/recipes", $data)['data'] ?? [];
 
@@ -151,14 +151,14 @@ trait ManagesRecipes
     }
 
     /**
-     * Delete a recipe share from a team.
+     * Remove a recipe share from a team (delete team recipes share).
      *
      * @param  string  $organizationId
      * @param  string  $teamId
      * @param  string  $recipeId
      * @return void
      */
-    public function deleteRecipeShare($organizationId, $teamId, $recipeId)
+    public function deleteTeamRecipesShare($organizationId, $teamId, $recipeId)
     {
         $this->delete("orgs/{$organizationId}/teams/{$teamId}/recipes/{$recipeId}");
     }

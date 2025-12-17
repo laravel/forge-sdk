@@ -45,7 +45,7 @@ trait ManagesSSHKeys
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\SSHKey
      */
-    public function createSSHKey($organizationId, $serverId, array $data)
+    public function createSshKey($organizationId, $serverId, array $data)
     {
         $key = $this->post("orgs/{$organizationId}/servers/{$serverId}/ssh-keys", $data)['data'] ?? [];
 
@@ -60,7 +60,7 @@ trait ManagesSSHKeys
      * @param  string  $keyId
      * @return void
      */
-    public function deleteSSHKey($organizationId, $serverId, $keyId)
+    public function deleteSshKey($organizationId, $serverId, $keyId)
     {
         $this->delete("orgs/{$organizationId}/servers/{$serverId}/ssh-keys/{$keyId}");
     }
@@ -72,7 +72,7 @@ trait ManagesSSHKeys
      * @param  string  $serverId
      * @return string
      */
-    public function serverPublicKey($organizationId, $serverId)
+    public function serverKey($organizationId, $serverId)
     {
         $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/key");
 
@@ -86,7 +86,7 @@ trait ManagesSSHKeys
      * @param  string  $serverId
      * @return string
      */
-    public function updateServerPublicKey($organizationId, $serverId, array $data)
+    public function updateServerKey($organizationId, $serverId, array $data)
     {
         $response = $this->put("orgs/{$organizationId}/servers/{$serverId}/key", $data);
 

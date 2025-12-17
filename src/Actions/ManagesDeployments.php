@@ -145,14 +145,14 @@ trait ManagesDeployments
     }
 
     /**
-     * Update the deployment state for a site.
+     * Disable quick deploy for a site.
      *
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function updateDeploymentState($organizationId, $serverId, $siteId)
+    public function disableQuickDeploy($organizationId, $serverId, $siteId)
     {
         $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/deployments/status");
     }
@@ -214,27 +214,27 @@ trait ManagesDeployments
     }
 
     /**
-     * Create a push to deploy configuration for a site.
+     * Enable push to deploy for a site.
      *
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function createPushToDeploy($organizationId, $serverId, $siteId, array $data)
+    public function enablePushToDeploy($organizationId, $serverId, $siteId, array $data)
     {
         $this->post("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/deployments/push-to-deploy", $data);
     }
 
     /**
-     * Delete the push to deploy configuration for a site.
+     * Disable push to deploy for a site (delete the push to deploy configuration).
      *
      * @param  string  $organizationId
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deletePushToDeploy($organizationId, $serverId, $siteId)
+    public function disablePushToDeploy($organizationId, $serverId, $siteId)
     {
         $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/deployments/push-to-deploy");
     }

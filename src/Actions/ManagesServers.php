@@ -384,7 +384,7 @@ trait ManagesServers
      * @param  string  $phpVersionId
      * @return array
      */
-    public function phpFpmConfig($organizationId, $serverId, $phpVersionId)
+    public function phpFpm($organizationId, $serverId, $phpVersionId)
     {
         return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm");
     }
@@ -397,7 +397,7 @@ trait ManagesServers
      * @param  string  $phpVersionId
      * @return array
      */
-    public function updatePhpFpmConfig($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpFpm($organizationId, $serverId, $phpVersionId, array $data)
     {
         return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm", $data);
     }
@@ -410,7 +410,7 @@ trait ManagesServers
      * @param  string  $phpVersionId
      * @return array
      */
-    public function phpCliConfig($organizationId, $serverId, $phpVersionId)
+    public function phpCli($organizationId, $serverId, $phpVersionId)
     {
         return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli");
     }
@@ -423,7 +423,7 @@ trait ManagesServers
      * @param  string  $phpVersionId
      * @return array
      */
-    public function updatePhpCliConfig($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpCli($organizationId, $serverId, $phpVersionId, array $data)
     {
         return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli", $data);
     }
@@ -436,7 +436,7 @@ trait ManagesServers
      * @param  string  $phpVersionId
      * @return array
      */
-    public function phpPoolConfig($organizationId, $serverId, $phpVersionId)
+    public function phpPool($organizationId, $serverId, $phpVersionId)
     {
         return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool");
     }
@@ -449,7 +449,7 @@ trait ManagesServers
      * @param  string  $phpVersionId
      * @return array
      */
-    public function updatePhpPoolConfig($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpPool($organizationId, $serverId, $phpVersionId, array $data)
     {
         return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool", $data);
     }
@@ -555,13 +555,13 @@ trait ManagesServers
     }
 
     /**
-     * Create a server share with a team.
+     * Share a server with a team (create team servers share).
      *
      * @param  string  $organizationId
      * @param  string  $teamId
      * @return \Laravel\Forge\Resources\Server
      */
-    public function createTeamServerShare($organizationId, $teamId, array $data)
+    public function createTeamServersShare($organizationId, $teamId, array $data)
     {
         $server = $this->post("orgs/{$organizationId}/teams/{$teamId}/servers", $data)['data'] ?? [];
 
@@ -569,14 +569,14 @@ trait ManagesServers
     }
 
     /**
-     * Delete a server share from a team.
+     * Remove a server share from a team (delete team servers share).
      *
      * @param  string  $organizationId
      * @param  string  $teamId
      * @param  string  $serverId
      * @return void
      */
-    public function deleteTeamServerShare($organizationId, $teamId, $serverId)
+    public function deleteTeamServersShare($organizationId, $teamId, $serverId)
     {
         $this->delete("orgs/{$organizationId}/teams/{$teamId}/servers/{$serverId}");
     }
