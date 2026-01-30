@@ -8,6 +8,7 @@ use Laravel\Forge\Resources\User;
 class Forge
 {
     use Actions\ManagesBackgroundProcesses,
+        Actions\ManagesBackups,
         Actions\ManagesCommands,
         Actions\ManagesDatabases,
         Actions\ManagesDeployments,

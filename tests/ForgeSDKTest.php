@@ -3634,4 +3634,128 @@ class ForgeSDKTest extends TestCase
         $nodes = $forge->updateLoadBalancingNodes('org-123', 'server-1', 'site-1', ['nodes' => ['192.168.1.1', '192.168.1.2']]);
         $this->assertIsArray($nodes);
     }
+
+    public function test_getting_backup_configurations()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/server-1/database/backups', [])->andReturn(
+            new Response(200, [], '{"data": [{"id": "config-1", "name": "Daily Backup"}]}')
+        );
+
+        $this->assertCount(1, $forge->backupConfigurations('org-123', 'server-1'));
+    }
+
+    public function test_getting_backup_configuration()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/server-1/database/backups/config-1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": "config-1", "name": "Daily Backup"}}')
+        );
+
+        $config = $forge->backupConfiguration('org-123', 'server-1', 'config-1');
+        $this->assertSame('config-1', $config->id);
+    }
+
+    public function test_creating_backup_configuration()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/server-1/database/backups', [
+            'form_params' => ['name' => 'Daily Backup', 'provider' => 's3'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": "config-1", "name": "Daily Backup"}}')
+        );
+
+        $forge->createBackupConfiguration('org-123', 'server-1', ['name' => 'Daily Backup', 'provider' => 's3']);
+        $this->assertTrue(true);
+    }
+
+    public function test_updating_backup_configuration()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/server-1/database/backups/config-1', [
+            'form_params' => ['name' => 'Updated Backup'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": "config-1", "name": "Updated Backup"}}')
+        );
+
+        $forge->updateBackupConfiguration('org-123', 'server-1', 'config-1', ['name' => 'Updated Backup']);
+        $this->assertTrue(true);
+    }
+
+    public function test_deleting_backup_configuration()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/server-1/database/backups/config-1', [])->andReturn(
+            new Response(204)
+        );
+
+        $forge->deleteBackupConfiguration('org-123', 'server-1', 'config-1');
+        $this->assertTrue(true);
+    }
+
+    public function test_getting_backups()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/server-1/database/backups/config-1/instances', [])->andReturn(
+            new Response(200, [], '{"data": [{"id": "backup-1", "status": "completed"}]}')
+        );
+
+        $this->assertCount(1, $forge->backups('org-123', 'server-1', 'config-1'));
+    }
+
+    public function test_getting_backup()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/server-1/database/backups/config-1/instances/backup-1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": "backup-1", "status": "completed"}}')
+        );
+
+        $backup = $forge->backup('org-123', 'server-1', 'config-1', 'backup-1');
+        $this->assertSame('backup-1', $backup->id);
+    }
+
+    public function test_creating_backup()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/server-1/database/backups/config-1/instances', [])->andReturn(
+            new Response(200, [], '{"data": {"id": "backup-1", "status": "pending"}}')
+        );
+
+        $forge->createBackup('org-123', 'server-1', 'config-1');
+        $this->assertTrue(true);
+    }
+
+    public function test_deleting_backup()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/server-1/database/backups/config-1/instances/backup-1', [])->andReturn(
+            new Response(204)
+        );
+
+        $forge->deleteBackup('org-123', 'server-1', 'config-1', 'backup-1');
+        $this->assertTrue(true);
+    }
+
+    public function test_restoring_backup()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/server-1/database/backups/config-1/instances/backup-1/restores', [
+            'form_params' => ['database_id' => 123],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"status": "restoring"}}')
+        );
+
+        $forge->restoreBackup('org-123', 'server-1', 'config-1', 'backup-1', ['database_id' => 123]);
+        $this->assertTrue(true);
+    }
 }
