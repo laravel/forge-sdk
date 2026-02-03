@@ -43,6 +43,17 @@ class OpenAPIEndpointMapper
         'POST /orgs/{organization}/servers/archives' => 'createArchivedServer',
         // Background Processes
         'GET /orgs/{organization}/servers/{server}/background-processes/{backgroundProcess}/log' => 'backgroundProcessLog',
+        // Backups - backup configurations and instances
+        'GET /orgs/{organization}/servers/{server}/database/backups' => 'backupConfigurations',
+        'POST /orgs/{organization}/servers/{server}/database/backups' => 'createBackupConfiguration',
+        'GET /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}' => 'backupConfiguration',
+        'PUT /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}' => 'updateBackupConfiguration',
+        'DELETE /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}' => 'deleteBackupConfiguration',
+        'GET /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}/instances' => 'backups',
+        'POST /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}/instances' => 'createBackup',
+        'GET /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}/instances/{backup}' => 'backup',
+        'DELETE /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}/instances/{backup}' => 'deleteBackup',
+        'POST /orgs/{organization}/servers/{server}/database/backups/{backupConfiguration}/instances/{backup}/restores' => 'restoreBackup',
         // Databases - 'database' is a namespace, 'schemas' is the resource
         'GET /orgs/{organization}/servers/{server}/database/schemas' => 'databases',
         'POST /orgs/{organization}/servers/{server}/database/schemas' => 'createDatabase',
