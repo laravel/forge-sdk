@@ -601,7 +601,7 @@ $regionSize = $forge->providerRegionSize($providerId, $regionId, $sizeId);
 
 ## API Documentation
 
-For detailed information about request parameters and response structures, see the [official Forge API documentation](https://forge.laravel.com/api/docs).
+For detailed information about request parameters and response structures, see the [official Forge API documentation](https://forge.laravel.com/docs/api).
 
 ## Contributing
 
