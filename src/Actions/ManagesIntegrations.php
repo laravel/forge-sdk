@@ -9,15 +9,15 @@ trait ManagesIntegrations
     /**
      * Get the Laravel Horizon integration status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getHorizon($organizationId, $serverId, $siteId)
+    public function getHorizon($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/horizon")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/horizon")['data'] ?? [],
             $this
         );
     }
@@ -25,21 +25,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Horizon integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createHorizon($organizationId, $serverId, $siteId, array $data = [])
+    public function createHorizon($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/horizon",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/horizon",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'horizon',
@@ -51,28 +51,28 @@ trait ManagesIntegrations
     /**
      * Delete the Laravel Horizon integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deleteHorizon($organizationId, $serverId, $siteId)
+    public function deleteHorizon($organizationSlug, $serverId, $siteId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/horizon");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/horizon");
     }
 
     /**
      * Get the Laravel Octane integration status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getOctane($organizationId, $serverId, $siteId)
+    public function getOctane($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/octane")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/octane")['data'] ?? [],
             $this
         );
     }
@@ -80,21 +80,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Octane integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createOctane($organizationId, $serverId, $siteId, array $data = [])
+    public function createOctane($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/octane",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/octane",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'octane',
@@ -106,28 +106,28 @@ trait ManagesIntegrations
     /**
      * Delete the Laravel Octane integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deleteOctane($organizationId, $serverId, $siteId)
+    public function deleteOctane($organizationSlug, $serverId, $siteId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/octane");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/octane");
     }
 
     /**
      * Get the Laravel Reverb integration status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getReverb($organizationId, $serverId, $siteId)
+    public function getReverb($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/reverb")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/reverb")['data'] ?? [],
             $this
         );
     }
@@ -135,21 +135,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Reverb integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createReverb($organizationId, $serverId, $siteId, array $data = [])
+    public function createReverb($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/reverb",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/reverb",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'reverb',
@@ -161,28 +161,28 @@ trait ManagesIntegrations
     /**
      * Delete the Laravel Reverb integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deleteReverb($organizationId, $serverId, $siteId)
+    public function deleteReverb($organizationSlug, $serverId, $siteId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/reverb");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/reverb");
     }
 
     /**
      * Get the Inertia integration status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getInertia($organizationId, $serverId, $siteId)
+    public function getInertia($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/inertia")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/inertia")['data'] ?? [],
             $this
         );
     }
@@ -190,21 +190,21 @@ trait ManagesIntegrations
     /**
      * Create an Inertia integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createInertia($organizationId, $serverId, $siteId, array $data = [])
+    public function createInertia($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/inertia",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/inertia",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'inertia',
@@ -216,15 +216,15 @@ trait ManagesIntegrations
     /**
      * Get the Laravel Pulse integration status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getPulse($organizationId, $serverId, $siteId)
+    public function getPulse($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/pulse")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/pulse")['data'] ?? [],
             $this
         );
     }
@@ -232,21 +232,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Pulse integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createPulse($organizationId, $serverId, $siteId, array $data = [])
+    public function createPulse($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/pulse",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/pulse",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'pulse',
@@ -258,28 +258,28 @@ trait ManagesIntegrations
     /**
      * Delete the Laravel Pulse integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deletePulse($organizationId, $serverId, $siteId)
+    public function deletePulse($organizationSlug, $serverId, $siteId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/pulse");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/pulse");
     }
 
     /**
      * Get the Laravel Maintenance integration status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getMaintenance($organizationId, $serverId, $siteId)
+    public function getMaintenance($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance")['data'] ?? [],
             $this
         );
     }
@@ -287,21 +287,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Maintenance integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createMaintenance($organizationId, $serverId, $siteId, array $data = [])
+    public function createMaintenance($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'laravel-maintenance',
@@ -313,28 +313,28 @@ trait ManagesIntegrations
     /**
      * Delete the Laravel Maintenance integration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deleteMaintenance($organizationId, $serverId, $siteId)
+    public function deleteMaintenance($organizationSlug, $serverId, $siteId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance");
     }
 
     /**
      * Get the Laravel Scheduler integration job.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function getScheduler($organizationId, $serverId, $siteId)
+    public function getScheduler($organizationSlug, $serverId, $siteId)
     {
         return new Integration(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-scheduler")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-scheduler")['data'] ?? [],
             $this
         );
     }
@@ -342,21 +342,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Scheduler integration job.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Integration
      */
-    public function createScheduler($organizationId, $serverId, $siteId, array $data = [])
+    public function createScheduler($organizationSlug, $serverId, $siteId, array $data = [])
     {
         $integration = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-scheduler",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-scheduler",
             $data
         )['data'] ?? [];
 
         return new Integration(
             $integration + [
-                'organization_id' => $organizationId,
+                'organization_id' => $organizationSlug,
                 'server_id' => $serverId,
                 'site_id' => $siteId,
                 'type' => 'laravel-scheduler',
@@ -368,13 +368,13 @@ trait ManagesIntegrations
     /**
      * Delete the Laravel Scheduler integration job.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return void
      */
-    public function deleteScheduler($organizationId, $serverId, $siteId)
+    public function deleteScheduler($organizationSlug, $serverId, $siteId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-scheduler");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-scheduler");
     }
 }

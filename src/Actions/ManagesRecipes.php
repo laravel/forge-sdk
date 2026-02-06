@@ -11,53 +11,53 @@ trait ManagesRecipes
     /**
      * Get the collection of recipes for an organization.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Recipe[]
      */
-    public function recipes($organizationId)
+    public function recipes($organizationSlug)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/recipes")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/recipes")['data'] ?? [],
             Recipe::class,
-            ['organization_id' => $organizationId]
+            ['organization_id' => $organizationSlug]
         );
     }
 
     /**
      * Get a recipe.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $recipeId
      * @return \Laravel\Forge\Resources\Recipe
      */
-    public function recipe($organizationId, $recipeId)
+    public function recipe($organizationSlug, $recipeId)
     {
-        return new Recipe($this->get("orgs/{$organizationId}/recipes/{$recipeId}")['data'] ?? [], $this);
+        return new Recipe($this->get("orgs/{$organizationSlug}/recipes/{$recipeId}")['data'] ?? [], $this);
     }
 
     /**
      * Create a new recipe.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Recipe
      */
-    public function createRecipe($organizationId, array $data)
+    public function createRecipe($organizationSlug, array $data)
     {
-        $recipe = $this->post("orgs/{$organizationId}/recipes", $data)['data'] ?? [];
+        $recipe = $this->post("orgs/{$organizationSlug}/recipes", $data)['data'] ?? [];
 
-        return new Recipe($recipe + ['organization_id' => $organizationId], $this);
+        return new Recipe($recipe + ['organization_id' => $organizationSlug], $this);
     }
 
     /**
      * Update a recipe.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $recipeId
      * @return \Laravel\Forge\Resources\Recipe
      */
-    public function updateRecipe($organizationId, $recipeId, array $data)
+    public function updateRecipe($organizationSlug, $recipeId, array $data)
     {
-        $recipe = $this->put("orgs/{$organizationId}/recipes/{$recipeId}", $data)['data'] ?? [];
+        $recipe = $this->put("orgs/{$organizationSlug}/recipes/{$recipeId}", $data)['data'] ?? [];
 
         return new Recipe($recipe, $this);
     }
@@ -65,43 +65,43 @@ trait ManagesRecipes
     /**
      * Delete a recipe.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $recipeId
      * @return void
      */
-    public function deleteRecipe($organizationId, $recipeId)
+    public function deleteRecipe($organizationSlug, $recipeId)
     {
-        $this->delete("orgs/{$organizationId}/recipes/{$recipeId}");
+        $this->delete("orgs/{$organizationSlug}/recipes/{$recipeId}");
     }
 
     /**
      * Get the collection of recipe runs for a recipe.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $recipeId
      * @return \Laravel\Forge\Resources\RecipeRun[]
      */
-    public function recipeRuns($organizationId, $recipeId)
+    public function recipeRuns($organizationSlug, $recipeId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/recipes/{$recipeId}/runs")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/recipes/{$recipeId}/runs")['data'] ?? [],
             RecipeRun::class,
-            ['organization_id' => $organizationId, 'recipe_id' => $recipeId]
+            ['organization_id' => $organizationSlug, 'recipe_id' => $recipeId]
         );
     }
 
     /**
      * Get a recipe run.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $recipeId
      * @param  string  $logId
      * @return \Laravel\Forge\Resources\RecipeRun
      */
-    public function recipeRun($organizationId, $recipeId, $logId)
+    public function recipeRun($organizationSlug, $recipeId, $logId)
     {
         return new RecipeRun(
-            $this->get("orgs/{$organizationId}/recipes/{$recipeId}/runs/{$logId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/recipes/{$recipeId}/runs/{$logId}")['data'] ?? [],
             $this
         );
     }
@@ -109,58 +109,58 @@ trait ManagesRecipes
     /**
      * Create a new recipe run.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $recipeId
      * @return \Laravel\Forge\Resources\RecipeRun
      */
-    public function createRecipeRun($organizationId, $recipeId, array $data)
+    public function createRecipeRun($organizationSlug, $recipeId, array $data)
     {
-        $run = $this->post("orgs/{$organizationId}/recipes/{$recipeId}/runs", $data)['data'] ?? [];
+        $run = $this->post("orgs/{$organizationSlug}/recipes/{$recipeId}/runs", $data)['data'] ?? [];
 
-        return new RecipeRun($run + ['organization_id' => $organizationId, 'recipe_id' => $recipeId], $this);
+        return new RecipeRun($run + ['organization_id' => $organizationSlug, 'recipe_id' => $recipeId], $this);
     }
 
     /**
      * Get the collection of recipes for a team.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $teamId
      * @return \Laravel\Forge\Resources\Recipe[]
      */
-    public function teamRecipes($organizationId, $teamId)
+    public function teamRecipes($organizationSlug, $teamId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/teams/{$teamId}/recipes")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/recipes")['data'] ?? [],
             Recipe::class,
-            ['organization_id' => $organizationId, 'team_id' => $teamId]
+            ['organization_id' => $organizationSlug, 'team_id' => $teamId]
         );
     }
 
     /**
      * Share a recipe with a team (create team recipes share).
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $teamId
      * @return \Laravel\Forge\Resources\Recipe
      */
-    public function createTeamRecipesShare($organizationId, $teamId, array $data)
+    public function createTeamRecipesShare($organizationSlug, $teamId, array $data)
     {
-        $recipe = $this->post("orgs/{$organizationId}/teams/{$teamId}/recipes", $data)['data'] ?? [];
+        $recipe = $this->post("orgs/{$organizationSlug}/teams/{$teamId}/recipes", $data)['data'] ?? [];
 
-        return new Recipe($recipe + ['organization_id' => $organizationId, 'team_id' => $teamId], $this);
+        return new Recipe($recipe + ['organization_id' => $organizationSlug, 'team_id' => $teamId], $this);
     }
 
     /**
      * Remove a recipe share from a team (delete team recipes share).
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $teamId
      * @param  string  $recipeId
      * @return void
      */
-    public function deleteTeamRecipesShare($organizationId, $teamId, $recipeId)
+    public function deleteTeamRecipesShare($organizationSlug, $teamId, $recipeId)
     {
-        $this->delete("orgs/{$organizationId}/teams/{$teamId}/recipes/{$recipeId}");
+        $this->delete("orgs/{$organizationSlug}/teams/{$teamId}/recipes/{$recipeId}");
     }
 
     /**

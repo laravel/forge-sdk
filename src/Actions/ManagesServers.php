@@ -11,29 +11,29 @@ trait ManagesServers
     /**
      * Get the collection of servers for an organization.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Server[]
      */
-    public function servers($organizationId)
+    public function servers($organizationSlug)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers")['data'] ?? [],
             Server::class,
-            ['organization_id' => $organizationId]
+            ['organization_id' => $organizationSlug]
         );
     }
 
     /**
      * Get a server instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\Server
      */
-    public function server($organizationId, $serverId)
+    public function server($organizationSlug, $serverId)
     {
         return new Server(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}")['data'] ?? [],
             $this
         );
     }
@@ -41,202 +41,189 @@ trait ManagesServers
     /**
      * Create a new server.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  bool  $wait
      * @return \Laravel\Forge\Resources\Server
      */
-    public function createServer($organizationId, array $data, $wait = true)
+    public function createServer($organizationSlug, array $data, $wait = true)
     {
-        $server = $this->post("orgs/{$organizationId}/servers", $data)['data'] ?? [];
+        $server = $this->post("orgs/{$organizationSlug}/servers", $data)['data'] ?? [];
 
         if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($organizationId, $server) {
-                $srv = $this->server($organizationId, $server['id']);
+            return $this->retry($this->getTimeout(), function () use ($organizationSlug, $server) {
+                $srv = $this->server($organizationSlug, $server['id']);
 
                 return isset($srv->isReady) && $srv->isReady ? $srv : null;
             });
         }
 
-        return new Server($server + ['organization_id' => $organizationId], $this);
+        return new Server($server + ['organization_id' => $organizationSlug], $this);
     }
 
     /**
      * Delete a server.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return void
      */
-    public function deleteServer($organizationId, $serverId)
+    public function deleteServer($organizationSlug, $serverId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}");
     }
 
     /**
      * Get the collection of archived servers for an organization.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Server[]
      */
-    public function archivedServers($organizationId)
+    public function archivedServers($organizationSlug)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/archives")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/archives")['data'] ?? [],
             Server::class,
-            ['organization_id' => $organizationId]
+            ['organization_id' => $organizationSlug]
         );
     }
 
     /**
      * Create an archived server.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Server
      */
-    public function createArchivedServer($organizationId, array $data)
+    public function createArchivedServer($organizationSlug, array $data)
     {
-        $server = $this->post("orgs/{$organizationId}/servers/archives", $data)['data'] ?? [];
+        $server = $this->post("orgs/{$organizationSlug}/servers/archives", $data)['data'] ?? [];
 
-        return new Server($server + ['organization_id' => $organizationId], $this);
+        return new Server($server + ['organization_id' => $organizationSlug], $this);
     }
 
     /**
      * Delete an archived server.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return void
      */
-    public function deleteArchivedServer($organizationId, $serverId)
+    public function deleteArchivedServer($organizationSlug, $serverId)
     {
-        $this->delete("orgs/{$organizationId}/servers/archives/{$serverId}");
+        $this->delete("orgs/{$organizationSlug}/servers/archives/{$serverId}");
     }
 
     /**
      * Create a server action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function createServerAction($organizationId, $serverId, array $data)
+    public function createServerAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/actions", $data);
-    }
-
-    /**
-     * Perform an action on a background process.
-     *
-     * @param  string  $organizationId
-     * @param  string  $serverId
-     * @param  string  $backgroundProcessId
-     * @return array
-     */
-    public function performBackgroundProcessAction($organizationId, $serverId, $backgroundProcessId, array $data)
-    {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/background-processes/{$backgroundProcessId}/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/actions", $data);
     }
 
     /**
      * Perform a Nginx service action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function performNginxAction($organizationId, $serverId, array $data)
+    public function performNginxAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/services/nginx/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/nginx/actions", $data);
     }
 
     /**
      * Perform a Postgres service action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function performPostgresAction($organizationId, $serverId, array $data)
+    public function performPostgresAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/services/postgres/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/postgres/actions", $data);
     }
 
     /**
      * Perform a Redis service action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function performRedisAction($organizationId, $serverId, array $data)
+    public function performRedisAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/services/redis/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/redis/actions", $data);
     }
 
     /**
      * Perform a MySQL service action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function performMySQLAction($organizationId, $serverId, array $data)
+    public function performMySQLAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/services/mysql/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/mysql/actions", $data);
     }
 
     /**
      * Perform a PHP service action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function performPHPAction($organizationId, $serverId, array $data)
+    public function performPHPAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/services/php/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/php/actions", $data);
     }
 
     /**
      * Perform a Supervisor service action.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function performSupervisorAction($organizationId, $serverId, array $data)
+    public function performSupervisorAction($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/services/supervisor/actions", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/supervisor/actions", $data);
     }
 
     /**
      * Get the collection of server events.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\Event[]
      */
-    public function serverEvents($organizationId, $serverId)
+    public function serverEvents($organizationSlug, $serverId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/events")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events")['data'] ?? [],
             Event::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
         );
     }
 
     /**
      * Get a server event instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $eventId
      * @return \Laravel\Forge\Resources\Event
      */
-    public function serverEvent($organizationId, $serverId, $eventId)
+    public function serverEvent($organizationSlug, $serverId, $eventId)
     {
         return new Event(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/events/{$eventId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events/{$eventId}")['data'] ?? [],
             $this
         );
     }
@@ -244,106 +231,106 @@ trait ManagesServers
     /**
      * Get the output of a server event.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $eventId
      * @return array
      */
-    public function serverEventOutput($organizationId, $serverId, $eventId)
+    public function serverEventOutput($organizationSlug, $serverId, $eventId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/events/{$eventId}/output");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events/{$eventId}/output");
     }
 
     /**
      * Get the PHP CLI version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function phpCliVersion($organizationId, $serverId)
+    public function phpCliVersion($organizationSlug, $serverId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/cli-version");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version");
     }
 
     /**
      * Update the PHP CLI version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function updatePhpCliVersion($organizationId, $serverId, array $data)
+    public function updatePhpCliVersion($organizationSlug, $serverId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/cli-version", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version", $data);
     }
 
     /**
      * Get the PHP site version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function phpSiteVersion($organizationId, $serverId)
+    public function phpSiteVersion($organizationSlug, $serverId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/site-version");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version");
     }
 
     /**
      * Update the PHP site version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function updatePhpSiteVersion($organizationId, $serverId, array $data)
+    public function updatePhpSiteVersion($organizationSlug, $serverId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/site-version", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version", $data);
     }
 
     /**
      * Get the collection of PHP versions.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\PHPVersion[]
      */
-    public function phpVersions($organizationId, $serverId)
+    public function phpVersions($organizationSlug, $serverId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions")['data'] ?? [],
             PHPVersion::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
         );
     }
 
     /**
      * Install a new PHP version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\PHPVersion
      */
-    public function installPhpVersion($organizationId, $serverId, array $data)
+    public function installPhpVersion($organizationSlug, $serverId, array $data)
     {
-        $phpVersion = $this->post("orgs/{$organizationId}/servers/{$serverId}/php/versions", $data)['data'] ?? [];
+        $phpVersion = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/versions", $data)['data'] ?? [];
 
-        return new PHPVersion($phpVersion + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
+        return new PHPVersion($phpVersion + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
     }
 
     /**
      * Get a PHP version instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return \Laravel\Forge\Resources\PHPVersion
      */
-    public function phpVersion($organizationId, $serverId, $phpVersionId)
+    public function phpVersion($organizationSlug, $serverId, $phpVersionId)
     {
         return new PHPVersion(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}")['data'] ?? [],
             $this
         );
     }
@@ -351,14 +338,14 @@ trait ManagesServers
     /**
      * Update a PHP version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return \Laravel\Forge\Resources\PHPVersion
      */
-    public function updatePhpVersion($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpVersion($organizationSlug, $serverId, $phpVersionId, array $data)
     {
-        $phpVersion = $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}", $data)['data'] ?? [];
+        $phpVersion = $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}", $data)['data'] ?? [];
 
         return new PHPVersion($phpVersion, $this);
     }
@@ -366,218 +353,218 @@ trait ManagesServers
     /**
      * Delete a PHP version.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return void
      */
-    public function deletePhpVersion($organizationId, $serverId, $phpVersionId)
+    public function deletePhpVersion($organizationSlug, $serverId, $phpVersionId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}");
     }
 
     /**
      * Get the PHP FPM configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return array
      */
-    public function phpFpm($organizationId, $serverId, $phpVersionId)
+    public function phpFpm($organizationSlug, $serverId, $phpVersionId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm");
     }
 
     /**
      * Update the PHP FPM configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return array
      */
-    public function updatePhpFpm($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpFpm($organizationSlug, $serverId, $phpVersionId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm", $data);
     }
 
     /**
      * Get the PHP CLI configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return array
      */
-    public function phpCli($organizationId, $serverId, $phpVersionId)
+    public function phpCli($organizationSlug, $serverId, $phpVersionId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli");
     }
 
     /**
      * Update the PHP CLI configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return array
      */
-    public function updatePhpCli($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpCli($organizationSlug, $serverId, $phpVersionId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli", $data);
     }
 
     /**
      * Get the PHP pool configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return array
      */
-    public function phpPool($organizationId, $serverId, $phpVersionId)
+    public function phpPool($organizationSlug, $serverId, $phpVersionId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool");
     }
 
     /**
      * Update the PHP pool configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $phpVersionId
      * @return array
      */
-    public function updatePhpPool($organizationId, $serverId, $phpVersionId, array $data)
+    public function updatePhpPool($organizationSlug, $serverId, $phpVersionId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool", $data);
     }
 
     /**
      * Get the PHP max upload size.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function phpMaxUploadSize($organizationId, $serverId)
+    public function phpMaxUploadSize($organizationSlug, $serverId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/max-upload-size");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size");
     }
 
     /**
      * Update the PHP max upload size.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function updatePhpMaxUploadSize($organizationId, $serverId, array $data)
+    public function updatePhpMaxUploadSize($organizationSlug, $serverId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/max-upload-size", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size", $data);
     }
 
     /**
      * Get the PHP max execution time.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function phpMaxExecutionTime($organizationId, $serverId)
+    public function phpMaxExecutionTime($organizationSlug, $serverId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/max-execution-time");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time");
     }
 
     /**
      * Update the PHP max execution time.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function updatePhpMaxExecutionTime($organizationId, $serverId, array $data)
+    public function updatePhpMaxExecutionTime($organizationSlug, $serverId, array $data)
     {
-        return $this->put("orgs/{$organizationId}/servers/{$serverId}/php/max-execution-time", $data);
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time", $data);
     }
 
     /**
      * Get the PHP OPcache status.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function phpOpcache($organizationId, $serverId)
+    public function phpOpcache($organizationSlug, $serverId)
     {
-        return $this->get("orgs/{$organizationId}/servers/{$serverId}/php/opcache");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache");
     }
 
     /**
      * Create PHP OPcache configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return array
      */
-    public function createPhpOpcache($organizationId, $serverId, array $data)
+    public function createPhpOpcache($organizationSlug, $serverId, array $data)
     {
-        return $this->post("orgs/{$organizationId}/servers/{$serverId}/php/opcache", $data);
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache", $data);
     }
 
     /**
      * Delete PHP OPcache configuration.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return void
      */
-    public function deletePhpOpcache($organizationId, $serverId)
+    public function deletePhpOpcache($organizationSlug, $serverId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/php/opcache");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache");
     }
 
     /**
      * Get the collection of team servers.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $teamId
      * @return \Laravel\Forge\Resources\Server[]
      */
-    public function teamServers($organizationId, $teamId)
+    public function teamServers($organizationSlug, $teamId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/teams/{$teamId}/servers")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/servers")['data'] ?? [],
             Server::class,
-            ['organization_id' => $organizationId, 'team_id' => $teamId]
+            ['organization_id' => $organizationSlug, 'team_id' => $teamId]
         );
     }
 
     /**
      * Share a server with a team (create team servers share).
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $teamId
      * @return \Laravel\Forge\Resources\Server
      */
-    public function createTeamServersShare($organizationId, $teamId, array $data)
+    public function createTeamServersShare($organizationSlug, $teamId, array $data)
     {
-        $server = $this->post("orgs/{$organizationId}/teams/{$teamId}/servers", $data)['data'] ?? [];
+        $server = $this->post("orgs/{$organizationSlug}/teams/{$teamId}/servers", $data)['data'] ?? [];
 
-        return new Server($server + ['organization_id' => $organizationId, 'team_id' => $teamId], $this);
+        return new Server($server + ['organization_id' => $organizationSlug, 'team_id' => $teamId], $this);
     }
 
     /**
      * Remove a server share from a team (delete team servers share).
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $teamId
      * @param  string  $serverId
      * @return void
      */
-    public function deleteTeamServersShare($organizationId, $teamId, $serverId)
+    public function deleteTeamServersShare($organizationSlug, $teamId, $serverId)
     {
-        $this->delete("orgs/{$organizationId}/teams/{$teamId}/servers/{$serverId}");
+        $this->delete("orgs/{$organizationSlug}/teams/{$teamId}/servers/{$serverId}");
     }
 }

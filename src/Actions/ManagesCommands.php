@@ -9,33 +9,33 @@ trait ManagesCommands
     /**
      * Get the collection of commands for a site.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Command[]
      */
-    public function commands($organizationId, $serverId, $siteId)
+    public function commands($organizationSlug, $serverId, $siteId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/commands")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands")['data'] ?? [],
             Command::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId]
         );
     }
 
     /**
      * Get a command instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $commandId
      * @return \Laravel\Forge\Resources\Command
      */
-    public function command($organizationId, $serverId, $siteId, $commandId)
+    public function command($organizationSlug, $serverId, $siteId, $commandId)
     {
         return new Command(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}")['data'] ?? [],
             $this
         );
     }
@@ -43,20 +43,20 @@ trait ManagesCommands
     /**
      * Create a new command.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\Command
      */
-    public function createCommand($organizationId, $serverId, $siteId, array $data)
+    public function createCommand($organizationSlug, $serverId, $siteId, array $data)
     {
         $command = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/commands",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands",
             $data
         )['data'] ?? [];
 
         return new Command(
-            $command + ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId],
+            $command + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId],
             $this
         );
     }
@@ -64,29 +64,29 @@ trait ManagesCommands
     /**
      * Delete the given command.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $commandId
      * @return void
      */
-    public function deleteCommand($organizationId, $serverId, $siteId, $commandId)
+    public function deleteCommand($organizationSlug, $serverId, $siteId, $commandId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}");
     }
 
     /**
      * Get the output for a command.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $commandId
      * @return string
      */
-    public function commandOutput($organizationId, $serverId, $siteId, $commandId)
+    public function commandOutput($organizationSlug, $serverId, $siteId, $commandId)
     {
-        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}/output");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}/output");
 
         return $response['data']['output'] ?? $response['output'] ?? '';
     }

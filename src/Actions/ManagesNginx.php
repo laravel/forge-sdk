@@ -9,31 +9,31 @@ trait ManagesNginx
     /**
      * Get the collection of Nginx templates.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\NginxTemplate[]
      */
-    public function nginxTemplates($organizationId, $serverId)
+    public function nginxTemplates($organizationSlug, $serverId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/nginx/templates")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates")['data'] ?? [],
             NginxTemplate::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
         );
     }
 
     /**
      * Get a Nginx template instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $templateId
      * @return \Laravel\Forge\Resources\NginxTemplate
      */
-    public function nginxTemplate($organizationId, $serverId, $templateId)
+    public function nginxTemplate($organizationSlug, $serverId, $templateId)
     {
         return new NginxTemplate(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/nginx/templates/{$templateId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates/{$templateId}")['data'] ?? [],
             $this
         );
     }
@@ -41,29 +41,29 @@ trait ManagesNginx
     /**
      * Create a new Nginx template.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\NginxTemplate
      */
-    public function createNginxTemplate($organizationId, $serverId, array $data)
+    public function createNginxTemplate($organizationSlug, $serverId, array $data)
     {
-        $template = $this->post("orgs/{$organizationId}/servers/{$serverId}/nginx/templates", $data)['data'] ?? [];
+        $template = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates", $data)['data'] ?? [];
 
-        return new NginxTemplate($template + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
+        return new NginxTemplate($template + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
     }
 
     /**
      * Update a Nginx template.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $templateId
      * @return \Laravel\Forge\Resources\NginxTemplate
      */
-    public function updateNginxTemplate($organizationId, $serverId, $templateId, array $data)
+    public function updateNginxTemplate($organizationSlug, $serverId, $templateId, array $data)
     {
         $template = $this->put(
-            "orgs/{$organizationId}/servers/{$serverId}/nginx/templates/{$templateId}",
+            "orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates/{$templateId}",
             $data
         )['data'] ?? [];
 
@@ -73,13 +73,13 @@ trait ManagesNginx
     /**
      * Delete the given Nginx template.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $templateId
      * @return void
      */
-    public function deleteNginxTemplate($organizationId, $serverId, $templateId)
+    public function deleteNginxTemplate($organizationSlug, $serverId, $templateId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/nginx/templates/{$templateId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates/{$templateId}");
     }
 }

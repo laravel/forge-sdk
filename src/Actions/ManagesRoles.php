@@ -59,53 +59,53 @@ trait ManagesRoles
     /**
      * Get the collection of roles for an organization.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Role[]
      */
-    public function roles($organizationId)
+    public function roles($organizationSlug)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/roles")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/roles")['data'] ?? [],
             Role::class,
-            ['organization_id' => $organizationId]
+            ['organization_id' => $organizationSlug]
         );
     }
 
     /**
      * Get a role.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $roleId
      * @return \Laravel\Forge\Resources\Role
      */
-    public function role($organizationId, $roleId)
+    public function role($organizationSlug, $roleId)
     {
-        return new Role($this->get("orgs/{$organizationId}/roles/{$roleId}")['data'] ?? [], $this);
+        return new Role($this->get("orgs/{$organizationSlug}/roles/{$roleId}")['data'] ?? [], $this);
     }
 
     /**
      * Create a new role.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @return \Laravel\Forge\Resources\Role
      */
-    public function createRole($organizationId, array $data)
+    public function createRole($organizationSlug, array $data)
     {
-        $role = $this->post("orgs/{$organizationId}/roles", $data)['data'] ?? [];
+        $role = $this->post("orgs/{$organizationSlug}/roles", $data)['data'] ?? [];
 
-        return new Role($role + ['organization_id' => $organizationId], $this);
+        return new Role($role + ['organization_id' => $organizationSlug], $this);
     }
 
     /**
      * Update a role.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $roleId
      * @return \Laravel\Forge\Resources\Role
      */
-    public function updateRole($organizationId, $roleId, array $data)
+    public function updateRole($organizationSlug, $roleId, array $data)
     {
-        $role = $this->put("orgs/{$organizationId}/roles/{$roleId}", $data)['data'] ?? [];
+        $role = $this->put("orgs/{$organizationSlug}/roles/{$roleId}", $data)['data'] ?? [];
 
         return new Role($role, $this);
     }
@@ -113,28 +113,28 @@ trait ManagesRoles
     /**
      * Delete a role.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $roleId
      * @return void
      */
-    public function deleteRole($organizationId, $roleId)
+    public function deleteRole($organizationSlug, $roleId)
     {
-        $this->delete("orgs/{$organizationId}/roles/{$roleId}");
+        $this->delete("orgs/{$organizationSlug}/roles/{$roleId}");
     }
 
     /**
      * Get the collection of permissions for a role.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $roleId
      * @return \Laravel\Forge\Resources\Permission[]
      */
-    public function rolePermissions($organizationId, $roleId)
+    public function rolePermissions($organizationSlug, $roleId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/roles/{$roleId}/permissions")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/roles/{$roleId}/permissions")['data'] ?? [],
             Permission::class,
-            ['organization_id' => $organizationId, 'role_id' => $roleId]
+            ['organization_id' => $organizationSlug, 'role_id' => $roleId]
         );
     }
 }

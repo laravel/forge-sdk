@@ -9,33 +9,33 @@ trait ManagesRedirectRules
     /**
      * Get the collection of redirect rules.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\RedirectRule[]
      */
-    public function redirectRules($organizationId, $serverId, $siteId)
+    public function redirectRules($organizationSlug, $serverId, $siteId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/redirect-rules")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules")['data'] ?? [],
             RedirectRule::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId]
         );
     }
 
     /**
      * Get a redirect rule instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $ruleId
      * @return \Laravel\Forge\Resources\RedirectRule
      */
-    public function redirectRule($organizationId, $serverId, $siteId, $ruleId)
+    public function redirectRule($organizationSlug, $serverId, $siteId, $ruleId)
     {
         return new RedirectRule(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/redirect-rules/{$ruleId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules/{$ruleId}")['data'] ?? [],
             $this
         );
     }
@@ -43,20 +43,20 @@ trait ManagesRedirectRules
     /**
      * Create a new redirect rule.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @return \Laravel\Forge\Resources\RedirectRule
      */
-    public function createRedirectRule($organizationId, $serverId, $siteId, array $data)
+    public function createRedirectRule($organizationSlug, $serverId, $siteId, array $data)
     {
         $rule = $this->post(
-            "orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/redirect-rules",
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules",
             $data
         )['data'] ?? [];
 
         return new RedirectRule(
-            $rule + ['organization_id' => $organizationId, 'server_id' => $serverId, 'site_id' => $siteId],
+            $rule + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId],
             $this
         );
     }
@@ -64,14 +64,14 @@ trait ManagesRedirectRules
     /**
      * Delete the given redirect rule.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $ruleId
      * @return void
      */
-    public function deleteRedirectRule($organizationId, $serverId, $siteId, $ruleId)
+    public function deleteRedirectRule($organizationSlug, $serverId, $siteId, $ruleId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/redirect-rules/{$ruleId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules/{$ruleId}");
     }
 }

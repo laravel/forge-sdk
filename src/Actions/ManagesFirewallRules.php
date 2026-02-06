@@ -9,31 +9,31 @@ trait ManagesFirewallRules
     /**
      * Get the collection of firewall rules.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\FirewallRule[]
      */
-    public function firewallRules($organizationId, $serverId)
+    public function firewallRules($organizationSlug, $serverId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/firewall-rules")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules")['data'] ?? [],
             FirewallRule::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
         );
     }
 
     /**
      * Get a firewall rule instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $ruleId
      * @return \Laravel\Forge\Resources\FirewallRule
      */
-    public function firewallRule($organizationId, $serverId, $ruleId)
+    public function firewallRule($organizationSlug, $serverId, $ruleId)
     {
         return new FirewallRule(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/firewall-rules/{$ruleId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules/{$ruleId}")['data'] ?? [],
             $this
         );
     }
@@ -41,27 +41,27 @@ trait ManagesFirewallRules
     /**
      * Create a new firewall rule.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\FirewallRule
      */
-    public function createFirewallRule($organizationId, $serverId, array $data)
+    public function createFirewallRule($organizationSlug, $serverId, array $data)
     {
-        $rule = $this->post("orgs/{$organizationId}/servers/{$serverId}/firewall-rules", $data)['data'] ?? [];
+        $rule = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules", $data)['data'] ?? [];
 
-        return new FirewallRule($rule + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
+        return new FirewallRule($rule + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
     }
 
     /**
      * Delete the given firewall rule.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $ruleId
      * @return void
      */
-    public function deleteFirewallRule($organizationId, $serverId, $ruleId)
+    public function deleteFirewallRule($organizationSlug, $serverId, $ruleId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/firewall-rules/{$ruleId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules/{$ruleId}");
     }
 }

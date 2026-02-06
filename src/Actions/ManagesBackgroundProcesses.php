@@ -9,31 +9,31 @@ trait ManagesBackgroundProcesses
     /**
      * Get the collection of background processes.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\BackgroundProcess[]
      */
-    public function backgroundProcesses($organizationId, $serverId)
+    public function backgroundProcesses($organizationSlug, $serverId)
     {
         return $this->transformCollection(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/background-processes")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/background-processes")['data'] ?? [],
             BackgroundProcess::class,
-            ['organization_id' => $organizationId, 'server_id' => $serverId]
+            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
         );
     }
 
     /**
      * Get a background process instance.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $processId
      * @return \Laravel\Forge\Resources\BackgroundProcess
      */
-    public function backgroundProcess($organizationId, $serverId, $processId)
+    public function backgroundProcess($organizationSlug, $serverId, $processId)
     {
         return new BackgroundProcess(
-            $this->get("orgs/{$organizationId}/servers/{$serverId}/background-processes/{$processId}")['data'] ?? [],
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}")['data'] ?? [],
             $this
         );
     }
@@ -41,29 +41,29 @@ trait ManagesBackgroundProcesses
     /**
      * Create a new background process.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @return \Laravel\Forge\Resources\BackgroundProcess
      */
-    public function createBackgroundProcess($organizationId, $serverId, array $data)
+    public function createBackgroundProcess($organizationSlug, $serverId, array $data)
     {
-        $process = $this->post("orgs/{$organizationId}/servers/{$serverId}/background-processes", $data)['data'] ?? [];
+        $process = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/background-processes", $data)['data'] ?? [];
 
-        return new BackgroundProcess($process + ['organization_id' => $organizationId, 'server_id' => $serverId], $this);
+        return new BackgroundProcess($process + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
     }
 
     /**
      * Update a background process.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $processId
      * @return \Laravel\Forge\Resources\BackgroundProcess
      */
-    public function updateBackgroundProcess($organizationId, $serverId, $processId, array $data)
+    public function updateBackgroundProcess($organizationSlug, $serverId, $processId, array $data)
     {
         $process = $this->put(
-            "orgs/{$organizationId}/servers/{$serverId}/background-processes/{$processId}",
+            "orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}",
             $data
         )['data'] ?? [];
 
@@ -73,28 +73,41 @@ trait ManagesBackgroundProcesses
     /**
      * Delete the given background process.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $processId
      * @return void
      */
-    public function deleteBackgroundProcess($organizationId, $serverId, $processId)
+    public function deleteBackgroundProcess($organizationSlug, $serverId, $processId)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/background-processes/{$processId}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}");
     }
 
     /**
      * Get the log for a background process.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $processId
      * @return string
      */
-    public function backgroundProcessLog($organizationId, $serverId, $processId)
+    public function backgroundProcessLog($organizationSlug, $serverId, $processId)
     {
-        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/background-processes/{$processId}/log");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}/log");
 
         return $response['data']['log'] ?? $response['log'] ?? '';
+    }
+
+    /**
+     * Perform an action on a background process.
+     *
+     * @param  string  $organizationSlug
+     * @param  string  $serverId
+     * @param  string  $backgroundProcessId
+     * @return array
+     */
+    public function performBackgroundProcessAction($organizationSlug, $serverId, $backgroundProcessId, array $data)
+    {
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$backgroundProcessId}/actions", $data);
     }
 }

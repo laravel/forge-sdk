@@ -7,14 +7,14 @@ trait ManagesLogs
     /**
      * Get server log content.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $logKey
      * @return string
      */
-    public function serverLog($organizationId, $serverId, $logKey)
+    public function serverLog($organizationSlug, $serverId, $logKey)
     {
-        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/logs/{$logKey}");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
 
         return $response['data']['content'] ?? $response['content'] ?? '';
     }
@@ -22,28 +22,28 @@ trait ManagesLogs
     /**
      * Delete server log content.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $logKey
      * @return void
      */
-    public function deleteServerLog($organizationId, $serverId, $logKey)
+    public function deleteServerLog($organizationSlug, $serverId, $logKey)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/logs/{$logKey}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
     }
 
     /**
      * Get site log content.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $logKey
      * @return string
      */
-    public function siteLog($organizationId, $serverId, $siteId, $logKey)
+    public function siteLog($organizationSlug, $serverId, $siteId, $logKey)
     {
-        $response = $this->get("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/{$logKey}");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/{$logKey}");
 
         return $response['data']['content'] ?? $response['content'] ?? '';
     }
@@ -51,14 +51,14 @@ trait ManagesLogs
     /**
      * Delete site log content.
      *
-     * @param  string  $organizationId
+     * @param  string  $organizationSlug
      * @param  string  $serverId
      * @param  string  $siteId
      * @param  string  $logKey
      * @return void
      */
-    public function deleteSiteLog($organizationId, $serverId, $siteId, $logKey)
+    public function deleteSiteLog($organizationSlug, $serverId, $siteId, $logKey)
     {
-        $this->delete("orgs/{$organizationId}/servers/{$serverId}/sites/{$siteId}/logs/{$logKey}");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/{$logKey}");
     }
 }
