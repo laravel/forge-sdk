@@ -495,7 +495,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": "share-1", "server_id": "server-1"}}')
         );
 
-        $share = $forge->createTeamServerShare('org-123', 'team-1', ['server_id' => 'server-1']);
+        $share = $forge->createTeamServersShare('org-123', 'team-1', ['server_id' => 'server-1']);
         $this->assertSame('share-1', $share->id);
     }
 
@@ -507,7 +507,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $forge->deleteTeamServerShare('org-123', 'team-1', 'server-1');
+        $forge->deleteTeamServersShare('org-123', 'team-1', 'server-1');
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
@@ -532,7 +532,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": "share-2", "credential_id": "cred-1"}}')
         );
 
-        $share = $forge->shareServerCredential('org-123', 'team-1', ['credential_id' => 'cred-1']);
+        $share = $forge->createTeamServerCredentialsShare('org-123', 'team-1', ['credential_id' => 'cred-1']);
         $this->assertSame('share-2', $share->id);
     }
 
@@ -1084,7 +1084,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $forge->updateDeploymentState('org-123', 'srv-123', 'site-456');
+        $forge->disableQuickDeploy('org-123', 'srv-123', 'site-456');
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
@@ -1156,7 +1156,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $forge->createPushToDeploy('org-123', 'srv-123', 'site-456', ['provider' => 'github', 'repository' => 'user/repo']);
+        $forge->enablePushToDeploy('org-123', 'srv-123', 'site-456', ['provider' => 'github', 'repository' => 'user/repo']);
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
@@ -1168,7 +1168,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $forge->deletePushToDeploy('org-123', 'srv-123', 'site-456');
+        $forge->disablePushToDeploy('org-123', 'srv-123', 'site-456');
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
@@ -1755,7 +1755,8 @@ class ForgeSDKTest extends TestCase
         );
 
         $config = $forge->phpFpm('org-123', 'server-1', 'php83');
-        $this->assertIsArray($config);
+        $this->assertIsString($config);
+        $this->assertStringContainsString('pm = dynamic', $config);
     }
 
     public function test_updating_php_fpm_config()
@@ -1769,8 +1770,7 @@ class ForgeSDKTest extends TestCase
         );
 
         $config = $forge->updatePhpFpm('org-123', 'server-1', 'php83', ['content' => 'pm = ondemand']);
-        $this->assertIsString($config);
-        $this->assertStringContainsString('pm = ondemand', $config);
+        $this->assertIsArray($config);
     }
 
     public function test_getting_php_cli_config()
@@ -1782,7 +1782,8 @@ class ForgeSDKTest extends TestCase
         );
 
         $config = $forge->phpCli('org-123', 'server-1', 'php83');
-        $this->assertIsArray($config);
+        $this->assertIsString($config);
+        $this->assertStringContainsString('memory_limit = 256M', $config);
     }
 
     public function test_updating_php_cli_config()
@@ -1796,8 +1797,7 @@ class ForgeSDKTest extends TestCase
         );
 
         $config = $forge->updatePhpCli('org-123', 'server-1', 'php83', ['content' => 'memory_limit = 512M']);
-        $this->assertIsString($config);
-        $this->assertStringContainsString('memory_limit = 512M', $config);
+        $this->assertIsArray($config);
     }
 
     public function test_getting_php_pool_config()
@@ -1809,7 +1809,8 @@ class ForgeSDKTest extends TestCase
         );
 
         $config = $forge->phpPool('org-123', 'server-1', 'php83');
-        $this->assertIsArray($config);
+        $this->assertIsString($config);
+        $this->assertStringContainsString('pm.max_children = 50', $config);
     }
 
     public function test_updating_php_pool_config()
@@ -1922,17 +1923,6 @@ class ForgeSDKTest extends TestCase
 
         $forge->deletePhpOpcache('org-123', 'server-1');
         $this->assertTrue(true); // Assertion to avoid risky test warning
-    }
-
-    public function test_getting_all_sites()
-    {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
-
-        $http->shouldReceive('request')->once()->with('GET', 'sites', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": "site-1", "name": "example.com"}]}')
-        );
-
-        $this->assertCount(1, $forge->sites());
     }
 
     public function test_getting_organization_sites()
@@ -2182,7 +2172,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC..."}}')
         );
 
-        $publicKey = $forge->serverPublicKey('org-123', 'server-1');
+        $publicKey = $forge->serverKey('org-123', 'server-1');
         $this->assertStringContainsString('ssh-rsa', $publicKey);
     }
 
@@ -2196,7 +2186,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD..."}}')
         );
 
-        $publicKey = $forge->updateServerPublicKey('org-123', 'server-1', ['public_key' => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD...']);
+        $publicKey = $forge->updateServerKey('org-123', 'server-1', ['public_key' => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD...']);
         $this->assertStringContainsString('ssh-rsa', $publicKey);
     }
 
@@ -2974,7 +2964,7 @@ class ForgeSDKTest extends TestCase
             new Response(201, [], '{"data": {"id": "recipe-1"}}')
         );
 
-        $recipe = $forge->shareRecipeWithTeam('org-123', 'team-1', ['recipe_id' => 'recipe-1']);
+        $recipe = $forge->createTeamRecipesShare('org-123', 'team-1', ['recipe_id' => 'recipe-1']);
         $this->assertSame('recipe-1', $recipe->id);
         $this->assertSame('org-123', $recipe->organizationId);
         $this->assertSame('team-1', $recipe->teamId);
@@ -2988,7 +2978,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $forge->deleteRecipeShare('org-123', 'team-1', 'recipe-1');
+        $forge->deleteTeamRecipesShare('org-123', 'team-1', 'recipe-1');
         $this->assertTrue(true);
     }
 
@@ -3052,7 +3042,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $forge->deleteServerCredentialShare('org-123', 'team-1', 'cred-1');
+        $forge->deleteTeamServerCredentialsShare('org-123', 'team-1', 'cred-1');
         $this->assertTrue(true);
     }
 
@@ -3273,7 +3263,7 @@ class ForgeSDKTest extends TestCase
     }
 
     // SSH Key methods
-    public function test_creating_ssh_key()
+    public function test_creating_ssh_key_alias()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
@@ -3287,7 +3277,7 @@ class ForgeSDKTest extends TestCase
         $this->assertSame('key-1', $key->id);
     }
 
-    public function test_deleting_ssh_key()
+    public function test_deleting_ssh_key_alias()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
@@ -3536,7 +3526,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/server-1/sites/site-1/nginx', [
-            'form_params' => 'server { listen 443; }',
+            'form_params' => ['content' => 'server { listen 443; }'],
         ])->andReturn(
             new Response(204)
         );
