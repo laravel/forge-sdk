@@ -28,6 +28,7 @@ class Forge
         Actions\ManagesServers,
         Actions\ManagesSites,
         Actions\ManagesSSHKeys,
+        Actions\ManagesStorageProviders,
         Actions\ManagesTeams,
         Actions\ManagesUser,
         MakesHttpRequests;
