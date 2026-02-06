@@ -4,6 +4,9 @@ This document outlines all breaking changes when upgrading from Forge SDK v3.x (
 
 ## Major Breaking Changes
 
+[!CAUTION]
+PHP Support has been dropped for versions below PHP 8.2.
+
 ### 1. API Version Change
 
 The SDK now uses the Forge API v2, which has a completely different URL structure and response format.
