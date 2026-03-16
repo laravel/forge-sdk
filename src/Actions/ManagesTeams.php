@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Team;
@@ -11,65 +13,52 @@ trait ManagesTeams
     /**
      * Get the collection of teams for an organization.
      *
-     * @param  string  $organizationSlug
-     * @return \Laravel\Forge\Resources\Team[]
+     * @return Team[]
      */
-    public function teams($organizationSlug)
+    public function teams(string $organizationSlug): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/teams")['data'] ?? [],
             Team::class,
-            ['organization_id' => $organizationSlug]
+            $organizationSlug,
         );
     }
 
     /**
      * Get a team.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @return \Laravel\Forge\Resources\Team
      */
-    public function team($organizationSlug, $teamId)
+    public function team(string $organizationSlug, int $teamId): Team
     {
         return new Team($this->get("orgs/{$organizationSlug}/teams/{$teamId}")['data'] ?? [], $this);
     }
 
     /**
      * Create a new team.
-     *
-     * @param  string  $organizationSlug
-     * @return \Laravel\Forge\Resources\Team
      */
-    public function createTeam($organizationSlug, array $data)
+    public function createTeam(string $organizationSlug, array $data): Team
     {
-        $team = $this->post("orgs/{$organizationSlug}/teams", $data)['data'] ?? [];
-
-        return new Team($team + ['organization_id' => $organizationSlug], $this);
+        return $this->newResource(
+            Team::class,
+            $this->post("orgs/{$organizationSlug}/teams", $data)['data'] ?? [],
+            $organizationSlug,
+        );
     }
 
     /**
      * Update a team.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @return \Laravel\Forge\Resources\Team
      */
-    public function updateTeam($organizationSlug, $teamId, array $data)
+    public function updateTeam(string $organizationSlug, int $teamId, array $data): Team
     {
-        $team = $this->put("orgs/{$organizationSlug}/teams/{$teamId}", $data)['data'] ?? [];
-
-        return new Team($team, $this);
+        return new Team(
+            $this->put("orgs/{$organizationSlug}/teams/{$teamId}", $data)['data'] ?? [],
+            $this
+        );
     }
 
     /**
      * Delete a team.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @return void
      */
-    public function deleteTeam($organizationSlug, $teamId)
+    public function deleteTeam(string $organizationSlug, int $teamId): void
     {
         $this->delete("orgs/{$organizationSlug}/teams/{$teamId}");
     }
@@ -77,28 +66,22 @@ trait ManagesTeams
     /**
      * Get the collection of team members.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @return \Laravel\Forge\Resources\TeamMember[]
+     * @return TeamMember[]
      */
-    public function teamMembers($organizationSlug, $teamId)
+    public function teamMembers(string $organizationSlug, int $teamId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/teams/{$teamId}/members")['data'] ?? [],
             TeamMember::class,
-            ['organization_id' => $organizationSlug, 'team_id' => $teamId]
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
         );
     }
 
     /**
      * Get a team member.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @param  string  $userId
-     * @return \Laravel\Forge\Resources\TeamMember
      */
-    public function teamMember($organizationSlug, $teamId, $userId)
+    public function teamMember(string $organizationSlug, int $teamId, int $userId): TeamMember
     {
         return new TeamMember(
             $this->get("orgs/{$organizationSlug}/teams/{$teamId}/members/{$userId}")['data'] ?? [],
@@ -108,28 +91,19 @@ trait ManagesTeams
 
     /**
      * Update a team member.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @param  string  $userId
-     * @return \Laravel\Forge\Resources\TeamMember
      */
-    public function updateTeamMember($organizationSlug, $teamId, $userId, array $data)
+    public function updateTeamMember(string $organizationSlug, int $teamId, int $userId, array $data): TeamMember
     {
-        $member = $this->put("orgs/{$organizationSlug}/teams/{$teamId}/members/{$userId}", $data)['data'] ?? [];
-
-        return new TeamMember($member, $this);
+        return new TeamMember(
+            $this->put("orgs/{$organizationSlug}/teams/{$teamId}/members/{$userId}", $data)['data'] ?? [],
+            $this
+        );
     }
 
     /**
      * Delete a team member.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @param  string  $userId
-     * @return void
      */
-    public function deleteTeamMember($organizationSlug, $teamId, $userId)
+    public function deleteTeamMember(string $organizationSlug, int $teamId, int $userId): void
     {
         $this->delete("orgs/{$organizationSlug}/teams/{$teamId}/members/{$userId}");
     }
@@ -137,28 +111,22 @@ trait ManagesTeams
     /**
      * Get the collection of team invitations.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @return \Laravel\Forge\Resources\TeamInvitation[]
+     * @return TeamInvitation[]
      */
-    public function teamInvitations($organizationSlug, $teamId)
+    public function teamInvitations(string $organizationSlug, int $teamId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/teams/{$teamId}/invites")['data'] ?? [],
             TeamInvitation::class,
-            ['organization_id' => $organizationSlug, 'team_id' => $teamId]
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
         );
     }
 
     /**
      * Get a team invitation.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @param  string  $invitationId
-     * @return \Laravel\Forge\Resources\TeamInvitation
      */
-    public function teamInvitation($organizationSlug, $teamId, $invitationId)
+    public function teamInvitation(string $organizationSlug, int $teamId, int $invitationId): TeamInvitation
     {
         return new TeamInvitation(
             $this->get("orgs/{$organizationSlug}/teams/{$teamId}/invites/{$invitationId}")['data'] ?? [],
@@ -168,27 +136,21 @@ trait ManagesTeams
 
     /**
      * Create a team invitation.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @return \Laravel\Forge\Resources\TeamInvitation
      */
-    public function createTeamInvitation($organizationSlug, $teamId, array $data)
+    public function createTeamInvitation(string $organizationSlug, int $teamId, array $data): TeamInvitation
     {
-        $invitation = $this->post("orgs/{$organizationSlug}/teams/{$teamId}/invites", $data)['data'] ?? [];
-
-        return new TeamInvitation($invitation + ['organization_id' => $organizationSlug, 'team_id' => $teamId], $this);
+        return $this->newResource(
+            TeamInvitation::class,
+            $this->post("orgs/{$organizationSlug}/teams/{$teamId}/invites", $data)['data'] ?? [],
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
+        );
     }
 
     /**
      * Delete a team invitation.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $teamId
-     * @param  string  $invitationId
-     * @return void
      */
-    public function deleteTeamInvitation($organizationSlug, $teamId, $invitationId)
+    public function deleteTeamInvitation(string $organizationSlug, int $teamId, int $invitationId): void
     {
         $this->delete("orgs/{$organizationSlug}/teams/{$teamId}/invites/{$invitationId}");
     }

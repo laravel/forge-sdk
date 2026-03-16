@@ -3,6 +3,7 @@
   <testsuites>
     <testsuite name="Forge SDK Test Suite">
       <directory suffix="Test.php">./tests</directory>
+      <exclude>./tests/Integration</exclude>
     </testsuite>
   </testsuites>
 </phpunit>

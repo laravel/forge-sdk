@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Exceptions;
 
 use Exception;
@@ -8,8 +10,6 @@ class NotFoundException extends Exception
 {
     /**
      * Create a new exception instance.
-     *
-     * @return void
      */
     public function __construct()
     {

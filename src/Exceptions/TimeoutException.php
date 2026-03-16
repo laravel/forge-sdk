@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Exceptions;
 
 use Exception;
@@ -8,15 +10,11 @@ class TimeoutException extends Exception
 {
     /**
      * The output returned from the operation.
-     *
-     * @var array
      */
-    public $output;
+    public array $output;
 
     /**
      * Create a new exception instance.
-     *
-     * @return void
      */
     public function __construct(array $output)
     {
@@ -27,10 +25,8 @@ class TimeoutException extends Exception
 
     /**
      * The output returned from the operation.
-     *
-     * @return array
      */
-    public function output()
+    public function output(): array
     {
         return $this->output;
     }

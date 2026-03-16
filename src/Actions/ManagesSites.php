@@ -1,21 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Certificate;
 use Laravel\Forge\Resources\Domain;
 use Laravel\Forge\Resources\Heartbeat;
 use Laravel\Forge\Resources\Site;
-use Laravel\Forge\Resources\Worker;
 
 trait ManagesSites
 {
     /**
      * Get the collection of all sites.
      *
-     * @return \Laravel\Forge\Resources\Site[]
+     * @return Site[]
      */
-    public function sites()
+    public function sites(): array
     {
         return $this->transformCollection(
             $this->get('sites')['data'] ?? [],
@@ -26,90 +27,74 @@ trait ManagesSites
     /**
      * Get the collection of sites for an organization.
      *
-     * @param  string  $organizationSlug
-     * @return \Laravel\Forge\Resources\Site[]
+     * @return Site[]
      */
-    public function organizationSites($organizationSlug)
+    public function organizationSites(string $organizationSlug): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/sites")['data'] ?? [],
             Site::class,
-            ['organization_id' => $organizationSlug]
+            $organizationSlug,
         );
     }
 
     /**
      * Get a site instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Site
      */
-    public function organizationSite($organizationSlug, $siteId)
+    public function organizationSite(string $organizationSlug, int $siteId): Site
     {
-        return new Site(
+        return $this->newResource(
+            Site::class,
             $this->get("orgs/{$organizationSlug}/sites/{$siteId}")['data'] ?? [],
-            $this
+            $organizationSlug,
         );
     }
 
     /**
      * Get the collection of sites for a server.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Site[]
+     * @return Site[]
      */
-    public function serverSites($organizationSlug, $serverId)
+    public function serverSites(string $organizationSlug, int $serverId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites")['data'] ?? [],
             Site::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Create a new site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Site
      */
-    public function createSite($organizationSlug, $serverId, array $data)
+    public function createSite(string $organizationSlug, int $serverId, array $data): Site
     {
-        $site = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites", $data)['data'] ?? [];
-
-        return new Site($site + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
+        return $this->newResource(
+            Site::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**
      * Update a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Site
      */
-    public function updateSite($organizationSlug, $serverId, $siteId, array $data)
+    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): Site
     {
-        $site = $this->put(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}",
-            $data
-        )['data'] ?? [];
-
-        return new Site($site, $this);
+        return $this->newResource(
+            Site::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**
      * Delete the given site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return void
      */
-    public function deleteSite($organizationSlug, $serverId, $siteId)
+    public function deleteSite(string $organizationSlug, int $serverId, int $siteId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}");
     }
@@ -117,112 +102,81 @@ trait ManagesSites
     /**
      * Get the collection of domains for a site.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Domain[]
+     * @return Domain[]
      */
-    public function domains($organizationSlug, $serverId, $siteId)
+    public function domains(string $organizationSlug, int $serverId, int $siteId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains")['data'] ?? [],
             Domain::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId]
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Create a new domain.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Domain
      */
-    public function createDomain($organizationSlug, $serverId, $siteId, array $data)
+    public function createDomain(string $organizationSlug, int $serverId, int $siteId, array $data): Domain
     {
-        $domain = $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains",
-            $data
-        )['data'] ?? [];
-
-        return new Domain($domain + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+        return $this->newResource(
+            Domain::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Get a domain instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return \Laravel\Forge\Resources\Domain
      */
-    public function domain($organizationSlug, $serverId, $siteId, $domainId)
+    public function domain(string $organizationSlug, int $serverId, int $siteId, int $domainId): Domain
     {
-        return new Domain(
+        return $this->newResource(
+            Domain::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Update a domain.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return \Laravel\Forge\Resources\Domain
      */
-    public function updateDomain($organizationSlug, $serverId, $siteId, $domainId, array $data)
+    public function updateDomain(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): Domain
     {
-        $domain = $this->patch(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}",
-            $data
-        )['data'] ?? [];
-
-        return new Domain($domain, $this);
+        return $this->newResource(
+            Domain::class,
+            $this->patch("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Delete the given domain.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return void
      */
-    public function deleteDomain($organizationSlug, $serverId, $siteId, $domainId)
+    public function deleteDomain(string $organizationSlug, int $serverId, int $siteId, int $domainId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}");
     }
 
     /**
      * Get domain DNS configurations.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return array
      */
-    public function domainConfigurations($organizationSlug, $serverId, $siteId, $domainId)
+    public function domainConfigurations(string $organizationSlug, int $serverId, int $siteId, int $domainId): array
     {
         return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/configurations")['data'] ?? [];
     }
 
     /**
      * Create a domain action.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return mixed
      */
-    public function createDomainAction($organizationSlug, $serverId, $siteId, $domainId, array $data)
+    public function createDomainAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): array
     {
         return $this->post(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/actions",
@@ -232,64 +186,44 @@ trait ManagesSites
 
     /**
      * Get a domain certificate.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return \Laravel\Forge\Resources\Certificate
      */
-    public function domainCertificate($organizationSlug, $serverId, $siteId, $domainId)
+    public function domainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId): Certificate
     {
-        return new Certificate(
+        return $this->newResource(
+            Certificate::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Create a domain certificate.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return \Laravel\Forge\Resources\Certificate
      */
-    public function createDomainCertificate($organizationSlug, $serverId, $siteId, $domainId, array $data)
+    public function createDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): Certificate
     {
-        $certificate = $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate",
-            $data
-        )['data'] ?? [];
-
-        return new Certificate($certificate + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+        return $this->newResource(
+            Certificate::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Delete the given domain certificate.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return void
      */
-    public function deleteDomainCertificate($organizationSlug, $serverId, $siteId, $domainId)
+    public function deleteDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate");
     }
 
     /**
      * Create a domain certificate action.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return mixed
      */
-    public function createDomainCertificateAction($organizationSlug, $serverId, $siteId, $domainId, array $data)
+    public function createDomainCertificateAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): array
     {
         return $this->post(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate/actions",
@@ -298,97 +232,9 @@ trait ManagesSites
     }
 
     /**
-     * Get the collection of workers for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Worker[]
-     */
-    public function workers($organizationSlug, $serverId, $siteId)
-    {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/workers")['data'] ?? [],
-            Worker::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId]
-        );
-    }
-
-    /**
-     * Create a new worker.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Worker
-     */
-    public function createWorker($organizationSlug, $serverId, $siteId, array $data)
-    {
-        $worker = $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/workers",
-            $data
-        )['data'] ?? [];
-
-        return new Worker($worker + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId], $this);
-    }
-
-    /**
-     * Get a worker instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $workerId
-     * @return \Laravel\Forge\Resources\Worker
-     */
-    public function worker($organizationSlug, $serverId, $siteId, $workerId)
-    {
-        return new Worker(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/workers/{$workerId}")['data'] ?? [],
-            $this
-        );
-    }
-
-    /**
-     * Delete the given worker.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $workerId
-     * @return void
-     */
-    public function deleteWorker($organizationSlug, $serverId, $siteId, $workerId)
-    {
-        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/workers/{$workerId}");
-    }
-
-    /**
-     * Create a worker action.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $workerId
-     * @return mixed
-     */
-    public function createWorkerAction($organizationSlug, $serverId, $siteId, $workerId, array $data)
-    {
-        return $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/workers/{$workerId}/actions",
-            $data
-        );
-    }
-
-    /**
      * Get the site environment file.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return string
      */
-    public function siteEnvironment($organizationSlug, $serverId, $siteId)
+    public function siteEnvironment(string $organizationSlug, int $serverId, int $siteId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/environment");
 
@@ -397,14 +243,8 @@ trait ManagesSites
 
     /**
      * Update the site environment file.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $content
-     * @return void
      */
-    public function updateSiteEnvironment($organizationSlug, $serverId, $siteId, $content)
+    public function updateSiteEnvironment(string $organizationSlug, int $serverId, int $siteId, string $content): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/environment", [
             'content' => $content,
@@ -413,13 +253,8 @@ trait ManagesSites
 
     /**
      * Get the site Nginx configuration.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return string
      */
-    public function siteNginx($organizationSlug, $serverId, $siteId)
+    public function siteNginx(string $organizationSlug, int $serverId, int $siteId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/nginx");
 
@@ -428,14 +263,8 @@ trait ManagesSites
 
     /**
      * Update the site Nginx configuration.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $content
-     * @return void
      */
-    public function updateSiteNginx($organizationSlug, $serverId, $siteId, $content)
+    public function updateSiteNginx(string $organizationSlug, int $serverId, int $siteId, string $content): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/nginx", [
             'content' => $content,
@@ -443,40 +272,9 @@ trait ManagesSites
     }
 
     /**
-     * Get the site PHP version.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return array
-     */
-    public function sitePhp($organizationSlug, $serverId, $siteId)
-    {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/php")['data'] ?? [];
-    }
-
-    /**
-     * Update the site PHP version.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return void
-     */
-    public function updateSitePhp($organizationSlug, $serverId, $siteId, array $data)
-    {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/php", $data);
-    }
-
-    /**
      * Get the Nginx access log.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return string
      */
-    public function siteNginxAccessLog($organizationSlug, $serverId, $siteId)
+    public function siteNginxAccessLog(string $organizationSlug, int $serverId, int $siteId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/nginx-access");
 
@@ -485,26 +283,16 @@ trait ManagesSites
 
     /**
      * Delete the Nginx access log.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return void
      */
-    public function deleteSiteNginxAccessLog($organizationSlug, $serverId, $siteId)
+    public function deleteSiteNginxAccessLog(string $organizationSlug, int $serverId, int $siteId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/nginx-access");
     }
 
     /**
      * Get the Nginx error log.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return string
      */
-    public function siteNginxErrorLog($organizationSlug, $serverId, $siteId)
+    public function siteNginxErrorLog(string $organizationSlug, int $serverId, int $siteId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/nginx-error");
 
@@ -513,26 +301,16 @@ trait ManagesSites
 
     /**
      * Delete the Nginx error log.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return void
      */
-    public function deleteSiteNginxErrorLog($organizationSlug, $serverId, $siteId)
+    public function deleteSiteNginxErrorLog(string $organizationSlug, int $serverId, int $siteId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/nginx-error");
     }
 
     /**
      * Get the application log.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return string
      */
-    public function siteApplicationLog($organizationSlug, $serverId, $siteId)
+    public function siteApplicationLog(string $organizationSlug, int $serverId, int $siteId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/application");
 
@@ -541,13 +319,8 @@ trait ManagesSites
 
     /**
      * Delete the application log.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return void
      */
-    public function deleteSiteApplicationLog($organizationSlug, $serverId, $siteId)
+    public function deleteSiteApplicationLog(string $organizationSlug, int $serverId, int $siteId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/application");
     }
@@ -555,98 +328,73 @@ trait ManagesSites
     /**
      * Get the collection of heartbeats for a site.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Heartbeat[]
+     * @return Heartbeat[]
      */
-    public function heartbeats($organizationSlug, $serverId, $siteId)
+    public function heartbeats(string $organizationSlug, int $serverId, int $siteId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats")['data'] ?? [],
             Heartbeat::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId]
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Create a new heartbeat.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\Heartbeat
      */
-    public function createHeartbeat($organizationSlug, $serverId, $siteId, array $data)
+    public function createHeartbeat(string $organizationSlug, int $serverId, int $siteId, array $data): Heartbeat
     {
-        $heartbeat = $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats",
-            $data
-        )['data'] ?? [];
-
-        return new Heartbeat($heartbeat + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId], $this);
+        return $this->newResource(
+            Heartbeat::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Get a heartbeat instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $heartbeatId
-     * @return \Laravel\Forge\Resources\Heartbeat
      */
-    public function heartbeat($organizationSlug, $serverId, $siteId, $heartbeatId)
+    public function heartbeat(string $organizationSlug, int $serverId, int $siteId, int $heartbeatId): Heartbeat
     {
-        return new Heartbeat(
+        return $this->newResource(
+            Heartbeat::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Update a heartbeat.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $heartbeatId
-     * @return \Laravel\Forge\Resources\Heartbeat
      */
-    public function updateHeartbeat($organizationSlug, $serverId, $siteId, $heartbeatId, array $data)
+    public function updateHeartbeat(string $organizationSlug, int $serverId, int $siteId, int $heartbeatId, array $data): Heartbeat
     {
-        $heartbeat = $this->put(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}",
-            $data
-        )['data'] ?? [];
-
-        return new Heartbeat($heartbeat, $this);
+        return $this->newResource(
+            Heartbeat::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Delete the given heartbeat.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $heartbeatId
-     * @return void
      */
-    public function deleteHeartbeat($organizationSlug, $serverId, $siteId, $heartbeatId)
+    public function deleteHeartbeat(string $organizationSlug, int $serverId, int $siteId, int $heartbeatId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats/{$heartbeatId}");
     }
 
     /**
      * Get the nginx configuration for a domain.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return string
      */
-    public function domainNginxConfig($organizationSlug, $serverId, $siteId, $domainId)
+    public function domainNginxConfig(string $organizationSlug, int $serverId, int $siteId, int $domainId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx");
 
@@ -655,134 +403,120 @@ trait ManagesSites
 
     /**
      * Update the nginx configuration for a domain.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $domainId
-     * @return void
      */
-    public function updateDomainNginxConfig($organizationSlug, $serverId, $siteId, $domainId, $content)
+    public function updateDomainNginxConfig(string $organizationSlug, int $serverId, int $siteId, int $domainId, string $content): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx", ['content' => $content]);
     }
 
     /**
      * Get the health check configuration for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return array
      */
-    public function siteHealthcheck($organizationSlug, $serverId, $siteId)
+    public function siteHealthcheck(string $organizationSlug, int $serverId, int $siteId): array
     {
         return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/healthcheck")['data'] ?? [];
     }
 
     /**
      * Update the health check configuration for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return void
      */
-    public function updateSiteHealthcheck($organizationSlug, $serverId, $siteId, array $data)
+    public function updateSiteHealthcheck(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/healthcheck", $data);
     }
 
     /**
      * Get composer credentials for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return array
      */
-    public function composerCredentials($organizationSlug, $serverId, $siteId)
+    public function composerCredentials(string $organizationSlug, int $serverId, int $siteId): array
     {
         return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials")['data'] ?? [];
     }
 
     /**
      * Create a composer credential for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return array
      */
-    public function createComposerCredential($organizationSlug, $serverId, $siteId, array $data)
+    public function createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data): array
     {
         return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials", $data)['data'] ?? [];
     }
 
     /**
      * Get a composer credential for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $repository
-     * @return array
      */
-    public function composerCredential($organizationSlug, $serverId, $siteId, $repository)
+    public function composerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository): array
     {
         return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}")['data'] ?? [];
     }
 
     /**
      * Update a composer credential for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $repository
-     * @return array
      */
-    public function updateComposerCredential($organizationSlug, $serverId, $siteId, $repository, array $data)
+    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): array
     {
         return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data)['data'] ?? [];
     }
 
     /**
      * Delete a composer credential for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $repository
-     * @return void
      */
-    public function deleteComposerCredential($organizationSlug, $serverId, $siteId, $repository)
+    public function deleteComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}");
     }
 
     /**
-     * Get load balancing nodes for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return array
+     * Get npm credentials for a site.
      */
-    public function loadBalancingNodes($organizationSlug, $serverId, $siteId)
+    public function npmCredentials(string $organizationSlug, int $serverId, int $siteId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials")['data'] ?? [];
+    }
+
+    /**
+     * Create an npm credential for a site.
+     */
+    public function createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data): array
+    {
+        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials", $data)['data'] ?? [];
+    }
+
+    /**
+     * Get an npm credential for a site.
+     */
+    public function npmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}")['data'] ?? [];
+    }
+
+    /**
+     * Update an npm credential for a site.
+     */
+    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): array
+    {
+        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data)['data'] ?? [];
+    }
+
+    /**
+     * Delete an npm credential for a site.
+     */
+    public function deleteNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry): void
+    {
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}");
+    }
+
+    /**
+     * Get load balancing nodes for a site.
+     */
+    public function loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId): array
     {
         return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes")['data'] ?? [];
     }
 
     /**
      * Update load balancing nodes for a site.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return array
      */
-    public function updateLoadBalancingNodes($organizationSlug, $serverId, $siteId, array $data)
+    public function updateLoadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $data): array
     {
         return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes", $data)['data'] ?? [];
     }

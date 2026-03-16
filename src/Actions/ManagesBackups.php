@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Backup;
@@ -10,70 +12,51 @@ trait ManagesBackups
     /**
      * Get the collection of backup configurations.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\BackupConfiguration[]
+     * @return BackupConfiguration[]
      */
-    public function backupConfigurations($organizationSlug, $serverId)
+    public function backupConfigurations(string $organizationSlug, int $serverId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups")['data'] ?? [],
             BackupConfiguration::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Get a backup configuration instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @return \Laravel\Forge\Resources\BackupConfiguration
      */
-    public function backupConfiguration($organizationSlug, $serverId, $backupConfigurationId)
+    public function backupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId): BackupConfiguration
     {
-        return new BackupConfiguration(
-            ($this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}")['data'] ?? [])
-                + ['organization_id' => $organizationSlug, 'server_id' => $serverId],
-            $this
+        return $this->newResource(
+            BackupConfiguration::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Create a new backup configuration.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return void
      */
-    public function createBackupConfiguration($organizationSlug, $serverId, array $data)
+    public function createBackupConfiguration(string $organizationSlug, int $serverId, array $data): void
     {
         $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups", $data);
     }
 
     /**
      * Update the given backup configuration.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @return void
      */
-    public function updateBackupConfiguration($organizationSlug, $serverId, $backupConfigurationId, array $data)
+    public function updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}", $data);
     }
 
     /**
      * Delete the given backup configuration.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @return void
      */
-    public function deleteBackupConfiguration($organizationSlug, $serverId, $backupConfigurationId)
+    public function deleteBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}");
     }
@@ -81,75 +64,53 @@ trait ManagesBackups
     /**
      * Get the collection of backups for a backup configuration.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @return \Laravel\Forge\Resources\Backup[]
+     * @return Backup[]
      */
-    public function backups($organizationSlug, $serverId, $backupConfigurationId)
+    public function backups(string $organizationSlug, int $serverId, int $backupConfigurationId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances")['data'] ?? [],
             Backup::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'backup_configuration_id' => $backupConfigurationId]
+            $organizationSlug,
+            $serverId,
+            extra: ['backup_configuration_id' => $backupConfigurationId],
         );
     }
 
     /**
      * Get a backup instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @param  string  $backupId
-     * @return \Laravel\Forge\Resources\Backup
      */
-    public function backup($organizationSlug, $serverId, $backupConfigurationId, $backupId)
+    public function backup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId): Backup
     {
-        return new Backup(
-            ($this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances/{$backupId}")['data'] ?? [])
-                + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'backup_configuration_id' => $backupConfigurationId],
-            $this
+        return $this->newResource(
+            Backup::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances/{$backupId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            extra: ['backup_configuration_id' => $backupConfigurationId],
         );
     }
 
     /**
      * Create a new backup.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @return void
      */
-    public function createBackup($organizationSlug, $serverId, $backupConfigurationId)
+    public function createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId): void
     {
         $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances");
     }
 
     /**
      * Delete the given backup.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @param  string  $backupId
-     * @return void
      */
-    public function deleteBackup($organizationSlug, $serverId, $backupConfigurationId, $backupId)
+    public function deleteBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances/{$backupId}");
     }
 
     /**
      * Restore a backup to a database.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $backupConfigurationId
-     * @param  string  $backupId
-     * @return void
      */
-    public function restoreBackup($organizationSlug, $serverId, $backupConfigurationId, $backupId, array $data)
+    public function restoreBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId, array $data): void
     {
         $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances/{$backupId}/restores", $data);
     }

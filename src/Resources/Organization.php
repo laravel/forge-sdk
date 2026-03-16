@@ -1,41 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Organization extends Resource
 {
     /**
      * The id of the organization.
-     *
-     * @var int
      */
-    public $id;
+    public ?string $id = null;
+
+    /**
+     * The slug of the organization.
+     */
+    public ?string $slug = null;
 
     /**
      * The name of the organization.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The id of the organization owner.
-     *
-     * @var int
      */
-    public $ownerId;
+    public ?int $ownerId = null;
 
     /**
      * The date/time the organization was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 
     /**
      * The date/time the organization was last updated.
-     *
-     * @var string
      */
-    public $updatedAt;
+    public ?string $updatedAt = null;
 }

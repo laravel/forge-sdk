@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge;
 
 use Exception;
@@ -15,67 +17,48 @@ trait MakesHttpRequests
 {
     /**
      * Make a GET request to Forge servers and return the response.
-     *
-     * @param  string  $uri
-     * @return mixed
      */
-    public function get($uri)
+    public function get(string $uri): mixed
     {
         return $this->request('GET', $uri);
     }
 
     /**
      * Make a POST request to Forge servers and return the response.
-     *
-     * @param  string  $uri
-     * @return mixed
      */
-    public function post($uri, array $payload = [])
+    public function post(string $uri, array $payload = []): mixed
     {
         return $this->request('POST', $uri, $payload);
     }
 
     /**
      * Make a PUT request to Forge servers and return the response.
-     *
-     * @param  string  $uri
-     * @return mixed
      */
-    public function put($uri, array $payload = [])
+    public function put(string $uri, array $payload = []): mixed
     {
         return $this->request('PUT', $uri, $payload);
     }
 
     /**
      * Make a PATCH request to Forge servers and return the response.
-     *
-     * @param  string  $uri
-     * @return mixed
      */
-    public function patch($uri, array $payload = [])
+    public function patch(string $uri, array $payload = []): mixed
     {
         return $this->request('PATCH', $uri, $payload);
     }
 
     /**
      * Make a DELETE request to Forge servers and return the response.
-     *
-     * @param  string  $uri
-     * @return mixed
      */
-    public function delete($uri, array $payload = [])
+    public function delete(string $uri, array $payload = []): mixed
     {
         return $this->request('DELETE', $uri, $payload);
     }
 
     /**
      * Make request to Forge servers and return the response.
-     *
-     * @param  string  $verb
-     * @param  string  $uri
-     * @return mixed
      */
-    protected function request($verb, $uri, array $payload = [])
+    protected function request(string $verb, string $uri, array $payload = []): mixed
     {
         $payload = empty($payload) ? [] : ['json' => $payload];
 
@@ -95,8 +78,6 @@ trait MakesHttpRequests
     /**
      * Handle the request error.
      *
-     * @return void
-     *
      * @throws \Exception
      * @throws \Laravel\Forge\Exceptions\FailedActionException
      * @throws \Laravel\Forge\Exceptions\ForbiddenException
@@ -104,7 +85,7 @@ trait MakesHttpRequests
      * @throws \Laravel\Forge\Exceptions\ValidationException
      * @throws \Laravel\Forge\Exceptions\RateLimitExceededException
      */
-    protected function handleRequestError(ResponseInterface $response)
+    protected function handleRequestError(ResponseInterface $response): never
     {
         if ($response->getStatusCode() == 422) {
             throw new ValidationException(json_decode((string) $response->getBody(), true));
@@ -136,14 +117,9 @@ trait MakesHttpRequests
     /**
      * Retry the callback or fail after x seconds.
      *
-     * @param  int  $timeout
-     * @param  callable  $callback
-     * @param  int  $sleep
-     * @return mixed
-     *
      * @throws \Laravel\Forge\Exceptions\TimeoutException
      */
-    public function retry($timeout, $callback, $sleep = 5)
+    public function retry(int $timeout, callable $callback, int $sleep = 5): mixed
     {
         $start = time();
 

@@ -1,41 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class VPC extends Resource
 {
     /**
      * The id of the VPC.
-     *
-     * @var int
      */
-    public $id;
+    public int|string|null $id = null;
 
     /**
      * The name of the VPC.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The region of the VPC.
-     *
-     * @var string
      */
-    public $region;
+    public ?string $region = null;
 
     /**
      * The CIDR block of the VPC.
-     *
-     * @var string
      */
-    public $cidrBlock;
+    public ?string $cidrBlock = null;
+
+    /**
+     * The subnets of the VPC.
+     */
+    public array $subnets = [];
 
     /**
      * The date/time the VPC was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 }

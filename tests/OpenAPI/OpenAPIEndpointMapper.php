@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\OpenAPI;
 
 /**
@@ -125,6 +127,11 @@ class OpenAPIEndpointMapper
         'GET /orgs/{organization}/servers/{server}/sites/{site}/composer/credentials/{repository}' => 'composerCredential',
         'PUT /orgs/{organization}/servers/{server}/sites/{site}/composer/credentials/{repository}' => 'updateComposerCredential',
         'DELETE /orgs/{organization}/servers/{server}/sites/{site}/composer/credentials/{repository}' => 'deleteComposerCredential',
+        'GET /orgs/{organization}/servers/{server}/sites/{site}/npm/credentials' => 'npmCredentials',
+        'POST /orgs/{organization}/servers/{server}/sites/{site}/npm/credentials' => 'createNpmCredential',
+        'GET /orgs/{organization}/servers/{server}/sites/{site}/npm/credentials/{registry}' => 'npmCredential',
+        'PUT /orgs/{organization}/servers/{server}/sites/{site}/npm/credentials/{registry}' => 'updateNpmCredential',
+        'DELETE /orgs/{organization}/servers/{server}/sites/{site}/npm/credentials/{registry}' => 'deleteNpmCredential',
         'GET /orgs/{organization}/servers/{server}/sites/{site}/load-balancing-nodes' => 'loadBalancingNodes',
         'PUT /orgs/{organization}/servers/{server}/sites/{site}/load-balancing-nodes' => 'updateLoadBalancingNodes',
         'GET /orgs/{organization}/servers/{server}/sites/{site}/redirect-rules' => 'redirectRules',

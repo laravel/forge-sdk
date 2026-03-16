@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\SSHKey;
@@ -9,70 +11,56 @@ trait ManagesSSHKeys
     /**
      * Get the collection of SSH keys.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\SSHKey[]
+     * @return SSHKey[]
      */
-    public function sshKeys($organizationSlug, $serverId)
+    public function sshKeys(string $organizationSlug, int $serverId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys")['data'] ?? [],
             SSHKey::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Get a SSH key instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $keyId
-     * @return \Laravel\Forge\Resources\SSHKey
      */
-    public function sshKey($organizationSlug, $serverId, $keyId)
+    public function sshKey(string $organizationSlug, int $serverId, int $keyId): SSHKey
     {
-        return new SSHKey(
+        return $this->newResource(
+            SSHKey::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys/{$keyId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Create a new SSH key.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\SSHKey
      */
-    public function createSshKey($organizationSlug, $serverId, array $data)
+    public function createSshKey(string $organizationSlug, int $serverId, array $data): SSHKey
     {
-        $key = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys", $data)['data'] ?? [];
-
-        return new SSHKey($key + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
+        return $this->newResource(
+            SSHKey::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**
      * Delete the given SSH key.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $keyId
-     * @return void
      */
-    public function deleteSshKey($organizationSlug, $serverId, $keyId)
+    public function deleteSshKey(string $organizationSlug, int $serverId, int $keyId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys/{$keyId}");
     }
 
     /**
      * Get the server's public SSH key.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return string
      */
-    public function serverKey($organizationSlug, $serverId)
+    public function serverKey(string $organizationSlug, int $serverId): string
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/key");
 
@@ -81,12 +69,8 @@ trait ManagesSSHKeys
 
     /**
      * Update the server's public SSH key.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return string
      */
-    public function updateServerKey($organizationSlug, $serverId, array $data)
+    public function updateServerKey(string $organizationSlug, int $serverId, array $data): string
     {
         $response = $this->put("orgs/{$organizationSlug}/servers/{$serverId}/key", $data);
 

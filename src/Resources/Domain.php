@@ -1,65 +1,76 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Domain extends Resource
 {
     /**
-     * The id of the domain.
-     *
-     * @var int
+     * The id of the organization.
      */
-    public $id;
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the domain.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The id of the site.
-     *
-     * @var int
      */
-    public $siteId;
+    public ?int $siteId = null;
 
     /**
      * The domain name.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The status of the domain.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The type of the domain.
-     *
-     * @var string
      */
-    public $type;
+    public ?string $type = null;
+
+    /**
+     * Whether the domain is the primary domain.
+     */
+    public ?bool $primary = null;
+
+    /**
+     * The www redirect type of the domain.
+     */
+    public ?string $wwwRedirectType = null;
+
+    /**
+     * Whether the domain allows wildcard subdomains.
+     */
+    public ?bool $allowWildcardSubdomains = null;
 
     /**
      * The date/time the domain was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the domain was last updated.
+     */
+    public ?string $updatedAt = null;
 
     /**
      * Delete the given domain.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteDomain($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteDomain($this->organizationId, $this->serverId, $this->siteId, $this->id);
     }
 }

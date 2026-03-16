@@ -1,48 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class TeamInvitation extends Resource
 {
     /**
      * The id of the team invitation.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the team.
-     *
-     * @var int
      */
-    public $teamId;
+    public ?int $teamId = null;
 
     /**
      * The email of the invitee.
-     *
-     * @var string
      */
-    public $email;
+    public ?string $email = null;
 
     /**
      * The id of the role.
-     *
-     * @var int
      */
-    public $roleId;
+    public ?int $roleId = null;
 
     /**
      * The date/time the team invitation was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 
     /**
      * The date/time the team invitation expires.
-     *
-     * @var string
      */
-    public $expiresAt;
+    public ?string $expiresAt = null;
+
+    /**
+     * The date/time the team invitation was last updated.
+     */
+    public ?string $updatedAt = null;
 }

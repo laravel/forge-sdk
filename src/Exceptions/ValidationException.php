@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Exceptions;
 
 use Exception;
@@ -8,15 +10,11 @@ class ValidationException extends Exception
 {
     /**
      * The array of errors.
-     *
-     * @var array
      */
-    public $errors;
+    public array $errors;
 
     /**
      * Create a new exception instance.
-     *
-     * @return void
      */
     public function __construct(array $errors)
     {
@@ -27,10 +25,8 @@ class ValidationException extends Exception
 
     /**
      * The array of errors.
-     *
-     * @return array
      */
-    public function errors()
+    public function errors(): array
     {
         return $this->errors;
     }

@@ -1,371 +1,276 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Server extends Resource
 {
     /**
-     * The id of the server.
-     *
-     * @var int
+     * The id of the organization.
      */
-    public $id;
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the server.
+     */
+    public ?int $id = null;
 
     /**
      * The name of the server.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The type of the server.
-     *
-     * @var string
      */
-    public $type;
+    public ?string $type = null;
 
     /**
      * The id of the provider credential instance.
-     *
-     * @var int
      */
-    public $credentialId;
+    public ?int $credentialId = null;
 
     /**
      * The size of the server.
-     *
-     * @var string
      */
-    public $size;
+    public ?string $size = null;
 
     /**
      * The region of the server.
-     *
-     * @var string
      */
-    public $region;
+    public ?string $region = null;
 
     /**
      * The IP address of the server.
-     *
-     * @var string
      */
-    public $ipAddress;
+    public ?string $ipAddress = null;
 
     /**
      * The Private IP address of the server.
-     *
-     * @var string
      */
-    public $privateIpAddress;
+    public ?string $privateIpAddress = null;
 
     /**
      * The PHP version used in the server.
-     *
-     * @var string
      */
-    public $phpVersion;
-
-    /**
-     * The status of the Blackfire service.
-     *
-     * @var string
-     */
-    public $blackfireStatus;
-
-    /**
-     * The status of the Papertrail service.
-     *
-     * @var string
-     */
-    public $papertrailStatus;
+    public ?string $phpVersion = null;
 
     /**
      * Determine if the server installation is done.
-     *
-     * @var bool
      */
-    public $isReady;
+    public ?bool $isReady = null;
 
     /**
      * Determine if Forge access to the server was revoked.
-     *
-     * @var bool
      */
-    public $revoked;
+    public ?bool $revoked = null;
 
     /**
      * The date/time the server was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 
     /**
      * The IDs of other servers on the same servers network.
-     *
-     * @var array
      */
-    public $network = [];
+    public array $network = [];
 
     /**
      * The sudo password of the new server.
-     *
-     * @var string
      */
-    public $sudoPassword;
+    public ?string $sudoPassword = null;
 
     /**
      * The database password of the new server.
-     *
-     * @var string
      */
-    public $databasePassword;
+    public ?string $databasePassword = null;
 
     /**
      * The provision command of the new server.
-     *
-     * @var string
      */
-    public $provisionCommand;
+    public ?string $provisionCommand = null;
+
+    /**
+     * The Ubuntu version of the server.
+     */
+    public ?string $ubuntuVersion = null;
+
+    /**
+     * The SSH port of the server.
+     */
+    public ?int $sshPort = null;
+
+    /**
+     * The provider of the server.
+     */
+    public ?string $provider = null;
+
+    /**
+     * The provider identifier of the server.
+     */
+    public ?string $identifier = null;
+
+    /**
+     * The PHP CLI version of the server.
+     */
+    public ?string $phpCliVersion = null;
+
+    /**
+     * The OPcache status of the server.
+     */
+    public ?string $opcacheStatus = null;
+
+    /**
+     * The database type of the server.
+     */
+    public ?string $databaseType = null;
+
+    /**
+     * The database status of the server.
+     */
+    public ?string $dbStatus = null;
+
+    /**
+     * The Redis status of the server.
+     */
+    public ?string $redisStatus = null;
+
+    /**
+     * The date/time the server was last updated.
+     */
+    public ?string $updatedAt = null;
+
+    /**
+     * The connection status of the server.
+     */
+    public ?string $connectionStatus = null;
+
+    /**
+     * The timezone of the server.
+     */
+    public ?string $timezone = null;
+
+    /**
+     * The local public key of the server.
+     */
+    public ?string $localPublicKey = null;
 
     /**
      * The tags associated with the server.
-     *
-     * @var array
      */
-    public $tags = [];
-
-    /**
-     * Update the given server.
-     *
-     * @return \Laravel\Forge\Resources\Server
-     */
-    public function update(array $data)
-    {
-        return $this->forge->updateServer($this->id, $data);
-    }
+    public array $tags = [];
 
     /**
      * Delete the given server.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteServer($this->id);
+        $this->forge->deleteServer($this->organizationId, $this->id);
     }
 
     /**
      * Reboot the server.
-     *
-     * @return void
      */
-    public function reboot()
+    public function reboot(): void
     {
-        $this->forge->rebootServer($this->id);
-    }
-
-    /**
-     * Revoke forge access to the server.
-     *
-     * @return void
-     */
-    public function revokeAccess()
-    {
-        $this->forge->revokeAccessToServer($this->id);
-    }
-
-    /**
-     * Reconnect the server to Forge with a new key.
-     *
-     * @return void
-     */
-    public function reconnect()
-    {
-        $this->forge->reconnectToServer($this->id);
-    }
-
-    /**
-     * Reactivate a revoked server.
-     *
-     * @return void
-     */
-    public function reactivate()
-    {
-        $this->forge->reactivateToServer($this->id);
+        $this->forge->createServerAction($this->organizationId, $this->id, ['action' => 'reboot']);
     }
 
     /**
      * Reboot MySQL on the server.
-     *
-     * @return void
      */
-    public function rebootMysql()
+    public function rebootMysql(): void
     {
-        $this->forge->rebootMysql($this->id);
+        $this->forge->performMySQLAction($this->organizationId, $this->id, ['action' => 'restart']);
     }
 
     /**
      * Stop MySQL on the server.
-     *
-     * @return void
      */
-    public function stopMysql()
+    public function stopMysql(): void
     {
-        $this->forge->stopMysql($this->id);
+        $this->forge->performMySQLAction($this->organizationId, $this->id, ['action' => 'stop']);
     }
 
     /**
      * Reboot Postgres on the server.
-     *
-     * @return void
      */
-    public function rebootPostgres()
+    public function rebootPostgres(): void
     {
-        $this->forge->rebootPostgres($this->id);
+        $this->forge->performPostgresAction($this->organizationId, $this->id, ['action' => 'restart']);
     }
 
     /**
      * Stop Postgres on the server.
-     *
-     * @return void
      */
-    public function stopPostgres()
+    public function stopPostgres(): void
     {
-        $this->forge->stopPostgres($this->id);
+        $this->forge->performPostgresAction($this->organizationId, $this->id, ['action' => 'stop']);
     }
 
     /**
      * Reboot Nginx on the server.
-     *
-     * @return void
      */
-    public function rebootNginx()
+    public function rebootNginx(): void
     {
-        $this->forge->rebootNginx($this->id);
+        $this->forge->performNginxAction($this->organizationId, $this->id, ['action' => 'restart']);
     }
 
     /**
      * Stop Nginx on the server.
-     *
-     * @return void
      */
-    public function stopNginx()
+    public function stopNginx(): void
     {
-        $this->forge->stopNginx($this->id);
+        $this->forge->performNginxAction($this->organizationId, $this->id, ['action' => 'stop']);
     }
 
     /**
      * Reboot PHP on the server.
-     *
-     * @return void
      */
-    public function rebootPHP(array $data)
+    public function rebootPHP(): void
     {
-        $this->forge->rebootPHP($this->id, $data);
-    }
-
-    /**
-     * Install Blackfire on the server.
-     *
-     * @return void
-     */
-    public function installBlackfire(array $data)
-    {
-        $this->forge->installBlackfire($this->id, $data);
-    }
-
-    /**
-     * Remove Blackfire from the server.
-     *
-     * @return void
-     */
-    public function removeBlackfire()
-    {
-        $this->forge->removeBlackfire($this->id);
-    }
-
-    /**
-     * Install Papertrail on the server.
-     *
-     * @return void
-     */
-    public function installPapertrail(array $data)
-    {
-        $this->forge->installPapertrail($this->id, $data);
-    }
-
-    /**
-     * Remove Papertrail from the server.
-     *
-     * @return void
-     */
-    public function removePapertrail()
-    {
-        $this->forge->removePapertrail($this->id);
+        $this->forge->performPHPAction($this->organizationId, $this->id, ['action' => 'restart']);
     }
 
     /**
      * Enable OPCache on the server.
-     *
-     * @return void
      */
-    public function enableOPCache()
+    public function enableOPCache(): void
     {
-        $this->forge->enableOPCache($this->id);
+        $this->forge->createPhpOpcache($this->organizationId, $this->id, []);
     }
 
     /**
      * Disable OPCache on the server.
-     *
-     * @return void
      */
-    public function disableOPCache()
+    public function disableOPCache(): void
     {
-        $this->forge->disableOPCache($this->id);
+        $this->forge->deletePhpOpcache($this->organizationId, $this->id);
     }
 
     /**
      * Get the collection of PHP Versions.
      *
-     * @return \Laravel\Forge\Resources\PHPVersion[]
+     * @return PHPVersion[]
      */
-    public function phpVersions()
+    public function phpVersions(): array
     {
-        return $this->forge->phpVersions($this->id);
+        return $this->forge->phpVersions($this->organizationId, $this->id);
     }
 
     /**
      * Install a version of PHP.
-     *
-     * @param  string  $version
-     * @return void
      */
-    public function installPHP($version)
+    public function installPHP(string $version): PHPVersion
     {
-        $this->forge->installPHP($this->id, $version);
-    }
-
-    /**
-     * Patch the version of PHP.
-     *
-     * @param  string  $version
-     * @return void
-     */
-    public function updatePHP($version)
-    {
-        $this->forge->updatePHP($this->id, $version);
+        return $this->forge->installPhpVersion($this->organizationId, $this->id, ['version' => $version]);
     }
 
     /**
      * Return the tags associated with the server.
-     *
-     * @param  string|null  $separator
-     * @return string
      */
-    public function tags($separator = null)
+    public function tags(?string $separator = null): string
     {
         return $this->transformTags($this->tags, $separator);
     }

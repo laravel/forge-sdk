@@ -5,3 +5,4 @@ composer.lock
 /.phpunit.cache
 .idea
 forge-openapi.json
+tests/Integration/.env.testing

@@ -1,62 +1,83 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class ProviderSize extends Resource
 {
     /**
      * The id of the provider size.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the provider.
-     *
-     * @var int
      */
-    public $providerId;
+    public ?int $providerId = null;
 
     /**
      * The name of the provider size.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The label of the provider size.
-     *
-     * @var string
      */
-    public $label;
+    public ?string $label = null;
 
     /**
      * The price of the provider size.
-     *
-     * @var string
      */
-    public $price;
+    public ?string $price = null;
 
     /**
      * The memory of the provider size.
-     *
-     * @var string
      */
-    public $memory;
+    public ?string $memory = null;
 
     /**
      * The disk size of the provider size.
-     *
-     * @var string
      */
-    public $disk;
+    public ?string $disk = null;
 
     /**
      * The CPU of the provider size.
-     *
-     * @var string
      */
-    public $cpu;
+    public ?string $cpu = null;
+
+    /**
+     * The code of the provider size.
+     */
+    public ?string $code = null;
+
+    /**
+     * The series of the provider size.
+     */
+    public ?string $series = null;
+
+    /**
+     * The category of the provider size.
+     */
+    public ?string $category = null;
+
+    /**
+     * The number of CPUs.
+     */
+    public ?int $cpus = null;
+
+    /**
+     * The disk type of the provider size.
+     */
+    public ?string $diskType = null;
+
+    /**
+     * The architecture of the provider size.
+     */
+    public ?string $architecture = null;
+
+    /**
+     * The RAM of the provider size.
+     */
+    public ?int $ram = null;
 }

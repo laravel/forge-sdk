@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Database;
@@ -10,44 +12,35 @@ trait ManagesDatabases
     /**
      * Get the collection of database schemas.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Database[]
+     * @return Database[]
      */
-    public function databases($organizationSlug, $serverId)
+    public function databases(string $organizationSlug, int $serverId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas")['data'] ?? [],
             Database::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Get a database schema instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $databaseId
-     * @return \Laravel\Forge\Resources\Database
      */
-    public function database($organizationSlug, $serverId, $databaseId)
+    public function database(string $organizationSlug, int $serverId, int $databaseId): Database
     {
-        return new Database(
+        return $this->newResource(
+            Database::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/{$databaseId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Create a new database schema.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Database
      */
-    public function createDatabase($organizationSlug, $serverId, array $data, $wait = true)
+    public function createDatabase(string $organizationSlug, int $serverId, array $data, bool $wait = true): Database
     {
         $database = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas", $data)['data'] ?? [];
 
@@ -59,30 +52,21 @@ trait ManagesDatabases
             });
         }
 
-        return new Database($database + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
+        return $this->newResource(Database::class, $database, $organizationSlug, $serverId);
     }
 
     /**
      * Delete the given database schema.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $databaseId
-     * @return void
      */
-    public function deleteDatabase($organizationSlug, $serverId, $databaseId)
+    public function deleteDatabase(string $organizationSlug, int $serverId, int $databaseId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/{$databaseId}");
     }
 
     /**
      * Synchronize database schemas.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return mixed
      */
-    public function syncDatabases($organizationSlug, $serverId, array $data = [])
+    public function syncDatabases(string $organizationSlug, int $serverId, array $data = []): array
     {
         return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/synchronizations", $data);
     }
@@ -90,44 +74,35 @@ trait ManagesDatabases
     /**
      * Get the collection of database users.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\DatabaseUser[]
+     * @return DatabaseUser[]
      */
-    public function databaseUsers($organizationSlug, $serverId)
+    public function databaseUsers(string $organizationSlug, int $serverId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/users")['data'] ?? [],
             DatabaseUser::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId]
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Get a database user instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $userId
-     * @return \Laravel\Forge\Resources\DatabaseUser
      */
-    public function databaseUser($organizationSlug, $serverId, $userId)
+    public function databaseUser(string $organizationSlug, int $serverId, int $userId): DatabaseUser
     {
-        return new DatabaseUser(
+        return $this->newResource(
+            DatabaseUser::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
      * Create a new database user.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\DatabaseUser
      */
-    public function createDatabaseUser($organizationSlug, $serverId, array $data, $wait = true)
+    public function createDatabaseUser(string $organizationSlug, int $serverId, array $data, bool $wait = true): DatabaseUser
     {
         $user = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/users", $data)['data'] ?? [];
 
@@ -139,48 +114,34 @@ trait ManagesDatabases
             });
         }
 
-        return new DatabaseUser($user + ['organization_id' => $organizationSlug, 'server_id' => $serverId], $this);
+        return $this->newResource(DatabaseUser::class, $user, $organizationSlug, $serverId);
     }
 
     /**
      * Update a database user.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $userId
-     * @return \Laravel\Forge\Resources\DatabaseUser
      */
-    public function updateDatabaseUser($organizationSlug, $serverId, $userId, array $data)
+    public function updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data): DatabaseUser
     {
-        $user = $this->put(
-            "orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}",
-            $data
-        )['data'] ?? [];
-
-        return new DatabaseUser($user, $this);
+        return $this->newResource(
+            DatabaseUser::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**
      * Delete the given database user.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $userId
-     * @return void
      */
-    public function deleteDatabaseUser($organizationSlug, $serverId, $userId)
+    public function deleteDatabaseUser(string $organizationSlug, int $serverId, int $userId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}");
     }
 
     /**
      * Update the database password.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @return mixed
      */
-    public function updateDatabasePassword($organizationSlug, $serverId, array $data)
+    public function updateDatabasePassword(string $organizationSlug, int $serverId, array $data): array
     {
         return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/password", $data);
     }

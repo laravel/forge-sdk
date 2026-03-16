@@ -1,125 +1,103 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class User extends Resource
 {
     /**
      * The id of the user.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The name of the user.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The E-Mail of the user.
-     *
-     * @var string
      */
-    public $email;
+    public ?string $email = null;
 
     /**
      * Last four digits of user's card.
-     *
-     * @var string
      */
-    public $cardLastFour;
+    public ?string $cardLastFour = null;
 
     /**
      * Determines if user connected to GitHub.
-     *
-     * @var bool
      */
-    public $connectedToGithub;
+    public ?bool $connectedToGithub = null;
 
     /**
      * Determines if user connected to GitLab.
-     *
-     * @var bool
      */
-    public $connectedToGitlab;
+    public ?bool $connectedToGitlab = null;
 
     /**
      * Determines if user connected to Bitbucket.
-     *
-     * @var bool
      */
-    public $connectedToBitbucket;
+    public ?bool $connectedToBitbucket = null;
 
     /**
      * Determines if user connected to Bitbucket Two.
-     *
-     * @var bool
      */
-    public $connectedToBitbucketTwo;
+    public ?bool $connectedToBitbucketTwo = null;
 
     /**
      * Determines if user connected to DigitalOcean.
-     *
-     * @var bool
      */
-    public $connectedToDigitalocean;
+    public ?bool $connectedToDigitalocean = null;
 
     /**
      * Determines if user connected to Linode.
-     *
-     * @var bool
      */
-    public $connectedToLinode;
+    public ?bool $connectedToLinode = null;
 
     /**
      * Determines if user connected to Vultr.
-     *
-     * @var bool
      */
-    public $connectedToVultr;
+    public ?bool $connectedToVultr = null;
 
     /**
      * Determines if user connected to AWS.
-     *
-     * @var bool
      */
-    public $connectedToAws;
+    public ?bool $connectedToAws = null;
 
     /**
      * Determines if user ready for billing.
-     *
-     * @var bool
      */
-    public $readyForBilling;
+    public ?bool $readyForBilling = null;
 
     /**
      * Determines if stripe is active.
-     *
-     * @var int
      */
-    public $stripeIsActive;
+    public ?int $stripeIsActive = null;
 
     /**
      * Name of stripe plan.
-     *
-     * @var string
      */
-    public $stripePlan;
+    public ?string $stripePlan = null;
 
     /**
      * Determines if user is subscribed.
-     *
-     * @var int
      */
-    public $subscribed;
+    public ?int $subscribed = null;
 
     /**
      * Determines if user can create servers.
-     *
-     * @var bool
      */
-    public $canCreateServers;
+    public ?bool $canCreateServers = null;
+
+    /**
+     * The date/time the user was created.
+     */
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the user was last updated.
+     */
+    public ?string $updatedAt = null;
 }

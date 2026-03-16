@@ -1,71 +1,77 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Recipe extends Resource
 {
     /**
      * The id of the recipe.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
+
+    /**
+     * The id of the organization.
+     */
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the team.
+     */
+    public ?int $teamId = null;
 
     /**
      * The key of the recipe.
-     *
-     * @var string
      */
-    public $key;
+    public ?string $key = null;
 
     /**
      * The name of the recipe.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The user that runs the recipe on the server.
-     *
-     * @var string
      */
-    public $user;
+    public ?string $user = null;
+
+    /**
+     * The script content of the recipe.
+     */
+    public ?string $script = null;
 
     /**
      * The date/time the recipe was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the recipe was last updated.
+     */
+    public ?string $updatedAt = null;
 
     /**
      * Update the given recipe.
-     *
-     * @return \Laravel\Forge\Resources\Recipe
      */
-    public function update(array $data)
+    public function update(array $data): Recipe
     {
-        return $this->forge->updateRecipe($this->id, $data);
+        return $this->forge->updateRecipe($this->organizationId, $this->id, $data);
     }
 
     /**
      * Delete the given recipe.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteRecipe($this->id);
+        $this->forge->deleteRecipe($this->organizationId, $this->id);
     }
 
     /**
      * Run the given recipe.
-     *
-     * @return void
      */
-    public function run(array $data)
+    public function run(array $data): RecipeRun
     {
-        $this->forge->runRecipe($this->id, $data);
+        return $this->forge->createRecipeRun($this->organizationId, $this->id, $data);
     }
 }

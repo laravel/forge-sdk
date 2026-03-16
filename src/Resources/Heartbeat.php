@@ -1,65 +1,76 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Heartbeat extends Resource
 {
     /**
-     * The id of the heartbeat.
-     *
-     * @var int
+     * The id of the organization.
      */
-    public $id;
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the heartbeat.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The id of the site.
-     *
-     * @var int
      */
-    public $siteId;
+    public ?int $siteId = null;
 
     /**
      * The name of the heartbeat.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The status of the heartbeat.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The interval of the heartbeat.
-     *
-     * @var int
      */
-    public $interval;
+    public ?int $interval = null;
+
+    /**
+     * The grace period of the heartbeat.
+     */
+    public ?int $gracePeriod = null;
+
+    /**
+     * The frequency of the heartbeat.
+     */
+    public ?string $frequency = null;
+
+    /**
+     * The custom frequency of the heartbeat.
+     */
+    public ?string $customFrequency = null;
+
+    /**
+     * The ping URL of the heartbeat.
+     */
+    public ?string $pingUrl = null;
 
     /**
      * The date/time the heartbeat was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 
     /**
      * Delete the given heartbeat.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteHeartbeat($this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteHeartbeat($this->organizationId, $this->serverId, $this->siteId, $this->id);
     }
 }

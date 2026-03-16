@@ -1,34 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class ProviderRegion extends Resource
 {
     /**
      * The id of the provider region.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the provider.
-     *
-     * @var int
      */
-    public $providerId;
+    public ?int $providerId = null;
 
     /**
      * The name of the provider region.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The label of the provider region.
-     *
-     * @var string
      */
-    public $label;
+    public ?string $label = null;
+
+    /**
+     * The code of the provider region.
+     */
+    public ?string $code = null;
+
+    /**
+     * The alternate code of the provider region.
+     */
+    public ?string $alternateCode = null;
 }

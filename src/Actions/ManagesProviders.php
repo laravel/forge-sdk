@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\Provider;
@@ -11,9 +13,9 @@ trait ManagesProviders
     /**
      * Get the collection of providers.
      *
-     * @return \Laravel\Forge\Resources\Provider[]
+     * @return Provider[]
      */
-    public function providers()
+    public function providers(): array
     {
         return $this->transformCollection(
             $this->get('providers')['data'] ?? [],
@@ -23,11 +25,8 @@ trait ManagesProviders
 
     /**
      * Get a specific provider.
-     *
-     * @param  string  $providerId
-     * @return \Laravel\Forge\Resources\Provider
      */
-    public function provider($providerId)
+    public function provider(int $providerId): Provider
     {
         return new Provider($this->get("providers/{$providerId}")['data'] ?? [], $this);
     }
@@ -35,26 +34,21 @@ trait ManagesProviders
     /**
      * Get the collection of sizes for a provider.
      *
-     * @param  string  $providerId
-     * @return \Laravel\Forge\Resources\ProviderSize[]
+     * @return ProviderSize[]
      */
-    public function providerSizes($providerId)
+    public function providerSizes(int $providerId): array
     {
         return $this->transformCollection(
             $this->get("providers/{$providerId}/sizes")['data'] ?? [],
             ProviderSize::class,
-            ['provider_id' => $providerId]
+            extra: ['provider_id' => $providerId],
         );
     }
 
     /**
      * Get a specific provider size.
-     *
-     * @param  string  $providerId
-     * @param  string  $sizeId
-     * @return \Laravel\Forge\Resources\ProviderSize
      */
-    public function providerSize($providerId, $sizeId)
+    public function providerSize(int $providerId, int $sizeId): ProviderSize
     {
         return new ProviderSize(
             $this->get("providers/{$providerId}/sizes/{$sizeId}")['data'] ?? [],
@@ -65,26 +59,21 @@ trait ManagesProviders
     /**
      * Get the collection of regions for a provider.
      *
-     * @param  string  $providerId
-     * @return \Laravel\Forge\Resources\ProviderRegion[]
+     * @return ProviderRegion[]
      */
-    public function providerRegions($providerId)
+    public function providerRegions(int $providerId): array
     {
         return $this->transformCollection(
             $this->get("providers/{$providerId}/regions")['data'] ?? [],
             ProviderRegion::class,
-            ['provider_id' => $providerId]
+            extra: ['provider_id' => $providerId],
         );
     }
 
     /**
      * Get a specific provider region.
-     *
-     * @param  string  $providerId
-     * @param  string  $regionId
-     * @return \Laravel\Forge\Resources\ProviderRegion
      */
-    public function providerRegion($providerId, $regionId)
+    public function providerRegion(int $providerId, int $regionId): ProviderRegion
     {
         return new ProviderRegion(
             $this->get("providers/{$providerId}/regions/{$regionId}")['data'] ?? [],
@@ -95,28 +84,21 @@ trait ManagesProviders
     /**
      * Get the collection of sizes for a specific region.
      *
-     * @param  string  $providerId
-     * @param  string  $regionId
-     * @return \Laravel\Forge\Resources\ProviderSize[]
+     * @return ProviderSize[]
      */
-    public function providerRegionSizes($providerId, $regionId)
+    public function providerRegionSizes(int $providerId, int $regionId): array
     {
         return $this->transformCollection(
             $this->get("providers/{$providerId}/regions/{$regionId}/sizes")['data'] ?? [],
             ProviderSize::class,
-            ['provider_id' => $providerId, 'region_id' => $regionId]
+            extra: ['provider_id' => $providerId, 'region_id' => $regionId],
         );
     }
 
     /**
      * Get a specific size for a specific region.
-     *
-     * @param  string  $providerId
-     * @param  string  $regionId
-     * @param  string  $sizeId
-     * @return \Laravel\Forge\Resources\ProviderSize
      */
-    public function providerRegionSize($providerId, $regionId, $sizeId)
+    public function providerRegionSize(int $providerId, int $regionId, int $sizeId): ProviderSize
     {
         return new ProviderSize(
             $this->get("providers/{$providerId}/regions/{$regionId}/sizes/{$sizeId}")['data'] ?? [],

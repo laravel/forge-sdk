@@ -1,48 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class BackgroundProcess extends Resource
 {
     /**
      * The id of the background process.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The command of the background process.
-     *
-     * @var string
      */
-    public $command;
+    public ?string $command = null;
 
     /**
      * The user running the background process.
-     *
-     * @var string
      */
-    public $user;
+    public ?string $user = null;
+
+    /**
+     * The directory of the background process.
+     */
+    public ?string $directory = null;
+
+    /**
+     * The number of processes.
+     */
+    public ?int $processes = null;
 
     /**
      * The status of the background process.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The date/time the background process was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 }

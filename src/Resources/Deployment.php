@@ -1,48 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Deployment extends Resource
 {
     /**
-     * The id of the deployment.
-     *
-     * @var int
+     * The id of the organization.
      */
-    public $id;
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the deployment.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the site.
-     *
-     * @var int
      */
-    public $siteId;
+    public ?int $siteId = null;
 
     /**
      * The status of the deployment.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The date/time the deployment started.
-     *
-     * @var string
      */
-    public $startedAt;
+    public ?string $startedAt = null;
 
     /**
-     * The date/time the deployment finished.
-     *
-     * @var string
+     * The commit information for the deployment.
      */
-    public $finishedAt;
+    public ?array $commit = null;
 
     /**
-     * The output of the deployment.
-     *
-     * @var string
+     * The type of the deployment.
      */
-    public $output;
+    public ?string $type = null;
+
+    /**
+     * The date/time the deployment ended.
+     */
+    public ?string $endedAt = null;
+
+    /**
+     * The date/time the deployment was created.
+     */
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the deployment was last updated.
+     */
+    public ?string $updatedAt = null;
 }

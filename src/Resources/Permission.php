@@ -1,34 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Permission extends Resource
 {
     /**
      * The id of the permission.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The name of the permission.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The description of the permission.
-     *
-     * @var string
      */
-    public $description;
+    public ?string $description = null;
 
     /**
      * The category of the permission.
-     *
-     * @var string
      */
-    public $category;
+    public ?string $category = null;
 }

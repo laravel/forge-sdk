@@ -1,125 +1,64 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Certificate extends Resource
 {
     /**
      * The id of the certificate.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The id of the site.
-     *
-     * @var int
      */
-    public $siteId;
-
-    /**
-     * The domain name.
-     *
-     * @var string
-     */
-    public $domain;
+    public ?int $siteId = null;
 
     /**
      * The type of the certificate.
-     *
-     * @var string
      */
-    public $type;
+    public ?string $type = null;
 
     /**
-     * Determine if the certificate is an existing one.
-     *
-     * @var bool
+     * The verification method of the certificate.
      */
-    public $existing;
+    public ?string $verificationMethod = null;
 
     /**
      * The status of the request.
-     *
-     * @var string
      */
-    public $requestStatus;
+    public ?string $requestStatus = null;
 
     /**
      * The status of the certificate.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
-     * Determine if the certificate is active.
-     *
-     * @var bool
+     * The key type of the certificate.
      */
-    public $active;
+    public ?string $keyType = null;
 
     /**
-     * Activation status of the certificate.
-     *
-     * @var string
+     * The preferred chain of the certificate.
      */
-    public $activationStatus;
+    public ?string $preferredChain = null;
 
     /**
      * The date/time the certificate was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 
     /**
-     * Delete the given certificate.
-     *
-     * @return void
+     * The date/time the certificate was last updated.
      */
-    public function delete()
-    {
-        $this->forge->deleteCertificate($this->serverId, $this->siteId, $this->id);
-    }
+    public ?string $updatedAt = null;
 
-    /**
-     * Get the SSL certificate signing request for the site.
-     *
-     * @return string
-     */
-    public function getSigningRequest()
-    {
-        return $this->forge->getCertificateSigningRequest($this->serverId, $this->siteId, $this->id);
-    }
-
-    /**
-     * Install the given certificate for the site.
-     *
-     * @param  bool  $wait
-     * @return void
-     */
-    public function install(array $data, $wait = true)
-    {
-        $this->forge->installCertificate($this->serverId, $this->siteId, $this->id, $data, $wait);
-    }
-
-    /**
-     * Activate the given certificate for the site.
-     *
-     * @param  bool  $wait
-     * @return void
-     */
-    public function activate($wait = true)
-    {
-        $this->forge->activateCertificate($this->serverId, $this->siteId, $this->id, $wait);
-    }
 }

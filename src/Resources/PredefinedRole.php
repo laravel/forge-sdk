@@ -1,27 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class PredefinedRole extends Resource
 {
     /**
      * The id of the predefined role.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The name of the predefined role.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The description of the predefined role.
-     *
-     * @var string
      */
-    public $description;
+    public ?string $description = null;
+
+    /**
+     * The date/time the predefined role was created.
+     */
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the predefined role was last updated.
+     */
+    public ?string $updatedAt = null;
 }

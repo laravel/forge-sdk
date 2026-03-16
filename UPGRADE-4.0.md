@@ -1,29 +1,15 @@
 # Upgrade Guide: v3.x to v4.0
 
-This document outlines all breaking changes when upgrading from Forge SDK v3.x (API v1) to v4.0 (API v2).
+This guide covers everything you need to know to upgrade from Forge SDK v3.x (API v1) to v4.0 (API v2).
 
-## Major Breaking Changes
+> [!CAUTION]
+> v4.0 requires **PHP 8.2** or higher. Support for PHP 7.2 through 8.1 has been dropped.
 
-[!CAUTION]
-PHP Support has been dropped for versions below PHP 8.2.
+## Breaking Changes
 
-### 1. API Version Change
+### Organization-Scoped Endpoints
 
-The SDK now uses the Forge API v2, which has a completely different URL structure and response format.
-
-**v3.x:**
-```php
-Base URI: https://forge.laravel.com/api/v1/
-```
-
-**v4.0:**
-```php
-Base URI: https://forge.laravel.com/api/
-```
-
-### 2. Organization-Scoped Endpoints
-
-**BREAKING:** All resource endpoints now require an organization ID as the first parameter.
+This is the most significant change in v4.0. Nearly all resource endpoints now require an organization slug as the first parameter.
 
 **v3.x:**
 ```php
@@ -34,252 +20,251 @@ $forge->createServer($data);
 
 **v4.0:**
 ```php
-$forge->servers($organizationId);
-$forge->server($organizationId, $serverId);
-$forge->createServer($organizationId, $data);
+$forge->servers($organizationSlug);
+$forge->server($organizationSlug, $serverId);
+$forge->createServer($organizationSlug, $data);
 ```
 
-This affects **ALL** endpoints except:
+This applies to **all** endpoints except:
 - `$forge->user()` / `$forge->me()`
 - `$forge->organizations()`
-- `$forge->providers()`
-- `$forge->permissions()`
-- `$forge->predefinedRoles()`
+- `$forge->sites()` (global, returns all sites across organizations)
+- `$forge->providers()` / `$forge->providerSizes()` / `$forge->providerRegions()`
+- `$forge->permissions()` / `$forge->predefinedRoles()`
+- `$forge->forgeRecipes()`
 
-### 3. Response Format Change (JSON:API)
+### Renamed Methods
 
-**BREAKING:** API responses now follow the JSON:API specification.
+Methods have been renamed to match API v2 terminology:
 
-**v3.x:**
+| v3.x | v4.0 |
+|------|------|
+| `daemons()`, `daemon()`, `createDaemon()` | `backgroundProcesses()`, `backgroundProcess()`, `createBackgroundProcess()` |
+| `jobs()`, `job()`, `createJob()` | `scheduledJobs()`, `scheduledJob()`, `createScheduledJob()` |
+| `sites($serverId)` | `serverSites($organizationSlug, $serverId)` |
+| `rebootServer($serverId)` | `createServerAction($organizationSlug, $serverId, ['action' => 'reboot'])` |
+| `rebootNginx($serverId)` | `performNginxAction($organizationSlug, $serverId, ['action' => 'restart'])` |
+| `rebootMySQL($serverId)` | `performMySQLAction($organizationSlug, $serverId, ['action' => 'restart'])` |
+| `installPHP($serverId, $version)` | `installPhpVersion($organizationSlug, $serverId, $data)` |
+
+Service actions now follow a consistent pattern for all services:
+
 ```php
-// Response: {"server": {...}}
-$server = $forge->server($id);
+$forge->performNginxAction($organizationSlug, $serverId, ['action' => 'restart']);
+$forge->performMySQLAction($organizationSlug, $serverId, ['action' => 'restart']);
+$forge->performPostgresAction($organizationSlug, $serverId, ['action' => 'restart']);
+$forge->performRedisAction($organizationSlug, $serverId, ['action' => 'restart']);
+$forge->performPHPAction($organizationSlug, $serverId, ['action' => 'restart']);
+$forge->performSupervisorAction($organizationSlug, $serverId, ['action' => 'restart']);
 ```
 
-**v4.0:**
-```php
-// Response: {"data": {...}}
-$server = $forge->server($orgId, $serverId);
-```
+### Removed Alias Methods
 
-The SDK handles this internally, but if you're accessing raw responses, they will be different.
+The following alias methods have been removed. Use the primary method instead:
 
-### 4. Content-Type Headers
+| Removed | Use Instead |
+|---------|-------------|
+| `allSites()` | `sites()` |
+| `siteNginxConfig()` | `siteNginx()` |
+| `updateSiteNginxConfig()` | `updateSiteNginx()` |
+| `siteLog()` | `siteNginxAccessLog()`, `siteNginxErrorLog()`, or `siteApplicationLog()` |
+| `deleteSiteLog()` | `deleteSiteNginxAccessLog()`, `deleteSiteNginxErrorLog()`, or `deleteSiteApplicationLog()` |
 
-**v3.x:**
-```
-Accept: application/json
-Content-Type: application/json
-```
+### Renamed Action Traits
 
-**v4.0:**
-```
-Accept: application/vnd.api+json
-Content-Type: application/vnd.api+json
-```
-
-### 5. Renamed Action Traits
-
-If you're extending or directly using action traits, these have been renamed:
+If you extend or directly reference action traits, these have been renamed or merged:
 
 | v3.x Trait | v4.0 Trait |
 |------------|------------|
-| `ManagesBackups` | *Removed* (not in API v2) |
-| `ManagesCertificates` | *Merged into ManagesSites* |
+| `ManagesCertificates` | *Merged into `ManagesSites`* |
 | `ManagesCredentials` | `ManagesServerCredentials` |
 | `ManagesDaemons` | `ManagesBackgroundProcesses` |
-| `ManagesDatabaseUsers` | *Merged into ManagesDatabases* |
+| `ManagesDatabaseUsers` | *Merged into `ManagesDatabases`* |
 | `ManagesJobs` | `ManagesScheduledJobs` |
 | `ManagesNginxTemplates` | `ManagesNginx` |
 | `ManagesSiteCommands` | `ManagesCommands` |
-| `ManagesWebhooks` | *Merged into ManagesDeployments* |
-| `ManagesWorkers` | *Merged into ManagesSites* |
+| `ManagesWebhooks` | *Merged into `ManagesDeployments`* |
+| `ManagesWorkers` | *Removed — workers are no longer available in API v2* |
 
-**New in v4.0:**
-- `ManagesIntegrations` (Horizon, Octane, Reverb, Inertia, Pulse, Maintenance, Scheduler)
-- `ManagesDeployments` (webhooks, deployment scripts, push-to-deploy)
+### Removed Resource Convenience Methods
+
+Many Resource convenience methods have been removed because the underlying API methods no longer exist in v4. If you relied on these, use the Forge client methods directly instead.
+
+**Server** — 9 methods removed:
+- `$server->update()` — no `updateServer()` in v4
+- `$server->revokeAccess()` — no `revokeAccessToServer()` in v4
+- `$server->reconnect()` — no `reconnectToServer()` in v4
+- `$server->reactivate()` — no `reactivateToServer()` in v4
+- `$server->installBlackfire()` / `$server->removeBlackfire()` — Blackfire integration removed
+- `$server->installPapertrail()` / `$server->removePapertrail()` — Papertrail integration removed
+- `$server->updatePHP()` — v4 `updatePhpVersion()` requires a `$phpVersionId`, cannot be called from the resource
+
+**Site** — 17 methods removed:
+- `$site->refreshToken()`, `$site->installGitRepository()`, `$site->updateGitRepository()`, `$site->destroyGitRepository()`, `$site->createDeployKey()`, `$site->destroyDeployKey()` — git operations removed from API v2
+- `$site->enableQuickDeploy()`, `$site->resetDeploymentState()`, `$site->siteDeploymentLog()` — no v4 equivalent
+- `$site->enableHipchatNotifications()`, `$site->disableHipchatNotifications()` — HipChat integration removed
+- `$site->setDeploymentFailureEmails()` — removed
+- `$site->installWordPress()`, `$site->removeWordPress()` — WordPress support removed
+- `$site->installPhpMyAdmin()`, `$site->removePhpMyAdmin()` — phpMyAdmin support removed
+- `$site->changePHPVersion()` — no `changeSitePHPVersion()` in v4
+
+**Certificate** — all 4 convenience methods removed (`delete()`, `getSigningRequest()`, `install()`, `activate()`). Certificates are now managed at the domain level via `domainCertificate()` / `createDomainCertificate()` / `deleteDomainCertificate()`.
+
+**Database** — `$database->update()` removed (no `updateDatabase()` in v4).
+
+### Changed Resource Convenience Method Signatures
+
+Some convenience methods have changed their signatures or target different underlying methods:
+
+**Server:**
+- `$server->rebootPHP(array $data)` → `$server->rebootPHP()` — no longer accepts `$data`
+- `$server->installPHP(string $version)` → now returns `PHPVersion` instead of `void`
+
+**Site:**
+- `$site->updateDeploymentScript(string $content, bool $autoSource)` → `$site->updateDeploymentScript(array $data)` — accepts an array instead of individual params
+- `$site->deploySite(bool $wait = true): Site` → `$site->deploySite(): Deployment` — no longer accepts `$wait`, returns `Deployment` instead of `Site`
+
+**Recipe:**
+- `$recipe->run(array $data): void` → `$recipe->run(array $data): RecipeRun` — now returns a `RecipeRun` instance
+
+### Removed Resource Properties
+
+**Server:**
+- `$blackfireStatus` — Blackfire integration removed
+- `$papertrailStatus` — Papertrail integration removed
+
+**Site:**
+- `$hipchatRoom`, `$slackChannel`, `$telegramChatId`, `$telegramChatTitle`, `$teamsWebhookUrl`, `$discordWebhookUrl` — notification channel properties removed
+- `$balancingStatus` — removed
+
+### Strict Types and Typed Properties
+
+All files now declare `strict_types=1` and use native PHP type declarations for properties, parameters, and return types.
+
+**Typed resource properties:**
+
+All resource properties are now typed with native PHP types. Properties are nullable with a `null` default:
+
+```php
+// v3.x
+class Server extends Resource
+{
+    public $id;
+    public $name;
+    public $isReady;
+    public $tags;
+}
+
+// v4.0
+class Server extends Resource
+{
+    public ?int $id = null;
+    public ?string $name = null;
+    public ?bool $isReady = null;
+    public array $tags = [];
+}
+```
+
+**Typed method signatures:**
+
+All SDK methods now have native parameter and return types:
+
+```php
+// v3.x
+public function servers();
+public function server($serverId);
+public function createServer(array $data, $wait = true);
+
+// v4.0
+public function servers(string $organizationSlug): array;
+public function server(string $organizationSlug, int $serverId): Server;
+public function createServer(string $organizationSlug, array $data, bool $wait = true): Server;
+```
+
+**Removal of `#[\AllowDynamicProperties]`:**
+
+The `Resource` base class no longer uses `#[\AllowDynamicProperties]`. Undeclared fields from the API response are no longer accessible as dynamic properties. Use the `$attributes` array instead:
+
+```php
+// v3.x — dynamic property access worked
+$server->someUndeclaredField;
+
+// v4.0 — use the attributes array
+$server->attributes['some_undeclared_field'];
+```
+
+### API Base URI and Response Format
+
+The SDK now targets Forge API v2:
+
+| | v3.x | v4.0 |
+|-|------|------|
+| **Base URI** | `https://forge.laravel.com/api/v1/` | `https://forge.laravel.com/api/` |
+| **Content-Type** | `application/json` | `application/vnd.api+json` |
+| **Response wrapper** | `{"server": {...}}` | `{"data": {...}}` |
+
+The SDK handles response unwrapping internally, but if you access raw HTTP responses directly, the structure has changed.
+
+---
+
+## New Features
+
+### New Traits
+
+v4.0 introduces several new action traits:
+
+- `ManagesDeployments` — webhooks, deployment scripts, push-to-deploy
+- `ManagesIntegrations` — Horizon, Octane, Reverb, Inertia, Pulse, Maintenance, Scheduler
+- `ManagesLogs`
 - `ManagesOrganizations`
 - `ManagesProviders`
 - `ManagesRoles`
+- `ManagesStorageProviders`
 - `ManagesTeams`
 - `ManagesUser`
-- `ManagesLogs`
 
-### 6. Method Signature Changes
-
-#### Servers
-
-**v3.x:**
-```php
-$servers = $forge->servers();
-$server = $forge->server($serverId);
-$server = $forge->createServer($data);
-$forge->updateServer($serverId, $data);
-$forge->deleteServer($serverId);
-$forge->rebootServer($serverId);
-```
-
-**v4.0:**
-```php
-$servers = $forge->servers($organizationId);
-$server = $forge->server($organizationId, $serverId);
-$server = $forge->createServer($organizationId, $data);
-$server->update($data); // Or $forge->updateServer($orgId, $serverId, $data)
-$server->delete(); // Or $forge->deleteServer($orgId, $serverId)
-$forge->createServerAction($organizationId, $serverId, ['action' => 'reboot']);
-```
-
-#### Sites
-
-**v3.x:**
-```php
-$sites = $forge->sites($serverId);
-$site = $forge->site($serverId, $siteId);
-$site = $forge->createSite($serverId, $data);
-```
-
-**v4.0:**
-```php
-$sites = $forge->serverSites($organizationId, $serverId);
-$site = $forge->organizationSite($organizationId, $siteId);
-$site = $forge->createSite($organizationId, $serverId, $data);
-```
-
-#### Databases
-
-**v3.x:**
-```php
-$databases = $forge->databases($serverId);
-$database = $forge->database($serverId, $databaseId);
-$database = $forge->createDatabase($serverId, $data);
-```
-
-**v4.0:**
-```php
-$databases = $forge->databases($organizationId, $serverId);
-$database = $forge->database($organizationId, $serverId, $databaseId);
-$database = $forge->createDatabase($organizationId, $serverId, $data);
-```
-
-#### Database Users
-
-**v3.x:**
-```php
-$users = $forge->databaseUsers($serverId);
-```
-
-**v4.0:**
-```php
-$users = $forge->databaseUsers($organizationId, $serverId);
-```
-
-#### Background Processes (formerly Daemons)
-
-**v3.x:**
-```php
-$daemons = $forge->daemons($serverId);
-$daemon = $forge->daemon($serverId, $daemonId);
-$daemon = $forge->createDaemon($serverId, $data);
-```
-
-**v4.0:**
-```php
-$processes = $forge->backgroundProcesses($organizationId, $serverId);
-$process = $forge->backgroundProcess($organizationId, $serverId, $processId);
-$process = $forge->createBackgroundProcess($organizationId, $serverId, $data);
-```
-
-#### Scheduled Jobs (formerly Jobs)
-
-**v3.x:**
-```php
-$jobs = $forge->jobs($serverId);
-$job = $forge->job($serverId, $jobId);
-```
-
-**v4.0:**
-```php
-$jobs = $forge->scheduledJobs($organizationId, $serverId);
-$job = $forge->scheduledJob($organizationId, $serverId, $jobId);
-```
-
-#### Firewall Rules
-
-**v3.x:**
-```php
-$rules = $forge->firewallRules($serverId);
-```
-
-**v4.0:**
-```php
-$rules = $forge->firewallRules($organizationId, $serverId);
-```
-
-#### Nginx Templates
-
-**v3.x:**
-```php
-$templates = $forge->nginxTemplates($serverId);
-```
-
-**v4.0:**
-```php
-$templates = $forge->nginxTemplates($organizationId, $serverId);
-```
-
-#### Recipes
-
-**v3.x:**
-```php
-$recipes = $forge->recipes();
-$recipe = $forge->recipe($recipeId);
-```
-
-**v4.0:**
-```php
-$recipes = $forge->recipes($organizationId);
-$recipe = $forge->recipe($organizationId, $recipeId);
-
-// New: Forge-provided recipes
-$forgeRecipes = $forge->forgeRecipes();
-```
-
-### 7. Removed Features
-
-The following features from v3.x are not available in API v2:
-
-- **Backups** (`ManagesBackups` trait)
-  - `backupConfigurations()`
-  - `backupConfiguration()`
-  - `createBackupConfiguration()`
-  - `updateBackupConfiguration()`
-  - `deleteBackupConfiguration()`
-  - `restoreBackup()`
-  - `deleteBackup()`
-
-If you rely on these features, you must stay on v3.x or use the Forge UI.
-
-### 8. New Features in v4.0
-
-#### Organizations
+### Organizations
 
 ```php
 $organizations = $forge->organizations();
-$organization = $forge->organization($organizationId);
+$organization = $forge->organization($organizationSlug);
 ```
 
-#### Server Credentials
+### Teams, Roles & Permissions
 
 ```php
-$credentials = $forge->serverCredentials($organizationId);
-$credential = $forge->serverCredential($organizationId, $credentialId);
+$teams = $forge->teams($organizationSlug);
+$team = $forge->team($organizationSlug, $teamId);
+$forge->createTeam($organizationSlug, $data);
+$members = $forge->teamMembers($organizationSlug, $teamId);
+$invitations = $forge->teamInvitations($organizationSlug, $teamId);
 
-// VPC support
-$vpcs = $forge->vpcs($organizationId, $credentialId, $region);
-$forge->createVpc($organizationId, $credentialId, $region, $data);
+$roles = $forge->roles($organizationSlug);
+$permissions = $forge->permissions();
+$predefinedRoles = $forge->predefinedRoles();
 ```
 
-#### Providers
+### Server Credentials & VPCs
+
+```php
+$credentials = $forge->serverCredentials($organizationSlug);
+$credential = $forge->serverCredential($organizationSlug, $credentialId);
+
+$vpcs = $forge->vpcs($organizationSlug, $credentialId, $region);
+$forge->createVpc($organizationSlug, $credentialId, $region, $data);
+```
+
+### Storage Providers
+
+```php
+$providers = $forge->storageProviders($organizationSlug);
+$provider = $forge->storageProvider($organizationSlug, $storageProviderId);
+$provider = $forge->createStorageProvider($organizationSlug, $data);
+$provider = $forge->updateStorageProvider($organizationSlug, $storageProviderId, $data);
+$forge->deleteStorageProvider($organizationSlug, $storageProviderId);
+```
+
+### Providers
 
 ```php
 $providers = $forge->providers();
@@ -288,177 +273,114 @@ $sizes = $forge->providerSizes($providerId);
 $regions = $forge->providerRegions($providerId);
 ```
 
-#### Teams
+### Laravel Integrations
+
+Each integration follows the same pattern (`get`, `create`, `delete`):
 
 ```php
-$teams = $forge->teams($organizationId);
-$team = $forge->team($organizationId, $teamId);
-$forge->createTeam($organizationId, $data);
-
-$members = $forge->teamMembers($organizationId, $teamId);
-$invitations = $forge->teamInvitations($organizationId, $teamId);
+$forge->getHorizon($organizationSlug, $serverId, $siteId);
+$forge->createHorizon($organizationSlug, $serverId, $siteId, $data);
+$forge->deleteHorizon($organizationSlug, $serverId, $siteId);
 ```
 
-#### Roles & Permissions
+Available integrations: Horizon, Octane, Reverb, Pulse, Inertia, Maintenance, Scheduler.
+
+### Site Deployments
 
 ```php
-$roles = $forge->roles($organizationId);
-$permissions = $forge->permissions();
-$predefinedRoles = $forge->predefinedRoles();
+$webhooks = $forge->webhooks($organizationSlug, $serverId, $siteId);
+$forge->createWebhook($organizationSlug, $serverId, $siteId, $data);
+
+$script = $forge->deploymentScript($organizationSlug, $serverId, $siteId);
+$forge->updateDeploymentScript($organizationSlug, $serverId, $siteId, $data);
+
+$url = $forge->deploymentTriggerUrl($organizationSlug, $serverId, $siteId);
 ```
 
-#### Laravel Integrations
+### Site Domains & Certificates
 
 ```php
-// Horizon
-$forge->getHorizon($organizationId, $serverId, $siteId);
-$forge->createHorizon($organizationId, $serverId, $siteId, $data);
-$forge->deleteHorizon($organizationId, $serverId, $siteId);
+$domains = $forge->domains($organizationSlug, $serverId, $siteId);
+$domain = $forge->createDomain($organizationSlug, $serverId, $siteId, $data);
 
-// Octane
-$forge->getOctane($organizationId, $serverId, $siteId);
-$forge->createOctane($organizationId, $serverId, $siteId, $data);
-$forge->deleteOctane($organizationId, $serverId, $siteId);
-
-// Reverb
-$forge->getReverb($organizationId, $serverId, $siteId);
-$forge->createReverb($organizationId, $serverId, $siteId, $data);
-$forge->deleteReverb($organizationId, $serverId, $siteId);
-
-// Pulse
-$forge->getPulse($organizationId, $serverId, $siteId);
-$forge->createPulse($organizationId, $serverId, $siteId, $data);
-$forge->deletePulse($organizationId, $serverId, $siteId);
-
-// And more: Inertia, Maintenance, Scheduler
+$cert = $forge->domainCertificate($organizationSlug, $serverId, $siteId, $domainId);
+$forge->createDomainCertificate($organizationSlug, $serverId, $siteId, $domainId, $data);
 ```
 
-#### Site Deployments
+### Site Heartbeats
 
 ```php
-// Webhooks
-$webhooks = $forge->webhooks($organizationId, $serverId, $siteId);
-$forge->createWebhook($organizationId, $serverId, $siteId, $data);
-
-// Deployment script
-$script = $forge->deploymentScript($organizationId, $serverId, $siteId);
-$forge->updateDeploymentScript($organizationId, $serverId, $siteId, $data);
-
-// Deploy trigger
-$url = $forge->deploymentTriggerUrl($organizationId, $serverId, $siteId);
+$heartbeats = $forge->heartbeats($organizationSlug, $serverId, $siteId);
+$heartbeat = $forge->createHeartbeat($organizationSlug, $serverId, $siteId, $data);
 ```
 
-#### Site Domains
+### PHP Version Management
+
+PHP management has been expanded:
 
 ```php
-$domains = $forge->domains($organizationId, $serverId, $siteId);
-$domain = $forge->createDomain($organizationId, $serverId, $siteId, $data);
+$versions = $forge->phpVersions($organizationSlug, $serverId);
+$forge->installPhpVersion($organizationSlug, $serverId, ['version' => 'php84']);
 
-// Domain certificates
-$cert = $forge->domainCertificate($organizationId, $serverId, $siteId, $domainId);
-$forge->createDomainCertificate($organizationId, $serverId, $siteId, $domainId, $data);
+// Per-version configuration
+$forge->phpFpm($organizationSlug, $serverId, $phpVersionId);
+$forge->updatePhpFpm($organizationSlug, $serverId, $phpVersionId, $data);
+$forge->phpCli($organizationSlug, $serverId, $phpVersionId);
+$forge->phpPool($organizationSlug, $serverId, $phpVersionId);
 ```
 
-#### Site Workers
+### Forge Recipes
 
 ```php
-$workers = $forge->workers($organizationId, $serverId, $siteId);
-$worker = $forge->createWorker($organizationId, $serverId, $siteId, $data);
+$forgeRecipes = $forge->forgeRecipes();
+$forgeRecipe = $forge->forgeRecipe($recipeId);
+$forge->createForgeRecipeRun($recipeId, $data);
 ```
 
-#### Site Heartbeats
+---
 
-```php
-$heartbeats = $forge->heartbeats($organizationId, $serverId, $siteId);
-$heartbeat = $forge->createHeartbeat($organizationId, $serverId, $siteId, $data);
-```
+## Migration Checklist
 
-### 9. PHP Version Management
+### 1. Update PHP to 8.2+
 
-Enhanced PHP version management in v4.0:
+v4.0 requires PHP 8.2 or higher.
 
-**v3.x:**
-```php
-$forge->installPHP($serverId, $version);
-```
-
-**v4.0:**
-```php
-// List all installed PHP versions
-$versions = $forge->phpVersions($organizationId, $serverId);
-
-// Install new version
-$forge->installPhpVersion($organizationId, $serverId, ['version' => 'php84']);
-
-// Manage PHP configs
-$forge->phpFpmConfig($organizationId, $serverId, $phpVersion);
-$forge->updatePhpFpmConfig($organizationId, $serverId, $phpVersion, $content);
-$forge->phpCliConfig($organizationId, $serverId, $phpVersion);
-$forge->phpPoolConfig($organizationId, $serverId, $phpVersion);
-```
-
-### 10. Server Service Actions
-
-**v3.x:**
-```php
-$forge->rebootNginx($serverId);
-$forge->rebootMySQL($serverId);
-```
-
-**v4.0:**
-```php
-$forge->performNginxAction($organizationId, $serverId, ['action' => 'restart']);
-$forge->performMySQLAction($organizationId, $serverId, ['action' => 'restart']);
-$forge->performPostgresAction($organizationId, $serverId, ['action' => 'restart']);
-$forge->performRedisAction($organizationId, $serverId, ['action' => 'restart']);
-$forge->performPHPAction($organizationId, $serverId, ['action' => 'restart']);
-$forge->performSupervisorAction($organizationId, $serverId, ['action' => 'restart']);
-```
-
-## Migration Strategy
-
-### Step 1: Get Your Organization ID
+### 2. Get Your Organization Slug
 
 ```php
 $forge = new \Laravel\Forge\Forge($apiKey);
-
-// Get your organizations
 $organizations = $forge->organizations();
-
-// Use the first organization or find the one you need
-$organizationId = $organizations[0]->id;
+$organizationSlug = $organizations[0]->id;
 ```
 
-### Step 2: Update All Method Calls
+### 3. Add Organization Slug to All Method Calls
 
-Go through your codebase and add the `$organizationId` parameter as the first argument to all resource methods.
+Add `$organizationSlug` as the first argument to all resource methods. This is the bulk of the migration work.
 
-### Step 3: Update Renamed Methods
+### 4. Rename Changed Methods
 
-- Replace `daemons()` with `backgroundProcesses()`
-- Replace `jobs()` with `scheduledJobs()`
-- Update any direct trait usage
+- `daemons()` → `backgroundProcesses()`
+- `jobs()` → `scheduledJobs()`
+- `allSites()` → `sites()`
+- `siteNginxConfig()` → `siteNginx()`
+- `updateSiteNginxConfig()` → `updateSiteNginx()`
+- Update any direct trait references (see table above)
 
-### Step 4: Remove Backup-Related Code
-
-If you're using backup features, you'll need to:
-- Use the Forge UI for backups
-- Stay on v3.x
-- Implement your own backup solution
-
-### Step 5: Test Thoroughly
+### 5. Test Thoroughly
 
 The API structure has changed significantly. Test all your integrations carefully.
+
+---
 
 ## Compatibility Notes
 
 ### Resource Objects
 
-Resource objects remain largely compatible, though some properties may have changed names or been added/removed based on the API v2 response structure.
+Resource properties are now natively typed. Properties are automatically camelCased from the API response and assigned to typed class properties. Unknown API fields are stored in the `$attributes` array and are no longer accessible as dynamic properties (see "Strict Types and Typed Properties" above).
 
 ### Error Handling
 
-Exception handling remains the same:
+Exception handling is unchanged:
 - `ValidationException`
 - `NotFoundException`
 - `ForbiddenException`
@@ -468,19 +390,12 @@ Exception handling remains the same:
 
 ### Async Operations
 
-The `$wait` parameter for async operations like `createServer()` and `createDatabase()` still works the same way.
+The `$wait` parameter for long-running operations like `createServer()` still works the same way.
+
+---
 
 ## Need Help?
-
-If you encounter issues during migration:
 
 1. Check the [API v2 documentation](https://forge.laravel.com/api/docs)
 2. Review the [SDK source code](https://github.com/laravel/forge-sdk)
 3. [Open an issue](https://github.com/laravel/forge-sdk/issues)
-
-## Version Support
-
-- **v3.x**: Supports Forge API v1 (deprecated but still functional)
-- **v4.0+**: Supports Forge API v2 only
-
-We recommend upgrading to v4.0 to ensure compatibility with future Forge features.

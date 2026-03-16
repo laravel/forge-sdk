@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\User;
@@ -8,20 +10,16 @@ trait ManagesUser
 {
     /**
      * Get the authenticated user.
-     *
-     * @return \Laravel\Forge\Resources\User
      */
-    public function user()
+    public function user(): User
     {
         return new User($this->get('user')['data'] ?? [], $this);
     }
 
     /**
      * Get the authenticated user (alias for user()).
-     *
-     * @return \Laravel\Forge\Resources\User
      */
-    public function me()
+    public function me(): User
     {
         return new User($this->get('me')['data'] ?? [], $this);
     }

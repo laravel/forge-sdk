@@ -1,48 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class ServerCredential extends Resource
 {
     /**
      * The id of the server credential.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the organization.
-     *
-     * @var int
      */
-    public $organizationId;
+    public ?string $organizationId = null;
 
     /**
      * The name of the server credential.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The type of the server credential.
-     *
-     * @var string
      */
-    public $type;
+    public ?string $type = null;
 
     /**
      * The provider of the server credential.
-     *
-     * @var string
      */
-    public $provider;
+    public ?string $provider = null;
+
+    /**
+     * Whether the server credential is in use.
+     */
+    public ?bool $inUse = null;
 
     /**
      * The date/time the server credential was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the server credential was last updated.
+     */
+    public ?string $updatedAt = null;
 }

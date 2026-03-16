@@ -1,71 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Backup extends Resource
 {
     /**
      * The id of the backup.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the organization.
-     *
-     * @var string
      */
-    public $organizationId;
+    public ?string $organizationId = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The id of the backup configuration.
-     *
-     * @var int
      */
-    public $backupConfigurationId;
+    public ?int $backupConfigurationId = null;
 
     /**
      * The status of the backup.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * Whether the backup is partial.
-     *
-     * @var bool
      */
-    public $isPartial;
+    public ?bool $isPartial = null;
 
     /**
      * The size of the backup.
-     *
-     * @var int|null
      */
-    public $size;
+    public ?int $size = null;
 
     /**
      * The date/time the backup finished.
-     *
-     * @var string|null
      */
-    public $finishedAt;
+    public ?string $finishedAt = null;
 
     /**
      * Delete the backup.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $this->forge->deleteBackup(
             $this->organizationId,
@@ -77,11 +61,8 @@ class Backup extends Resource
 
     /**
      * Restore the backup to a database.
-     *
-     * @param  int  $databaseId
-     * @return void
      */
-    public function restore($databaseId)
+    public function restore(int $databaseId): void
     {
         $this->forge->restoreBackup(
             $this->organizationId,

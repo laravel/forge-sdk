@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\Resources\SecurityRule;
@@ -9,87 +11,65 @@ trait ManagesSecurityRules
     /**
      * Get the collection of security rules.
      *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\SecurityRule[]
+     * @return SecurityRule[]
      */
-    public function securityRules($organizationSlug, $serverId, $siteId)
+    public function securityRules(string $organizationSlug, int $serverId, int $siteId): array
     {
         return $this->transformCollection(
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules")['data'] ?? [],
             SecurityRule::class,
-            ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId]
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Get a security rule instance.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $ruleId
-     * @return \Laravel\Forge\Resources\SecurityRule
      */
-    public function securityRule($organizationSlug, $serverId, $siteId, $ruleId)
+    public function securityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId): SecurityRule
     {
-        return new SecurityRule(
+        return $this->newResource(
+            SecurityRule::class,
             $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Create a new security rule.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @return \Laravel\Forge\Resources\SecurityRule
      */
-    public function createSecurityRule($organizationSlug, $serverId, $siteId, array $data)
+    public function createSecurityRule(string $organizationSlug, int $serverId, int $siteId, array $data): SecurityRule
     {
-        $rule = $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules",
-            $data
-        )['data'] ?? [];
-
-        return new SecurityRule(
-            $rule + ['organization_id' => $organizationSlug, 'server_id' => $serverId, 'site_id' => $siteId],
-            $this
+        return $this->newResource(
+            SecurityRule::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Update a security rule.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $ruleId
-     * @return \Laravel\Forge\Resources\SecurityRule
      */
-    public function updateSecurityRule($organizationSlug, $serverId, $siteId, $ruleId, array $data)
+    public function updateSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId, array $data): SecurityRule
     {
-        $rule = $this->put(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}",
-            $data
-        )['data'] ?? [];
-
-        return new SecurityRule($rule, $this);
+        return $this->newResource(
+            SecurityRule::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Delete the given security rule.
-     *
-     * @param  string  $organizationSlug
-     * @param  string  $serverId
-     * @param  string  $siteId
-     * @param  string  $ruleId
-     * @return void
      */
-    public function deleteSecurityRule($organizationSlug, $serverId, $siteId, $ruleId)
+    public function deleteSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}");
     }

@@ -1,69 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Monitor extends Resource
 {
     /**
      * The id of the monitor.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The status of the monitor.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The type of the monitor.
-     *
-     * @var string
      */
-    public $type;
+    public ?string $type = null;
 
     /**
      * The comparison operator of the monitor.
-     *
-     * @var string
      */
-    public $operator;
+    public ?string $operator = null;
 
     /**
      * The threshold of the monitor.
-     *
-     * @var int
      */
-    public $threshold;
+    public ?int $threshold = null;
 
     /**
      * The minutes of the monitor.
-     *
-     * @var int
      */
-    public $minutes;
+    public ?int $minutes = null;
 
     /**
      * The state of the monitor.
-     *
-     * @var string
      */
-    public $state;
+    public ?string $state = null;
 
     /**
      * The state date/time of the monitor.
-     *
-     * @var string
      */
-    public $stateChangedAt;
+    public ?string $stateChangedAt = null;
+
+    /**
+     * The notify setting of the monitor.
+     */
+    public ?string $notify = null;
+
+    /**
+     * The date/time the monitor was created.
+     */
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the monitor was last updated.
+     */
+    public ?string $updatedAt = null;
 }

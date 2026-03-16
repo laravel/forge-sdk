@@ -1,41 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class ForgeRecipe extends Resource
 {
     /**
      * The id of the recipe.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The name of the recipe.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The description of the recipe.
-     *
-     * @var string
      */
-    public $description;
+    public ?string $description = null;
 
     /**
      * The script of the recipe.
-     *
-     * @var string
      */
-    public $script;
+    public ?string $script = null;
+
+    /**
+     * The user of the recipe.
+     */
+    public ?string $user = null;
+
+    /**
+     * The info of the recipe.
+     */
+    public ?string $info = null;
 
     /**
      * The date/time the recipe was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the recipe was last updated.
+     */
+    public ?string $updatedAt = null;
 }

@@ -1,134 +1,100 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class BackupConfiguration extends Resource
 {
     /**
      * The id of the backup configuration.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the organization.
-     *
-     * @var string
      */
-    public $organizationId;
+    public ?string $organizationId = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The name of the backup configuration.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The storage provider id.
-     *
-     * @var int
      */
-    public $storageProviderId;
+    public ?int $storageProviderId = null;
 
     /**
      * The provider name.
-     *
-     * @var string
      */
-    public $provider;
+    public ?string $provider = null;
 
     /**
      * The bucket name.
-     *
-     * @var string
      */
-    public $bucket;
+    public ?string $bucket = null;
 
     /**
      * The directory path.
-     *
-     * @var string
      */
-    public $directory;
+    public ?string $directory = null;
 
     /**
      * The schedule configuration.
-     *
-     * @var array
      */
-    public $schedule;
+    public array $schedule = [];
 
     /**
      * The displayable schedule string.
-     *
-     * @var string
      */
-    public $displayableSchedule;
+    public ?string $displayableSchedule = null;
 
     /**
      * The next run time.
-     *
-     * @var string
      */
-    public $nextRunTime;
+    public ?string $nextRunTime = null;
 
     /**
      * The status of the backup configuration.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The day of week.
-     *
-     * @var int|null
      */
-    public $dayOfWeek;
+    public ?int $dayOfWeek = null;
 
     /**
      * The time.
-     *
-     * @var string
      */
-    public $time;
+    public ?string $time = null;
 
     /**
      * The cron schedule.
-     *
-     * @var string
      */
-    public $cronSchedule;
+    public ?string $cronSchedule = null;
 
     /**
      * The retention period.
-     *
-     * @var int
      */
-    public $retention;
+    public ?int $retention = null;
 
     /**
      * The notification email.
-     *
-     * @var string
      */
-    public $notifyEmail;
+    public ?string $notifyEmail = null;
 
     /**
      * Update the backup configuration.
-     *
-     * @return void
      */
-    public function update(array $data)
+    public function update(array $data): void
     {
         $this->forge->updateBackupConfiguration(
             $this->organizationId,
@@ -140,10 +106,8 @@ class BackupConfiguration extends Resource
 
     /**
      * Delete the backup configuration.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
         $this->forge->deleteBackupConfiguration(
             $this->organizationId,
@@ -157,7 +121,7 @@ class BackupConfiguration extends Resource
      *
      * @return \Laravel\Forge\Resources\Backup[]
      */
-    public function backups()
+    public function backups(): array
     {
         return $this->forge->backups(
             $this->organizationId,
@@ -168,10 +132,8 @@ class BackupConfiguration extends Resource
 
     /**
      * Create a new backup.
-     *
-     * @return void
      */
-    public function createBackup()
+    public function createBackup(): void
     {
         $this->forge->createBackup(
             $this->organizationId,

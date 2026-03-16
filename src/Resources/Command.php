@@ -1,48 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Command extends Resource
 {
     /**
      * The id of the command.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The id of the site.
-     *
-     * @var int
      */
-    public $siteId;
+    public ?int $siteId = null;
 
     /**
      * The command.
-     *
-     * @var string
      */
-    public $command;
+    public ?string $command = null;
 
     /**
      * The status of the command.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The output of the command.
-     *
-     * @var string
      */
-    public $output;
+    public ?string $output = null;
+
+    /**
+     * The duration of the command.
+     */
+    public ?string $duration = null;
+
+    /**
+     * The ID of the user who ran the command.
+     */
+    public ?int $userId = null;
 
     /**
      * The date/time the command was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the command was last updated.
+     */
+    public ?string $updatedAt = null;
 }

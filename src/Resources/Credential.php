@@ -1,27 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Credential extends Resource
 {
     /**
      * The id of the credential.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The name of the credential.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The type of the credential.
-     *
-     * @var string
      */
-    public $type;
+    public ?string $type = null;
 }
