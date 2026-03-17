@@ -40,7 +40,7 @@ class SecurityRule extends Resource
     public $path;
 
     /**
-     * The credentials of the redirect rule.
+     * The credentials of the security rule.
      *
      * @var string
      */
@@ -54,7 +54,7 @@ class SecurityRule extends Resource
     public $createdAt;
 
     /**
-     * Delete the given redirect rule.
+     * Delete the given security rule.
      *
      * @return void
      */
