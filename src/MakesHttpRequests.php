@@ -99,7 +99,7 @@ trait MakesHttpRequests
      */
     protected function handleRequestError(ResponseInterface $response)
     {
-        if ($response->getStatusCode() == 422) {
+        if ($response->getStatusCode() === 422) {
             throw new ValidationException(json_decode((string) $response->getBody(), true));
         }
 
@@ -107,11 +107,11 @@ trait MakesHttpRequests
             throw new ForbiddenException((string) $response->getBody());
         }
 
-        if ($response->getStatusCode() == 404) {
+        if ($response->getStatusCode() === 404) {
             throw new NotFoundException;
         }
 
-        if ($response->getStatusCode() == 400) {
+        if ($response->getStatusCode() === 400) {
             throw new FailedActionException((string) $response->getBody());
         }
 

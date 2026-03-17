@@ -45,10 +45,6 @@ trait ManagesSiteCommands
     {
         $command = $this->get("servers/$serverId/sites/$siteId/commands/$commandId");
 
-        return $this->transformCollection(
-            [$command['command']],
-            SiteCommand::class,
-            ['output' => $command['output']]
-        );
+        return new SiteCommand($command['command'] + ['output' => $command['output']], $this);
     }
 }
