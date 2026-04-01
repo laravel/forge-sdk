@@ -224,5 +224,4 @@ class Site extends Resource
     {
         return $this->transformTags($this->tags, $separator);
     }
-
 }

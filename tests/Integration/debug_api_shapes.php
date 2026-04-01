@@ -35,10 +35,10 @@ foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
     }
 }
 
-$baseUri      = $config['FORGE_API_URL']      ?? '';
-$token        = $config['FORGE_API_TOKEN']     ?? '';
-$organization = $config['FORGE_ORGANIZATION']  ?? '';
-$serverId     = $config['FORGE_SERVER_ID']     ?? '';
+$baseUri = $config['FORGE_API_URL'] ?? '';
+$token = $config['FORGE_API_TOKEN'] ?? '';
+$organization = $config['FORGE_ORGANIZATION'] ?? '';
+$serverId = $config['FORGE_SERVER_ID'] ?? '';
 
 if ($token === '' || $baseUri === '' || $organization === '') {
     fwrite(STDERR, "ERROR: Missing required env vars (FORGE_API_URL, FORGE_API_TOKEN, FORGE_ORGANIZATION).\n");
@@ -56,14 +56,14 @@ echo str_repeat('=', 80)."\n\n";
 // ---------------------------------------------------------------------------
 
 $client = new HttpClient([
-    'base_uri'    => $baseUri,
+    'base_uri' => $baseUri,
     'http_errors' => false,
-    'verify'      => false,
-    'headers'     => [
+    'verify' => false,
+    'headers' => [
         'Authorization' => 'Bearer '.$token,
-        'Accept'        => 'application/vnd.api+json',
-        'Content-Type'  => 'application/vnd.api+json',
-        'User-Agent'    => 'Forge SDK Debug Script',
+        'Accept' => 'application/vnd.api+json',
+        'Content-Type' => 'application/vnd.api+json',
+        'User-Agent' => 'Forge SDK Debug Script',
     ],
 ]);
 
@@ -82,8 +82,9 @@ function printShape(string $label, string $endpoint, array $json, bool $isSingle
 
     if ($data === null) {
         echo "  >> 'data' key is MISSING from response\n";
-        echo "  >> Top-level keys: ".implode(', ', array_keys($json))."\n";
+        echo '  >> Top-level keys: '.implode(', ', array_keys($json))."\n";
         echo "\n";
+
         return;
     }
 
@@ -92,25 +93,26 @@ function printShape(string $label, string $endpoint, array $json, bool $isSingle
     } else {
         if (count($data) === 0) {
             echo "  >> Collection is EMPTY (no items to inspect)\n\n";
+
             return;
         }
         $item = $data[0];
     }
 
     // Top-level keys of the item
-    echo "  ITEM TOP-LEVEL KEYS: ".implode(', ', array_keys($item))."\n";
+    echo '  ITEM TOP-LEVEL KEYS: '.implode(', ', array_keys($item))."\n";
 
     // id / type
     if (isset($item['id'])) {
-        echo "  id   : ".var_export($item['id'], true)." (".gettype($item['id']).")\n";
+        echo '  id   : '.var_export($item['id'], true).' ('.gettype($item['id']).")\n";
     }
     if (isset($item['type'])) {
-        echo "  type : ".var_export($item['type'], true)."\n";
+        echo '  type : '.var_export($item['type'], true)."\n";
     }
 
     // Attributes
     if (isset($item['attributes']) && is_array($item['attributes'])) {
-        echo "  ATTRIBUTES (".count($item['attributes'])." keys):\n";
+        echo '  ATTRIBUTES ('.count($item['attributes'])." keys):\n";
         foreach ($item['attributes'] as $key => $value) {
             $type = gettype($value);
             $preview = '';
@@ -136,7 +138,7 @@ function printShape(string $label, string $endpoint, array $json, bool $isSingle
 
     // Relationships
     if (isset($item['relationships']) && is_array($item['relationships'])) {
-        echo "  RELATIONSHIPS (".count($item['relationships'])." keys):\n";
+        echo '  RELATIONSHIPS ('.count($item['relationships'])." keys):\n";
         foreach ($item['relationships'] as $relName => $relData) {
             $relKeys = is_array($relData) ? implode(', ', array_keys($relData)) : '(not array)';
             // Check if the relationship data is a collection or single
@@ -161,20 +163,20 @@ function printShape(string $label, string $endpoint, array $json, bool $isSingle
 
     // Links
     if (isset($item['links']) && is_array($item['links'])) {
-        echo "  LINKS: ".implode(', ', array_keys($item['links']))."\n";
+        echo '  LINKS: '.implode(', ', array_keys($item['links']))."\n";
     }
 
     // Meta
     if (isset($item['meta']) && is_array($item['meta'])) {
-        echo "  META: ".implode(', ', array_keys($item['meta']))."\n";
+        echo '  META: '.implode(', ', array_keys($item['meta']))."\n";
     }
 
     // Top-level meta/links on the response itself
     if (isset($json['meta'])) {
-        echo "  RESPONSE META: ".json_encode($json['meta'], JSON_UNESCAPED_SLASHES)."\n";
+        echo '  RESPONSE META: '.json_encode($json['meta'], JSON_UNESCAPED_SLASHES)."\n";
     }
     if (isset($json['links'])) {
-        echo "  RESPONSE LINKS: ".json_encode($json['links'], JSON_UNESCAPED_SLASHES)."\n";
+        echo '  RESPONSE LINKS: '.json_encode($json['links'], JSON_UNESCAPED_SLASHES)."\n";
     }
 
     echo "\n";
@@ -192,6 +194,7 @@ function fetchAndPrint(HttpClient $client, string $label, string $endpoint, bool
         echo "  >> ERROR: HTTP {$status}\n";
         $preview = mb_substr($body, 0, 500);
         echo "  >> Body: {$preview}\n\n";
+
         return null;
     }
 
@@ -200,7 +203,8 @@ function fetchAndPrint(HttpClient $client, string $label, string $endpoint, bool
 
     if (! is_array($json)) {
         echo "  >> Could not decode JSON\n";
-        echo "  >> Raw: ".mb_substr($body, 0, 500)."\n\n";
+        echo '  >> Raw: '.mb_substr($body, 0, 500)."\n\n";
+
         return null;
     }
 

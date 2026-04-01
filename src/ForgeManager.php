@@ -8,7 +8,7 @@ use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
- * @mixin \Laravel\Forge\Forge
+ * @mixin Forge
  */
 class ForgeManager
 {

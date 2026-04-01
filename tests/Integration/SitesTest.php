@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration;
 
 use Laravel\Forge\Resources\Domain;
+use Laravel\Forge\Resources\Heartbeat;
 use Laravel\Forge\Resources\Site;
 
 class SitesTest extends IntegrationTestCase
@@ -181,6 +182,123 @@ class SitesTest extends IntegrationTestCase
         } finally {
             usleep(500_000);
             $this->forge()->deleteDomain($org, $serverId, $site->id, $domain->id);
+        }
+    }
+
+    public function test_get_site_environment(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $env = $this->forge()->siteEnvironment($org, $serverId, $site->id);
+
+        $this->assertIsString($env, 'siteEnvironment() should return a string');
+    }
+
+    public function test_get_site_nginx(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $nginx = $this->forge()->siteNginx($org, $serverId, $site->id);
+
+        $this->assertIsString($nginx, 'siteNginx() should return a string');
+        $this->assertNotEmpty($nginx, 'Nginx config should not be empty for an installed site');
+        $this->assertTrue(
+            str_contains($nginx, 'server') || str_contains($nginx, 'listen'),
+            'Nginx config should contain typical directives like "server" or "listen"'
+        );
+    }
+
+    public function test_get_site_nginx_access_log(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $log = $this->forge()->siteNginxAccessLog($org, $serverId, $site->id);
+
+        $this->assertIsString($log, 'siteNginxAccessLog() should return a string (may be empty if no traffic)');
+    }
+
+    public function test_get_site_nginx_error_log(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $log = $this->forge()->siteNginxErrorLog($org, $serverId, $site->id);
+
+        $this->assertIsString($log, 'siteNginxErrorLog() should return a string');
+    }
+
+    public function test_get_site_application_log(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $log = $this->forge()->siteApplicationLog($org, $serverId, $site->id);
+
+        $this->assertIsString($log, 'siteApplicationLog() should return a string');
+    }
+
+    public function test_get_organization_sites(): void
+    {
+        $org = $this->organization();
+
+        $sites = $this->forge()->organizationSites($org);
+
+        $this->assertIsArray($sites);
+
+        if (count($sites) === 0) {
+            $this->markTestSkipped('No sites found for the organization.');
+        }
+
+        $this->assertInstanceOf(Site::class, $sites[0]);
+        $this->assertIsInt($sites[0]->id);
+        $this->assertIsString($sites[0]->name);
+    }
+
+    public function test_get_organization_site(): void
+    {
+        $org = $this->organization();
+        $site = $this->firstSite();
+
+        $fetched = $this->forge()->organizationSite($org, $site->id);
+
+        $this->assertInstanceOf(Site::class, $fetched);
+        $this->assertSame($site->id, $fetched->id, 'Fetched site id should match the requested id');
+        $this->assertIsString($fetched->name);
+        $this->assertNotEmpty($fetched->name);
+    }
+
+    public function test_get_site_healthcheck(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $healthcheck = $this->forge()->siteHealthcheck($org, $serverId, $site->id);
+
+        $this->assertIsArray($healthcheck, 'siteHealthcheck() should return an array');
+    }
+
+    public function test_heartbeats_crud(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+        $site = $this->firstSite();
+
+        $heartbeats = $this->forge()->heartbeats($org, $serverId, $site->id);
+
+        $this->assertIsArray($heartbeats, 'heartbeats() should return an array');
+
+        foreach ($heartbeats as $heartbeat) {
+            $this->assertInstanceOf(Heartbeat::class, $heartbeat);
+            $this->assertIsInt($heartbeat->id);
         }
     }
 }

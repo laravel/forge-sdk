@@ -77,7 +77,7 @@ trait ManagesBackgroundProcesses
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}/log");
 
-        return $response['data']['log'] ?? $response['log'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**

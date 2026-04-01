@@ -29,6 +29,7 @@ class BackupsTest extends OpenAPITestCase
 
             if (! $sdkMethod) {
                 $uncovered[] = "$signature (no SDK method mapped)";
+
                 continue;
             }
 

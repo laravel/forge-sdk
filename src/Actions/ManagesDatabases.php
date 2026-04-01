@@ -66,9 +66,9 @@ trait ManagesDatabases
     /**
      * Synchronize database schemas.
      */
-    public function syncDatabases(string $organizationSlug, int $serverId, array $data = []): array
+    public function syncDatabases(string $organizationSlug, int $serverId, array $data = []): void
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/synchronizations", $data);
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/synchronizations", $data);
     }
 
     /**

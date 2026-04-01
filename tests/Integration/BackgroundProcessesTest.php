@@ -72,4 +72,42 @@ class BackgroundProcessesTest extends IntegrationTestCase
             $this->forge()->deleteBackgroundProcess($org, $serverId, $process->id);
         }
     }
+
+    public function test_get_single_background_process(): void
+    {
+        $org = $this->organization();
+        $serverId = $this->serverId();
+
+        $processes = $this->forge()->backgroundProcesses($org, $serverId);
+
+        $this->assertIsArray($processes);
+
+        if (count($processes) === 0) {
+            $this->markTestSkipped('No background processes found on the test server.');
+        }
+
+        $process = $this->forge()->backgroundProcess($org, $serverId, $processes[0]->id);
+
+        $this->assertInstanceOf(BackgroundProcess::class, $process);
+        $this->assertSame($processes[0]->id, $process->id);
+        $this->assertIsString($process->command);
+        $this->assertNotEmpty($process->command);
+        $this->assertIsString($process->status);
+        $this->assertTrue(
+            is_null($process->user) || is_string($process->user),
+            'user should be null or string'
+        );
+        $this->assertTrue(
+            is_null($process->directory) || is_string($process->directory),
+            'directory should be null or string'
+        );
+        $this->assertTrue(
+            is_null($process->processes) || is_int($process->processes),
+            'processes should be null or int'
+        );
+        $this->assertTrue(
+            is_null($process->createdAt) || is_string($process->createdAt),
+            'createdAt should be null or string'
+        );
+    }
 }

@@ -29,6 +29,7 @@ class OrganizationsTest extends OpenAPITestCase
 
             if (! $sdkMethod) {
                 $uncovered[] = "$signature (no SDK method mapped)";
+
                 continue;
             }
 
@@ -39,7 +40,7 @@ class OrganizationsTest extends OpenAPITestCase
 
         if (! empty($uncovered)) {
             $this->fail(
-                "The following ".count($uncovered)." Organizations endpoints do not have SDK methods:\n".
+                'The following '.count($uncovered)." Organizations endpoints do not have SDK methods:\n".
                 implode("\n", $uncovered)
             );
         }
@@ -76,7 +77,7 @@ class OrganizationsTest extends OpenAPITestCase
 
         if (! empty($missingTests)) {
             $this->fail(
-                "The following ".count($missingTests)." Organizations SDK methods do not have tests:\n".
+                'The following '.count($missingTests)." Organizations SDK methods do not have tests:\n".
                 implode("\n", $missingTests)
             );
         }
@@ -117,6 +118,6 @@ class OrganizationsTest extends OpenAPITestCase
         echo "Total Endpoints: $totalEndpoints\n";
         echo "Mapped to SDK: $mappedEndpoints (".($totalEndpoints > 0 ? round($mappedEndpoints / $totalEndpoints * 100, 2) : 0)."%)\n";
         echo "With Tests: $testedEndpoints (".($totalEndpoints > 0 ? round($testedEndpoints / $totalEndpoints * 100, 2) : 0)."%)\n";
-        echo str_repeat('=', strlen("Organizations API Coverage") + 8) . "\n\n";
+        echo str_repeat('=', strlen('Organizations API Coverage') + 8)."\n\n";
     }
 }

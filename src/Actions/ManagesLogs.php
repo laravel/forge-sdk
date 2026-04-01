@@ -13,7 +13,7 @@ trait ManagesLogs
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -23,5 +23,4 @@ trait ManagesLogs
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
     }
-
 }

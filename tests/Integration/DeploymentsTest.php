@@ -104,6 +104,22 @@ class DeploymentsTest extends IntegrationTestCase
         $this->assertIsString($script);
     }
 
+    public function test_get_deployment_trigger_url(): void
+    {
+        $site = $this->firstSite();
+        $url = $this->forge()->deploymentTriggerUrl($this->organization(), $this->serverId(), $site->id);
+
+        $this->assertIsString($url);
+    }
+
+    public function test_get_deployment_status(): void
+    {
+        $site = $this->firstSite();
+        $status = $this->forge()->deploymentStatus($this->organization(), $this->serverId(), $site->id);
+
+        $this->assertIsArray($status);
+    }
+
     public function test_list_webhooks(): void
     {
         $site = $this->firstSite();

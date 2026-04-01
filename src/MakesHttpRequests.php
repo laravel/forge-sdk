@@ -72,18 +72,20 @@ trait MakesHttpRequests
 
         $responseBody = (string) $response->getBody();
 
-        return json_decode($responseBody, true) ?: $responseBody;
+        $decoded = json_decode($responseBody, true);
+
+        return $decoded === null ? $responseBody : $decoded;
     }
 
     /**
      * Handle the request error.
      *
-     * @throws \Exception
-     * @throws \Laravel\Forge\Exceptions\FailedActionException
-     * @throws \Laravel\Forge\Exceptions\ForbiddenException
-     * @throws \Laravel\Forge\Exceptions\NotFoundException
-     * @throws \Laravel\Forge\Exceptions\ValidationException
-     * @throws \Laravel\Forge\Exceptions\RateLimitExceededException
+     * @throws Exception
+     * @throws FailedActionException
+     * @throws ForbiddenException
+     * @throws NotFoundException
+     * @throws ValidationException
+     * @throws RateLimitExceededException
      */
     protected function handleRequestError(ResponseInterface $response): never
     {
@@ -117,7 +119,7 @@ trait MakesHttpRequests
     /**
      * Retry the callback or fail after x seconds.
      *
-     * @throws \Laravel\Forge\Exceptions\TimeoutException
+     * @throws TimeoutException
      */
     public function retry(int $timeout, callable $callback, int $sleep = 5): mixed
     {

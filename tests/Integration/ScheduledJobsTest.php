@@ -57,4 +57,31 @@ class ScheduledJobsTest extends IntegrationTestCase
         $this->assertArrayNotHasKey('relationships', $job->attributes);
         $this->assertArrayNotHasKey('links', $job->attributes);
     }
+
+    public function test_get_site_scheduled_jobs(): void
+    {
+        $sites = $this->forge()->serverSites($this->organization(), $this->serverId());
+
+        if (count($sites) === 0) {
+            $this->markTestSkipped('No sites found on the test server.');
+        }
+
+        $site = $sites[0];
+        $jobs = $this->forge()->siteScheduledJobs($this->organization(), $this->serverId(), $site->id);
+
+        $this->assertIsArray($jobs);
+
+        if (count($jobs) === 0) {
+            // Site scheduled jobs are optional, just verify listing works.
+            $this->assertTrue(true);
+
+            return;
+        }
+
+        $job = $jobs[0];
+        $this->assertInstanceOf(ScheduledJob::class, $job);
+        $this->assertIsInt($job->id);
+        $this->assertIsString($job->command);
+        $this->assertNotEmpty($job->command);
+    }
 }

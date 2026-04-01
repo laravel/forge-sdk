@@ -8,7 +8,6 @@ declare(strict_types=1);
  * This script creates a test file for each tag/category in the OpenAPI spec.
  * Run with: php tests/OpenAPI/generate-tests.php
  */
-
 $spec = json_decode(file_get_contents(__DIR__.'/../../forge-openapi.json'), true);
 $tags = array_column($spec['tags'], 'name');
 
@@ -164,7 +163,7 @@ foreach ($tags as $tag) {
     $generated[] = "{$className}Test.php";
 }
 
-echo "Generated ".count($generated)." test files:\n";
+echo 'Generated '.count($generated)." test files:\n";
 foreach ($generated as $file) {
     echo "  - $file\n";
 }

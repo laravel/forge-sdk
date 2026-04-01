@@ -64,7 +64,7 @@ trait ManagesSSHKeys
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/key");
 
-        return $response['data']['public_key'] ?? $response['public_key'] ?? '';
+        return $response['data']['attributes']['public_key'] ?? '';
     }
 
     /**
@@ -74,6 +74,6 @@ trait ManagesSSHKeys
     {
         $response = $this->put("orgs/{$organizationSlug}/servers/{$serverId}/key", $data);
 
-        return $response['data']['public_key'] ?? $response['public_key'] ?? '';
+        return $response['data']['attributes']['public_key'] ?? '';
     }
 }

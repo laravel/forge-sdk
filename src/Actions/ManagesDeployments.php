@@ -128,7 +128,7 @@ trait ManagesDeployments
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/script");
 
-        return $response['data']['script'] ?? $response['script'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -146,7 +146,7 @@ trait ManagesDeployments
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/deploy-hook");
 
-        return $response['data']['url'] ?? $response['url'] ?? '';
+        return $response['data']['attributes']['url'] ?? '';
     }
 
     /**
@@ -180,6 +180,6 @@ trait ManagesDeployments
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/{$deploymentId}/log");
 
-        return $response['data']['output'] ?? $response['output'] ?? '';
+        return $response['data']['attributes']['output'] ?? '';
     }
 }

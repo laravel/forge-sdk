@@ -67,6 +67,6 @@ trait ManagesCommands
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands/{$commandId}/output");
 
-        return $response['data']['output'] ?? $response['output'] ?? '';
+        return $response['data']['attributes']['output'] ?? '';
     }
 }

@@ -14,6 +14,25 @@ use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\ValidationException;
 use Laravel\Forge\Forge;
 use Laravel\Forge\MakesHttpRequests;
+use Laravel\Forge\Resources\Database;
+use Laravel\Forge\Resources\DatabaseUser;
+use Laravel\Forge\Resources\Deployment;
+use Laravel\Forge\Resources\Domain;
+use Laravel\Forge\Resources\FirewallRule;
+use Laravel\Forge\Resources\Heartbeat;
+use Laravel\Forge\Resources\Monitor;
+use Laravel\Forge\Resources\NginxTemplate;
+use Laravel\Forge\Resources\PHPVersion;
+use Laravel\Forge\Resources\Recipe;
+use Laravel\Forge\Resources\RecipeRun;
+use Laravel\Forge\Resources\RedirectRule;
+use Laravel\Forge\Resources\SecurityRule;
+use Laravel\Forge\Resources\Server;
+use Laravel\Forge\Resources\Site;
+use Laravel\Forge\Resources\SSHKey;
+use Laravel\Forge\Resources\StorageProvider;
+use Laravel\Forge\Resources\User;
+use Laravel\Forge\Resources\Webhook;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -129,6 +148,20 @@ class ForgeSDKTest extends TestCase
         );
 
         $site = $forge->createSite('org-123', 1, ['domain' => 'example.com']);
+        $this->assertSame(1, $site->id);
+    }
+
+    public function test_creating_balancer()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/balancer', [
+            'json' => ['method' => 'round_robin'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "balancer"}}')
+        );
+
+        $site = $forge->createBalancer('org-123', 1, ['method' => 'round_robin']);
         $this->assertSame(1, $site->id);
     }
 
@@ -778,6 +811,18 @@ class ForgeSDKTest extends TestCase
         $this->assertSame(4, $integration->id);
     }
 
+    public function test_deleting_inertia_integration()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/1/sites/1/integrations/inertia', [])->andReturn(
+            new Response(204)
+        );
+
+        $forge->deleteInertia('org-123', 1, 1);
+        $this->assertTrue(true);
+    }
+
     public function test_getting_pulse_integration()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
@@ -1097,7 +1142,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/123/sites/456/deployments/script', [])->andReturn(
-            new Response(200, [], '{"data": {"script": "cd /home/forge/example.com\ngit pull origin main"}}')
+            new Response(200, [], '{"data": {"type": "deployment-scripts", "id": "1", "attributes": {"content": "cd /home/forge/example.com\ngit pull origin main"}}}')
         );
 
         $script = $forge->deploymentScript('org-123', 123, 456);
@@ -1125,7 +1170,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/123/sites/456/deployments/deploy-hook', [])->andReturn(
-            new Response(200, [], '{"data": {"url": "https://forge.laravel.com/servers/123/sites/456/deploy/http?token=abc123"}}')
+            new Response(200, [], '{"data": {"type": "deploy-hooks", "id": "1", "attributes": {"url": "https://forge.laravel.com/servers/123/sites/456/deploy/http?token=abc123"}}}')
         );
 
         $url = $forge->deploymentTriggerUrl('org-123', 123, 456);
@@ -1181,7 +1226,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/123/sites/456/deployments/1/log', [])->andReturn(
-            new Response(200, [], '{"data": {"output": "Cloning repository...\nInstalling dependencies...\nDeployment finished successfully."}}')
+            new Response(200, [], '{"data": {"type": "deployment-outputs", "id": "1", "attributes": {"output": "Cloning repository...\nInstalling dependencies...\nDeployment finished successfully."}}}')
         );
 
         $log = $forge->deploymentLog('org-123', 123, 456, 1);
@@ -1702,7 +1747,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/php/versions/83/configs/fpm', [])->andReturn(
-            new Response(200, [], 'pm = dynamic')
+            new Response(200, [], '{"data": {"type": "php-fpm-configs", "id": "1", "attributes": {"configuration": "pm = dynamic"}}}')
         );
 
         $config = $forge->phpFpm('org-123', 1, 83);
@@ -1729,7 +1774,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/php/versions/83/configs/cli', [])->andReturn(
-            new Response(200, [], 'memory_limit = 256M')
+            new Response(200, [], '{"data": {"type": "php-cli-configs", "id": "1", "attributes": {"configuration": "memory_limit = 256M"}}}')
         );
 
         $config = $forge->phpCli('org-123', 1, 83);
@@ -1756,7 +1801,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/php/versions/83/configs/pool', [])->andReturn(
-            new Response(200, [], 'pm.max_children = 50')
+            new Response(200, [], '{"data": {"type": "php-pool-configs", "id": "1", "attributes": {"configuration": "pm.max_children = 50"}}}')
         );
 
         $config = $forge->phpPool('org-123', 1, 83);
@@ -1955,7 +2000,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/scheduled-jobs/1/output', [])->andReturn(
-            new Response(200, [], '{"data": {"output": "Job started at 2025-11-18 10:00:00\nProcessing items...\nJob completed successfully."}}')
+            new Response(200, [], '{"data": {"type": "job-outputs", "id": "1", "attributes": {"output": "Job started at 2025-11-18 10:00:00\nProcessing items...\nJob completed successfully."}}}')
         );
 
         $output = $forge->scheduledJobOutput('org-123', 1, 1);
@@ -2120,7 +2165,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/key', [])->andReturn(
-            new Response(200, [], '{"data": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC..."}}')
+            new Response(200, [], '{"data": {"type": "server-keys", "id": "1", "attributes": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC..."}}}')
         );
 
         $publicKey = $forge->serverKey('org-123', 1);
@@ -2134,7 +2179,7 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/key', [
             'json' => ['public_key' => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD...'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD..."}}')
+            new Response(200, [], '{"data": {"type": "server-keys", "id": "1", "attributes": {"public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD..."}}}')
         );
 
         $publicKey = $forge->updateServerKey('org-123', 1, ['public_key' => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD...']);
@@ -2378,7 +2423,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/commands/1/output', [])->andReturn(
-            new Response(200, [], '{"data": {"output": "Running migrations...\nMigration table created successfully.\nMigrating: 2024_01_01_000000_create_users_table\nMigrated: 2024_01_01_000000_create_users_table (45.67ms)"}}')
+            new Response(200, [], '{"data": {"type": "command-outputs", "id": "1", "attributes": {"output": "Running migrations...\nMigration table created successfully.\nMigrating: 2024_01_01_000000_create_users_table\nMigrated: 2024_01_01_000000_create_users_table (45.67ms)"}}}')
         );
 
         $output = $forge->commandOutput('org-123', 1, 1, 1);
@@ -2392,7 +2437,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/environment', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "APP_NAME=Laravel\nAPP_ENV=production\nAPP_KEY=base64:randomkey123\nAPP_DEBUG=false\nAPP_URL=https://example.com\n\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_PORT=3306\nDB_DATABASE=laravel\nDB_USERNAME=forge\nDB_PASSWORD=secret"}}')
+            new Response(200, [], '{"data": {"type": "environments", "id": "1", "attributes": {"content": "APP_NAME=Laravel\nAPP_ENV=production\nAPP_KEY=base64:randomkey123\nAPP_DEBUG=false\nAPP_URL=https://example.com\n\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_PORT=3306\nDB_DATABASE=laravel\nDB_USERNAME=forge\nDB_PASSWORD=secret"}}}')
         );
 
         $content = $forge->siteEnvironment('org-123', 1, 1);
@@ -2421,7 +2466,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/nginx', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "server {\\n    listen 80;\\n    server_name example.com;\\n    root /home/forge/example.com;\\n\\n    location / {\\n        try_files $uri $uri/ /index.php?$query_string;\\n    }\\n}"}}')
+            new Response(200, [], '{"data": {"type": "nginx-configs", "id": "1", "attributes": {"content": "server {\\n    listen 80;\\n    server_name example.com;\\n    root /home/forge/example.com;\\n\\n    location / {\\n        try_files $uri $uri/ /index.php?$query_string;\\n    }\\n}"}}}')
         );
 
         $content = $forge->siteNginx('org-123', 1, 1);
@@ -2452,7 +2497,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/logs/nginx-error', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "2025/11/18 10:00:00 [error] 1234#1234: *1 connect() failed (111: Connection refused)\n2025/11/18 10:01:00 [warn] 1234#1234: *2 upstream server temporarily disabled\n2025/11/18 10:02:00 [error] 1234#1234: *3 open() \\"/var/www/html/favicon.ico\\" failed (2: No such file or directory)"}}')
+            new Response(200, [], '{"data": {"type": "server-logs", "id": "1", "attributes": {"content": "2025/11/18 10:00:00 [error] 1234#1234: *1 connect() failed (111: Connection refused)\n2025/11/18 10:01:00 [warn] 1234#1234: *2 upstream server temporarily disabled\n2025/11/18 10:02:00 [error] 1234#1234: *3 open() \\"/var/www/html/favicon.ico\\" failed (2: No such file or directory)"}}}')
         );
 
         $log = $forge->serverLog('org-123', 1, 'nginx-error');
@@ -2478,7 +2523,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/logs/nginx-access', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "192.168.1.1 - - [18/Nov/2025:10:00:00 +0000] \\"GET /api/users HTTP/1.1\\" 200 1234 \\"-\\" \\"Mozilla/5.0\\"\n192.168.1.2 - - [18/Nov/2025:10:01:00 +0000] \\"POST /api/login HTTP/1.1\\" 201 567 \\"-\\" \\"axios/1.6.0\\"\n192.168.1.3 - - [18/Nov/2025:10:02:00 +0000] \\"GET /health HTTP/1.1\\" 200 89 \\"-\\" \\"HealthCheck/1.0\\""}}')
+            new Response(200, [], '{"data": {"type": "nginx-access-logs", "id": "1", "attributes": {"content": "192.168.1.1 - - [18/Nov/2025:10:00:00 +0000] \\"GET /api/users HTTP/1.1\\" 200 1234 \\"-\\" \\"Mozilla/5.0\\"\n192.168.1.2 - - [18/Nov/2025:10:01:00 +0000] \\"POST /api/login HTTP/1.1\\" 201 567 \\"-\\" \\"axios/1.6.0\\"\n192.168.1.3 - - [18/Nov/2025:10:02:00 +0000] \\"GET /health HTTP/1.1\\" 200 89 \\"-\\" \\"HealthCheck/1.0\\""}}}')
         );
 
         $log = $forge->siteNginxAccessLog('org-123', 1, 1);
@@ -2502,7 +2547,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/logs/nginx-error', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "2025/11/18 10:00:00 [error] 5678#5678: *10 FastCGI sent in stderr: \\"PHP message: PHP Fatal error: Uncaught Exception\\"\n2025/11/18 10:01:00 [error] 5678#5678: *11 connect() to unix:/var/run/php/php8.3-fpm.sock failed (2: No such file or directory)\n2025/11/18 10:02:00 [warn] 5678#5678: *12 an upstream response is buffered to a temporary file"}}')
+            new Response(200, [], '{"data": {"type": "nginx-error-logs", "id": "1", "attributes": {"content": "2025/11/18 10:00:00 [error] 5678#5678: *10 FastCGI sent in stderr: \\"PHP message: PHP Fatal error: Uncaught Exception\\"\n2025/11/18 10:01:00 [error] 5678#5678: *11 connect() to unix:/var/run/php/php8.3-fpm.sock failed (2: No such file or directory)\n2025/11/18 10:02:00 [warn] 5678#5678: *12 an upstream response is buffered to a temporary file"}}}')
         );
 
         $log = $forge->siteNginxErrorLog('org-123', 1, 1);
@@ -2526,7 +2571,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/logs/application', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "[2025-11-18 10:00:00] production.ERROR: SQLSTATE[HY000] [1045] Access denied for user\n[2025-11-18 10:01:00] production.INFO: User login successful {\\"user_id\\": 123}\n[2025-11-18 10:02:00] production.WARNING: Cache store redis is not available"}}')
+            new Response(200, [], '{"data": {"type": "application-logs", "id": "1", "attributes": {"content": "[2025-11-18 10:00:00] production.ERROR: SQLSTATE[HY000] [1045] Access denied for user\n[2025-11-18 10:01:00] production.INFO: User login successful {\\"user_id\\": 123}\n[2025-11-18 10:02:00] production.WARNING: Cache store redis is not available"}}}')
         );
 
         $log = $forge->siteApplicationLog('org-123', 1, 1);
@@ -2711,7 +2756,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/background-processes/1/log', [])->andReturn(
-            new Response(200, [], '{"data": {"log": "Process log content"}}')
+            new Response(200, [], '{"data": {"type": "background-process-logs", "id": "1", "attributes": {"content": "Process log content"}}}')
         );
 
         $log = $forge->backgroundProcessLog('org-123', 1, 1);
@@ -2738,8 +2783,8 @@ class ForgeSDKTest extends TestCase
             new Response(202, [], '{"data": {"status": "syncing"}}')
         );
 
-        $result = $forge->syncDatabases('org-123', 1);
-        $this->assertIsArray($result);
+        $forge->syncDatabases('org-123', 1);
+        $this->assertTrue(true);
     }
 
     public function test_getting_single_database_user()
@@ -3181,7 +3226,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/key', [])->andReturn(
-            new Response(200, [], '{"data": {"public_key": "ssh-rsa..."}}')
+            new Response(200, [], '{"data": {"type": "server-keys", "id": "1", "attributes": {"public_key": "ssh-rsa..."}}}')
         );
 
         $key = $forge->serverKey('org-123', 1);
@@ -3195,7 +3240,7 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/key', [
             'json' => ['key' => 'ssh-rsa...'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"public_key": "ssh-rsa..."}}')
+            new Response(200, [], '{"data": {"type": "server-keys", "id": "1", "attributes": {"public_key": "ssh-rsa..."}}}')
         );
 
         $key = $forge->updateServerKey('org-123', 1, ['key' => 'ssh-rsa...']);
@@ -3258,7 +3303,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/scheduled-jobs/1/output', [])->andReturn(
-            new Response(200, [], '{"data": {"output": "Job completed successfully"}}')
+            new Response(200, [], '{"data": {"type": "job-outputs", "id": "1", "attributes": {"output": "Job completed successfully"}}}')
         );
 
         $output = $forge->siteScheduledJobOutput('org-123', 1, 1, 1);
@@ -3337,7 +3382,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/domains/1/nginx', [])->andReturn(
-            new Response(200, [], '{"data": {"content": "server { ... }"}}')
+            new Response(200, [], '{"data": {"type": "nginx-configs", "id": "1", "attributes": {"content": "server { ... }"}}}')
         );
 
         $config = $forge->domainNginxConfig('org-123', 1, 1, 1);
@@ -3389,11 +3434,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/nginx', [])->andReturn(
-            new Response(200, [], 'server { ... }')
+            new Response(200, [], '{"data": {"type": "nginx-configs", "id": "1", "attributes": {"content": "server { ... }"}}}')
         );
 
         $config = $forge->siteNginx('org-123', 1, 1);
         $this->assertIsString($config);
+        $this->assertSame('server { ... }', $config);
     }
 
     public function test_updating_site_nginx_config()
@@ -3955,7 +4001,7 @@ class ForgeSDKTest extends TestCase
 
     public function test_server_json_api_response_preserves_type()
     {
-        $server = new \Laravel\Forge\Resources\Server([
+        $server = new Server([
             'id' => '10',
             'type' => 'servers',
             'attributes' => [
@@ -3983,7 +4029,7 @@ class ForgeSDKTest extends TestCase
 
     public function test_database_json_api_response_hydration()
     {
-        $database = new \Laravel\Forge\Resources\Database([
+        $database = new Database([
             'id' => '1',
             'type' => 'databases',
             'attributes' => [
@@ -4003,7 +4049,7 @@ class ForgeSDKTest extends TestCase
 
     public function test_monitor_json_api_response_preserves_type()
     {
-        $monitor = new \Laravel\Forge\Resources\Monitor([
+        $monitor = new Monitor([
             'id' => '1',
             'type' => 'monitors',
             'attributes' => [
@@ -4027,7 +4073,7 @@ class ForgeSDKTest extends TestCase
 
     public function test_firewall_rule_json_api_response_preserves_type()
     {
-        $rule = new \Laravel\Forge\Resources\FirewallRule([
+        $rule = new FirewallRule([
             'id' => '42',
             'type' => 'rules',
             'attributes' => [
@@ -4048,7 +4094,7 @@ class ForgeSDKTest extends TestCase
 
     public function test_user_json_api_response_strips_envelope_type()
     {
-        $user = new \Laravel\Forge\Resources\User([
+        $user = new User([
             'id' => '3',
             'type' => 'users',
             'attributes' => [
@@ -4070,7 +4116,7 @@ class ForgeSDKTest extends TestCase
 
     public function test_storage_provider_json_api_response_hydration()
     {
-        $provider = new \Laravel\Forge\Resources\StorageProvider([
+        $provider = new StorageProvider([
             'id' => '1',
             'type' => 'storageProviders',
             'attributes' => [
@@ -4108,7 +4154,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->delete();
 
         $this->assertTrue(true);
@@ -4124,7 +4170,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "reboot"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->reboot();
 
         $this->assertTrue(true);
@@ -4140,7 +4186,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->rebootMysql();
 
         $this->assertTrue(true);
@@ -4156,7 +4202,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "stop"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->stopMysql();
 
         $this->assertTrue(true);
@@ -4172,7 +4218,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->rebootPostgres();
 
         $this->assertTrue(true);
@@ -4188,7 +4234,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->rebootNginx();
 
         $this->assertTrue(true);
@@ -4204,7 +4250,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->rebootPHP();
 
         $this->assertTrue(true);
@@ -4218,7 +4264,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"enabled": true}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->enableOPCache();
 
         $this->assertTrue(true);
@@ -4232,7 +4278,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $server->disableOPCache();
 
         $this->assertTrue(true);
@@ -4246,7 +4292,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": [{"id": 1, "version": "8.3"}]}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $versions = $server->phpVersions();
 
         $this->assertCount(1, $versions);
@@ -4262,10 +4308,10 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 1, "version": "8.3"}}')
         );
 
-        $server = new \Laravel\Forge\Resources\Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $version = $server->installPHP('8.3');
 
-        $this->assertInstanceOf(\Laravel\Forge\Resources\PHPVersion::class, $version);
+        $this->assertInstanceOf(PHPVersion::class, $version);
     }
 
     public function test_site_delete_convenience_method()
@@ -4276,7 +4322,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $site->delete();
 
         $this->assertTrue(true);
@@ -4287,10 +4333,10 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/2/deployments/script', [])->andReturn(
-            new Response(200, [], '{"data": {"script": "cd /home/forge && git pull"}}')
+            new Response(200, [], '{"data": {"type": "deployment-scripts", "id": "1", "attributes": {"content": "cd /home/forge && git pull"}}}')
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $script = $site->getDeploymentScript();
 
         $this->assertSame('cd /home/forge && git pull', $script);
@@ -4306,7 +4352,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"script": "cd /home/forge && git pull"}}')
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $site->updateDeploymentScript(['script' => 'cd /home/forge && git pull']);
 
         $this->assertTrue(true);
@@ -4320,10 +4366,10 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 10, "status": "deploying"}}')
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $deployment = $site->deploySite();
 
-        $this->assertInstanceOf(\Laravel\Forge\Resources\Deployment::class, $deployment);
+        $this->assertInstanceOf(Deployment::class, $deployment);
     }
 
     public function test_site_disable_quick_deploy_convenience_method()
@@ -4334,7 +4380,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $site->disableQuickDeploy();
 
         $this->assertTrue(true);
@@ -4348,7 +4394,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": [{"id": 1, "status": "finished"}]}')
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $deployments = $site->getDeploymentHistory();
 
         $this->assertCount(1, $deployments);
@@ -4359,10 +4405,10 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/2/deployments/10/log', [])->andReturn(
-            new Response(200, [], '{"data": {"output": "Deployment output..."}}')
+            new Response(200, [], '{"data": {"type": "deployment-outputs", "id": "10", "attributes": {"output": "Deployment output..."}}}')
         );
 
-        $site = new \Laravel\Forge\Resources\Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $output = $site->getDeploymentHistoryOutput(10);
 
         $this->assertSame('Deployment output...', $output);
@@ -4376,7 +4422,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $database = new \Laravel\Forge\Resources\Database(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $database = new Database(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $database->delete();
 
         $this->assertTrue(true);
@@ -4392,10 +4438,10 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 3, "name": "forge"}}')
         );
 
-        $user = new \Laravel\Forge\Resources\DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $updated = $user->update(['databases' => [1, 2]]);
 
-        $this->assertInstanceOf(\Laravel\Forge\Resources\DatabaseUser::class, $updated);
+        $this->assertInstanceOf(DatabaseUser::class, $updated);
     }
 
     public function test_database_user_delete_convenience_method()
@@ -4406,7 +4452,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $user = new \Laravel\Forge\Resources\DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $user->delete();
 
         $this->assertTrue(true);
@@ -4420,7 +4466,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $domain = new \Laravel\Forge\Resources\Domain(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $domain = new Domain(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
         $domain->delete();
 
         $this->assertTrue(true);
@@ -4434,7 +4480,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $rule = new \Laravel\Forge\Resources\FirewallRule(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $rule = new FirewallRule(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $rule->delete();
 
         $this->assertTrue(true);
@@ -4448,7 +4494,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $heartbeat = new \Laravel\Forge\Resources\Heartbeat(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $heartbeat = new Heartbeat(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
         $heartbeat->delete();
 
         $this->assertTrue(true);
@@ -4464,10 +4510,10 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 5, "name": "custom"}}')
         );
 
-        $template = new \Laravel\Forge\Resources\NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $template = new NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $updated = $template->update(['content' => 'server {}']);
 
-        $this->assertInstanceOf(\Laravel\Forge\Resources\NginxTemplate::class, $updated);
+        $this->assertInstanceOf(NginxTemplate::class, $updated);
     }
 
     public function test_nginx_template_delete_convenience_method()
@@ -4478,7 +4524,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $template = new \Laravel\Forge\Resources\NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $template = new NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $template->delete();
 
         $this->assertTrue(true);
@@ -4494,10 +4540,10 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 5, "name": "Updated Recipe"}}')
         );
 
-        $recipe = new \Laravel\Forge\Resources\Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
+        $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
         $updated = $recipe->update(['name' => 'Updated Recipe']);
 
-        $this->assertInstanceOf(\Laravel\Forge\Resources\Recipe::class, $updated);
+        $this->assertInstanceOf(Recipe::class, $updated);
     }
 
     public function test_recipe_delete_convenience_method()
@@ -4508,7 +4554,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $recipe = new \Laravel\Forge\Resources\Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
+        $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
         $recipe->delete();
 
         $this->assertTrue(true);
@@ -4524,10 +4570,10 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 10}}')
         );
 
-        $recipe = new \Laravel\Forge\Resources\Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
+        $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
         $run = $recipe->run(['servers' => [1, 2]]);
 
-        $this->assertInstanceOf(\Laravel\Forge\Resources\RecipeRun::class, $run);
+        $this->assertInstanceOf(RecipeRun::class, $run);
     }
 
     public function test_redirect_rule_delete_convenience_method()
@@ -4538,7 +4584,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $rule = new \Laravel\Forge\Resources\RedirectRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $rule = new RedirectRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
         $rule->delete();
 
         $this->assertTrue(true);
@@ -4552,7 +4598,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $rule = new \Laravel\Forge\Resources\SecurityRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $rule = new SecurityRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
         $rule->delete();
 
         $this->assertTrue(true);
@@ -4566,7 +4612,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $key = new \Laravel\Forge\Resources\SSHKey(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $key = new SSHKey(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $key->delete();
 
         $this->assertTrue(true);
@@ -4580,7 +4626,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $webhook = new \Laravel\Forge\Resources\Webhook(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $webhook = new Webhook(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
         $webhook->delete();
 
         $this->assertTrue(true);

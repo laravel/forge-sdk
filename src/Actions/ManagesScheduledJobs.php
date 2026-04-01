@@ -64,7 +64,7 @@ trait ManagesScheduledJobs
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/scheduled-jobs/{$jobId}/output");
 
-        return $response['data']['output'] ?? $response['output'] ?? '';
+        return $response['data']['attributes']['output'] ?? '';
     }
 
     /**
@@ -126,6 +126,6 @@ trait ManagesScheduledJobs
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/scheduled-jobs/{$jobId}/output");
 
-        return $response['data']['output'] ?? $response['output'] ?? '';
+        return $response['data']['attributes']['output'] ?? '';
     }
 }

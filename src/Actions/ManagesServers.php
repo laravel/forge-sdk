@@ -283,9 +283,11 @@ trait ManagesServers
     /**
      * Get the PHP FPM configuration.
      */
-    public function phpFpm(string $organizationSlug, int $serverId, int $phpVersionId): array|string
+    public function phpFpm(string $organizationSlug, int $serverId, int $phpVersionId): string
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm");
+
+        return $response['data']['attributes']['configuration'] ?? '';
     }
 
     /**
@@ -299,9 +301,11 @@ trait ManagesServers
     /**
      * Get the PHP CLI configuration.
      */
-    public function phpCli(string $organizationSlug, int $serverId, int $phpVersionId): array|string
+    public function phpCli(string $organizationSlug, int $serverId, int $phpVersionId): string
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli");
+
+        return $response['data']['attributes']['configuration'] ?? '';
     }
 
     /**
@@ -315,9 +319,11 @@ trait ManagesServers
     /**
      * Get the PHP pool configuration.
      */
-    public function phpPool(string $organizationSlug, int $serverId, int $phpVersionId): array|string
+    public function phpPool(string $organizationSlug, int $serverId, int $phpVersionId): string
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool");
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool");
+
+        return $response['data']['attributes']['configuration'] ?? '';
     }
 
     /**

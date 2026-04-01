@@ -60,5 +60,4 @@ class Certificate extends Resource
      * The date/time the certificate was last updated.
      */
     public ?string $updatedAt = null;
-
 }

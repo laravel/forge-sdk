@@ -119,7 +119,7 @@ class BackupConfiguration extends Resource
     /**
      * Get backups for this configuration.
      *
-     * @return \Laravel\Forge\Resources\Backup[]
+     * @return Backup[]
      */
     public function backups(): array
     {

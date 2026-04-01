@@ -92,6 +92,19 @@ trait ManagesSites
     }
 
     /**
+     * Create a new load balancer site.
+     */
+    public function createBalancer(string $organizationSlug, int $serverId, array $data): Site
+    {
+        return $this->newResource(
+            Site::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/balancer", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
+    }
+
+    /**
      * Delete the given site.
      */
     public function deleteSite(string $organizationSlug, int $serverId, int $siteId): void
@@ -238,7 +251,7 @@ trait ManagesSites
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/environment");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -258,7 +271,7 @@ trait ManagesSites
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/nginx");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -278,7 +291,7 @@ trait ManagesSites
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/nginx-access");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -296,7 +309,7 @@ trait ManagesSites
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/nginx-error");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -314,7 +327,7 @@ trait ManagesSites
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/logs/application");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -398,7 +411,7 @@ trait ManagesSites
     {
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx");
 
-        return $response['data']['content'] ?? $response['content'] ?? '';
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**

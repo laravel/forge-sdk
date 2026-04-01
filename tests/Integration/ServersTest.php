@@ -108,4 +108,31 @@ class ServersTest extends IntegrationTestCase
         $this->assertNotEmpty($event->description);
         $this->assertIsString($event->createdAt);
     }
+
+    public function test_get_single_server_event(): void
+    {
+        $events = $this->forge()->serverEvents($this->organization(), $this->serverId());
+
+        $this->assertIsArray($events);
+
+        if (count($events) === 0) {
+            $this->markTestSkipped('No events found on the test server.');
+        }
+
+        $firstEvent = $events[0];
+        $event = $this->forge()->serverEvent($this->organization(), $this->serverId(), $firstEvent->id);
+
+        $this->assertInstanceOf(Event::class, $event);
+        $this->assertSame($firstEvent->id, $event->id);
+        $this->assertIsString($event->description);
+        $this->assertNotEmpty($event->description);
+        $this->assertIsString($event->createdAt);
+    }
+
+    public function test_archived_servers_list(): void
+    {
+        $servers = $this->forge()->archivedServers($this->organization());
+
+        $this->assertIsArray($servers);
+    }
 }
