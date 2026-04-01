@@ -61,7 +61,7 @@ class SiteCommand extends Resource
     public $createdAt;
 
     /**
-     * The The updated_at time for the command.
+     * The updated_at time for the command.
      *
      * @var string
      */

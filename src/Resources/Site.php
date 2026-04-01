@@ -201,7 +201,7 @@ class Site extends Resource
     public $phpVersion;
 
     /**
-     * The aliases of the site.
+     * The tags of the site.
      *
      * @var array
      */

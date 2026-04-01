@@ -65,7 +65,7 @@ class BackupConfiguration extends Resource
     public $databases;
 
     /**
-     * The databases for this backup.
+     * The backups for this configuration.
      *
      * @var \Laravel\Forge\Resources\Backup[]
      */

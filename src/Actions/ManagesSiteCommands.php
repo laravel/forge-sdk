@@ -23,7 +23,7 @@ trait ManagesSiteCommands
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\SiteCommand
+     * @return \Laravel\Forge\Resources\SiteCommand[]
      */
     public function listCommandHistory($serverId, $siteId)
     {
