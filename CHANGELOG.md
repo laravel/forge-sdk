@@ -128,7 +128,7 @@
 
 ### Fixed
 
-- Ensure timout exception always recieves an array by @timacdonald in https://github.com/laravel/forge-sdk/pull/143
+- Ensure timout exception always receives an array by @timacdonald in https://github.com/laravel/forge-sdk/pull/143
 
 ## [v3.13.0](https://github.com/laravel/forge-sdk/compare/v3.12.0...v3.13.0) - 2022-03-08
 
