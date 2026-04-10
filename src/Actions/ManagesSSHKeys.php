@@ -39,14 +39,9 @@ trait ManagesSSHKeys
     /**
      * Create a new SSH key.
      */
-    public function createSshKey(string $organizationSlug, int $serverId, array $data): SSHKey
+    public function createSshKey(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->newResource(
-            SSHKey::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys", $data);
     }
 
     /**

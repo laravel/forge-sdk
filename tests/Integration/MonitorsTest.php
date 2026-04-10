@@ -19,7 +19,7 @@ class MonitorsTest extends IntegrationTestCase
             return;
         }
 
-        $monitor = $this->forge()->createMonitor($this->organization(), $this->serverId(), [
+        $this->forge()->createMonitor($this->organization(), $this->serverId(), [
             'type' => 'disk',
             'operator' => 'gte',
             'threshold' => 80,
@@ -27,21 +27,16 @@ class MonitorsTest extends IntegrationTestCase
             'notify' => 'sdk-test@example.com',
         ]);
 
-        if ($monitor->id === null || $monitor->id === 0) {
-            // If create returned 202 with no body, try listing.
-            sleep(2);
-            $monitors = $this->forge()->monitors($this->organization(), $this->serverId());
-            foreach ($monitors as $m) {
-                if ($m->notify === 'sdk-test@example.com') {
-                    static::$testMonitorId = $m->id;
+        sleep(2);
+        $monitors = $this->forge()->monitors($this->organization(), $this->serverId());
+        foreach ($monitors as $m) {
+            if ($m->notify === 'sdk-test@example.com') {
+                static::$testMonitorId = $m->id;
 
-                    return;
-                }
+                return;
             }
-            $this->markTestSkipped('Monitor creation was accepted but monitor did not appear in listing.');
         }
-
-        static::$testMonitorId = $monitor->id;
+        $this->markTestSkipped('Monitor creation was accepted but monitor did not appear in listing.');
     }
 
     public static function tearDownAfterClass(): void

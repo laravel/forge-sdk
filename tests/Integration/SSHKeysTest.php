@@ -21,7 +21,6 @@ class SSHKeysTest extends IntegrationTestCase
 
         $publicKey = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJEj1ZKj+X6iN2m8fHVoADwjMKiTrOGy3GqXBqFKbuh6 sdk-test@integration';
 
-        // createSshKey returns 202 with no body, so the returned SSHKey is empty.
         $this->forge()->createSshKey($this->organization(), $this->serverId(), [
             'name' => 'SDK Test Key '.time(),
             'key' => $publicKey,

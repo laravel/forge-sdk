@@ -27,11 +27,9 @@ class CommandsTest extends IntegrationTestCase
         $site = $this->firstSite();
 
         // Create a command
-        $command = $this->forge()->createCommand($org, $serverId, $site->id, [
+        $this->forge()->createCommand($org, $serverId, $site->id, [
             'command' => 'echo "SDK integration test"',
         ]);
-
-        $this->assertInstanceOf(Command::class, $command);
 
         usleep(500_000);
 

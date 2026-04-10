@@ -2085,16 +2085,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_monitor()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/monitors', [
             'json' => ['type' => 'disk', 'threshold' => '90'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "type": "disk", "threshold": "90"}}')
+            new Response(202)
         );
 
-        $monitor = $forge->createMonitor('org-123', 1, ['type' => 'disk', 'threshold' => '90']);
-        $this->assertSame(2, $monitor->id);
+        $forge->createMonitor('org-123', 1, ['type' => 'disk', 'threshold' => '90']);
     }
 
     public function test_deleting_monitor()
@@ -2136,16 +2137,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_ssh_key()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/ssh-keys', [
             'json' => ['name' => 'Production Key', 'key' => 'ssh-rsa AAAAB3...'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "name": "Production Key", "username": "forge"}}')
+            new Response(202)
         );
 
-        $key = $forge->createSSHKey('org-123', 1, ['name' => 'Production Key', 'key' => 'ssh-rsa AAAAB3...']);
-        $this->assertSame(2, $key->id);
+        $forge->createSSHKey('org-123', 1, ['name' => 'Production Key', 'key' => 'ssh-rsa AAAAB3...']);
     }
 
     public function test_deleting_ssh_key()
@@ -2394,16 +2396,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_command()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/commands', [
             'json' => ['command' => 'php artisan cache:clear'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "command": "php artisan cache:clear", "status": "running"}}')
+            new Response(202)
         );
 
-        $command = $forge->createCommand('org-123', 1, 1, ['command' => 'php artisan cache:clear']);
-        $this->assertSame(2, $command->id);
+        $forge->createCommand('org-123', 1, 1, ['command' => 'php artisan cache:clear']);
     }
 
     public function test_deleting_command()
@@ -3197,16 +3200,17 @@ class ForgeSDKTest extends TestCase
     // SSH Key methods
     public function test_creating_ssh_key_alias()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/ssh-keys', [
             'json' => ['name' => 'Key 1', 'key' => 'ssh-rsa...'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "Key 1"}}')
+            new Response(202)
         );
 
-        $key = $forge->createSshKey('org-123', 1, ['name' => 'Key 1', 'key' => 'ssh-rsa...']);
-        $this->assertSame(1, $key->id);
+        $forge->createSshKey('org-123', 1, ['name' => 'Key 1', 'key' => 'ssh-rsa...']);
     }
 
     public function test_deleting_ssh_key_alias()
@@ -4679,5 +4683,17 @@ class ForgeSDKTest extends TestCase
 
         $recipe = $forge->recipe('org-123', 5);
         $this->assertSame('org-123', $recipe->organizationId);
+    }
+
+    public function test_post_returns_null_for_202_empty_body()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'test-endpoint', ['json' => ['key' => 'value']])->andReturn(
+            new Response(202)
+        );
+
+        $result = $forge->post('test-endpoint', ['key' => 'value']);
+        $this->assertNull($result);
     }
 }

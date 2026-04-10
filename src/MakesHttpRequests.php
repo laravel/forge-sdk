@@ -72,6 +72,10 @@ trait MakesHttpRequests
 
         $responseBody = (string) $response->getBody();
 
+        if ($responseBody === '') {
+            return null;
+        }
+
         $decoded = json_decode($responseBody, true);
 
         return $decoded === null ? $responseBody : $decoded;
