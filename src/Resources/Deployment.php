@@ -17,6 +17,11 @@ class Deployment extends Resource
     public ?int $id = null;
 
     /**
+     * The id of the server.
+     */
+    public ?int $serverId = null;
+
+    /**
      * The id of the site.
      */
     public ?int $siteId = null;
