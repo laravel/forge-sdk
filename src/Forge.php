@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Laravel\Forge;
 
 use GuzzleHttp\Client as HttpClient;
-use Laravel\Forge\Resources\User;
 
 class Forge
 {
@@ -152,19 +151,4 @@ class Forge
         return $this->timeout;
     }
 
-    /**
-     * Get an authenticated user instance.
-     */
-    public function user(): User
-    {
-        return new User($this->get('user')['data'] ?? []);
-    }
-
-    /**
-     * Get "me" user instance (alias for user()).
-     */
-    public function me(): User
-    {
-        return new User($this->get('me')['data'] ?? []);
-    }
 }
