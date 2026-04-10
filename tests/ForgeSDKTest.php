@@ -26,11 +26,16 @@ use Laravel\Forge\Resources\PHPVersion;
 use Laravel\Forge\Resources\Recipe;
 use Laravel\Forge\Resources\RecipeRun;
 use Laravel\Forge\Resources\RedirectRule;
+use Laravel\Forge\Resources\Role;
 use Laravel\Forge\Resources\SecurityRule;
 use Laravel\Forge\Resources\Server;
+use Laravel\Forge\Resources\ServerCredential;
 use Laravel\Forge\Resources\Site;
 use Laravel\Forge\Resources\SSHKey;
 use Laravel\Forge\Resources\StorageProvider;
+use Laravel\Forge\Resources\Team;
+use Laravel\Forge\Resources\TeamInvitation;
+use Laravel\Forge\Resources\TeamMember;
 use Laravel\Forge\Resources\User;
 use Laravel\Forge\Resources\Webhook;
 use Mockery;
@@ -4695,5 +4700,192 @@ class ForgeSDKTest extends TestCase
 
         $result = $forge->post('test-endpoint', ['key' => 'value']);
         $this->assertNull($result);
+    }
+
+    // Issue 1: user() and me() should use ManagesUser trait (passes Forge instance)
+
+    public function test_user_method_returns_user_with_forge_instance()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'user', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "John Doe"}}')
+        );
+
+        $user = $forge->user();
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame(1, $user->id);
+
+        // Verify the Forge instance was injected (via reflection since $forge is protected)
+        $ref = new \ReflectionProperty($user, 'forge');
+        $this->assertSame($forge, $ref->getValue($user));
+    }
+
+    public function test_me_method_returns_user_with_forge_instance()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'me', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "John Doe"}}')
+        );
+
+        $user = $forge->me();
+        $this->assertInstanceOf(User::class, $user);
+
+        $ref = new \ReflectionProperty($user, 'forge');
+        $this->assertSame($forge, $ref->getValue($user));
+    }
+
+    // Issue 2: Context injection via newResource for get/update methods
+
+    public function test_role_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/roles/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "Admin"}}')
+        );
+
+        $role = $forge->role('org-123', 1);
+        $this->assertInstanceOf(Role::class, $role);
+        $this->assertSame('org-123', $role->organizationId);
+    }
+
+    public function test_update_role_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/roles/1', [
+            'json' => ['name' => 'Super Admin'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "Super Admin"}}')
+        );
+
+        $role = $forge->updateRole('org-123', 1, ['name' => 'Super Admin']);
+        $this->assertSame('org-123', $role->organizationId);
+    }
+
+    public function test_team_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "Dev Team"}}')
+        );
+
+        $team = $forge->team('org-123', 1);
+        $this->assertInstanceOf(Team::class, $team);
+        $this->assertSame('org-123', $team->organizationId);
+    }
+
+    public function test_update_team_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/teams/1', [
+            'json' => ['name' => 'Updated'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "Updated"}}')
+        );
+
+        $team = $forge->updateTeam('org-123', 1, ['name' => 'Updated']);
+        $this->assertSame('org-123', $team->organizationId);
+    }
+
+    public function test_team_member_injects_team_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/5/members/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "John"}}')
+        );
+
+        $member = $forge->teamMember('org-123', 5, 1);
+        $this->assertInstanceOf(TeamMember::class, $member);
+        $this->assertSame(5, $member->teamId);
+    }
+
+    public function test_update_team_member_injects_team_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/teams/5/members/1', [
+            'json' => ['role' => 'admin'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "role": "admin"}}')
+        );
+
+        $member = $forge->updateTeamMember('org-123', 5, 1, ['role' => 'admin']);
+        $this->assertSame(5, $member->teamId);
+    }
+
+    public function test_team_invitation_injects_team_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/5/invites/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "email": "user@example.com"}}')
+        );
+
+        $invitation = $forge->teamInvitation('org-123', 5, 1);
+        $this->assertInstanceOf(TeamInvitation::class, $invitation);
+        $this->assertSame(5, $invitation->teamId);
+    }
+
+    public function test_server_credential_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/server-credentials/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "AWS"}}')
+        );
+
+        $credential = $forge->serverCredential('org-123', 1);
+        $this->assertInstanceOf(ServerCredential::class, $credential);
+        $this->assertSame('org-123', $credential->organizationId);
+    }
+
+    public function test_storage_provider_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/storage-providers/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "S3 Bucket"}}')
+        );
+
+        $provider = $forge->storageProvider('org-123', 1);
+        $this->assertInstanceOf(StorageProvider::class, $provider);
+        $this->assertSame('org-123', $provider->organizationId);
+    }
+
+    public function test_update_storage_provider_injects_organization_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/storage-providers/1', [
+            'json' => ['name' => 'Updated S3'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "Updated S3"}}')
+        );
+
+        $provider = $forge->updateStorageProvider('org-123', 1, ['name' => 'Updated S3']);
+        $this->assertSame('org-123', $provider->organizationId);
+    }
+
+    // Issue 4: Deployment resource should have serverId populated
+
+    public function test_deployment_has_server_id_from_context()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/2/deployments/3', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 3, "status": "finished"}}')
+        );
+
+        $deployment = $forge->deployment('org-123', 1, 2, 3);
+        $this->assertInstanceOf(Deployment::class, $deployment);
+        $this->assertSame('org-123', $deployment->organizationId);
+        $this->assertSame(1, $deployment->serverId);
+        $this->assertSame(2, $deployment->siteId);
     }
 }
