@@ -102,7 +102,7 @@ use Laravel\Forge\ForgeManager;
  * SSH Keys
  * @method static \Laravel\Forge\Resources\SSHKey[] sshKeys(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\SSHKey sshKey(string $organizationSlug, int $serverId, int $keyId)
- * @method static \Laravel\Forge\Resources\SSHKey createSshKey(string $organizationSlug, int $serverId, array $data)
+ * @method static void createSshKey(string $organizationSlug, int $serverId, array $data)
  * @method static void deleteSshKey(string $organizationSlug, int $serverId, int $keyId)
  *
  * Firewall Rules
@@ -126,7 +126,7 @@ use Laravel\Forge\ForgeManager;
  * Monitors
  * @method static \Laravel\Forge\Resources\Monitor[] monitors(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\Monitor monitor(string $organizationSlug, int $serverId, int $monitorId)
- * @method static \Laravel\Forge\Resources\Monitor createMonitor(string $organizationSlug, int $serverId, array $data)
+ * @method static void createMonitor(string $organizationSlug, int $serverId, array $data)
  * @method static void deleteMonitor(string $organizationSlug, int $serverId, int $monitorId)
  *
  * Nginx Templates
@@ -160,20 +160,20 @@ use Laravel\Forge\ForgeManager;
  * Commands
  * @method static \Laravel\Forge\Resources\Command[] commands(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Command command(string $organizationSlug, int $serverId, int $siteId, int $commandId)
- * @method static \Laravel\Forge\Resources\Command createCommand(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void createCommand(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static void deleteCommand(string $organizationSlug, int $serverId, int $siteId, int $commandId)
  *
  * Backups
  * @method static \Laravel\Forge\Resources\BackupConfiguration[] backupConfigurations(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\BackupConfiguration backupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId)
- * @method static \Laravel\Forge\Resources\BackupConfiguration createBackupConfiguration(string $organizationSlug, int $serverId, array $data)
- * @method static \Laravel\Forge\Resources\BackupConfiguration updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data)
+ * @method static void createBackupConfiguration(string $organizationSlug, int $serverId, array $data)
+ * @method static void updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data)
  * @method static void deleteBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static \Laravel\Forge\Resources\Backup[] backups(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static \Laravel\Forge\Resources\Backup backup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId)
- * @method static \Laravel\Forge\Resources\Backup createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data)
+ * @method static void createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static void deleteBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId)
- * @method static void restoreBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId)
+ * @method static void restoreBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId, array $data)
  *
  * HTTP Methods
  * @method static mixed get(string $uri)
