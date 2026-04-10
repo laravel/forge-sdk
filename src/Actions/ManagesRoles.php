@@ -71,7 +71,11 @@ trait ManagesRoles
      */
     public function role(string $organizationSlug, int $roleId): Role
     {
-        return new Role($this->get("orgs/{$organizationSlug}/roles/{$roleId}")['data'] ?? [], $this);
+        return $this->newResource(
+            Role::class,
+            $this->get("orgs/{$organizationSlug}/roles/{$roleId}")['data'] ?? [],
+            $organizationSlug,
+        );
     }
 
     /**
@@ -91,9 +95,10 @@ trait ManagesRoles
      */
     public function updateRole(string $organizationSlug, int $roleId, array $data): Role
     {
-        return new Role(
+        return $this->newResource(
+            Role::class,
             $this->put("orgs/{$organizationSlug}/roles/{$roleId}", $data)['data'] ?? [],
-            $this
+            $organizationSlug,
         );
     }
 

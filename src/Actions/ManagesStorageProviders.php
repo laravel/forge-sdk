@@ -27,9 +27,10 @@ trait ManagesStorageProviders
      */
     public function storageProvider(string $organizationSlug, int $storageProviderId): StorageProvider
     {
-        return new StorageProvider(
+        return $this->newResource(
+            StorageProvider::class,
             $this->get("orgs/{$organizationSlug}/storage-providers/{$storageProviderId}")['data'] ?? [],
-            $this
+            $organizationSlug,
         );
     }
 
@@ -50,9 +51,10 @@ trait ManagesStorageProviders
      */
     public function updateStorageProvider(string $organizationSlug, int $storageProviderId, array $data): StorageProvider
     {
-        return new StorageProvider(
+        return $this->newResource(
+            StorageProvider::class,
             $this->put("orgs/{$organizationSlug}/storage-providers/{$storageProviderId}", $data)['data'] ?? [],
-            $this
+            $organizationSlug,
         );
     }
 

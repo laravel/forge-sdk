@@ -50,9 +50,10 @@ trait ManagesOrganizations
      */
     public function serverCredential(string $organizationSlug, int $credentialId): ServerCredential
     {
-        return new ServerCredential(
+        return $this->newResource(
+            ServerCredential::class,
             $this->get("orgs/{$organizationSlug}/server-credentials/{$credentialId}")['data'] ?? [],
-            $this
+            $organizationSlug,
         );
     }
 

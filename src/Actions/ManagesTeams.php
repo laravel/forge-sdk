@@ -29,7 +29,11 @@ trait ManagesTeams
      */
     public function team(string $organizationSlug, int $teamId): Team
     {
-        return new Team($this->get("orgs/{$organizationSlug}/teams/{$teamId}")['data'] ?? [], $this);
+        return $this->newResource(
+            Team::class,
+            $this->get("orgs/{$organizationSlug}/teams/{$teamId}")['data'] ?? [],
+            $organizationSlug,
+        );
     }
 
     /**
@@ -49,9 +53,10 @@ trait ManagesTeams
      */
     public function updateTeam(string $organizationSlug, int $teamId, array $data): Team
     {
-        return new Team(
+        return $this->newResource(
+            Team::class,
             $this->put("orgs/{$organizationSlug}/teams/{$teamId}", $data)['data'] ?? [],
-            $this
+            $organizationSlug,
         );
     }
 
@@ -83,9 +88,11 @@ trait ManagesTeams
      */
     public function teamMember(string $organizationSlug, int $teamId, int $userId): TeamMember
     {
-        return new TeamMember(
+        return $this->newResource(
+            TeamMember::class,
             $this->get("orgs/{$organizationSlug}/teams/{$teamId}/members/{$userId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
         );
     }
 
@@ -94,9 +101,11 @@ trait ManagesTeams
      */
     public function updateTeamMember(string $organizationSlug, int $teamId, int $userId, array $data): TeamMember
     {
-        return new TeamMember(
+        return $this->newResource(
+            TeamMember::class,
             $this->put("orgs/{$organizationSlug}/teams/{$teamId}/members/{$userId}", $data)['data'] ?? [],
-            $this
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
         );
     }
 
@@ -128,9 +137,11 @@ trait ManagesTeams
      */
     public function teamInvitation(string $organizationSlug, int $teamId, int $invitationId): TeamInvitation
     {
-        return new TeamInvitation(
+        return $this->newResource(
+            TeamInvitation::class,
             $this->get("orgs/{$organizationSlug}/teams/{$teamId}/invites/{$invitationId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
         );
     }
 
