@@ -4888,4 +4888,16 @@ class ForgeSDKTest extends TestCase
         $this->assertSame(1, $deployment->serverId);
         $this->assertSame(2, $deployment->siteId);
     }
+
+    public function test_get_request_passes_query_parameters_to_guzzle()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'abc']])->andReturn(
+            new Response(200, [], '{"data": []}')
+        );
+
+        $result = $forge->get('orgs/org-123/servers', ['cursor' => 'abc']);
+        $this->assertSame(['data' => []], $result);
+    }
 }

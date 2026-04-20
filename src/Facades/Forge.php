@@ -176,7 +176,7 @@ use Laravel\Forge\ForgeManager;
  * @method static void restoreBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId, array $data)
  *
  * HTTP Methods
- * @method static mixed get(string $uri)
+ * @method static mixed get(string $uri, array $query = [])
  * @method static mixed post(string $uri, array $payload = [])
  * @method static mixed put(string $uri, array $payload = [])
  * @method static mixed patch(string $uri, array $payload = [])

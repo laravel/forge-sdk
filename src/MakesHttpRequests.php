@@ -18,9 +18,9 @@ trait MakesHttpRequests
     /**
      * Make a GET request to Forge servers and return the response.
      */
-    public function get(string $uri): mixed
+    public function get(string $uri, array $query = []): mixed
     {
-        return $this->request('GET', $uri);
+        return $this->request('GET', $uri, [], $query);
     }
 
     /**
@@ -58,11 +58,15 @@ trait MakesHttpRequests
     /**
      * Make request to Forge servers and return the response.
      */
-    protected function request(string $verb, string $uri, array $payload = []): mixed
+    protected function request(string $verb, string $uri, array $payload = [], array $query = []): mixed
     {
-        $payload = empty($payload) ? [] : ['json' => $payload];
+        $options = empty($payload) ? [] : ['json' => $payload];
 
-        $response = $this->guzzle->request($verb, $uri, $payload);
+        if (! empty($query)) {
+            $options['query'] = $query;
+        }
+
+        $response = $this->guzzle->request($verb, $uri, $options);
 
         $statusCode = $response->getStatusCode();
 
