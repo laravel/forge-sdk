@@ -54,10 +54,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "My Organization"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "My Organization"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->organizations());
+        $organizations = $forge->organizations();
+        $this->assertInstanceOf(CursorPaginator::class, $organizations);
+        $this->assertCount(1, $organizations);
     }
 
     public function test_getting_single_organization()
@@ -77,7 +79,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/recipes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Recipe 1"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Recipe 1"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->recipes('org-123'));
@@ -88,10 +90,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Server 1"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Server 1"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->servers('org-123'));
+        $servers = $forge->servers('org-123');
+        $this->assertInstanceOf(CursorPaginator::class, $servers);
+        $this->assertCount(1, $servers);
     }
 
     public function test_getting_single_server()
@@ -137,7 +141,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->serverSites('org-123', 1));
@@ -202,10 +206,11 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/heartbeats', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "My Heartbeat", "interval": 60, "status": "active"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "My Heartbeat", "interval": 60, "status": "active"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $heartbeats = $forge->heartbeats('org-123', 1, 1);
+        $this->assertInstanceOf(CursorPaginator::class, $heartbeats);
         $this->assertCount(1, $heartbeats);
         $this->assertSame(1, $heartbeats[0]->id);
     }
@@ -270,7 +275,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/database/schemas', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "my_database"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "my_database"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->databases('org-123', 1));
@@ -307,7 +312,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/database/users', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "db_user"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "db_user"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->databaseUsers('org-123', 1));
@@ -346,7 +351,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/background-processes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "My Process"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "My Process"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->backgroundProcesses('org-123', 1));
@@ -397,10 +402,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Development Team"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Development Team"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->teams('org-123'));
+        $teams = $forge->teams('org-123');
+        $this->assertInstanceOf(CursorPaginator::class, $teams);
+        $this->assertCount(1, $teams);
     }
 
     public function test_getting_single_team()
@@ -460,7 +467,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/1/members', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "John Doe"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "John Doe"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->teamMembers('org-123', 1));
@@ -471,7 +478,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/1/invites', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "email": "user@example.com"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "email": "user@example.com"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->teamInvitations('org-123', 1));
@@ -520,7 +527,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/1/servers', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Production Server"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Production Server"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->teamServers('org-123', 1));
@@ -557,7 +564,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/1/server-credentials', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "AWS Credentials"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "AWS Credentials"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->teamServerCredentials('org-123', 1));
@@ -582,7 +589,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/roles', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Admin"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Admin"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->roles('org-123'));
@@ -645,7 +652,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'predefined-roles', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Administrator"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Administrator"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->predefinedRoles());
@@ -656,7 +663,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'permissions', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "manage_servers"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "manage_servers"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->permissions());
@@ -667,7 +674,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'providers', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Digital Ocean"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Digital Ocean"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->providers());
@@ -690,7 +697,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'providers/1/regions', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "New York 3"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "New York 3"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->providerRegions(1));
@@ -701,7 +708,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'providers/1/sizes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "1GB"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "1GB"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->providerSizes(1));
@@ -956,10 +963,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/domains', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->domains('org-123', 1, 1));
+        $domains = $forge->domains('org-123', 1, 1);
+        $this->assertInstanceOf(CursorPaginator::class, $domains);
+        $this->assertCount(1, $domains);
     }
 
     public function test_creating_domain()
@@ -1034,7 +1043,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/123/sites/456/webhooks', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "url": "https://example.com/webhook"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "url": "https://example.com/webhook"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->webhooks('org-123', 123, 456));
@@ -1085,10 +1094,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/123/sites/456/deployments', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "status": "finished"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "status": "finished"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->deployments('org-123', 123, 456));
+        $deployments = $forge->deployments('org-123', 123, 456);
+        $this->assertInstanceOf(CursorPaginator::class, $deployments);
+        $this->assertCount(1, $deployments);
     }
 
     public function test_getting_single_deployment()
@@ -1422,7 +1433,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/server-credentials', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "AWS Credentials"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "AWS Credentials"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->serverCredentials('org-123'));
@@ -1445,7 +1456,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/server-credentials/1/regions/us-east-1/vpcs', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Production VPC"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Production VPC"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->vpcs('org-123', 1, 'us-east-1'));
@@ -1482,7 +1493,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'forge-recipes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Install Node.js"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Install Node.js"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->forgeRecipes());
@@ -1545,7 +1556,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/recipes/1/runs', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "status": "completed"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "status": "completed"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->recipeRuns('org-123', 1));
@@ -1582,7 +1593,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/events', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "description": "Server created"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "description": "Server created"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->serverEvents('org-123', 1));
@@ -1605,7 +1616,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/archives', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 2, "name": "Archived Server"}]}')
+            new Response(200, [], '{"data": [{"id": 2, "name": "Archived Server"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->archivedServers('org-123'));
@@ -1642,7 +1653,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/php/versions', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "version": "8.3"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "version": "8.3"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->phpVersions('org-123', 1));
@@ -1932,7 +1943,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/sites', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->organizationSites('org-123'));
@@ -1957,10 +1968,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/scheduled-jobs', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "command": "php artisan schedule:run", "frequency": "hourly"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "command": "php artisan schedule:run", "frequency": "hourly"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->scheduledJobs('org-123', 1));
+        $scheduledJobs = $forge->scheduledJobs('org-123', 1);
+        $this->assertInstanceOf(CursorPaginator::class, $scheduledJobs);
+        $this->assertCount(1, $scheduledJobs);
     }
 
     public function test_getting_single_scheduled_job()
@@ -2020,10 +2033,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/firewall-rules', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "SSH Access", "port": "22"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "SSH Access", "port": "22"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->firewallRules('org-123', 1));
+        $firewallRules = $forge->firewallRules('org-123', 1);
+        $this->assertInstanceOf(CursorPaginator::class, $firewallRules);
+        $this->assertCount(1, $firewallRules);
     }
 
     public function test_getting_single_firewall_rule()
@@ -2071,7 +2086,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/monitors', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "type": "cpu", "threshold": "80"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "type": "cpu", "threshold": "80"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->monitors('org-123', 1));
@@ -2123,7 +2138,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/ssh-keys', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Deploy Key", "username": "forge"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Deploy Key", "username": "forge"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->sshKeys('org-123', 1));
@@ -2201,7 +2216,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/nginx/templates', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Laravel Template", "content": "server { listen 80; }"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Laravel Template", "content": "server { listen 80; }"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->nginxTemplates('org-123', 1));
@@ -2266,7 +2281,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/security-rules', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Block Bad Bots", "path": "/admin"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Block Bad Bots", "path": "/admin"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->securityRules('org-123', 1, 1));
@@ -2331,7 +2346,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/redirect-rules', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "from": "/old-path", "to": "/new-path", "type": "permanent"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "from": "/old-path", "to": "/new-path", "type": "permanent"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->redirectRules('org-123', 1, 1));
@@ -2382,7 +2397,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/commands', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "command": "php artisan migrate", "status": "finished"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "command": "php artisan migrate", "status": "finished"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->commands('org-123', 1, 1));
@@ -2888,7 +2903,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'providers/1/regions/1/sizes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "2GB"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "2GB"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $sizes = $forge->providerRegionSizes(1, 1);
@@ -2924,7 +2939,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/teams/1/recipes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Team Recipe"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Team Recipe"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $recipes = $forge->teamRecipes('org-123', 1);
@@ -3004,7 +3019,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/roles/1/permissions', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "server:view"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "server:view"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $permissions = $forge->rolePermissions('org-123', 1);
@@ -3263,7 +3278,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/scheduled-jobs', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "command": "php artisan schedule:run"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "command": "php artisan schedule:run"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $jobs = $forge->siteScheduledJobs('org-123', 1, 1);
@@ -3380,10 +3395,11 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'sites', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "example.com"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $sites = $forge->sites();
+        $this->assertInstanceOf(CursorPaginator::class, $sites);
         $this->assertCount(1, $sites);
     }
 
@@ -3625,10 +3641,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/database/backups', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "name": "Daily Backup"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "name": "Daily Backup"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $this->assertCount(1, $forge->backupConfigurations('org-123', 1));
+        $backupConfigs = $forge->backupConfigurations('org-123', 1);
+        $this->assertInstanceOf(CursorPaginator::class, $backupConfigs);
+        $this->assertCount(1, $backupConfigs);
     }
 
     public function test_getting_backup_configuration()
@@ -3688,7 +3706,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/database/backups/1/instances', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "status": "completed"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "status": "completed"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $this->assertCount(1, $forge->backups('org-123', 1, 1));
@@ -4299,12 +4317,13 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/php/versions', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "version": "8.3"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "version": "8.3"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
         $versions = $server->phpVersions();
 
+        $this->assertInstanceOf(CursorPaginator::class, $versions);
         $this->assertCount(1, $versions);
     }
 
@@ -4401,12 +4420,13 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/2/deployments', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "status": "finished"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "status": "finished"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
         $deployments = $site->getDeploymentHistory();
 
+        $this->assertInstanceOf(CursorPaginator::class, $deployments);
         $this->assertCount(1, $deployments);
     }
 
@@ -4900,6 +4920,60 @@ class ForgeSDKTest extends TestCase
 
         $result = $forge->get('orgs/org-123/servers', ['cursor' => 'abc']);
         $this->assertSame(['data' => []], $result);
+    }
+
+    public function test_list_method_returns_cursor_paginator_with_pagination_metadata()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 1, 'name' => 'Server 1'],
+                    ['id' => 2, 'name' => 'Server 2'],
+                ],
+                'meta' => [
+                    'next_cursor' => 'eyJpZCI6Mn0',
+                    'per_page' => 2,
+                ],
+            ]))
+        );
+
+        $servers = $forge->servers('org-123');
+
+        $this->assertInstanceOf(CursorPaginator::class, $servers);
+        $this->assertCount(2, $servers);
+        $this->assertInstanceOf(Server::class, $servers[0]);
+        $this->assertSame(1, $servers[0]->id);
+        $this->assertSame('Server 2', $servers[1]->name);
+        $this->assertSame('eyJpZCI6Mn0', $servers->nextCursor());
+        $this->assertTrue($servers->hasMorePages());
+        $this->assertSame(2, $servers->perPage());
+    }
+
+    public function test_list_method_returns_paginator_with_null_cursor_on_last_page()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 1, 'name' => 'example.com'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 15,
+                ],
+            ]))
+        );
+
+        $sites = $forge->serverSites('org-123', 1);
+
+        $this->assertInstanceOf(CursorPaginator::class, $sites);
+        $this->assertCount(1, $sites);
+        $this->assertNull($sites->nextCursor());
+        $this->assertFalse($sites->hasMorePages());
+        $this->assertSame(15, $sites->perPage());
     }
 
     public function test_paginated_collection_returns_cursor_paginator()
