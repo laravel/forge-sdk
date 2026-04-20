@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\RedirectRule;
 
 trait ManagesRedirectRules
 {
     /**
      * Get the collection of redirect rules.
-     *
-     * @return RedirectRule[]
      */
-    public function redirectRules(string $organizationSlug, int $serverId, int $siteId): array
+    public function redirectRules(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules",
             RedirectRule::class,
             $organizationSlug,
             $serverId,

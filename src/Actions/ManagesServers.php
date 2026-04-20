@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Event;
 use Laravel\Forge\Resources\PHPVersion;
 use Laravel\Forge\Resources\Server;
@@ -12,13 +13,11 @@ trait ManagesServers
 {
     /**
      * Get the collection of servers for an organization.
-     *
-     * @return Server[]
      */
-    public function servers(string $organizationSlug): array
+    public function servers(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers",
             Server::class,
             $organizationSlug,
         );
@@ -64,13 +63,11 @@ trait ManagesServers
 
     /**
      * Get the collection of archived servers for an organization.
-     *
-     * @return Server[]
      */
-    public function archivedServers(string $organizationSlug): array
+    public function archivedServers(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/archives")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/archives",
             Server::class,
             $organizationSlug,
         );
@@ -152,13 +149,11 @@ trait ManagesServers
 
     /**
      * Get the collection of server events.
-     *
-     * @return Event[]
      */
-    public function serverEvents(string $organizationSlug, int $serverId): array
+    public function serverEvents(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/events",
             Event::class,
             $organizationSlug,
             $serverId,
@@ -220,13 +215,11 @@ trait ManagesServers
 
     /**
      * Get the collection of PHP versions.
-     *
-     * @return PHPVersion[]
      */
-    public function phpVersions(string $organizationSlug, int $serverId): array
+    public function phpVersions(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/php/versions",
             PHPVersion::class,
             $organizationSlug,
             $serverId,
@@ -392,13 +385,11 @@ trait ManagesServers
 
     /**
      * Get the collection of team servers.
-     *
-     * @return Server[]
      */
-    public function teamServers(string $organizationSlug, int $teamId): array
+    public function teamServers(string $organizationSlug, int $teamId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/servers")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams/{$teamId}/servers",
             Server::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],

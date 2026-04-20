@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Resources;
 
+use Laravel\Forge\CursorPaginator;
+
 class Site extends Resource
 {
     /**
@@ -193,10 +195,8 @@ class Site extends Resource
 
     /**
      * Get the deployments history of the site.
-     *
-     * @return Deployment[]
      */
-    public function getDeploymentHistory(): array
+    public function getDeploymentHistory(): CursorPaginator
     {
         return $this->forge->deployments($this->organizationId, $this->serverId, $this->id);
     }

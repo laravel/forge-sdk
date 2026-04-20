@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Command;
 
 trait ManagesCommands
 {
     /**
      * Get the collection of commands for a site.
-     *
-     * @return Command[]
      */
-    public function commands(string $organizationSlug, int $serverId, int $siteId): array
+    public function commands(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands",
             Command::class,
             $organizationSlug,
             $serverId,

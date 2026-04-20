@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Deployment;
 use Laravel\Forge\Resources\Webhook;
 
@@ -11,13 +12,11 @@ trait ManagesDeployments
 {
     /**
      * Get the collection of webhooks for a site.
-     *
-     * @return Webhook[]
      */
-    public function webhooks(string $organizationSlug, int $serverId, int $siteId): array
+    public function webhooks(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/webhooks")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/webhooks",
             Webhook::class,
             $organizationSlug,
             $serverId,
@@ -63,13 +62,11 @@ trait ManagesDeployments
 
     /**
      * Get the collection of deployments for a site.
-     *
-     * @return Deployment[]
      */
-    public function deployments(string $organizationSlug, int $serverId, int $siteId): array
+    public function deployments(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments",
             Deployment::class,
             $organizationSlug,
             $serverId,

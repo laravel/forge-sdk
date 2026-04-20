@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Backup;
 use Laravel\Forge\Resources\BackupConfiguration;
 
@@ -11,13 +12,11 @@ trait ManagesBackups
 {
     /**
      * Get the collection of backup configurations.
-     *
-     * @return BackupConfiguration[]
      */
-    public function backupConfigurations(string $organizationSlug, int $serverId): array
+    public function backupConfigurations(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/database/backups",
             BackupConfiguration::class,
             $organizationSlug,
             $serverId,
@@ -63,13 +62,11 @@ trait ManagesBackups
 
     /**
      * Get the collection of backups for a backup configuration.
-     *
-     * @return Backup[]
      */
-    public function backups(string $organizationSlug, int $serverId, int $backupConfigurationId): array
+    public function backups(string $organizationSlug, int $serverId, int $backupConfigurationId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances",
             Backup::class,
             $organizationSlug,
             $serverId,

@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Monitor;
 
 trait ManagesMonitors
 {
     /**
      * Get the collection of monitors.
-     *
-     * @return Monitor[]
      */
-    public function monitors(string $organizationSlug, int $serverId): array
+    public function monitors(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/monitors")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/monitors",
             Monitor::class,
             $organizationSlug,
             $serverId,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Database;
 use Laravel\Forge\Resources\DatabaseUser;
 
@@ -11,13 +12,11 @@ trait ManagesDatabases
 {
     /**
      * Get the collection of database schemas.
-     *
-     * @return Database[]
      */
-    public function databases(string $organizationSlug, int $serverId): array
+    public function databases(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/database/schemas",
             Database::class,
             $organizationSlug,
             $serverId,
@@ -73,13 +72,11 @@ trait ManagesDatabases
 
     /**
      * Get the collection of database users.
-     *
-     * @return DatabaseUser[]
      */
-    public function databaseUsers(string $organizationSlug, int $serverId): array
+    public function databaseUsers(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/users")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/database/users",
             DatabaseUser::class,
             $organizationSlug,
             $serverId,

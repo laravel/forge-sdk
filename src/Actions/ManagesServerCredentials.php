@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\ServerCredential;
 
 trait ManagesServerCredentials
 {
     /**
      * Get the collection of team server credentials.
-     *
-     * @return ServerCredential[]
      */
-    public function teamServerCredentials(string $organizationSlug, int $teamId): array
+    public function teamServerCredentials(string $organizationSlug, int $teamId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/server-credentials")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams/{$teamId}/server-credentials",
             ServerCredential::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],

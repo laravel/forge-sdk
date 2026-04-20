@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\NginxTemplate;
 
 trait ManagesNginx
 {
     /**
      * Get the collection of Nginx templates.
-     *
-     * @return NginxTemplate[]
      */
-    public function nginxTemplates(string $organizationSlug, int $serverId): array
+    public function nginxTemplates(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates",
             NginxTemplate::class,
             $organizationSlug,
             $serverId,

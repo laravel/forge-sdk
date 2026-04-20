@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Organization;
 use Laravel\Forge\Resources\ServerCredential;
 use Laravel\Forge\Resources\VPC;
@@ -12,14 +13,12 @@ trait ManagesOrganizations
 {
     /**
      * Get the collection of organizations.
-     *
-     * @return Organization[]
      */
-    public function organizations(): array
+    public function organizations(): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('orgs')['data'] ?? [],
-            Organization::class
+        return $this->paginatedCollection(
+            'orgs',
+            Organization::class,
         );
     }
 
@@ -33,13 +32,11 @@ trait ManagesOrganizations
 
     /**
      * Get the collection of server credentials for an organization.
-     *
-     * @return ServerCredential[]
      */
-    public function serverCredentials(string $organizationSlug): array
+    public function serverCredentials(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/server-credentials")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/server-credentials",
             ServerCredential::class,
             $organizationSlug,
         );
@@ -72,14 +69,12 @@ trait ManagesOrganizations
 
     /**
      * Get the collection of VPCs.
-     *
-     * @return VPC[]
      */
-    public function vpcs(string $organizationSlug, int $credentialId, string $region): array
+    public function vpcs(string $organizationSlug, int $credentialId, string $region): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs")['data'] ?? [],
-            VPC::class
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs",
+            VPC::class,
         );
     }
 

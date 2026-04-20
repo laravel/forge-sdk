@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\ScheduledJob;
 
 trait ManagesScheduledJobs
 {
     /**
      * Get the collection of scheduled jobs.
-     *
-     * @return ScheduledJob[]
      */
-    public function scheduledJobs(string $organizationSlug, int $serverId): array
+    public function scheduledJobs(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/scheduled-jobs")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/scheduled-jobs",
             ScheduledJob::class,
             $organizationSlug,
             $serverId,
@@ -69,13 +68,11 @@ trait ManagesScheduledJobs
 
     /**
      * Get the collection of scheduled jobs for a site.
-     *
-     * @return ScheduledJob[]
      */
-    public function siteScheduledJobs(string $organizationSlug, int $serverId, int $siteId): array
+    public function siteScheduledJobs(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/scheduled-jobs")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/scheduled-jobs",
             ScheduledJob::class,
             $organizationSlug,
             $serverId,

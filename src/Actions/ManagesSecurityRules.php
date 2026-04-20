@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\SecurityRule;
 
 trait ManagesSecurityRules
 {
     /**
      * Get the collection of security rules.
-     *
-     * @return SecurityRule[]
      */
-    public function securityRules(string $organizationSlug, int $serverId, int $siteId): array
+    public function securityRules(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules",
             SecurityRule::class,
             $organizationSlug,
             $serverId,

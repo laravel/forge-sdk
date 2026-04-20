@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Permission;
 use Laravel\Forge\Resources\PredefinedRole;
 use Laravel\Forge\Resources\Role;
@@ -12,14 +13,12 @@ trait ManagesRoles
 {
     /**
      * Get the collection of predefined roles.
-     *
-     * @return PredefinedRole[]
      */
-    public function predefinedRoles(): array
+    public function predefinedRoles(): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('predefined-roles')['data'] ?? [],
-            PredefinedRole::class
+        return $this->paginatedCollection(
+            'predefined-roles',
+            PredefinedRole::class,
         );
     }
 
@@ -33,14 +32,12 @@ trait ManagesRoles
 
     /**
      * Get the collection of permissions.
-     *
-     * @return Permission[]
      */
-    public function permissions(): array
+    public function permissions(): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('permissions')['data'] ?? [],
-            Permission::class
+        return $this->paginatedCollection(
+            'permissions',
+            Permission::class,
         );
     }
 
@@ -54,13 +51,11 @@ trait ManagesRoles
 
     /**
      * Get the collection of roles for an organization.
-     *
-     * @return Role[]
      */
-    public function roles(string $organizationSlug): array
+    public function roles(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/roles")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/roles",
             Role::class,
             $organizationSlug,
         );
@@ -112,13 +107,11 @@ trait ManagesRoles
 
     /**
      * Get the collection of permissions for a role.
-     *
-     * @return Permission[]
      */
-    public function rolePermissions(string $organizationSlug, int $roleId): array
+    public function rolePermissions(string $organizationSlug, int $roleId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/roles/{$roleId}/permissions")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/roles/{$roleId}/permissions",
             Permission::class,
             $organizationSlug,
             extra: ['role_id' => $roleId],

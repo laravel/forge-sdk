@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Certificate;
 use Laravel\Forge\Resources\Domain;
 use Laravel\Forge\Resources\Heartbeat;
@@ -13,26 +14,22 @@ trait ManagesSites
 {
     /**
      * Get the collection of all sites.
-     *
-     * @return Site[]
      */
-    public function sites(): array
+    public function sites(): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('sites')['data'] ?? [],
-            Site::class
+        return $this->paginatedCollection(
+            'sites',
+            Site::class,
         );
     }
 
     /**
      * Get the collection of sites for an organization.
-     *
-     * @return Site[]
      */
-    public function organizationSites(string $organizationSlug): array
+    public function organizationSites(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/sites")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/sites",
             Site::class,
             $organizationSlug,
         );
@@ -52,13 +49,11 @@ trait ManagesSites
 
     /**
      * Get the collection of sites for a server.
-     *
-     * @return Site[]
      */
-    public function serverSites(string $organizationSlug, int $serverId): array
+    public function serverSites(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites",
             Site::class,
             $organizationSlug,
             $serverId,
@@ -114,13 +109,11 @@ trait ManagesSites
 
     /**
      * Get the collection of domains for a site.
-     *
-     * @return Domain[]
      */
-    public function domains(string $organizationSlug, int $serverId, int $siteId): array
+    public function domains(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains",
             Domain::class,
             $organizationSlug,
             $serverId,
@@ -340,13 +333,11 @@ trait ManagesSites
 
     /**
      * Get the collection of heartbeats for a site.
-     *
-     * @return Heartbeat[]
      */
-    public function heartbeats(string $organizationSlug, int $serverId, int $siteId): array
+    public function heartbeats(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats",
             Heartbeat::class,
             $organizationSlug,
             $serverId,

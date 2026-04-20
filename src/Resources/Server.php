@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Resources;
 
+use Laravel\Forge\CursorPaginator;
+
 class Server extends Resource
 {
     /**
@@ -251,10 +253,8 @@ class Server extends Resource
 
     /**
      * Get the collection of PHP Versions.
-     *
-     * @return PHPVersion[]
      */
-    public function phpVersions(): array
+    public function phpVersions(): CursorPaginator
     {
         return $this->forge->phpVersions($this->organizationId, $this->id);
     }

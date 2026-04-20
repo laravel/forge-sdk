@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Provider;
 use Laravel\Forge\Resources\ProviderRegion;
 use Laravel\Forge\Resources\ProviderSize;
@@ -12,14 +13,12 @@ trait ManagesProviders
 {
     /**
      * Get the collection of providers.
-     *
-     * @return Provider[]
      */
-    public function providers(): array
+    public function providers(): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('providers')['data'] ?? [],
-            Provider::class
+        return $this->paginatedCollection(
+            'providers',
+            Provider::class,
         );
     }
 
@@ -33,13 +32,11 @@ trait ManagesProviders
 
     /**
      * Get the collection of sizes for a provider.
-     *
-     * @return ProviderSize[]
      */
-    public function providerSizes(int $providerId): array
+    public function providerSizes(int $providerId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("providers/{$providerId}/sizes")['data'] ?? [],
+        return $this->paginatedCollection(
+            "providers/{$providerId}/sizes",
             ProviderSize::class,
             extra: ['provider_id' => $providerId],
         );
@@ -58,13 +55,11 @@ trait ManagesProviders
 
     /**
      * Get the collection of regions for a provider.
-     *
-     * @return ProviderRegion[]
      */
-    public function providerRegions(int $providerId): array
+    public function providerRegions(int $providerId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("providers/{$providerId}/regions")['data'] ?? [],
+        return $this->paginatedCollection(
+            "providers/{$providerId}/regions",
             ProviderRegion::class,
             extra: ['provider_id' => $providerId],
         );
@@ -83,13 +78,11 @@ trait ManagesProviders
 
     /**
      * Get the collection of sizes for a specific region.
-     *
-     * @return ProviderSize[]
      */
-    public function providerRegionSizes(int $providerId, int $regionId): array
+    public function providerRegionSizes(int $providerId, int $regionId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("providers/{$providerId}/regions/{$regionId}/sizes")['data'] ?? [],
+        return $this->paginatedCollection(
+            "providers/{$providerId}/regions/{$regionId}/sizes",
             ProviderSize::class,
             extra: ['provider_id' => $providerId, 'region_id' => $regionId],
         );

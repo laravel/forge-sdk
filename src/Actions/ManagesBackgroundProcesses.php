@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\BackgroundProcess;
 
 trait ManagesBackgroundProcesses
 {
     /**
      * Get the collection of background processes.
-     *
-     * @return BackgroundProcess[]
      */
-    public function backgroundProcesses(string $organizationSlug, int $serverId): array
+    public function backgroundProcesses(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/background-processes")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/background-processes",
             BackgroundProcess::class,
             $organizationSlug,
             $serverId,

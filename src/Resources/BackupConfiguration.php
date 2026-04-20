@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Resources;
 
+use Laravel\Forge\CursorPaginator;
+
 class BackupConfiguration extends Resource
 {
     /**
@@ -118,10 +120,8 @@ class BackupConfiguration extends Resource
 
     /**
      * Get backups for this configuration.
-     *
-     * @return Backup[]
      */
-    public function backups(): array
+    public function backups(): CursorPaginator
     {
         return $this->forge->backups(
             $this->organizationId,

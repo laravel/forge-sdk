@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\SSHKey;
 
 trait ManagesSSHKeys
 {
     /**
      * Get the collection of SSH keys.
-     *
-     * @return SSHKey[]
      */
-    public function sshKeys(string $organizationSlug, int $serverId): array
+    public function sshKeys(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys",
             SSHKey::class,
             $organizationSlug,
             $serverId,

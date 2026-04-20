@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Team;
 use Laravel\Forge\Resources\TeamInvitation;
 use Laravel\Forge\Resources\TeamMember;
@@ -12,13 +13,11 @@ trait ManagesTeams
 {
     /**
      * Get the collection of teams for an organization.
-     *
-     * @return Team[]
      */
-    public function teams(string $organizationSlug): array
+    public function teams(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/teams")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams",
             Team::class,
             $organizationSlug,
         );
@@ -70,13 +69,11 @@ trait ManagesTeams
 
     /**
      * Get the collection of team members.
-     *
-     * @return TeamMember[]
      */
-    public function teamMembers(string $organizationSlug, int $teamId): array
+    public function teamMembers(string $organizationSlug, int $teamId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/members")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams/{$teamId}/members",
             TeamMember::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
@@ -119,13 +116,11 @@ trait ManagesTeams
 
     /**
      * Get the collection of team invitations.
-     *
-     * @return TeamInvitation[]
      */
-    public function teamInvitations(string $organizationSlug, int $teamId): array
+    public function teamInvitations(string $organizationSlug, int $teamId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/invites")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams/{$teamId}/invites",
             TeamInvitation::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],

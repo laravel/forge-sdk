@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\FirewallRule;
 
 trait ManagesFirewallRules
 {
     /**
      * Get the collection of firewall rules.
-     *
-     * @return FirewallRule[]
      */
-    public function firewallRules(string $organizationSlug, int $serverId): array
+    public function firewallRules(string $organizationSlug, int $serverId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules",
             FirewallRule::class,
             $organizationSlug,
             $serverId,

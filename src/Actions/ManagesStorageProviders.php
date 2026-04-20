@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\StorageProvider;
 
 trait ManagesStorageProviders
 {
     /**
      * Get the collection of storage providers for an organization.
-     *
-     * @return StorageProvider[]
      */
-    public function storageProviders(string $organizationSlug): array
+    public function storageProviders(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/storage-providers")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/storage-providers",
             StorageProvider::class,
             $organizationSlug,
         );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\ForgeRecipe;
 use Laravel\Forge\Resources\Recipe;
 use Laravel\Forge\Resources\RecipeRun;
@@ -12,13 +13,11 @@ trait ManagesRecipes
 {
     /**
      * Get the collection of recipes for an organization.
-     *
-     * @return Recipe[]
      */
-    public function recipes(string $organizationSlug): array
+    public function recipes(string $organizationSlug): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/recipes")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/recipes",
             Recipe::class,
             $organizationSlug,
         );
@@ -70,13 +69,11 @@ trait ManagesRecipes
 
     /**
      * Get the collection of recipe runs for a recipe.
-     *
-     * @return RecipeRun[]
      */
-    public function recipeRuns(string $organizationSlug, int $recipeId): array
+    public function recipeRuns(string $organizationSlug, int $recipeId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/recipes/{$recipeId}/runs")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/recipes/{$recipeId}/runs",
             RecipeRun::class,
             $organizationSlug,
             extra: ['recipe_id' => $recipeId],
@@ -111,13 +108,11 @@ trait ManagesRecipes
 
     /**
      * Get the collection of recipes for a team.
-     *
-     * @return Recipe[]
      */
-    public function teamRecipes(string $organizationSlug, int $teamId): array
+    public function teamRecipes(string $organizationSlug, int $teamId): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("orgs/{$organizationSlug}/teams/{$teamId}/recipes")['data'] ?? [],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams/{$teamId}/recipes",
             Recipe::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
@@ -147,14 +142,12 @@ trait ManagesRecipes
 
     /**
      * Get the collection of Forge recipes.
-     *
-     * @return ForgeRecipe[]
      */
-    public function forgeRecipes(): array
+    public function forgeRecipes(): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('forge-recipes')['data'] ?? [],
-            ForgeRecipe::class
+        return $this->paginatedCollection(
+            'forge-recipes',
+            ForgeRecipe::class,
         );
     }
 
