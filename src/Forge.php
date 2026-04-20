@@ -113,6 +113,46 @@ class Forge
     }
 
     /**
+     * Make a paginated GET request and return a CursorPaginator of resource objects.
+     */
+    protected function paginatedCollection(
+        string $uri,
+        string $class,
+        ?string $organizationSlug = null,
+        ?int $serverId = null,
+        ?int $siteId = null,
+        array $extra = [],
+        array $query = [],
+    ): CursorPaginator {
+        $response = $this->get($uri, $query);
+
+        $data = $response['data'] ?? [];
+        $meta = $response['meta'] ?? [];
+
+        $items = $this->transformCollection(
+            $data,
+            $class,
+            $organizationSlug,
+            $serverId,
+            $siteId,
+            $extra,
+        );
+
+        return new CursorPaginator(
+            items: $items,
+            nextCursor: $meta['next_cursor'] ?? null,
+            perPage: $meta['per_page'] ?? null,
+            forge: $this,
+            uri: $uri,
+            class: $class,
+            organizationSlug: $organizationSlug,
+            serverId: $serverId,
+            siteId: $siteId,
+            extra: $extra,
+        );
+    }
+
+    /**
      * Set the api key and setup the guzzle request object.
      */
     public function setApiKey(string $apiKey, ?HttpClient $guzzle = null): static

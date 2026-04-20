@@ -12,6 +12,7 @@ use Laravel\Forge\Exceptions\NotFoundException;
 use Laravel\Forge\Exceptions\RateLimitExceededException;
 use Laravel\Forge\Exceptions\TimeoutException;
 use Laravel\Forge\Exceptions\ValidationException;
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Forge;
 use Laravel\Forge\MakesHttpRequests;
 use Laravel\Forge\Resources\Database;
@@ -4899,5 +4900,184 @@ class ForgeSDKTest extends TestCase
 
         $result = $forge->get('orgs/org-123/servers', ['cursor' => 'abc']);
         $this->assertSame(['data' => []], $result);
+    }
+
+    public function test_paginated_collection_returns_cursor_paginator()
+    {
+        $forge = new TestableForge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 1, 'name' => 'Server 1'],
+                    ['id' => 2, 'name' => 'Server 2'],
+                ],
+                'meta' => [
+                    'next_cursor' => 'cursor-abc',
+                    'per_page' => 10,
+                ],
+            ]))
+        );
+
+        $paginator = $forge->paginatedCollection('orgs/org-123/servers', Server::class, 'org-123');
+
+        $this->assertInstanceOf(CursorPaginator::class, $paginator);
+        $this->assertCount(2, $paginator);
+        $this->assertInstanceOf(Server::class, $paginator[0]);
+        $this->assertSame('Server 1', $paginator[0]->name);
+        $this->assertSame('cursor-abc', $paginator->nextCursor());
+        $this->assertSame(10, $paginator->perPage());
+        $this->assertTrue($paginator->hasMorePages());
+    }
+
+    public function test_paginated_collection_passes_query_parameters()
+    {
+        $forge = new TestableForge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['per_page' => 5]])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 1, 'name' => 'Server 1'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 5,
+                ],
+            ]))
+        );
+
+        $paginator = $forge->paginatedCollection(
+            'orgs/org-123/servers',
+            Server::class,
+            'org-123',
+            query: ['per_page' => 5],
+        );
+
+        $this->assertCount(1, $paginator);
+        $this->assertFalse($paginator->hasMorePages());
+        $this->assertSame(5, $paginator->perPage());
+    }
+
+    public function test_paginated_collection_handles_empty_response()
+    {
+        $forge = new TestableForge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 10,
+                ],
+            ]))
+        );
+
+        $paginator = $forge->paginatedCollection('orgs/org-123/servers', Server::class, 'org-123');
+
+        $this->assertCount(0, $paginator);
+        $this->assertFalse($paginator->hasMorePages());
+    }
+
+    public function test_paginated_collection_passes_context_to_resources()
+    {
+        $forge = new TestableForge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 10, 'name' => 'example.com'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 10,
+                ],
+            ]))
+        );
+
+        $paginator = $forge->paginatedCollection(
+            'orgs/org-123/servers/1/sites',
+            Site::class,
+            'org-123',
+            serverId: 1,
+        );
+
+        $this->assertCount(1, $paginator);
+        $this->assertInstanceOf(Site::class, $paginator[0]);
+        $this->assertSame(1, $paginator[0]->serverId);
+    }
+
+    public function test_paginated_collection_handles_missing_meta()
+    {
+        $forge = new TestableForge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 1, 'name' => 'Server 1'],
+                ],
+            ]))
+        );
+
+        $paginator = $forge->paginatedCollection('orgs/org-123/servers', Server::class, 'org-123');
+
+        $this->assertCount(1, $paginator);
+        $this->assertNull($paginator->nextCursor());
+        $this->assertNull($paginator->perPage());
+        $this->assertFalse($paginator->hasMorePages());
+    }
+
+    public function test_paginated_collection_paginator_can_fetch_next_page()
+    {
+        $forge = new TestableForge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 1, 'name' => 'Server 1'],
+                ],
+                'meta' => [
+                    'next_cursor' => 'cursor-page2',
+                    'per_page' => 1,
+                ],
+            ]))
+        );
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'cursor-page2']])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 2, 'name' => 'Server 2'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 1,
+                ],
+            ]))
+        );
+
+        $page1 = $forge->paginatedCollection('orgs/org-123/servers', Server::class, 'org-123');
+        $page2 = $page1->nextPage();
+
+        $this->assertInstanceOf(CursorPaginator::class, $page2);
+        $this->assertCount(1, $page2);
+        $this->assertSame('Server 2', $page2[0]->name);
+        $this->assertFalse($page2->hasMorePages());
+    }
+}
+
+/**
+ * Exposes protected paginatedCollection() for testing.
+ */
+class TestableForge extends Forge
+{
+    public function paginatedCollection(
+        string $uri,
+        string $class,
+        ?string $organizationSlug = null,
+        ?int $serverId = null,
+        ?int $siteId = null,
+        array $extra = [],
+        array $query = [],
+    ): CursorPaginator {
+        return parent::paginatedCollection($uri, $class, $organizationSlug, $serverId, $siteId, $extra, $query);
     }
 }
