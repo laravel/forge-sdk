@@ -66,7 +66,7 @@ class Forge
     /**
      * Transform the items of the collection to the given class.
      */
-    protected function transformCollection(
+    public function transformCollection(
         array $collection,
         string $class,
         ?string $organizationSlug = null,
