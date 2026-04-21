@@ -2782,6 +2782,32 @@ class ForgeSDKTest extends TestCase
         $this->assertSame('pending', $action['data']['status']);
     }
 
+    public function test_action_endpoints_return_empty_array_when_response_has_no_body()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/actions', [
+            'json' => ['action' => 'reboot'],
+        ])->andReturn(
+            new Response(202)
+        );
+
+        $this->assertSame([], $forge->createServerAction('org-123', 1, ['action' => 'reboot']));
+    }
+
+    public function test_action_endpoints_return_empty_array_when_response_is_not_json()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/domains/1/certificate/actions', [
+            'json' => ['action' => 'renew'],
+        ])->andReturn(
+            new Response(202, [], 'Accepted')
+        );
+
+        $this->assertSame([], $forge->createDomainCertificateAction('org-123', 1, 1, 1, ['action' => 'renew']));
+    }
+
     // Additional tests for complete coverage
 
     public function test_getting_authenticated_user()

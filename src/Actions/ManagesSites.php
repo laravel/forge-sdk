@@ -184,10 +184,12 @@ trait ManagesSites
      */
     public function createDomainAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): array
     {
-        return $this->post(
+        $response = $this->post(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/actions",
             $data
         );
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -231,10 +233,12 @@ trait ManagesSites
      */
     public function createDomainCertificateAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): array
     {
-        return $this->post(
+        $response = $this->post(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate/actions",
             $data
         );
+
+        return is_array($response) ? $response : [];
     }
 
     /**

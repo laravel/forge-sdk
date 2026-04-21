@@ -84,6 +84,8 @@ trait ManagesBackgroundProcesses
      */
     public function performBackgroundProcessAction(string $organizationSlug, int $serverId, int $backgroundProcessId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$backgroundProcessId}/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$backgroundProcessId}/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 }

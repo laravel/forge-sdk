@@ -130,7 +130,9 @@ trait ManagesServers
      */
     public function createServerAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -138,7 +140,9 @@ trait ManagesServers
      */
     public function performNginxAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/nginx/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/nginx/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -146,7 +150,9 @@ trait ManagesServers
      */
     public function performPostgresAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/postgres/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/postgres/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -154,7 +160,9 @@ trait ManagesServers
      */
     public function performRedisAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/redis/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/redis/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -162,7 +170,9 @@ trait ManagesServers
      */
     public function performMySQLAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/mysql/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/mysql/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -170,7 +180,9 @@ trait ManagesServers
      */
     public function performPHPAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/php/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/php/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**
@@ -178,7 +190,9 @@ trait ManagesServers
      */
     public function performSupervisorAction(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/supervisor/actions", $data);
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/supervisor/actions", $data);
+
+        return is_array($response) ? $response : [];
     }
 
     /**

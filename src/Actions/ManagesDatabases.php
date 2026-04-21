@@ -140,6 +140,8 @@ trait ManagesDatabases
      */
     public function updateDatabasePassword(string $organizationSlug, int $serverId, array $data): array
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/password", $data);
+        $response = $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/password", $data);
+
+        return is_array($response) ? $response : [];
     }
 }
