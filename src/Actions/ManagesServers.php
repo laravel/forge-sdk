@@ -54,11 +54,45 @@ trait ManagesServers
     }
 
     /**
+     * Update a server.
+     */
+    public function updateServer(string $organizationSlug, int $serverId, array $data): Server
+    {
+        return $this->newResource(
+            Server::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}", $data)['data'] ?? [],
+            $organizationSlug,
+        );
+    }
+
+    /**
      * Delete a server.
      */
     public function deleteServer(string $organizationSlug, int $serverId): void
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}");
+    }
+
+    /**
+     * Get the server's network (the list of servers it can communicate with).
+     *
+     * @return Server[]
+     */
+    public function network(string $organizationSlug, int $serverId): array
+    {
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/network")['data'] ?? [],
+            Server::class,
+            $organizationSlug,
+        );
+    }
+
+    /**
+     * Sync the server's network with the given list of server IDs.
+     */
+    public function updateNetwork(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/network", $data);
     }
 
     /**

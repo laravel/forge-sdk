@@ -136,6 +136,52 @@ class ForgeSDKTest extends TestCase
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
+    public function test_updating_server()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1', [
+            'json' => ['name' => 'renamed-server', 'tags' => ['production', 'web']],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "renamed-server"}}')
+        );
+
+        $server = $forge->updateServer('org-123', 1, ['name' => 'renamed-server', 'tags' => ['production', 'web']]);
+        $this->assertSame(1, $server->id);
+        $this->assertSame('renamed-server', $server->name);
+        $this->assertSame('org-123', $server->organizationId);
+    }
+
+    public function test_getting_server_network()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/network', [])->andReturn(
+            new Response(200, [], '{"data": [{"id": 2, "name": "Server 2"}, {"id": 3, "name": "Server 3"}]}')
+        );
+
+        $network = $forge->network('org-123', 1);
+        $this->assertIsArray($network);
+        $this->assertCount(2, $network);
+        $this->assertInstanceOf(Server::class, $network[0]);
+        $this->assertSame(2, $network[0]->id);
+        $this->assertSame('org-123', $network[0]->organizationId);
+    }
+
+    public function test_updating_server_network()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/network', [
+            'json' => ['servers' => [2, 3, 4]],
+        ])->andReturn(
+            new Response(202)
+        );
+
+        $forge->updateNetwork('org-123', 1, ['servers' => [2, 3, 4]]);
+        $this->assertTrue(true);
+    }
+
     public function test_getting_sites_for_server()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
