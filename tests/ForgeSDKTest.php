@@ -17,6 +17,7 @@ use Laravel\Forge\Forge;
 use Laravel\Forge\MakesHttpRequests;
 use Laravel\Forge\Resources\Database;
 use Laravel\Forge\Resources\DatabaseUser;
+use Laravel\Forge\Resources\DeployKey;
 use Laravel\Forge\Resources\Deployment;
 use Laravel\Forge\Resources\Domain;
 use Laravel\Forge\Resources\FirewallRule;
@@ -1307,6 +1308,46 @@ class ForgeSDKTest extends TestCase
 
         $log = $forge->deploymentLog('org-123', 123, 456, 1);
         $this->assertStringContainsString('Deployment finished successfully', $log);
+    }
+
+    // Deploy Keys (3 tests)
+
+    public function test_getting_deploy_key()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/deploy-key', [])->andReturn(
+            new Response(200, [], '{"data": {"type": "deploy-keys", "id": "1", "attributes": {"key": "ssh-rsa AAAAB3NzaC1yc2EAAAA forge@example.com"}}}')
+        );
+
+        $deployKey = $forge->deployKey('org-123', 1, 1);
+        $this->assertInstanceOf(DeployKey::class, $deployKey);
+        $this->assertStringStartsWith('ssh-rsa', $deployKey->key);
+    }
+
+    public function test_creating_deploy_key()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/deploy-key', [])->andReturn(
+            new Response(200, [], '{"data": {"type": "deploy-keys", "id": "1", "attributes": {"key": "ssh-rsa AAAAB3NzaC1yc2EAAAA forge@example.com"}}}')
+        );
+
+        $deployKey = $forge->createDeployKey('org-123', 1, 1);
+        $this->assertInstanceOf(DeployKey::class, $deployKey);
+        $this->assertNotEmpty($deployKey->key);
+    }
+
+    public function test_deleting_deploy_key()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/1/sites/1/deploy-key', [])->andReturn(
+            new Response(204)
+        );
+
+        $forge->deleteDeployKey('org-123', 1, 1);
+        $this->assertTrue(true);
     }
 
     public function test_handling_validation_errors()
