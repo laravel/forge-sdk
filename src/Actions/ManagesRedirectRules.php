@@ -12,7 +12,7 @@ trait ManagesRedirectRules
     /**
      * Get the collection of redirect rules.
      */
-    public function redirectRules(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function redirectRules(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules",
@@ -20,6 +20,7 @@ trait ManagesRedirectRules
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 

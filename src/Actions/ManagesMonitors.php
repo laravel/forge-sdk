@@ -12,13 +12,14 @@ trait ManagesMonitors
     /**
      * Get the collection of monitors.
      */
-    public function monitors(string $organizationSlug, int $serverId): CursorPaginator
+    public function monitors(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/monitors",
             Monitor::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 

@@ -14,12 +14,13 @@ trait ManagesRecipes
     /**
      * Get the collection of recipes for an organization.
      */
-    public function recipes(string $organizationSlug): CursorPaginator
+    public function recipes(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/recipes",
             Recipe::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -70,13 +71,14 @@ trait ManagesRecipes
     /**
      * Get the collection of recipe runs for a recipe.
      */
-    public function recipeRuns(string $organizationSlug, int $recipeId): CursorPaginator
+    public function recipeRuns(string $organizationSlug, int $recipeId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/recipes/{$recipeId}/runs",
             RecipeRun::class,
             $organizationSlug,
             extra: ['recipe_id' => $recipeId],
+            query: $query,
         );
     }
 
@@ -109,13 +111,14 @@ trait ManagesRecipes
     /**
      * Get the collection of recipes for a team.
      */
-    public function teamRecipes(string $organizationSlug, int $teamId): CursorPaginator
+    public function teamRecipes(string $organizationSlug, int $teamId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/teams/{$teamId}/recipes",
             Recipe::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
+            query: $query,
         );
     }
 
@@ -143,11 +146,12 @@ trait ManagesRecipes
     /**
      * Get the collection of Forge recipes.
      */
-    public function forgeRecipes(): CursorPaginator
+    public function forgeRecipes(array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             'forge-recipes',
             ForgeRecipe::class,
+            query: $query,
         );
     }
 

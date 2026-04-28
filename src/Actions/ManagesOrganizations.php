@@ -14,11 +14,12 @@ trait ManagesOrganizations
     /**
      * Get the collection of organizations.
      */
-    public function organizations(): CursorPaginator
+    public function organizations(array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             'orgs',
             Organization::class,
+            query: $query,
         );
     }
 
@@ -33,12 +34,13 @@ trait ManagesOrganizations
     /**
      * Get the collection of server credentials for an organization.
      */
-    public function serverCredentials(string $organizationSlug): CursorPaginator
+    public function serverCredentials(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/server-credentials",
             ServerCredential::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -70,11 +72,12 @@ trait ManagesOrganizations
     /**
      * Get the collection of VPCs.
      */
-    public function vpcs(string $organizationSlug, int $credentialId, string $region): CursorPaginator
+    public function vpcs(string $organizationSlug, int $credentialId, string $region, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs",
             VPC::class,
+            query: $query,
         );
     }
 

@@ -13,13 +13,14 @@ trait ManagesDatabases
     /**
      * Get the collection of database schemas.
      */
-    public function databases(string $organizationSlug, int $serverId): CursorPaginator
+    public function databases(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/database/schemas",
             Database::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 
@@ -73,13 +74,14 @@ trait ManagesDatabases
     /**
      * Get the collection of database users.
      */
-    public function databaseUsers(string $organizationSlug, int $serverId): CursorPaginator
+    public function databaseUsers(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/database/users",
             DatabaseUser::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 

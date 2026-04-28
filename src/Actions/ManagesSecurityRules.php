@@ -12,7 +12,7 @@ trait ManagesSecurityRules
     /**
      * Get the collection of security rules.
      */
-    public function securityRules(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function securityRules(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules",
@@ -20,6 +20,7 @@ trait ManagesSecurityRules
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 

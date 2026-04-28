@@ -12,13 +12,14 @@ trait ManagesFirewallRules
     /**
      * Get the collection of firewall rules.
      */
-    public function firewallRules(string $organizationSlug, int $serverId): CursorPaginator
+    public function firewallRules(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules",
             FirewallRule::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 

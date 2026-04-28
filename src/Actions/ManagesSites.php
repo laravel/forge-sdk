@@ -15,23 +15,25 @@ trait ManagesSites
     /**
      * Get the collection of all sites.
      */
-    public function sites(): CursorPaginator
+    public function sites(array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             'sites',
             Site::class,
+            query: $query,
         );
     }
 
     /**
      * Get the collection of sites for an organization.
      */
-    public function organizationSites(string $organizationSlug): CursorPaginator
+    public function organizationSites(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/sites",
             Site::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -50,13 +52,14 @@ trait ManagesSites
     /**
      * Get the collection of sites for a server.
      */
-    public function serverSites(string $organizationSlug, int $serverId): CursorPaginator
+    public function serverSites(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites",
             Site::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 
@@ -110,7 +113,7 @@ trait ManagesSites
     /**
      * Get the collection of domains for a site.
      */
-    public function domains(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function domains(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains",
@@ -118,6 +121,7 @@ trait ManagesSites
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 
@@ -338,7 +342,7 @@ trait ManagesSites
     /**
      * Get the collection of heartbeats for a site.
      */
-    public function heartbeats(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function heartbeats(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/heartbeats",
@@ -346,6 +350,7 @@ trait ManagesSites
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 

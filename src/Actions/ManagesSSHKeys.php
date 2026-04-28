@@ -12,13 +12,14 @@ trait ManagesSSHKeys
     /**
      * Get the collection of SSH keys.
      */
-    public function sshKeys(string $organizationSlug, int $serverId): CursorPaginator
+    public function sshKeys(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/ssh-keys",
             SSHKey::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 

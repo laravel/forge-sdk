@@ -98,6 +98,19 @@ class ForgeSDKTest extends TestCase
         $this->assertCount(1, $servers);
     }
 
+    public function test_list_methods_forward_query_parameters()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'abc', 'page' => ['size' => 5]]])->andReturn(
+            new Response(200, [], '{"data": [{"id": 1, "name": "Server 1"}], "meta": {"next_cursor": null, "per_page": 5}}')
+        );
+
+        $servers = $forge->servers('org-123', ['cursor' => 'abc', 'page' => ['size' => 5]]);
+        $this->assertInstanceOf(CursorPaginator::class, $servers);
+        $this->assertCount(1, $servers);
+    }
+
     public function test_getting_single_server()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));

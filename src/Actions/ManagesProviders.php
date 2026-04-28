@@ -14,11 +14,12 @@ trait ManagesProviders
     /**
      * Get the collection of providers.
      */
-    public function providers(): CursorPaginator
+    public function providers(array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             'providers',
             Provider::class,
+            query: $query,
         );
     }
 
@@ -33,12 +34,13 @@ trait ManagesProviders
     /**
      * Get the collection of sizes for a provider.
      */
-    public function providerSizes(int $providerId): CursorPaginator
+    public function providerSizes(int $providerId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "providers/{$providerId}/sizes",
             ProviderSize::class,
             extra: ['provider_id' => $providerId],
+            query: $query,
         );
     }
 
@@ -56,12 +58,13 @@ trait ManagesProviders
     /**
      * Get the collection of regions for a provider.
      */
-    public function providerRegions(int $providerId): CursorPaginator
+    public function providerRegions(int $providerId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "providers/{$providerId}/regions",
             ProviderRegion::class,
             extra: ['provider_id' => $providerId],
+            query: $query,
         );
     }
 
@@ -79,12 +82,13 @@ trait ManagesProviders
     /**
      * Get the collection of sizes for a specific region.
      */
-    public function providerRegionSizes(int $providerId, int $regionId): CursorPaginator
+    public function providerRegionSizes(int $providerId, int $regionId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "providers/{$providerId}/regions/{$regionId}/sizes",
             ProviderSize::class,
             extra: ['provider_id' => $providerId, 'region_id' => $regionId],
+            query: $query,
         );
     }
 

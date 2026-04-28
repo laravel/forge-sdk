@@ -12,13 +12,14 @@ trait ManagesServerCredentials
     /**
      * Get the collection of team server credentials.
      */
-    public function teamServerCredentials(string $organizationSlug, int $teamId): CursorPaginator
+    public function teamServerCredentials(string $organizationSlug, int $teamId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/teams/{$teamId}/server-credentials",
             ServerCredential::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
+            query: $query,
         );
     }
 

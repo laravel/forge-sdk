@@ -13,13 +13,14 @@ trait ManagesBackups
     /**
      * Get the collection of backup configurations.
      */
-    public function backupConfigurations(string $organizationSlug, int $serverId): CursorPaginator
+    public function backupConfigurations(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/database/backups",
             BackupConfiguration::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 
@@ -63,7 +64,7 @@ trait ManagesBackups
     /**
      * Get the collection of backups for a backup configuration.
      */
-    public function backups(string $organizationSlug, int $serverId, int $backupConfigurationId): CursorPaginator
+    public function backups(string $organizationSlug, int $serverId, int $backupConfigurationId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances",
@@ -71,6 +72,7 @@ trait ManagesBackups
             $organizationSlug,
             $serverId,
             extra: ['backup_configuration_id' => $backupConfigurationId],
+            query: $query,
         );
     }
 

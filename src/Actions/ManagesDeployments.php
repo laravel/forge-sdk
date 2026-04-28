@@ -13,7 +13,7 @@ trait ManagesDeployments
     /**
      * Get the collection of webhooks for a site.
      */
-    public function webhooks(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function webhooks(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/webhooks",
@@ -21,6 +21,7 @@ trait ManagesDeployments
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 
@@ -63,7 +64,7 @@ trait ManagesDeployments
     /**
      * Get the collection of deployments for a site.
      */
-    public function deployments(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function deployments(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments",
@@ -71,6 +72,7 @@ trait ManagesDeployments
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 

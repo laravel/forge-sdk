@@ -12,7 +12,7 @@ trait ManagesCommands
     /**
      * Get the collection of commands for a site.
      */
-    public function commands(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function commands(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/commands",
@@ -20,6 +20,7 @@ trait ManagesCommands
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 

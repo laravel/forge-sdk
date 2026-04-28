@@ -14,11 +14,12 @@ trait ManagesRoles
     /**
      * Get the collection of predefined roles.
      */
-    public function predefinedRoles(): CursorPaginator
+    public function predefinedRoles(array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             'predefined-roles',
             PredefinedRole::class,
+            query: $query,
         );
     }
 
@@ -33,11 +34,12 @@ trait ManagesRoles
     /**
      * Get the collection of permissions.
      */
-    public function permissions(): CursorPaginator
+    public function permissions(array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             'permissions',
             Permission::class,
+            query: $query,
         );
     }
 
@@ -52,12 +54,13 @@ trait ManagesRoles
     /**
      * Get the collection of roles for an organization.
      */
-    public function roles(string $organizationSlug): CursorPaginator
+    public function roles(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/roles",
             Role::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -108,13 +111,14 @@ trait ManagesRoles
     /**
      * Get the collection of permissions for a role.
      */
-    public function rolePermissions(string $organizationSlug, int $roleId): CursorPaginator
+    public function rolePermissions(string $organizationSlug, int $roleId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/roles/{$roleId}/permissions",
             Permission::class,
             $organizationSlug,
             extra: ['role_id' => $roleId],
+            query: $query,
         );
     }
 }

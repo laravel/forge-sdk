@@ -14,12 +14,13 @@ trait ManagesServers
     /**
      * Get the collection of servers for an organization.
      */
-    public function servers(string $organizationSlug): CursorPaginator
+    public function servers(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers",
             Server::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -98,12 +99,13 @@ trait ManagesServers
     /**
      * Get the collection of archived servers for an organization.
      */
-    public function archivedServers(string $organizationSlug): CursorPaginator
+    public function archivedServers(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/archives",
             Server::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -198,13 +200,14 @@ trait ManagesServers
     /**
      * Get the collection of server events.
      */
-    public function serverEvents(string $organizationSlug, int $serverId): CursorPaginator
+    public function serverEvents(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/events",
             Event::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 
@@ -264,13 +267,14 @@ trait ManagesServers
     /**
      * Get the collection of PHP versions.
      */
-    public function phpVersions(string $organizationSlug, int $serverId): CursorPaginator
+    public function phpVersions(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/php/versions",
             PHPVersion::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 
@@ -434,13 +438,14 @@ trait ManagesServers
     /**
      * Get the collection of team servers.
      */
-    public function teamServers(string $organizationSlug, int $teamId): CursorPaginator
+    public function teamServers(string $organizationSlug, int $teamId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/teams/{$teamId}/servers",
             Server::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
+            query: $query,
         );
     }
 

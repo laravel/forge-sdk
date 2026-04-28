@@ -12,13 +12,14 @@ trait ManagesScheduledJobs
     /**
      * Get the collection of scheduled jobs.
      */
-    public function scheduledJobs(string $organizationSlug, int $serverId): CursorPaginator
+    public function scheduledJobs(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/scheduled-jobs",
             ScheduledJob::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 
@@ -69,7 +70,7 @@ trait ManagesScheduledJobs
     /**
      * Get the collection of scheduled jobs for a site.
      */
-    public function siteScheduledJobs(string $organizationSlug, int $serverId, int $siteId): CursorPaginator
+    public function siteScheduledJobs(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/scheduled-jobs",
@@ -77,6 +78,7 @@ trait ManagesScheduledJobs
             $organizationSlug,
             $serverId,
             $siteId,
+            query: $query,
         );
     }
 

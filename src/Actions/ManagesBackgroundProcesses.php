@@ -12,13 +12,14 @@ trait ManagesBackgroundProcesses
     /**
      * Get the collection of background processes.
      */
-    public function backgroundProcesses(string $organizationSlug, int $serverId): CursorPaginator
+    public function backgroundProcesses(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/background-processes",
             BackgroundProcess::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 

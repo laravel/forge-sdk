@@ -14,12 +14,13 @@ trait ManagesTeams
     /**
      * Get the collection of teams for an organization.
      */
-    public function teams(string $organizationSlug): CursorPaginator
+    public function teams(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/teams",
             Team::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
@@ -70,13 +71,14 @@ trait ManagesTeams
     /**
      * Get the collection of team members.
      */
-    public function teamMembers(string $organizationSlug, int $teamId): CursorPaginator
+    public function teamMembers(string $organizationSlug, int $teamId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/teams/{$teamId}/members",
             TeamMember::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
+            query: $query,
         );
     }
 
@@ -117,13 +119,14 @@ trait ManagesTeams
     /**
      * Get the collection of team invitations.
      */
-    public function teamInvitations(string $organizationSlug, int $teamId): CursorPaginator
+    public function teamInvitations(string $organizationSlug, int $teamId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/teams/{$teamId}/invites",
             TeamInvitation::class,
             $organizationSlug,
             extra: ['team_id' => $teamId],
+            query: $query,
         );
     }
 

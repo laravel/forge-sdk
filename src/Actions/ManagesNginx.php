@@ -12,13 +12,14 @@ trait ManagesNginx
     /**
      * Get the collection of Nginx templates.
      */
-    public function nginxTemplates(string $organizationSlug, int $serverId): CursorPaginator
+    public function nginxTemplates(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/servers/{$serverId}/nginx/templates",
             NginxTemplate::class,
             $organizationSlug,
             $serverId,
+            query: $query,
         );
     }
 

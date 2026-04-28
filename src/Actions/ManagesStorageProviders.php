@@ -12,12 +12,13 @@ trait ManagesStorageProviders
     /**
      * Get the collection of storage providers for an organization.
      */
-    public function storageProviders(string $organizationSlug): CursorPaginator
+    public function storageProviders(string $organizationSlug, array $query = []): CursorPaginator
     {
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/storage-providers",
             StorageProvider::class,
             $organizationSlug,
+            query: $query,
         );
     }
 
