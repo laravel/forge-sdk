@@ -162,9 +162,9 @@ class OpenAPIEndpointMapper
         $httpMethod = strtoupper($httpMethod);
         $path = ltrim($path, '/');
 
-        // Check special cases first
+        // Check special cases first (null value means explicitly skip this endpoint)
         $key = "$httpMethod /$path";
-        if (isset(static::$specialCases[$key])) {
+        if (array_key_exists($key, static::$specialCases)) {
             return static::$specialCases[$key];
         }
 
