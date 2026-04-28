@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\CursorPaginator;
-use Laravel\Forge\Resources\DeployKey;
 use Laravel\Forge\Resources\Deployment;
 use Laravel\Forge\Resources\Webhook;
 
@@ -181,41 +180,5 @@ trait ManagesDeployments
         $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/{$deploymentId}/log");
 
         return $response['data']['attributes']['output'] ?? '';
-    }
-
-    /**
-     * Get the deploy key for a site.
-     */
-    public function deployKey(string $organizationSlug, int $serverId, int $siteId): DeployKey
-    {
-        return $this->newResource(
-            DeployKey::class,
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deploy-key")['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
-    }
-
-    /**
-     * Create a deploy key for a site (returns existing key if one already exists).
-     */
-    public function createDeployKey(string $organizationSlug, int $serverId, int $siteId): DeployKey
-    {
-        return $this->newResource(
-            DeployKey::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deploy-key")['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
-    }
-
-    /**
-     * Delete the deploy key for a site.
-     */
-    public function deleteDeployKey(string $organizationSlug, int $serverId, int $siteId): void
-    {
-        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deploy-key");
     }
 }
