@@ -5,11 +5,33 @@ This guide covers everything you need to know to upgrade from Forge SDK v3.x (AP
 > [!CAUTION]
 > v4.0 requires **PHP 8.2** or higher. Support for PHP 7.2 through 8.1 has been dropped.
 
+---
+
 ## Breaking Changes
+
+### List Methods Return `CursorPaginator` Instead of Arrays
+
+This is the most impactful change for existing code. Every method that previously returned an array of resources now returns a `CursorPaginator` instance.
+
+**v3.x:**
+```php
+$servers = $forge->servers(); // array
+foreach ($servers as $server) { ... }
+```
+
+**v4.0:**
+```php
+$servers = $forge->servers($organizationSlug); // CursorPaginator
+foreach ($servers as $server) { ... }
+```
+
+`CursorPaginator` implements `Countable`, `ArrayAccess`, and `IteratorAggregate`, so `foreach`, `count()`, and `$result[0]` all continue to work. However, it is **not** a plain array, so functions like `array_map()` or `array_filter()` will not work directly. Use `$paginator->items()` to get the underlying array, or iterate over pages with `lazy()` / `lazyPages()`.
+
+See the [Pagination section](#pagination) below for full usage.
 
 ### Organization-Scoped Endpoints
 
-This is the most significant change in v4.0. Nearly all resource endpoints now require an organization slug as the first parameter.
+Nearly all resource endpoints now require an organization slug as the first parameter.
 
 **v3.x:**
 ```php
@@ -28,14 +50,12 @@ $forge->createServer($organizationSlug, $data);
 This applies to **all** endpoints except:
 - `$forge->user()` / `$forge->me()`
 - `$forge->organizations()`
-- `$forge->sites()` (global, returns all sites across organizations)
+- `$forge->sites()` (global — all sites across organizations)
 - `$forge->providers()` / `$forge->providerSizes()` / `$forge->providerRegions()`
 - `$forge->permissions()` / `$forge->predefinedRoles()`
 - `$forge->forgeRecipes()`
 
 ### Renamed Methods
-
-Methods have been renamed to match API v2 terminology:
 
 | v3.x | v4.0 |
 |------|------|
@@ -59,8 +79,6 @@ $forge->performSupervisorAction($organizationSlug, $serverId, ['action' => 'rest
 ```
 
 ### Removed Alias Methods
-
-The following alias methods have been removed. Use the primary method instead:
 
 | Removed | Use Instead |
 |---------|-------------|
@@ -88,19 +106,20 @@ If you extend or directly reference action traits, these have been renamed or me
 
 ### Removed Resource Convenience Methods
 
-Many Resource convenience methods have been removed because the underlying API methods no longer exist in v4. If you relied on these, use the Forge client methods directly instead.
+Many Resource convenience methods have been removed because the underlying API methods no longer exist in v4. Use the Forge client methods directly instead.
 
 **Server** — 9 methods removed:
-- `$server->update()` — no `updateServer()` in v4
-- `$server->revokeAccess()` — no `revokeAccessToServer()` in v4
-- `$server->reconnect()` — no `reconnectToServer()` in v4
-- `$server->reactivate()` — no `reactivateToServer()` in v4
+- `$server->update()` — use `$forge->updateServer($organizationSlug, $serverId, $data)` instead
+- `$server->revokeAccess()` — no equivalent in v4
+- `$server->reconnect()` — no equivalent in v4
+- `$server->reactivate()` — no equivalent in v4
 - `$server->installBlackfire()` / `$server->removeBlackfire()` — Blackfire integration removed
 - `$server->installPapertrail()` / `$server->removePapertrail()` — Papertrail integration removed
 - `$server->updatePHP()` — v4 `updatePhpVersion()` requires a `$phpVersionId`, cannot be called from the resource
 
 **Site** — 17 methods removed:
-- `$site->refreshToken()`, `$site->installGitRepository()`, `$site->updateGitRepository()`, `$site->destroyGitRepository()`, `$site->createDeployKey()`, `$site->destroyDeployKey()` — git operations removed from API v2
+- `$site->refreshToken()`, `$site->installGitRepository()`, `$site->updateGitRepository()`, `$site->destroyGitRepository()` — git operations removed from API v2
+- `$site->createDeployKey()`, `$site->destroyDeployKey()` — use `$forge->deployKey()`, `$forge->createDeployKey()`, `$forge->deleteDeployKey()` instead
 - `$site->enableQuickDeploy()`, `$site->resetDeploymentState()`, `$site->siteDeploymentLog()` — no v4 equivalent
 - `$site->enableHipchatNotifications()`, `$site->disableHipchatNotifications()` — HipChat integration removed
 - `$site->setDeploymentFailureEmails()` — removed
@@ -113,8 +132,6 @@ Many Resource convenience methods have been removed because the underlying API m
 **Database** — `$database->update()` removed (no `updateDatabase()` in v4).
 
 ### Changed Resource Convenience Method Signatures
-
-Some convenience methods have changed their signatures or target different underlying methods:
 
 **Server:**
 - `$server->rebootPHP(array $data)` → `$server->rebootPHP()` — no longer accepts `$data`
@@ -141,9 +158,7 @@ Some convenience methods have changed their signatures or target different under
 
 All files now declare `strict_types=1` and use native PHP type declarations for properties, parameters, and return types.
 
-**Typed resource properties:**
-
-All resource properties are now typed with native PHP types. Properties are nullable with a `null` default:
+All resource properties are now typed and nullable with a `null` default:
 
 ```php
 // v3.x
@@ -165,8 +180,6 @@ class Server extends Resource
 }
 ```
 
-**Typed method signatures:**
-
 All SDK methods now have native parameter and return types:
 
 ```php
@@ -176,12 +189,10 @@ public function server($serverId);
 public function createServer(array $data, $wait = true);
 
 // v4.0
-public function servers(string $organizationSlug): array;
+public function servers(string $organizationSlug): CursorPaginator;
 public function server(string $organizationSlug, int $serverId): Server;
 public function createServer(string $organizationSlug, array $data, bool $wait = true): Server;
 ```
-
-**Removal of `#[\AllowDynamicProperties]`:**
 
 The `Resource` base class no longer uses `#[\AllowDynamicProperties]`. Undeclared fields from the API response are no longer accessible as dynamic properties. Use the `$attributes` array instead:
 
@@ -209,19 +220,89 @@ The SDK handles response unwrapping internally, but if you access raw HTTP respo
 
 ## New Features
 
-### New Traits
+### Pagination
 
-v4.0 introduces several new action traits:
+All list methods now return a `CursorPaginator` instead of a plain array. The paginator is iterable, countable, and array-accessible, so existing `foreach` and `count()` usage continues to work without changes.
 
-- `ManagesDeployments` — webhooks, deployment scripts, push-to-deploy
-- `ManagesIntegrations` — Horizon, Octane, Reverb, Inertia, Pulse, Maintenance, Scheduler
-- `ManagesLogs`
-- `ManagesOrganizations`
-- `ManagesProviders`
-- `ManagesRoles`
-- `ManagesStorageProviders`
-- `ManagesTeams`
-- `ManagesUser`
+**Accessing items on the current page:**
+```php
+$servers = $forge->servers($organizationSlug);
+
+foreach ($servers as $server) { ... }       // iterate
+count($servers);                             // item count on this page
+$servers[0];                                 // index access
+$servers->items();                           // get plain array
+```
+
+**Fetching subsequent pages:**
+```php
+$page1 = $forge->servers($organizationSlug);
+
+if ($page1->hasMorePages()) {
+    $page2 = $page1->nextPage();
+}
+
+// Cursor for resuming later (e.g. storing between queue jobs)
+$cursor = $page1->nextCursor(); // string|null
+```
+
+**Iterating all items across all pages:**
+```php
+foreach ($forge->servers($organizationSlug)->lazy() as $server) {
+    // automatically fetches additional pages as needed
+}
+```
+
+**Iterating page-by-page:**
+```php
+foreach ($forge->servers($organizationSlug)->lazyPages() as $page) {
+    // $page is a CursorPaginator
+    foreach ($page as $server) { ... }
+}
+```
+
+**Resuming pagination from a stored cursor (e.g. between queue jobs):**
+```php
+// First job: store the cursor
+$page = $forge->servers($organizationSlug);
+Cache::put('forge_cursor', $page->nextCursor());
+
+// Next job: resume from where you left off
+$cursor = Cache::get('forge_cursor');
+$page = $forge->servers($organizationSlug, ['cursor' => $cursor]);
+```
+
+**Controlling page size:**
+```php
+$servers = $forge->servers($organizationSlug, ['page' => ['size' => 50]]);
+```
+
+All list methods accept an optional `array $query = []` parameter that is forwarded directly to the API request, so any query string parameters documented in the API can be passed this way.
+
+### Deploy Keys
+
+```php
+$deployKey = $forge->deployKey($organizationSlug, $serverId, $siteId);
+$deployKey = $forge->createDeployKey($organizationSlug, $serverId, $siteId);
+$forge->deleteDeployKey($organizationSlug, $serverId, $siteId);
+
+echo $deployKey->key; // the public SSH deploy key
+```
+
+If the site already has a deploy key, `createDeployKey()` returns the existing one.
+
+### Server Management
+
+```php
+// Update a server's settings
+$server = $forge->updateServer($organizationSlug, $serverId, $data);
+
+// Get the list of servers this server can communicate with
+$servers = $forge->network($organizationSlug, $serverId); // Server[]
+
+// Update the network (set which server IDs this server can reach)
+$forge->updateNetwork($organizationSlug, $serverId, ['servers' => [2, 3, 4]]);
+```
 
 ### Organizations
 
@@ -271,6 +352,7 @@ $providers = $forge->providers();
 $provider = $forge->provider($providerId);
 $sizes = $forge->providerSizes($providerId);
 $regions = $forge->providerRegions($providerId);
+$regionSizes = $forge->providerRegionSizes($providerId, $regionId);
 ```
 
 ### Laravel Integrations
@@ -357,7 +439,19 @@ $organizationSlug = $organizations[0]->id;
 
 Add `$organizationSlug` as the first argument to all resource methods. This is the bulk of the migration work.
 
-### 4. Rename Changed Methods
+### 4. Update Code That Treats List Results as Arrays
+
+List methods return `CursorPaginator`, not arrays. Code that used `array_map()`, `array_filter()`, or other array functions on results needs to be updated. Either call `->items()` to get the underlying array, or refactor to iterate with `foreach`.
+
+```php
+// Before
+$names = array_map(fn($s) => $s->name, $forge->servers());
+
+// After
+$names = array_map(fn($s) => $s->name, $forge->servers($org)->items());
+```
+
+### 5. Rename Changed Methods
 
 - `daemons()` → `backgroundProcesses()`
 - `jobs()` → `scheduledJobs()`
@@ -366,7 +460,7 @@ Add `$organizationSlug` as the first argument to all resource methods. This is t
 - `updateSiteNginxConfig()` → `updateSiteNginx()`
 - Update any direct trait references (see table above)
 
-### 5. Test Thoroughly
+### 6. Test Thoroughly
 
 The API structure has changed significantly. Test all your integrations carefully.
 
@@ -396,6 +490,6 @@ The `$wait` parameter for long-running operations like `createServer()` still wo
 
 ## Need Help?
 
-1. Check the [API v2 documentation](https://forge.laravel.com/api/docs)
+1. Check the [Forge API documentation](https://forge.laravel.com/docs/api-reference)
 2. Review the [SDK source code](https://github.com/laravel/forge-sdk)
 3. [Open an issue](https://github.com/laravel/forge-sdk/issues)
