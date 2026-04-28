@@ -257,7 +257,7 @@ trait ManagesSites
     public function updateSiteEnvironment(string $organizationSlug, int $serverId, int $siteId, string $content): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/environment", [
-            'content' => $content,
+            'environment' => $content,
         ]);
     }
 
@@ -277,7 +277,7 @@ trait ManagesSites
     public function updateSiteNginx(string $organizationSlug, int $serverId, int $siteId, string $content): void
     {
         $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/nginx", [
-            'content' => $content,
+            'config' => $content,
         ]);
     }
 
@@ -414,7 +414,7 @@ trait ManagesSites
      */
     public function updateDomainNginxConfig(string $organizationSlug, int $serverId, int $siteId, int $domainId, string $content): void
     {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx", ['content' => $content]);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/nginx", ['config' => $content]);
     }
 
     /**

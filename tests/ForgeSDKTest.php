@@ -2522,7 +2522,7 @@ class ForgeSDKTest extends TestCase
         $content = "APP_NAME=MyApp\nAPP_ENV=production\nAPP_KEY=base64:newkey456";
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/environment', [
-            'json' => ['content' => $content],
+            'json' => ['environment' => $content],
         ])->andReturn(
             new Response(200)
         );
@@ -2551,7 +2551,7 @@ class ForgeSDKTest extends TestCase
         $content = "server {\n    listen 80;\n    server_name example.com;\n}";
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/nginx', [
-            'json' => ['content' => $content],
+            'json' => ['config' => $content],
         ])->andReturn(
             new Response(200)
         );
@@ -3492,7 +3492,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/domains/1/nginx', [
-            'json' => ['content' => 'server { listen 80; }'],
+            'json' => ['config' => 'server { listen 80; }'],
         ])->andReturn(
             new Response(204)
         );
@@ -3545,7 +3545,7 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/nginx', [
-            'json' => ['content' => 'server { listen 443; }'],
+            'json' => ['config' => 'server { listen 443; }'],
         ])->andReturn(
             new Response(204)
         );
