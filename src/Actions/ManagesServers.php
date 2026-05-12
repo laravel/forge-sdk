@@ -227,7 +227,7 @@ trait ManagesServers
      */
     public function serverEventOutput(string $organizationSlug, int $serverId, int $eventId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events/{$eventId}/output");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events/{$eventId}/output")['data'] ?? [];
     }
 
     /**
@@ -235,7 +235,7 @@ trait ManagesServers
      */
     public function phpCliVersion(string $organizationSlug, int $serverId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version")['data'] ?? [];
     }
 
     /**
@@ -251,7 +251,7 @@ trait ManagesServers
      */
     public function phpSiteVersion(string $organizationSlug, int $serverId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version")['data'] ?? [];
     }
 
     /**
@@ -372,7 +372,7 @@ trait ManagesServers
      */
     public function phpMaxUploadSize(string $organizationSlug, int $serverId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size")['data'] ?? [];
     }
 
     /**
@@ -388,7 +388,7 @@ trait ManagesServers
      */
     public function phpMaxExecutionTime(string $organizationSlug, int $serverId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time")['data'] ?? [];
     }
 
     /**
@@ -404,7 +404,7 @@ trait ManagesServers
      */
     public function phpOpcache(string $organizationSlug, int $serverId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache");
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache")['data'] ?? [];
     }
 
     /**

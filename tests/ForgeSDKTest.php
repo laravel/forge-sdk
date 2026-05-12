@@ -1820,8 +1820,8 @@ class ForgeSDKTest extends TestCase
 
         $cliVersion = $forge->phpCliVersion('org-123', 1);
         $this->assertIsArray($cliVersion);
-        $this->assertSame('php83', $cliVersion['data']['version']);
-        $this->assertSame('PHP 8.3', $cliVersion['data']['displayVersion']);
+        $this->assertSame('php83', $cliVersion['version']);
+        $this->assertSame('PHP 8.3', $cliVersion['displayVersion']);
     }
 
     public function test_updating_php_cli_version()
@@ -1849,8 +1849,8 @@ class ForgeSDKTest extends TestCase
 
         $siteVersion = $forge->phpSiteVersion('org-123', 1);
         $this->assertIsArray($siteVersion);
-        $this->assertSame('php83', $siteVersion['data']['version']);
-        $this->assertSame('PHP 8.3', $siteVersion['data']['displayVersion']);
+        $this->assertSame('php83', $siteVersion['version']);
+        $this->assertSame('PHP 8.3', $siteVersion['displayVersion']);
     }
 
     public function test_updating_php_site_version()
@@ -1962,7 +1962,7 @@ class ForgeSDKTest extends TestCase
 
         $uploadSize = $forge->phpMaxUploadSize('org-123', 1);
         $this->assertIsArray($uploadSize);
-        $this->assertSame('256M', $uploadSize['data']['size']);
+        $this->assertSame('256M', $uploadSize['size']);
     }
 
     public function test_updating_php_max_upload_size()
@@ -1990,7 +1990,7 @@ class ForgeSDKTest extends TestCase
 
         $executionTime = $forge->phpMaxExecutionTime('org-123', 1);
         $this->assertIsArray($executionTime);
-        $this->assertSame('60', $executionTime['data']['time']);
+        $this->assertSame('60', $executionTime['time']);
     }
 
     public function test_updating_php_max_execution_time()
@@ -2018,8 +2018,8 @@ class ForgeSDKTest extends TestCase
 
         $opcache = $forge->phpOpcache('org-123', 1);
         $this->assertIsArray($opcache);
-        $this->assertSame('enabled', $opcache['data']['status']);
-        $this->assertSame('128', $opcache['data']['memory']);
+        $this->assertSame('enabled', $opcache['status']);
+        $this->assertSame('128', $opcache['memory']);
     }
 
     public function test_creating_php_opcache()
