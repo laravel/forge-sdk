@@ -253,9 +253,21 @@ trait ManagesIntegrations
     /**
      * Create a Laravel Maintenance integration.
      */
-    public function createMaintenance(string $organizationSlug, int $serverId, int $siteId, array $data = []): void
+    public function createMaintenance(string $organizationSlug, int $serverId, int $siteId, array $data = []): Integration
     {
-        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance", $data);
+        return new Integration(
+            $this->normalizeIntegration(
+                $this->post(
+                    "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/laravel-maintenance",
+                    $data
+                )['data'] ?? [],
+                'laravel-maintenance',
+                $organizationSlug,
+                $serverId,
+                $siteId,
+            ),
+            $this
+        );
     }
 
     /**
