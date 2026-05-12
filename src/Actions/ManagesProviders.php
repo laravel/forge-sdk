@@ -49,9 +49,10 @@ trait ManagesProviders
      */
     public function providerSize(int $providerId, int $sizeId): ProviderSize
     {
-        return new ProviderSize(
+        return $this->newResource(
+            ProviderSize::class,
             $this->get("providers/{$providerId}/sizes/{$sizeId}")['data'] ?? [],
-            $this
+            extra: ['provider_id' => $providerId],
         );
     }
 
@@ -73,9 +74,10 @@ trait ManagesProviders
      */
     public function providerRegion(int $providerId, int $regionId): ProviderRegion
     {
-        return new ProviderRegion(
+        return $this->newResource(
+            ProviderRegion::class,
             $this->get("providers/{$providerId}/regions/{$regionId}")['data'] ?? [],
-            $this
+            extra: ['provider_id' => $providerId],
         );
     }
 
@@ -97,9 +99,10 @@ trait ManagesProviders
      */
     public function providerRegionSize(int $providerId, int $regionId, int $sizeId): ProviderSize
     {
-        return new ProviderSize(
+        return $this->newResource(
+            ProviderSize::class,
             $this->get("providers/{$providerId}/regions/{$regionId}/sizes/{$sizeId}")['data'] ?? [],
-            $this
+            extra: ['provider_id' => $providerId, 'region_id' => $regionId],
         );
     }
 }

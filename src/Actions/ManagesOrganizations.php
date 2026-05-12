@@ -61,12 +61,15 @@ trait ManagesOrganizations
      */
     public function createVpc(string $organizationSlug, int $credentialId, string $region, array $data = []): VPC
     {
-        $vpc = $this->post(
-            "orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs",
-            $data
-        )['data'] ?? [];
-
-        return new VPC($vpc, $this);
+        return $this->newResource(
+            VPC::class,
+            $this->post(
+                "orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs",
+                $data
+            )['data'] ?? [],
+            $organizationSlug,
+            extra: ['credential_id' => $credentialId, 'region' => $region],
+        );
     }
 
     /**
@@ -77,6 +80,8 @@ trait ManagesOrganizations
         return $this->paginatedCollection(
             "orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs",
             VPC::class,
+            $organizationSlug,
+            extra: ['credential_id' => $credentialId, 'region' => $region],
             query: $query,
         );
     }
@@ -86,9 +91,11 @@ trait ManagesOrganizations
      */
     public function vpc(string $organizationSlug, int $credentialId, string $region, int $vpcId): VPC
     {
-        return new VPC(
+        return $this->newResource(
+            VPC::class,
             $this->get("orgs/{$organizationSlug}/server-credentials/{$credentialId}/regions/{$region}/vpcs/{$vpcId}")['data'] ?? [],
-            $this
+            $organizationSlug,
+            extra: ['credential_id' => $credentialId, 'region' => $region],
         );
     }
 }
