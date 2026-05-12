@@ -192,55 +192,6 @@ trait ManagesSites
     }
 
     /**
-     * Get a domain certificate.
-     */
-    public function domainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId): Certificate
-    {
-        return $this->newResource(
-            Certificate::class,
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate")['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
-    }
-
-    /**
-     * Create a domain certificate.
-     */
-    public function createDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): Certificate
-    {
-        return $this->newResource(
-            Certificate::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
-    }
-
-    /**
-     * Delete the given domain certificate.
-     */
-    public function deleteDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId): void
-    {
-        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate");
-    }
-
-    /**
-     * Create a domain certificate action.
-     */
-    public function createDomainCertificateAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): array
-    {
-        $response = $this->post(
-            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificate/actions",
-            $data
-        );
-
-        return is_array($response) ? $response : [];
-    }
-
-    /**
      * Get the collection of certificates for a domain.
      */
     public function domainCertificates(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $query = []): CursorPaginator

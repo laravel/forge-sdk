@@ -125,11 +125,11 @@ class MethodNameConventions
             if (str_contains($path, 'servers') && ! str_contains($path, 'sites')) {
                 return 'createServerAction';
             }
+            if (str_contains($path, 'certificates')) {
+                return 'createCertificateAction';
+            }
             if (str_contains($path, 'domains')) {
                 return 'createDomainAction';
-            }
-            if (str_contains($path, 'certificate')) {
-                return 'createDomainCertificateAction';
             }
         }
 

@@ -127,7 +127,7 @@ Many Resource convenience methods have been removed because the underlying API m
 - `$site->installPhpMyAdmin()`, `$site->removePhpMyAdmin()` — phpMyAdmin support removed
 - `$site->changePHPVersion()` — no `changeSitePHPVersion()` in v4
 
-**Certificate** — all 4 convenience methods removed (`delete()`, `getSigningRequest()`, `install()`, `activate()`). Certificates are now managed at the domain level via `domainCertificate()` / `createDomainCertificate()` / `deleteDomainCertificate()`.
+**Certificate** — all 4 convenience methods removed (`delete()`, `getSigningRequest()`, `install()`, `activate()`). Certificates are now managed via `domainCertificates()` / `activeDomainCertificate()` / `certificate()` / `createCertificate()` / `deleteCertificate()`.
 
 **Database** — `$database->update()` removed (no `updateDatabase()` in v4).
 
@@ -385,8 +385,8 @@ $url = $forge->deploymentTriggerUrl($organizationSlug, $serverId, $siteId);
 $domains = $forge->domains($organizationSlug, $serverId, $siteId);
 $domain = $forge->createDomain($organizationSlug, $serverId, $siteId, $data);
 
-$cert = $forge->domainCertificate($organizationSlug, $serverId, $siteId, $domainId);
-$forge->createDomainCertificate($organizationSlug, $serverId, $siteId, $domainId, $data);
+$cert = $forge->activeDomainCertificate($organizationSlug, $serverId, $siteId, $domainId);
+$forge->createCertificate($organizationSlug, $serverId, $siteId, $domainId, $data);
 ```
 
 ### Site Heartbeats

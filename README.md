@@ -182,9 +182,11 @@ $forge->updateDomain($organizationId, $serverId, $siteId, $domainId, $data);
 $forge->deleteDomain($organizationId, $serverId, $siteId, $domainId);
 
 // Domain certificates
-$cert = $forge->domainCertificate($organizationId, $serverId, $siteId, $domainId);
-$forge->createDomainCertificate($organizationId, $serverId, $siteId, $domainId, $data);
-$forge->deleteDomainCertificate($organizationId, $serverId, $siteId, $domainId);
+$certs = $forge->domainCertificates($organizationId, $serverId, $siteId, $domainId);
+$active = $forge->activeDomainCertificate($organizationId, $serverId, $siteId, $domainId);
+$cert = $forge->certificate($organizationId, $serverId, $siteId, $domainId, $certificateId);
+$forge->createCertificate($organizationId, $serverId, $siteId, $domainId, $data);
+$forge->deleteCertificate($organizationId, $serverId, $siteId, $domainId, $certificateId);
 ```
 
 ### Site Deployments
