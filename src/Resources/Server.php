@@ -24,6 +24,11 @@ class Server extends Resource
     public ?string $name = null;
 
     /**
+     * The slug of the server.
+     */
+    public ?string $slug = null;
+
+    /**
      * The type of the server.
      */
     public ?string $type = null;
