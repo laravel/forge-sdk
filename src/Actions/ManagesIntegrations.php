@@ -181,14 +181,6 @@ trait ManagesIntegrations
     }
 
     /**
-     * Delete the Inertia integration.
-     */
-    public function deleteInertia(string $organizationSlug, int $serverId, int $siteId): void
-    {
-        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/integrations/inertia");
-    }
-
-    /**
      * Get the Laravel Pulse integration status.
      */
     public function getPulse(string $organizationSlug, int $serverId, int $siteId): Integration

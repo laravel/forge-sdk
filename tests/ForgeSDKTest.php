@@ -887,18 +887,6 @@ class ForgeSDKTest extends TestCase
         $this->assertSame(4, $integration->id);
     }
 
-    public function test_deleting_inertia_integration()
-    {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
-
-        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/1/sites/1/integrations/inertia', [])->andReturn(
-            new Response(204)
-        );
-
-        $forge->deleteInertia('org-123', 1, 1);
-        $this->assertTrue(true);
-    }
-
     public function test_getting_pulse_integration()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));

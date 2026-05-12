@@ -220,7 +220,6 @@ use Laravel\Forge\ForgeManager;
  * @method static void deleteReverb(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Integration getInertia(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Integration createInertia(string $organizationSlug, int $serverId, int $siteId, array $data = [])
- * @method static void deleteInertia(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Integration getPulse(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Integration createPulse(string $organizationSlug, int $serverId, int $siteId, array $data = [])
  * @method static void deletePulse(string $organizationSlug, int $serverId, int $siteId)
