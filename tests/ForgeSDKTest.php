@@ -949,14 +949,15 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_maintenance_integration()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/integrations/laravel-maintenance', [])->andReturn(
-            new Response(200, [], '{"data": {"id": 6, "type": "laravel-maintenance"}}')
+            new Response(202)
         );
 
-        $integration = $forge->createMaintenance('org-123', 1, 1);
-        $this->assertSame(6, $integration->id);
+        $forge->createMaintenance('org-123', 1, 1);
     }
 
     public function test_deleting_maintenance_integration()
