@@ -149,6 +149,7 @@ class Forge
             serverId: $serverId,
             siteId: $siteId,
             extra: $extra,
+            query: $query,
         );
     }
 

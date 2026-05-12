@@ -30,6 +30,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess
         protected ?int $serverId = null,
         protected ?int $siteId = null,
         protected array $extra = [],
+        protected array $query = [],
     ) {}
 
     /**
@@ -73,7 +74,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess
             return null;
         }
 
-        $response = $this->forge->get($this->uri, ['cursor' => $this->nextCursor]);
+        $response = $this->forge->get($this->uri, array_merge($this->query, ['cursor' => $this->nextCursor]));
 
         $data = $response['data'] ?? [];
         $meta = $response['meta'] ?? [];
@@ -98,6 +99,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess
             serverId: $this->serverId,
             siteId: $this->siteId,
             extra: $this->extra,
+            query: $this->query,
         );
     }
 

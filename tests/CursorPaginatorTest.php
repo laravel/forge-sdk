@@ -369,6 +369,45 @@ class CursorPaginatorTest extends TestCase
         $this->assertSame('org-123', $nextPage[0]->organizationId);
     }
 
+    public function test_next_page_preserves_original_query_params()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [
+            'query' => ['per_page' => 50, 'filter' => 'active', 'cursor' => 'cursor-2'],
+        ])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 3, 'name' => 'Server 3'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 50,
+                ],
+            ]))
+        );
+
+        $paginator = new CursorPaginator(
+            items: [
+                new Server(['id' => 1, 'name' => 'Server 1'], $forge),
+                new Server(['id' => 2, 'name' => 'Server 2'], $forge),
+            ],
+            nextCursor: 'cursor-2',
+            perPage: 50,
+            forge: $forge,
+            uri: 'orgs/org-123/servers',
+            class: Server::class,
+            organizationSlug: 'org-123',
+            query: ['per_page' => 50, 'filter' => 'active'],
+        );
+
+        $nextPage = $paginator->nextPage();
+
+        $this->assertInstanceOf(CursorPaginator::class, $nextPage);
+        $this->assertCount(1, $nextPage);
+        $this->assertNull($nextPage->nextCursor());
+    }
+
     public function test_backward_compatibility_foreach_count_and_index_access()
     {
         $items = [
