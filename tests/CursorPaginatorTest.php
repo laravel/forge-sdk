@@ -177,7 +177,7 @@ class CursorPaginatorTest extends TestCase
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'cursor-page-2']])->andReturn(
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-page-2']]])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
                     ['id' => 3, 'name' => 'Server 3'],
@@ -217,7 +217,7 @@ class CursorPaginatorTest extends TestCase
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'cursor-last']])->andReturn(
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-last']]])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
                     ['id' => 5, 'name' => 'Server 5'],
@@ -251,7 +251,7 @@ class CursorPaginatorTest extends TestCase
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'cursor-2']])->andReturn(
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
                     ['id' => 3, 'name' => 'Server 3'],
@@ -300,7 +300,7 @@ class CursorPaginatorTest extends TestCase
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'cursor-2']])->andReturn(
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
                     ['id' => 3, 'name' => 'Server 3'],
@@ -338,7 +338,7 @@ class CursorPaginatorTest extends TestCase
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'next']])->andReturn(
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'next']]])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
                     ['id' => 10, 'name' => 'Server 10'],
@@ -374,7 +374,10 @@ class CursorPaginatorTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [
-            'query' => ['per_page' => 50, 'filter' => 'active', 'cursor' => 'cursor-2'],
+            'query' => [
+                'page' => ['size' => 50, 'cursor' => 'cursor-2'],
+                'filter' => ['name' => 'web'],
+            ],
         ])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
@@ -398,7 +401,10 @@ class CursorPaginatorTest extends TestCase
             uri: 'orgs/org-123/servers',
             class: Server::class,
             organizationSlug: 'org-123',
-            query: ['per_page' => 50, 'filter' => 'active'],
+            query: [
+                'page' => ['size' => 50],
+                'filter' => ['name' => 'web'],
+            ],
         );
 
         $nextPage = $paginator->nextPage();

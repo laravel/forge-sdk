@@ -74,7 +74,10 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess
             return null;
         }
 
-        $response = $this->forge->get($this->uri, array_merge($this->query, ['cursor' => $this->nextCursor]));
+        $query = $this->query;
+        $query['page'] = array_merge($query['page'] ?? [], ['cursor' => $this->nextCursor]);
+
+        $response = $this->forge->get($this->uri, $query);
 
         $data = $response['data'] ?? [];
         $meta = $response['meta'] ?? [];

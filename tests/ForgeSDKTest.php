@@ -5339,7 +5339,7 @@ class ForgeSDKTest extends TestCase
             ]))
         );
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['cursor' => 'cursor-page2']])->andReturn(
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-page2']]])->andReturn(
             new Response(200, [], json_encode([
                 'data' => [
                     ['id' => 2, 'name' => 'Server 2'],
