@@ -116,6 +116,12 @@ class OpenAPIEndpointMapper
         'GET /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificate' => 'domainCertificate',
         'POST /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificate' => 'createDomainCertificate',
         'DELETE /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificate' => 'deleteDomainCertificate',
+        'GET /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificates' => 'domainCertificates',
+        'POST /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificates' => 'createCertificate',
+        'GET /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificates/active' => 'activeDomainCertificate',
+        'GET /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificates/{certificate}' => 'certificate',
+        'DELETE /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificates/{certificate}' => 'deleteCertificate',
+        'POST /orgs/{organization}/servers/{server}/sites/{site}/domains/{domainRecord}/certificates/{certificate}/actions' => 'createCertificateAction',
         'GET /orgs/{organization}/servers/{server}/sites/{site}/nginx' => 'siteNginx',
         'PUT /orgs/{organization}/servers/{server}/sites/{site}/nginx' => 'updateSiteNginx',
         'GET /orgs/{organization}/servers/{server}/sites/{site}/environment' => 'siteEnvironment',
@@ -153,6 +159,16 @@ class OpenAPIEndpointMapper
         'GET /orgs/{organization}/teams/{team}/invites/{invitation}' => 'teamInvitation',
         'DELETE /orgs/{organization}/teams/{team}/invites/{invitation}' => 'deleteTeamInvitation',
     ];
+
+    /**
+     * Check whether an endpoint is explicitly skipped (null entry in special cases).
+     */
+    public static function isExplicitlySkipped(string $httpMethod, string $path): bool
+    {
+        $key = strtoupper($httpMethod).' /'.ltrim($path, '/');
+
+        return array_key_exists($key, static::$specialCases) && static::$specialCases[$key] === null;
+    }
 
     /**
      * Map an endpoint to its corresponding SDK method name.

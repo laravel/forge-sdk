@@ -52,6 +52,11 @@ class Certificate extends Resource
     public ?string $preferredChain = null;
 
     /**
+     * Whether the certificate is the active one for the domain.
+     */
+    public ?bool $active = null;
+
+    /**
      * The date/time the certificate was created.
      */
     public ?string $createdAt = null;

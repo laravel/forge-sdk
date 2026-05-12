@@ -262,9 +262,9 @@ class Server extends Resource
     /**
      * Install a version of PHP.
      */
-    public function installPHP(string $version): PHPVersion
+    public function installPHP(string $version): void
     {
-        return $this->forge->installPhpVersion($this->organizationId, $this->id, ['version' => $version]);
+        $this->forge->installPhpVersion($this->organizationId, $this->id, ['version' => $version]);
     }
 
     /**

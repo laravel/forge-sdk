@@ -27,7 +27,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Server[] network(string $organizationSlug, int $serverId)
  * @method static void updateNetwork(string $organizationSlug, int $serverId, array $data)
  * @method static \Laravel\Forge\CursorPaginator archivedServers(string $organizationSlug)
- * @method static \Laravel\Forge\Resources\Server createArchivedServer(string $organizationSlug, array $data)
+ * @method static void createArchivedServer(string $organizationSlug, array $data)
  * @method static void deleteArchivedServer(string $organizationSlug, int $serverId)
  * @method static array createServerAction(string $organizationSlug, int $serverId, array $data)
  * @method static array performNginxAction(string $organizationSlug, int $serverId, array $data)
@@ -43,11 +43,11 @@ use Laravel\Forge\ForgeManager;
  * PHP
  * @method static \Laravel\Forge\CursorPaginator phpVersions(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\PHPVersion phpVersion(string $organizationSlug, int $serverId, int $phpVersionId)
- * @method static \Laravel\Forge\Resources\PHPVersion installPhpVersion(string $organizationSlug, int $serverId, array $data)
- * @method static \Laravel\Forge\Resources\PHPVersion updatePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId, array $data)
+ * @method static void installPhpVersion(string $organizationSlug, int $serverId, array $data)
+ * @method static void updatePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId, array $data)
  * @method static void deletePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId)
  * @method static array phpOpcache(string $organizationSlug, int $serverId)
- * @method static array createPhpOpcache(string $organizationSlug, int $serverId, array $data)
+ * @method static void createPhpOpcache(string $organizationSlug, int $serverId, array $data)
  * @method static void deletePhpOpcache(string $organizationSlug, int $serverId)
  *
  * Sites
@@ -56,8 +56,20 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Site organizationSite(string $organizationSlug, int $siteId)
  * @method static \Laravel\Forge\CursorPaginator serverSites(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\Site createSite(string $organizationSlug, int $serverId, array $data)
- * @method static \Laravel\Forge\Resources\Site updateSite(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void updateSite(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static void deleteSite(string $organizationSlug, int $serverId, int $siteId)
+ * @method static array loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId)
+ * @method static void updateLoadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static array composerCredentials(string $organizationSlug, int $serverId, int $siteId)
+ * @method static void createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static array composerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository)
+ * @method static void updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data)
+ * @method static void deleteComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository)
+ * @method static array npmCredentials(string $organizationSlug, int $serverId, int $siteId)
+ * @method static void createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static array npmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry)
+ * @method static void updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data)
+ * @method static void deleteNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry)
  *
  * Domains
  * @method static \Laravel\Forge\CursorPaginator domains(string $organizationSlug, int $serverId, int $siteId)
@@ -68,6 +80,13 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Certificate domainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId)
  * @method static \Laravel\Forge\Resources\Certificate createDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data)
  * @method static void deleteDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId)
+ * @method static array createDomainCertificateAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data)
+ * @method static \Laravel\Forge\CursorPaginator domainCertificates(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $query = [])
+ * @method static \Laravel\Forge\Resources\Certificate createCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data)
+ * @method static \Laravel\Forge\Resources\Certificate activeDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId)
+ * @method static \Laravel\Forge\Resources\Certificate certificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, int $certificateId)
+ * @method static void deleteCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, int $certificateId)
+ * @method static void createCertificateAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, int $certificateId, array $data)
  *
  * Heartbeats
  * @method static \Laravel\Forge\CursorPaginator heartbeats(string $organizationSlug, int $serverId, int $siteId)
@@ -84,22 +103,29 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\CursorPaginator databaseUsers(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\DatabaseUser databaseUser(string $organizationSlug, int $serverId, int $userId)
  * @method static \Laravel\Forge\Resources\DatabaseUser createDatabaseUser(string $organizationSlug, int $serverId, array $data, bool $wait = true)
- * @method static \Laravel\Forge\Resources\DatabaseUser updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data)
+ * @method static void updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data)
  * @method static void deleteDatabaseUser(string $organizationSlug, int $serverId, int $userId)
+ * @method static void syncDatabases(string $organizationSlug, int $serverId, array $data = [])
+ * @method static void updateDatabasePassword(string $organizationSlug, int $serverId, array $data)
  *
  * Deployments
  * @method static \Laravel\Forge\CursorPaginator deployments(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Deployment deployment(string $organizationSlug, int $serverId, int $siteId, int $deploymentId)
  * @method static \Laravel\Forge\Resources\Deployment createDeployment(string $organizationSlug, int $serverId, int $siteId, array $data = [])
- * @method static string deploymentScript(string $organizationSlug, int $serverId, int $siteId)
- * @method static void updateDeploymentScript(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static array deploymentStatus(string $organizationSlug, int $serverId, int $siteId)
  * @method static void disableQuickDeploy(string $organizationSlug, int $serverId, int $siteId)
+ * @method static string deploymentScript(string $organizationSlug, int $serverId, int $siteId)
+ * @method static string updateDeploymentScript(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static string deploymentTriggerUrl(string $organizationSlug, int $serverId, int $siteId)
+ * @method static string updateDeploymentTriggerUrl(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void enablePushToDeploy(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void disablePushToDeploy(string $organizationSlug, int $serverId, int $siteId)
  * @method static string deploymentLog(string $organizationSlug, int $serverId, int $siteId, int $deploymentId)
  *
  * Webhooks
  * @method static \Laravel\Forge\CursorPaginator webhooks(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\Webhook webhook(string $organizationSlug, int $serverId, int $siteId, int $webhookId)
- * @method static \Laravel\Forge\Resources\Webhook createWebhook(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void createWebhook(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static void deleteWebhook(string $organizationSlug, int $serverId, int $siteId, int $webhookId)
  *
  * SSH Keys
@@ -111,25 +137,26 @@ use Laravel\Forge\ForgeManager;
  * Firewall Rules
  * @method static \Laravel\Forge\CursorPaginator firewallRules(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\FirewallRule firewallRule(string $organizationSlug, int $serverId, int $ruleId)
- * @method static \Laravel\Forge\Resources\FirewallRule createFirewallRule(string $organizationSlug, int $serverId, array $data)
+ * @method static void createFirewallRule(string $organizationSlug, int $serverId, array $data)
  * @method static void deleteFirewallRule(string $organizationSlug, int $serverId, int $ruleId)
  *
  * Redirect Rules
  * @method static \Laravel\Forge\CursorPaginator redirectRules(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\RedirectRule redirectRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId)
- * @method static \Laravel\Forge\Resources\RedirectRule createRedirectRule(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void createRedirectRule(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static void deleteRedirectRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId)
  *
  * Security Rules
  * @method static \Laravel\Forge\CursorPaginator securityRules(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\SecurityRule securityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId)
  * @method static \Laravel\Forge\Resources\SecurityRule createSecurityRule(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static void updateSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId, array $data)
  * @method static void deleteSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId)
  *
  * Monitors
  * @method static \Laravel\Forge\CursorPaginator monitors(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\Monitor monitor(string $organizationSlug, int $serverId, int $monitorId)
- * @method static void createMonitor(string $organizationSlug, int $serverId, array $data)
+ * @method static \Laravel\Forge\Resources\Monitor createMonitor(string $organizationSlug, int $serverId, array $data)
  * @method static void deleteMonitor(string $organizationSlug, int $serverId, int $monitorId)
  *
  * Nginx Templates
@@ -145,7 +172,10 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Recipe createRecipe(string $organizationSlug, array $data)
  * @method static \Laravel\Forge\Resources\Recipe updateRecipe(string $organizationSlug, int $recipeId, array $data)
  * @method static void deleteRecipe(string $organizationSlug, int $recipeId)
- * @method static \Laravel\Forge\Resources\RecipeRun createRecipeRun(string $organizationSlug, int $recipeId, array $data)
+ * @method static \Laravel\Forge\CursorPaginator recipeRuns(string $organizationSlug, int $recipeId)
+ * @method static void createRecipeRun(string $organizationSlug, int $recipeId, array $data)
+ * @method static \Laravel\Forge\CursorPaginator forgeRecipes()
+ * @method static void createForgeRecipeRun(int $forgeRecipeId, array $data)
  *
  * Scheduled Jobs
  * @method static \Laravel\Forge\CursorPaginator scheduledJobs(string $organizationSlug, int $serverId)
@@ -157,7 +187,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\CursorPaginator backgroundProcesses(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\BackgroundProcess backgroundProcess(string $organizationSlug, int $serverId, int $processId)
  * @method static \Laravel\Forge\Resources\BackgroundProcess createBackgroundProcess(string $organizationSlug, int $serverId, array $data)
- * @method static \Laravel\Forge\Resources\BackgroundProcess updateBackgroundProcess(string $organizationSlug, int $serverId, int $processId, array $data)
+ * @method static void updateBackgroundProcess(string $organizationSlug, int $serverId, int $processId, array $data)
  * @method static void deleteBackgroundProcess(string $organizationSlug, int $serverId, int $processId)
  *
  * Commands
@@ -177,6 +207,29 @@ use Laravel\Forge\ForgeManager;
  * @method static void createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static void deleteBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId)
  * @method static void restoreBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId, array $data)
+ *
+ * Integrations
+ * @method static \Laravel\Forge\Resources\Integration getHorizon(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration createHorizon(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deleteHorizon(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration getOctane(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration createOctane(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deleteOctane(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration getReverb(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration createReverb(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deleteReverb(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration getInertia(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration createInertia(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deleteInertia(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration getPulse(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration createPulse(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deletePulse(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration getMaintenance(string $organizationSlug, int $serverId, int $siteId)
+ * @method static void createMaintenance(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deleteMaintenance(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration getScheduler(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\Resources\Integration createScheduler(string $organizationSlug, int $serverId, int $siteId, array $data = [])
+ * @method static void deleteScheduler(string $organizationSlug, int $serverId, int $siteId)
  *
  * HTTP Methods
  * @method static mixed get(string $uri, array $query = [])

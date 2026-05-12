@@ -49,9 +49,9 @@ class DatabaseUser extends Resource
     /**
      * Update the given Database User.
      */
-    public function update(array $data): DatabaseUser
+    public function update(array $data): void
     {
-        return $this->forge->updateDatabaseUser($this->organizationId, $this->serverId, $this->id, $data);
+        $this->forge->updateDatabaseUser($this->organizationId, $this->serverId, $this->id, $data);
     }
 
     /**

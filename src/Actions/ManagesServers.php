@@ -112,11 +112,9 @@ trait ManagesServers
     /**
      * Create an archived server.
      */
-    public function createArchivedServer(string $organizationSlug, array $data): Server
+    public function createArchivedServer(string $organizationSlug, array $data): void
     {
-        $server = $this->post("orgs/{$organizationSlug}/servers/archives", $data)['data'] ?? [];
-
-        return $this->newResource(Server::class, $server, $organizationSlug);
+        $this->post("orgs/{$organizationSlug}/servers/archives", $data);
     }
 
     /**
@@ -243,9 +241,9 @@ trait ManagesServers
     /**
      * Update the PHP CLI version.
      */
-    public function updatePhpCliVersion(string $organizationSlug, int $serverId, array $data): array
+    public function updatePhpCliVersion(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version", $data);
     }
 
     /**
@@ -259,9 +257,9 @@ trait ManagesServers
     /**
      * Update the PHP site version.
      */
-    public function updatePhpSiteVersion(string $organizationSlug, int $serverId, array $data): array
+    public function updatePhpSiteVersion(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version", $data);
     }
 
     /**
@@ -281,14 +279,9 @@ trait ManagesServers
     /**
      * Install a new PHP version.
      */
-    public function installPhpVersion(string $organizationSlug, int $serverId, array $data): PHPVersion
+    public function installPhpVersion(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->newResource(
-            PHPVersion::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/versions", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/versions", $data);
     }
 
     /**
@@ -307,14 +300,9 @@ trait ManagesServers
     /**
      * Update a PHP version.
      */
-    public function updatePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId, array $data): PHPVersion
+    public function updatePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
     {
-        return $this->newResource(
-            PHPVersion::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}", $data);
     }
 
     /**
@@ -338,9 +326,9 @@ trait ManagesServers
     /**
      * Update the PHP FPM configuration.
      */
-    public function updatePhpFpm(string $organizationSlug, int $serverId, int $phpVersionId, array $data): array
+    public function updatePhpFpm(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm", $data);
     }
 
     /**
@@ -356,9 +344,9 @@ trait ManagesServers
     /**
      * Update the PHP CLI configuration.
      */
-    public function updatePhpCli(string $organizationSlug, int $serverId, int $phpVersionId, array $data): array
+    public function updatePhpCli(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli", $data);
     }
 
     /**
@@ -374,9 +362,9 @@ trait ManagesServers
     /**
      * Update the PHP pool configuration.
      */
-    public function updatePhpPool(string $organizationSlug, int $serverId, int $phpVersionId, array $data): array
+    public function updatePhpPool(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool", $data);
     }
 
     /**
@@ -390,9 +378,9 @@ trait ManagesServers
     /**
      * Update the PHP max upload size.
      */
-    public function updatePhpMaxUploadSize(string $organizationSlug, int $serverId, array $data): array
+    public function updatePhpMaxUploadSize(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size", $data);
     }
 
     /**
@@ -406,9 +394,9 @@ trait ManagesServers
     /**
      * Update the PHP max execution time.
      */
-    public function updatePhpMaxExecutionTime(string $organizationSlug, int $serverId, array $data): array
+    public function updatePhpMaxExecutionTime(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time", $data);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time", $data);
     }
 
     /**
@@ -422,9 +410,9 @@ trait ManagesServers
     /**
      * Create PHP OPcache configuration.
      */
-    public function createPhpOpcache(string $organizationSlug, int $serverId, array $data): array
+    public function createPhpOpcache(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache", $data);
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache", $data);
     }
 
     /**

@@ -25,6 +25,10 @@ class SitesTest extends OpenAPITestCase
             $path = $endpoint['path'];
             $signature = "$method $path";
 
+            if (OpenAPIEndpointMapper::isExplicitlySkipped($method, $path)) {
+                continue;
+            }
+
             $sdkMethod = $mapping[$signature] ?? null;
 
             if (! $sdkMethod) {

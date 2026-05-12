@@ -39,14 +39,9 @@ trait ManagesFirewallRules
     /**
      * Create a new firewall rule.
      */
-    public function createFirewallRule(string $organizationSlug, int $serverId, array $data): FirewallRule
+    public function createFirewallRule(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->newResource(
-            FirewallRule::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/firewall-rules", $data);
     }
 
     /**

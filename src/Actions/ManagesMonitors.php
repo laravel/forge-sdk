@@ -39,9 +39,14 @@ trait ManagesMonitors
     /**
      * Create a new monitor.
      */
-    public function createMonitor(string $organizationSlug, int $serverId, array $data): void
+    public function createMonitor(string $organizationSlug, int $serverId, array $data): Monitor
     {
-        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/monitors", $data);
+        return $this->newResource(
+            Monitor::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/monitors", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**

@@ -55,15 +55,9 @@ trait ManagesSecurityRules
     /**
      * Update a security rule.
      */
-    public function updateSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId, array $data): SecurityRule
+    public function updateSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId, array $data): void
     {
-        return $this->newResource(
-            SecurityRule::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}", $data);
     }
 
     /**

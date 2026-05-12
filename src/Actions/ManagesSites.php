@@ -79,14 +79,9 @@ trait ManagesSites
     /**
      * Update a site.
      */
-    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): Site
+    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
-        return $this->newResource(
-            Site::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data);
     }
 
     /**
@@ -243,6 +238,82 @@ trait ManagesSites
         );
 
         return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Get the collection of certificates for a domain.
+     */
+    public function domainCertificates(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificates",
+            Certificate::class,
+            $organizationSlug,
+            $serverId,
+            $siteId,
+            query: $query,
+        );
+    }
+
+    /**
+     * Create a certificate for a domain.
+     */
+    public function createCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data): Certificate
+    {
+        return $this->newResource(
+            Certificate::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificates", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
+    }
+
+    /**
+     * Get the active certificate for a domain.
+     */
+    public function activeDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId): Certificate
+    {
+        return $this->newResource(
+            Certificate::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificates/active")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
+    }
+
+    /**
+     * Get a certificate by ID.
+     */
+    public function certificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, int $certificateId): Certificate
+    {
+        return $this->newResource(
+            Certificate::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificates/{$certificateId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
+    }
+
+    /**
+     * Delete a certificate.
+     */
+    public function deleteCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, int $certificateId): void
+    {
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificates/{$certificateId}");
+    }
+
+    /**
+     * Create an action for a certificate.
+     */
+    public function createCertificateAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, int $certificateId, array $data): void
+    {
+        $this->post(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/domains/{$domainId}/certificates/{$certificateId}/actions",
+            $data
+        );
     }
 
     /**
@@ -449,9 +520,9 @@ trait ManagesSites
     /**
      * Create a composer credential for a site.
      */
-    public function createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data): array
+    public function createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials", $data)['data'] ?? [];
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials", $data);
     }
 
     /**
@@ -465,9 +536,9 @@ trait ManagesSites
     /**
      * Update a composer credential for a site.
      */
-    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): array
+    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data)['data'] ?? [];
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data);
     }
 
     /**
@@ -489,9 +560,9 @@ trait ManagesSites
     /**
      * Create an npm credential for a site.
      */
-    public function createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data): array
+    public function createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
-        return $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials", $data)['data'] ?? [];
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials", $data);
     }
 
     /**
@@ -505,9 +576,9 @@ trait ManagesSites
     /**
      * Update an npm credential for a site.
      */
-    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): array
+    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data)['data'] ?? [];
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data);
     }
 
     /**
@@ -529,8 +600,8 @@ trait ManagesSites
     /**
      * Update load balancing nodes for a site.
      */
-    public function updateLoadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $data): array
+    public function updateLoadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
-        return $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes", $data)['data'] ?? [];
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes", $data);
     }
 }

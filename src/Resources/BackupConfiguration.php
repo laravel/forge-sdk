@@ -51,7 +51,14 @@ class BackupConfiguration extends Resource
     /**
      * The schedule configuration.
      */
-    public array $schedule = [];
+    public ?string $schedule = null;
+
+    /**
+     * The database IDs covered by this backup configuration.
+     *
+     * @var array<int>
+     */
+    public array $databaseIds = [];
 
     /**
      * The displayable schedule string.

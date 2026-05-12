@@ -43,15 +43,9 @@ trait ManagesDeployments
     /**
      * Create a new webhook.
      */
-    public function createWebhook(string $organizationSlug, int $serverId, int $siteId, array $data): Webhook
+    public function createWebhook(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
-        return $this->newResource(
-            Webhook::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/webhooks", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/webhooks", $data);
     }
 
     /**
@@ -134,9 +128,11 @@ trait ManagesDeployments
     /**
      * Update the deployment script for a site.
      */
-    public function updateDeploymentScript(string $organizationSlug, int $serverId, int $siteId, array $data): void
+    public function updateDeploymentScript(string $organizationSlug, int $serverId, int $siteId, array $data): string
     {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/script", $data);
+        $response = $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/script", $data);
+
+        return $response['data']['attributes']['content'] ?? '';
     }
 
     /**
@@ -152,9 +148,11 @@ trait ManagesDeployments
     /**
      * Update the deployment trigger URL for a site.
      */
-    public function updateDeploymentTriggerUrl(string $organizationSlug, int $serverId, int $siteId, array $data): void
+    public function updateDeploymentTriggerUrl(string $organizationSlug, int $serverId, int $siteId, array $data): string
     {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/deploy-hook", $data);
+        $response = $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/deployments/deploy-hook", $data);
+
+        return $response['data']['attributes']['url'] ?? '';
     }
 
     /**

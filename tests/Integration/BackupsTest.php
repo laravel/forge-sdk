@@ -39,7 +39,10 @@ class BackupsTest extends IntegrationTestCase
             is_null($config->directory) || is_string($config->directory),
             'directory should be null or string'
         );
-        $this->assertIsArray($config->schedule, 'schedule should be an array');
+        $this->assertTrue(
+            is_null($config->schedule) || is_string($config->schedule),
+            'schedule should be null or string'
+        );
     }
 
     public function test_get_single_backup_configuration(): void

@@ -237,16 +237,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_site()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1', [
             'json' => ['aliases' => ['foo.com']],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "aliases": ["foo.com"]}}')
+            new Response(202)
         );
 
-        $site = $forge->updateSite('org-123', 1, 1, ['aliases' => ['foo.com']]);
-        $this->assertSame(['foo.com'], $site->aliases);
+        $forge->updateSite('org-123', 1, 1, ['aliases' => ['foo.com']]);
     }
 
     public function test_deleting_site()
@@ -394,16 +395,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_database_user()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/database/users/1', [
             'json' => ['databases' => [1]],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "databases": ["my_database"]}}')
+            new Response(202)
         );
 
-        $user = $forge->updateDatabaseUser('org-123', 1, 1, ['databases' => [1]]);
-        $this->assertSame(['my_database'], $user->databases);
+        $forge->updateDatabaseUser('org-123', 1, 1, ['databases' => [1]]);
     }
 
     public function test_getting_background_processes()
@@ -433,16 +435,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_background_process()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/background-processes/1', [
             'json' => ['processes' => 2],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "processes": 2}}')
+            new Response(202)
         );
 
-        $process = $forge->updateBackgroundProcess('org-123', 1, 1, ['processes' => 2]);
-        $this->assertSame(2, $process->processes);
+        $forge->updateBackgroundProcess('org-123', 1, 1, ['processes' => 2]);
     }
 
     public function test_deleting_background_process()
@@ -946,14 +949,15 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_maintenance_integration()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/integrations/laravel-maintenance', [])->andReturn(
-            new Response(200, [], '{"data": {"id": 6, "type": "laravel-maintenance"}}')
+            new Response(202)
         );
 
-        $integration = $forge->createMaintenance('org-123', 1, 1);
-        $this->assertSame(6, $integration->id);
+        $forge->createMaintenance('org-123', 1, 1);
     }
 
     public function test_deleting_maintenance_integration()
@@ -1123,16 +1127,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_webhook()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/123/sites/456/webhooks', [
             'json' => ['url' => 'https://example.com/webhook'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "url": "https://example.com/webhook"}}')
+            new Response(202)
         );
 
-        $webhook = $forge->createWebhook('org-123', 123, 456, ['url' => 'https://example.com/webhook']);
-        $this->assertSame(2, $webhook->id);
+        $forge->createWebhook('org-123', 123, 456, ['url' => 'https://example.com/webhook']);
     }
 
     public function test_deleting_webhook()
@@ -1233,11 +1238,12 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/123/sites/456/deployments/script', [
             'json' => ['script' => 'cd /home/forge/example.com\ngit pull origin main\nphp artisan migrate'],
         ])->andReturn(
-            new Response(204)
+            new Response(200, [], '{"data": {"type": "deploymentScripts", "id": "1", "attributes": {"content": "cd /home/forge/example.com", "auto_source": false}, "links": {"self": "https://forge.laravel.com"}}}')
         );
 
-        $forge->updateDeploymentScript('org-123', 123, 456, ['script' => 'cd /home/forge/example.com\ngit pull origin main\nphp artisan migrate']);
-        $this->assertTrue(true); // Assertion to avoid risky test warning
+        $script = $forge->updateDeploymentScript('org-123', 123, 456, ['script' => 'cd /home/forge/example.com\ngit pull origin main\nphp artisan migrate']);
+        $this->assertIsString($script);
+        $this->assertSame('cd /home/forge/example.com', $script);
     }
 
     // Deployment Trigger (2 tests)
@@ -1261,11 +1267,12 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/123/sites/456/deployments/deploy-hook', [
             'json' => ['regenerate' => true],
         ])->andReturn(
-            new Response(204)
+            new Response(200, [], '{"data": {"type": "deploymentHooks", "id": "1", "attributes": {"url": "https://forge.laravel.com/servers/123/sites/456/deploy/http?token=newtoken"}, "links": {"self": "https://forge.laravel.com"}}}')
         );
 
-        $forge->updateDeploymentTriggerUrl('org-123', 123, 456, ['regenerate' => true]);
-        $this->assertTrue(true); // Assertion to avoid risky test warning
+        $url = $forge->updateDeploymentTriggerUrl('org-123', 123, 456, ['regenerate' => true]);
+        $this->assertIsString($url);
+        $this->assertStringContainsString('deploy/http', $url);
     }
 
     // Push to Deploy (2 tests)
@@ -1676,16 +1683,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_recipe_run()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/recipes/1/runs', [
             'json' => ['server_id' => 1],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "status": "pending"}}')
+            new Response(202)
         );
 
-        $run = $forge->createRecipeRun('org-123', 1, ['server_id' => 1]);
-        $this->assertSame(2, $run->id);
+        $forge->createRecipeRun('org-123', 1, ['server_id' => 1]);
     }
 
     public function test_getting_server_events()
@@ -1724,16 +1732,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_archived_server()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/archives', [
             'json' => ['server_id' => 1],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "server_id": 1}}')
+            new Response(202)
         );
 
-        $archive = $forge->createArchivedServer('org-123', ['server_id' => 1]);
-        $this->assertSame(1, $archive->id);
+        $forge->createArchivedServer('org-123', ['server_id' => 1]);
     }
 
     public function test_deleting_archived_server()
@@ -1761,30 +1770,32 @@ class ForgeSDKTest extends TestCase
 
     public function test_installing_php_version()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/versions', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "version": "8.3"}}')
+            new Response(202)
         );
 
-        $phpVersion = $forge->installPhpVersion('org-123', 1, ['version' => '8.3']);
-        $this->assertSame(2, $phpVersion->id);
+        $forge->installPhpVersion('org-123', 1, ['version' => '8.3']);
     }
 
     public function test_updating_php_version()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/versions/1', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "version": "8.3"}}')
+            new Response(202)
         );
 
-        $phpVersion = $forge->updatePhpVersion('org-123', 1, 1, ['version' => '8.3']);
-        $this->assertSame('8.3', $phpVersion->version);
+        $forge->updatePhpVersion('org-123', 1, 1, ['version' => '8.3']);
     }
 
     public function test_deleting_php_version()
@@ -1815,18 +1826,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_cli_version()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/cli-version', [
             'json' => ['version' => 'php84'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"version": "php84", "displayVersion": "PHP 8.4"}}')
+            new Response(204)
         );
 
-        $cliVersion = $forge->updatePhpCliVersion('org-123', 1, ['version' => 'php84']);
-        $this->assertIsArray($cliVersion);
-        $this->assertSame('php84', $cliVersion['data']['version']);
-        $this->assertSame('PHP 8.4', $cliVersion['data']['displayVersion']);
+        $forge->updatePhpCliVersion('org-123', 1, ['version' => 'php84']);
     }
 
     public function test_getting_php_site_version()
@@ -1845,18 +1855,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_site_version()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/site-version', [
             'json' => ['version' => 'php84'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"version": "php84", "displayVersion": "PHP 8.4"}}')
+            new Response(204)
         );
 
-        $siteVersion = $forge->updatePhpSiteVersion('org-123', 1, ['version' => 'php84']);
-        $this->assertIsArray($siteVersion);
-        $this->assertSame('php84', $siteVersion['data']['version']);
-        $this->assertSame('PHP 8.4', $siteVersion['data']['displayVersion']);
+        $forge->updatePhpSiteVersion('org-123', 1, ['version' => 'php84']);
     }
 
     public function test_getting_php_fpm_config()
@@ -1874,16 +1883,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_fpm_config()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/versions/83/configs/fpm', [
             'json' => ['content' => 'pm = ondemand'],
         ])->andReturn(
-            new Response(200, [], '{"data": {}}')
+            new Response(202)
         );
 
-        $config = $forge->updatePhpFpm('org-123', 1, 83, ['content' => 'pm = ondemand']);
-        $this->assertIsArray($config);
+        $forge->updatePhpFpm('org-123', 1, 83, ['content' => 'pm = ondemand']);
     }
 
     public function test_getting_php_cli_config()
@@ -1901,16 +1911,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_cli_config()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/versions/83/configs/cli', [
             'json' => ['content' => 'memory_limit = 512M'],
         ])->andReturn(
-            new Response(200, [], '{"data": {}}')
+            new Response(202)
         );
 
-        $config = $forge->updatePhpCli('org-123', 1, 83, ['content' => 'memory_limit = 512M']);
-        $this->assertIsArray($config);
+        $forge->updatePhpCli('org-123', 1, 83, ['content' => 'memory_limit = 512M']);
     }
 
     public function test_getting_php_pool_config()
@@ -1928,16 +1939,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_pool_config()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/versions/83/configs/pool', [
             'json' => ['content' => 'pm.max_children = 100'],
         ])->andReturn(
-            new Response(200, [], '{"data": {}}')
+            new Response(202)
         );
 
-        $config = $forge->updatePhpPool('org-123', 1, 83, ['content' => 'pm.max_children = 100']);
-        $this->assertIsArray($config);
+        $forge->updatePhpPool('org-123', 1, 83, ['content' => 'pm.max_children = 100']);
     }
 
     public function test_getting_php_max_upload_size()
@@ -1955,17 +1967,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_max_upload_size()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/max-upload-size', [
             'json' => ['size' => '512M'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"size": "512M"}}')
+            new Response(202)
         );
 
-        $uploadSize = $forge->updatePhpMaxUploadSize('org-123', 1, ['size' => '512M']);
-        $this->assertIsArray($uploadSize);
-        $this->assertSame('512M', $uploadSize['data']['size']);
+        $forge->updatePhpMaxUploadSize('org-123', 1, ['size' => '512M']);
     }
 
     public function test_getting_php_max_execution_time()
@@ -1983,17 +1995,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_php_max_execution_time()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/php/max-execution-time', [
             'json' => ['time' => '120'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"time": "120"}}')
+            new Response(202)
         );
 
-        $executionTime = $forge->updatePhpMaxExecutionTime('org-123', 1, ['time' => '120']);
-        $this->assertIsArray($executionTime);
-        $this->assertSame('120', $executionTime['data']['time']);
+        $forge->updatePhpMaxExecutionTime('org-123', 1, ['time' => '120']);
     }
 
     public function test_getting_php_opcache()
@@ -2012,18 +2024,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_php_opcache()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/opcache', [
             'json' => ['memory' => '256'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"status": "enabled", "memory": "256"}}')
+            new Response(202)
         );
 
-        $opcache = $forge->createPhpOpcache('org-123', 1, ['memory' => '256']);
-        $this->assertIsArray($opcache);
-        $this->assertSame('enabled', $opcache['data']['status']);
-        $this->assertSame('256', $opcache['data']['memory']);
+        $forge->createPhpOpcache('org-123', 1, ['memory' => '256']);
     }
 
     public function test_deleting_php_opcache()
@@ -2155,16 +2166,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_firewall_rule()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/firewall-rules', [
             'json' => ['name' => 'HTTP Access', 'port' => '80'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "name": "HTTP Access", "port": "80"}}')
+            new Response(202)
         );
 
-        $rule = $forge->createFirewallRule('org-123', 1, ['name' => 'HTTP Access', 'port' => '80']);
-        $this->assertSame(2, $rule->id);
+        $forge->createFirewallRule('org-123', 1, ['name' => 'HTTP Access', 'port' => '80']);
     }
 
     public function test_deleting_firewall_rule()
@@ -2206,17 +2218,16 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_monitor()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/monitors', [
             'json' => ['type' => 'disk', 'threshold' => '90'],
         ])->andReturn(
-            new Response(202)
+            new Response(202, [], '{"data": {"id": 1, "type": "disk", "threshold": "90"}}')
         );
 
-        $forge->createMonitor('org-123', 1, ['type' => 'disk', 'threshold' => '90']);
+        $monitor = $forge->createMonitor('org-123', 1, ['type' => 'disk', 'threshold' => '90']);
+        $this->assertSame(1, $monitor->id);
     }
 
     public function test_deleting_monitor()
@@ -2415,16 +2426,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_security_rule()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/security-rules/1', [
             'json' => ['path' => '/admin/*'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "Block Bad Bots", "path": "/admin/*"}}')
+            new Response(202)
         );
 
-        $rule = $forge->updateSecurityRule('org-123', 1, 1, 1, ['path' => '/admin/*']);
-        $this->assertSame('/admin/*', $rule->path);
+        $forge->updateSecurityRule('org-123', 1, 1, 1, ['path' => '/admin/*']);
     }
 
     public function test_deleting_security_rule()
@@ -2466,16 +2478,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_redirect_rule()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/redirect-rules', [
             'json' => ['from' => '/blog', 'to' => '/articles', 'type' => 'redirect'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 2, "from": "/blog", "to": "/articles", "type": "redirect"}}')
+            new Response(202)
         );
 
-        $rule = $forge->createRedirectRule('org-123', 1, 1, ['from' => '/blog', 'to' => '/articles', 'type' => 'redirect']);
-        $this->assertSame(2, $rule->id);
+        $forge->createRedirectRule('org-123', 1, 1, ['from' => '/blog', 'to' => '/articles', 'type' => 'redirect']);
     }
 
     public function test_deleting_redirect_rule()
@@ -2963,16 +2976,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_database_password()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/database/password', [
             'json' => ['password' => 'newpassword'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"updated": true}}')
+            new Response(204)
         );
 
-        $result = $forge->updateDatabasePassword('org-123', 1, ['password' => 'newpassword']);
-        $this->assertIsArray($result);
+        $forge->updateDatabasePassword('org-123', 1, ['password' => 'newpassword']);
     }
 
     public function test_getting_octane_integration()
@@ -3102,18 +3116,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_forge_recipe_run()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'forge-recipes/1/runs', [
             'json' => ['server_id' => 1],
         ])->andReturn(
-            new Response(201, [], '{"data": {"id": 1, "status": "pending"}}')
+            new Response(202)
         );
 
-        $run = $forge->createForgeRecipeRun(1, ['server_id' => 1]);
-        $this->assertSame(1, $run->id);
-        $this->assertSame('pending', $run->status);
-        $this->assertSame(1, $run->forgeRecipeId);
+        $forge->createForgeRecipeRun(1, ['server_id' => 1]);
     }
 
     public function test_getting_predefined_role()
@@ -3236,6 +3249,84 @@ class ForgeSDKTest extends TestCase
 
         $forge->deleteDomainCertificate('org-123', 1, 1, 1);
         $this->assertTrue(true);
+    }
+
+    public function test_getting_domain_certificates()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/domains/1/certificates', [])->andReturn(
+            new Response(200, [], '{"data": [{"id": 1, "status": "active", "active": true}], "meta": {"next_cursor": null, "per_page": 15}}')
+        );
+
+        $certs = $forge->domainCertificates('org-123', 1, 1, 1);
+        $this->assertInstanceOf(CursorPaginator::class, $certs);
+        $this->assertCount(1, $certs);
+    }
+
+    public function test_creating_certificate()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/domains/1/certificates', [
+            'json' => ['type' => 'letsencrypt'],
+        ])->andReturn(
+            new Response(202, [], '{"data": {"id": 2, "type": "letsencrypt"}}')
+        );
+
+        $cert = $forge->createCertificate('org-123', 1, 1, 1, ['type' => 'letsencrypt']);
+        $this->assertSame(2, $cert->id);
+    }
+
+    public function test_getting_active_domain_certificate()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/domains/1/certificates/active', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 3, "active": true}}')
+        );
+
+        $cert = $forge->activeDomainCertificate('org-123', 1, 1, 1);
+        $this->assertSame(3, $cert->id);
+        $this->assertTrue($cert->active);
+    }
+
+    public function test_getting_certificate()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/domains/1/certificates/5', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 5, "status": "active"}}')
+        );
+
+        $cert = $forge->certificate('org-123', 1, 1, 1, 5);
+        $this->assertSame(5, $cert->id);
+    }
+
+    public function test_deleting_certificate()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/1/sites/1/domains/1/certificates/5', [])->andReturn(
+            new Response(202)
+        );
+
+        $forge->deleteCertificate('org-123', 1, 1, 1, 5);
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function test_creating_certificate_action()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/domains/1/certificates/5/actions', [
+            'json' => ['action' => 'renew'],
+        ])->andReturn(
+            new Response(202)
+        );
+
+        $forge->createCertificateAction('org-123', 1, 1, 1, 5, ['action' => 'renew']);
+        $this->expectNotToPerformAssertions();
     }
 
     public function test_getting_team_member()
@@ -3622,16 +3713,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_composer_credential()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/composer/credentials', [
             'json' => ['repository' => 'packagist.org', 'username' => 'user'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"repository": "packagist.org"}}')
+            new Response(202)
         );
 
-        $credential = $forge->createComposerCredential('org-123', 1, 1, ['repository' => 'packagist.org', 'username' => 'user']);
-        $this->assertIsArray($credential);
+        $forge->createComposerCredential('org-123', 1, 1, ['repository' => 'packagist.org', 'username' => 'user']);
     }
 
     public function test_getting_composer_credential()
@@ -3648,16 +3740,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_composer_credential()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/composer/credentials/packagist.org', [
             'json' => ['username' => 'newuser'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"repository": "packagist.org"}}')
+            new Response(202)
         );
 
-        $credential = $forge->updateComposerCredential('org-123', 1, 1, 'packagist.org', ['username' => 'newuser']);
-        $this->assertIsArray($credential);
+        $forge->updateComposerCredential('org-123', 1, 1, 'packagist.org', ['username' => 'newuser']);
     }
 
     public function test_deleting_composer_credential()
@@ -3686,16 +3779,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_npm_credential()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/npm/credentials', [
             'json' => ['registry' => 'registry.npmjs.org', 'token' => 'npm_abc123'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"registry": "registry.npmjs.org"}}')
+            new Response(202)
         );
 
-        $credential = $forge->createNpmCredential('org-123', 1, 1, ['registry' => 'registry.npmjs.org', 'token' => 'npm_abc123']);
-        $this->assertIsArray($credential);
+        $forge->createNpmCredential('org-123', 1, 1, ['registry' => 'registry.npmjs.org', 'token' => 'npm_abc123']);
     }
 
     public function test_getting_npm_credential()
@@ -3712,16 +3806,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_npm_credential()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/npm/credentials/registry.npmjs.org', [
             'json' => ['token' => 'npm_xyz789'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"registry": "registry.npmjs.org"}}')
+            new Response(202)
         );
 
-        $credential = $forge->updateNpmCredential('org-123', 1, 1, 'registry.npmjs.org', ['token' => 'npm_xyz789']);
-        $this->assertIsArray($credential);
+        $forge->updateNpmCredential('org-123', 1, 1, 'registry.npmjs.org', ['token' => 'npm_xyz789']);
     }
 
     public function test_deleting_npm_credential()
@@ -3750,16 +3845,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_load_balancing_nodes()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/load-balancing-nodes', [
             'json' => ['nodes' => ['192.168.1.1', '192.168.1.2']],
         ])->andReturn(
-            new Response(200, [], '{"data": []}')
+            new Response(202)
         );
 
-        $nodes = $forge->updateLoadBalancingNodes('org-123', 1, 1, ['nodes' => ['192.168.1.1', '192.168.1.2']]);
-        $this->assertIsArray($nodes);
+        $forge->updateLoadBalancingNodes('org-123', 1, 1, ['nodes' => ['192.168.1.1', '192.168.1.2']]);
     }
 
     public function test_getting_backup_configurations()
@@ -3789,16 +3885,17 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_backup_configuration()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/database/backups', [
             'json' => ['name' => 'Daily Backup', 'provider' => 's3'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "Daily Backup"}}')
+            new Response(202)
         );
 
         $forge->createBackupConfiguration('org-123', 1, ['name' => 'Daily Backup', 'provider' => 's3']);
-        $this->assertTrue(true);
     }
 
     public function test_updating_backup_configuration()
@@ -4455,18 +4552,18 @@ class ForgeSDKTest extends TestCase
 
     public function test_server_install_php_convenience_method()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/versions', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "version": "8.3"}}')
+            new Response(202)
         );
 
         $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
-        $version = $server->installPHP('8.3');
-
-        $this->assertInstanceOf(PHPVersion::class, $version);
+        $server->installPHP('8.3');
     }
 
     public function test_site_delete_convenience_method()
@@ -4586,18 +4683,18 @@ class ForgeSDKTest extends TestCase
 
     public function test_database_user_update_convenience_method()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/database/users/3', [
             'json' => ['databases' => [1, 2]],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 3, "name": "forge"}}')
+            new Response(202)
         );
 
         $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
-        $updated = $user->update(['databases' => [1, 2]]);
-
-        $this->assertInstanceOf(DatabaseUser::class, $updated);
+        $user->update(['databases' => [1, 2]]);
     }
 
     public function test_database_user_delete_convenience_method()
@@ -4718,18 +4815,18 @@ class ForgeSDKTest extends TestCase
 
     public function test_recipe_run_convenience_method()
     {
+        $this->expectNotToPerformAssertions();
+
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/recipes/5/runs', [
             'json' => ['servers' => [1, 2]],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 10}}')
+            new Response(202)
         );
 
         $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
-        $run = $recipe->run(['servers' => [1, 2]]);
-
-        $this->assertInstanceOf(RecipeRun::class, $run);
+        $recipe->run(['servers' => [1, 2]]);
     }
 
     public function test_redirect_rule_delete_convenience_method()
