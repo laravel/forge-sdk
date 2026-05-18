@@ -37,11 +37,6 @@ class SecurityRule extends Resource
     public ?string $path = null;
 
     /**
-     * The credentials of the redirect rule.
-     */
-    public ?string $credentials = null;
-
-    /**
      * The status of the security rule.
      */
     public ?string $status = null;
