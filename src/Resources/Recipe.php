@@ -17,14 +17,9 @@ class Recipe extends Resource
     public ?string $organizationId = null;
 
     /**
-     * The id of the team.
+     * The id of the team (when fetched via the team-shared endpoint).
      */
     public ?int $teamId = null;
-
-    /**
-     * The key of the recipe.
-     */
-    public ?string $key = null;
 
     /**
      * The name of the recipe.
