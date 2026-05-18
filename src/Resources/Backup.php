@@ -32,9 +32,9 @@ class Backup extends Resource
     public ?string $status = null;
 
     /**
-     * Whether the backup is partial.
+     * Whether the backup is partial (the API returns a string flag).
      */
-    public ?bool $isPartial = null;
+    public ?string $isPartial = null;
 
     /**
      * The size of the backup.
