@@ -3283,14 +3283,15 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/teams/1/members/1', [
-            'json' => ['role' => 'admin'],
+            'json' => ['role_id' => 7],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "role": "admin"}}')
+            new Response(200, [], '{"data": {"id": 1, "name": "Alice", "email": "alice@example.com"}}')
         );
 
-        $member = $forge->updateTeamMember('org-123', 1, 1, ['role' => 'admin']);
+        $member = $forge->updateTeamMember('org-123', 1, 1, ['role_id' => 7]);
         $this->assertSame(1, $member->id);
-        $this->assertSame('admin', $member->role);
+        $this->assertSame('Alice', $member->name);
+        $this->assertSame('alice@example.com', $member->email);
     }
 
     public function test_deleting_team_member()
