@@ -15,14 +15,4 @@ class Permission extends Resource
      * The name of the permission.
      */
     public ?string $name = null;
-
-    /**
-     * The description of the permission.
-     */
-    public ?string $description = null;
-
-    /**
-     * The category of the permission.
-     */
-    public ?string $category = null;
 }

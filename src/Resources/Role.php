@@ -22,11 +22,6 @@ class Role extends Resource
     public ?string $name = null;
 
     /**
-     * The description of the role.
-     */
-    public ?string $description = null;
-
-    /**
      * The date/time the role was created.
      */
     public ?string $createdAt = null;

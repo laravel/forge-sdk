@@ -17,11 +17,6 @@ class PredefinedRole extends Resource
     public ?string $name = null;
 
     /**
-     * The description of the predefined role.
-     */
-    public ?string $description = null;
-
-    /**
      * The date/time the predefined role was created.
      */
     public ?string $createdAt = null;

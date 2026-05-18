@@ -22,11 +22,6 @@ class Team extends Resource
     public ?string $name = null;
 
     /**
-     * The description of the team.
-     */
-    public ?string $description = null;
-
-    /**
      * The date/time the team was created.
      */
     public ?string $createdAt = null;
