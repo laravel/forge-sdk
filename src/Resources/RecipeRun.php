@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class RecipeRun extends Resource
 {
     /**
-     * The id of the recipe run.
+     * The id of the organization.
      */
-    public ?int $id = null;
+    public ?string $organizationId = null;
 
     /**
      * The id of the recipe.
@@ -17,12 +17,12 @@ class RecipeRun extends Resource
     public ?int $recipeId = null;
 
     /**
-     * The id of the forge recipe.
+     * The id of the recipe run.
      */
-    public ?int $forgeRecipeId = null;
+    public ?int $id = null;
 
     /**
-     * The id of the server.
+     * The id of the server the recipe was run against.
      */
     public ?int $serverId = null;
 
@@ -37,9 +37,9 @@ class RecipeRun extends Resource
     public ?string $output = null;
 
     /**
-     * The user who executed the recipe run.
+     * The id of the user who executed the recipe run.
      */
-    public ?string $executedBy = null;
+    public ?int $executedBy = null;
 
     /**
      * The date/time the recipe run started.
@@ -50,9 +50,4 @@ class RecipeRun extends Resource
      * The date/time the recipe run finished.
      */
     public ?string $finishedAt = null;
-
-    /**
-     * The date/time the recipe run was created.
-     */
-    public ?string $createdAt = null;
 }
