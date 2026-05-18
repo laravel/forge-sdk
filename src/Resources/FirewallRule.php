@@ -27,9 +27,9 @@ class FirewallRule extends Resource
     public ?string $name = null;
 
     /**
-     * The port number used.
+     * The port number (or range) the rule applies to.
      */
-    public ?int $port = null;
+    public ?string $port = null;
 
     /**
      * The IP Address.
