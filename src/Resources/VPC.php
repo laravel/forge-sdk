@@ -7,6 +7,16 @@ namespace Laravel\Forge\Resources;
 class VPC extends Resource
 {
     /**
+     * The id of the organization.
+     */
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the server credential used to fetch the VPC.
+     */
+    public ?int $credentialId = null;
+
+    /**
      * The id of the VPC.
      */
     public int|string|null $id = null;
@@ -30,9 +40,4 @@ class VPC extends Resource
      * The subnets of the VPC.
      */
     public array $subnets = [];
-
-    /**
-     * The date/time the VPC was created.
-     */
-    public ?string $createdAt = null;
 }
