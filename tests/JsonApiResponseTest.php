@@ -215,7 +215,6 @@ class JsonApiResponseTest extends TestCase
                 'attributes' => [
                     'name' => 'My Organization',
                     'slug' => 'my-org',
-                    'owner_id' => 1,
                     'created_at' => '2025-01-01T00:00:00.000000Z',
                     'updated_at' => '2025-06-15T12:00:00.000000Z',
                 ],
@@ -235,7 +234,6 @@ class JsonApiResponseTest extends TestCase
         $this->assertSame('org-uuid-123', $org->id);
         $this->assertSame('My Organization', $org->name);
         $this->assertSame('my-org', $org->slug);
-        $this->assertSame(1, $org->ownerId);
         $this->assertSame('2025-01-01T00:00:00.000000Z', $org->createdAt);
         $this->assertSame('2025-06-15T12:00:00.000000Z', $org->updatedAt);
 
