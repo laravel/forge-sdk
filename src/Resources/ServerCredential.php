@@ -22,11 +22,6 @@ class ServerCredential extends Resource
     public ?string $name = null;
 
     /**
-     * The type of the server credential.
-     */
-    public ?string $type = null;
-
-    /**
      * The provider of the server credential.
      */
     public ?string $provider = null;
