@@ -17,34 +17,14 @@ class ProviderSize extends Resource
     public ?int $providerId = null;
 
     /**
+     * The id of the region (when fetched via the region-specific endpoint).
+     */
+    public ?int $regionId = null;
+
+    /**
      * The name of the provider size.
      */
     public ?string $name = null;
-
-    /**
-     * The label of the provider size.
-     */
-    public ?string $label = null;
-
-    /**
-     * The price of the provider size.
-     */
-    public ?string $price = null;
-
-    /**
-     * The memory of the provider size.
-     */
-    public ?string $memory = null;
-
-    /**
-     * The disk size of the provider size.
-     */
-    public ?string $disk = null;
-
-    /**
-     * The CPU of the provider size.
-     */
-    public ?string $cpu = null;
 
     /**
      * The code of the provider size.
@@ -65,6 +45,11 @@ class ProviderSize extends Resource
      * The number of CPUs.
      */
     public ?int $cpus = null;
+
+    /**
+     * The disk size of the provider size.
+     */
+    public ?int $disk = null;
 
     /**
      * The disk type of the provider size.
