@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class TeamMember extends Resource
 {
     /**
-     * The id of the team member.
+     * The id of the organization.
      */
-    public ?int $id = null;
+    public ?string $organizationId = null;
 
     /**
      * The id of the team.
@@ -17,14 +17,9 @@ class TeamMember extends Resource
     public ?int $teamId = null;
 
     /**
-     * The id of the user.
+     * The id of the team member.
      */
-    public ?int $userId = null;
-
-    /**
-     * The id of the role.
-     */
-    public ?int $roleId = null;
+    public ?int $id = null;
 
     /**
      * The name of the team member.
@@ -35,11 +30,6 @@ class TeamMember extends Resource
      * The email of the team member.
      */
     public ?string $email = null;
-
-    /**
-     * The role of the team member.
-     */
-    public ?string $role = null;
 
     /**
      * The date/time the team member was created.
