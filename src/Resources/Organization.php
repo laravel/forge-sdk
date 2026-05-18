@@ -22,11 +22,6 @@ class Organization extends Resource
     public ?string $name = null;
 
     /**
-     * The id of the organization owner.
-     */
-    public ?int $ownerId = null;
-
-    /**
      * The date/time the organization was created.
      */
     public ?string $createdAt = null;
