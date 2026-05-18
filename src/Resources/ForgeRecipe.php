@@ -17,11 +17,6 @@ class ForgeRecipe extends Resource
     public ?string $name = null;
 
     /**
-     * The description of the recipe.
-     */
-    public ?string $description = null;
-
-    /**
      * The script of the recipe.
      */
     public ?string $script = null;
