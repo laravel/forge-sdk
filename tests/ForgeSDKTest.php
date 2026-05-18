@@ -294,15 +294,15 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/heartbeats', [
-            'json' => ['name' => 'My Heartbeat', 'interval' => 60],
+            'json' => ['name' => 'My Heartbeat', 'frequency' => 60],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "My Heartbeat", "interval": 60, "status": "active"}}')
+            new Response(200, [], '{"data": {"id": 1, "name": "My Heartbeat", "frequency": 60, "status": "active"}}')
         );
 
-        $heartbeat = $forge->createHeartbeat('org-123', 1, 1, ['name' => 'My Heartbeat', 'interval' => 60]);
+        $heartbeat = $forge->createHeartbeat('org-123', 1, 1, ['name' => 'My Heartbeat', 'frequency' => 60]);
         $this->assertSame(1, $heartbeat->id);
         $this->assertSame('My Heartbeat', $heartbeat->name);
-        $this->assertSame(60, $heartbeat->interval);
+        $this->assertSame(60, $heartbeat->frequency);
     }
 
     public function test_updating_heartbeat()
