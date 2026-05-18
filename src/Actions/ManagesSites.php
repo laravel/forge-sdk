@@ -6,9 +6,11 @@ namespace Laravel\Forge\Actions;
 
 use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Certificate;
+use Laravel\Forge\Resources\ComposerCredential;
 use Laravel\Forge\Resources\Domain;
 use Laravel\Forge\Resources\Heartbeat;
 use Laravel\Forge\Resources\LoadBalancingNode;
+use Laravel\Forge\Resources\NpmCredential;
 use Laravel\Forge\Resources\Site;
 
 trait ManagesSites
@@ -463,26 +465,46 @@ trait ManagesSites
 
     /**
      * Get composer credentials for a site.
+     *
+     * @return ComposerCredential[]
      */
     public function composerCredentials(string $organizationSlug, int $serverId, int $siteId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials")['data'] ?? [];
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials")['data'] ?? [],
+            ComposerCredential::class,
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Create a composer credential for a site.
      */
-    public function createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data): void
+    public function createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data): ComposerCredential
     {
-        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials", $data);
+        return $this->newResource(
+            ComposerCredential::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Get a composer credential for a site.
      */
-    public function composerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository): array
+    public function composerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository): ComposerCredential
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}")['data'] ?? [];
+        return $this->newResource(
+            ComposerCredential::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
@@ -503,26 +525,46 @@ trait ManagesSites
 
     /**
      * Get npm credentials for a site.
+     *
+     * @return NpmCredential[]
      */
     public function npmCredentials(string $organizationSlug, int $serverId, int $siteId): array
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials")['data'] ?? [];
+        return $this->transformCollection(
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials")['data'] ?? [],
+            NpmCredential::class,
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Create an npm credential for a site.
      */
-    public function createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data): void
+    public function createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data): NpmCredential
     {
-        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials", $data);
+        return $this->newResource(
+            NpmCredential::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
      * Get an npm credential for a site.
      */
-    public function npmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry): array
+    public function npmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry): NpmCredential
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}")['data'] ?? [];
+        return $this->newResource(
+            NpmCredential::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**

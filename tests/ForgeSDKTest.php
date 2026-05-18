@@ -15,6 +15,7 @@ use Laravel\Forge\Exceptions\ValidationException;
 use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Forge;
 use Laravel\Forge\MakesHttpRequests;
+use Laravel\Forge\Resources\ComposerCredential;
 use Laravel\Forge\Resources\Database;
 use Laravel\Forge\Resources\DatabaseUser;
 use Laravel\Forge\Resources\DeployKey;
@@ -24,6 +25,7 @@ use Laravel\Forge\Resources\FirewallRule;
 use Laravel\Forge\Resources\Heartbeat;
 use Laravel\Forge\Resources\Monitor;
 use Laravel\Forge\Resources\NginxTemplate;
+use Laravel\Forge\Resources\NpmCredential;
 use Laravel\Forge\Resources\PHPVersion;
 use Laravel\Forge\Resources\Recipe;
 use Laravel\Forge\Resources\RecipeRun;
@@ -3646,21 +3648,22 @@ class ForgeSDKTest extends TestCase
 
         $credentials = $forge->composerCredentials('org-123', 1, 1);
         $this->assertIsArray($credentials);
+        $this->assertContainsOnlyInstancesOf(ComposerCredential::class, $credentials);
     }
 
     public function test_creating_composer_credential()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/composer/credentials', [
             'json' => ['repository' => 'packagist.org', 'username' => 'user'],
         ])->andReturn(
-            new Response(202)
+            new Response(200, [], '{"data": {"repository": "packagist.org", "username": "user"}}')
         );
 
-        $forge->createComposerCredential('org-123', 1, 1, ['repository' => 'packagist.org', 'username' => 'user']);
+        $credential = $forge->createComposerCredential('org-123', 1, 1, ['repository' => 'packagist.org', 'username' => 'user']);
+        $this->assertInstanceOf(ComposerCredential::class, $credential);
+        $this->assertSame('packagist.org', $credential->repository);
     }
 
     public function test_getting_composer_credential()
@@ -3672,7 +3675,8 @@ class ForgeSDKTest extends TestCase
         );
 
         $credential = $forge->composerCredential('org-123', 1, 1, 'packagist.org');
-        $this->assertIsArray($credential);
+        $this->assertInstanceOf(ComposerCredential::class, $credential);
+        $this->assertSame('packagist.org', $credential->repository);
     }
 
     public function test_updating_composer_credential()
@@ -3712,21 +3716,22 @@ class ForgeSDKTest extends TestCase
 
         $credentials = $forge->npmCredentials('org-123', 1, 1);
         $this->assertIsArray($credentials);
+        $this->assertContainsOnlyInstancesOf(NpmCredential::class, $credentials);
     }
 
     public function test_creating_npm_credential()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/npm/credentials', [
             'json' => ['registry' => 'registry.npmjs.org', 'token' => 'npm_abc123'],
         ])->andReturn(
-            new Response(202)
+            new Response(200, [], '{"data": {"registry": "registry.npmjs.org", "token": "npm_abc123"}}')
         );
 
-        $forge->createNpmCredential('org-123', 1, 1, ['registry' => 'registry.npmjs.org', 'token' => 'npm_abc123']);
+        $credential = $forge->createNpmCredential('org-123', 1, 1, ['registry' => 'registry.npmjs.org', 'token' => 'npm_abc123']);
+        $this->assertInstanceOf(NpmCredential::class, $credential);
+        $this->assertSame('registry.npmjs.org', $credential->registry);
     }
 
     public function test_getting_npm_credential()
@@ -3738,7 +3743,8 @@ class ForgeSDKTest extends TestCase
         );
 
         $credential = $forge->npmCredential('org-123', 1, 1, 'registry.npmjs.org');
-        $this->assertIsArray($credential);
+        $this->assertInstanceOf(NpmCredential::class, $credential);
+        $this->assertSame('registry.npmjs.org', $credential->registry);
     }
 
     public function test_updating_npm_credential()
