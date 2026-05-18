@@ -3773,11 +3773,14 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/load-balancing-nodes', [])->andReturn(
-            new Response(200, [], '{"data": [{"id": 1, "ip": "192.168.1.1"}]}')
+            new Response(200, [], '{"data": [{"id": 1, "server_id": 5, "port": 80, "weight": 1, "backup": false, "down": false}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
         $nodes = $forge->loadBalancingNodes('org-123', 1, 1);
-        $this->assertIsArray($nodes);
+        $this->assertInstanceOf(CursorPaginator::class, $nodes);
+        $this->assertCount(1, $nodes);
+        $this->assertSame(1, $nodes[0]->id);
+        $this->assertSame(5, $nodes[0]->serverId);
     }
 
     public function test_updating_load_balancing_nodes()

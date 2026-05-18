@@ -58,7 +58,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Site createSite(string $organizationSlug, int $serverId, array $data)
  * @method static void updateSite(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static void deleteSite(string $organizationSlug, int $serverId, int $siteId)
- * @method static array loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId)
+ * @method static \Laravel\Forge\CursorPaginator loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $query = [])
  * @method static void updateLoadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static array composerCredentials(string $organizationSlug, int $serverId, int $siteId)
  * @method static void createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data)

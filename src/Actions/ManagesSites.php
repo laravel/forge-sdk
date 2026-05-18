@@ -8,6 +8,7 @@ use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Certificate;
 use Laravel\Forge\Resources\Domain;
 use Laravel\Forge\Resources\Heartbeat;
+use Laravel\Forge\Resources\LoadBalancingNode;
 use Laravel\Forge\Resources\Site;
 
 trait ManagesSites
@@ -543,9 +544,16 @@ trait ManagesSites
     /**
      * Get load balancing nodes for a site.
      */
-    public function loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId): array
+    public function loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
-        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes")['data'] ?? [];
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/load-balancing-nodes",
+            LoadBalancingNode::class,
+            $organizationSlug,
+            $serverId,
+            $siteId,
+            query: $query,
+        );
     }
 
     /**
