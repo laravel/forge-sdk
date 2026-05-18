@@ -7,14 +7,24 @@ namespace Laravel\Forge\Resources;
 class Command extends Resource
 {
     /**
-     * The id of the command.
+     * The id of the organization.
      */
-    public ?int $id = null;
+    public ?string $organizationId = null;
+
+    /**
+     * The id of the server.
+     */
+    public ?int $serverId = null;
 
     /**
      * The id of the site.
      */
     public ?int $siteId = null;
+
+    /**
+     * The id of the command.
+     */
+    public ?int $id = null;
 
     /**
      * The command.
@@ -25,11 +35,6 @@ class Command extends Resource
      * The status of the command.
      */
     public ?string $status = null;
-
-    /**
-     * The output of the command.
-     */
-    public ?string $output = null;
 
     /**
      * The duration of the command.
