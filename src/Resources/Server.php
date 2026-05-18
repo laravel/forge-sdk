@@ -79,11 +79,6 @@ class Server extends Resource
     public ?string $createdAt = null;
 
     /**
-     * The IDs of other servers on the same servers network.
-     */
-    public array $network = [];
-
-    /**
      * The sudo password of the new server.
      */
     public ?string $sudoPassword = null;
