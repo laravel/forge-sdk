@@ -22,11 +22,6 @@ class StorageProvider extends Resource
     public ?string $name = null;
 
     /**
-     * The type of the storage provider.
-     */
-    public ?string $type = null;
-
-    /**
      * The provider type of the storage provider.
      */
     public ?string $provider = null;
@@ -57,9 +52,9 @@ class StorageProvider extends Resource
     public ?string $endpoint = null;
 
     /**
-     * The assume role ARN of the storage provider.
+     * Whether the storage provider should assume an IAM role.
      */
-    public ?string $assumeRole = null;
+    public ?bool $assumeRole = null;
 
     /**
      * Whether the storage provider is in use.
