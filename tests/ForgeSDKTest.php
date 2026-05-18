@@ -1001,13 +1001,13 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PATCH', 'orgs/org-123/servers/1/sites/1/domains/1', [
-            'json' => ['primary' => true],
+            'json' => ['allow_wildcard_subdomains' => true],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "primary": true}}')
+            new Response(200, [], '{"data": {"id": 1, "allow_wildcard_subdomains": true}}')
         );
 
-        $domain = $forge->updateDomain('org-123', 1, 1, 1, ['primary' => true]);
-        $this->assertTrue($domain->primary);
+        $domain = $forge->updateDomain('org-123', 1, 1, 1, ['allow_wildcard_subdomains' => true]);
+        $this->assertTrue($domain->allowWildcardSubdomains);
     }
 
     public function test_getting_domains()
