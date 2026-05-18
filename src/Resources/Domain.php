@@ -42,11 +42,6 @@ class Domain extends Resource
     public ?string $type = null;
 
     /**
-     * Whether the domain is the primary domain.
-     */
-    public ?bool $primary = null;
-
-    /**
      * The www redirect type of the domain.
      */
     public ?string $wwwRedirectType = null;
