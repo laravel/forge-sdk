@@ -22,11 +22,6 @@ class ProviderRegion extends Resource
     public ?string $name = null;
 
     /**
-     * The label of the provider region.
-     */
-    public ?string $label = null;
-
-    /**
      * The code of the provider region.
      */
     public ?string $code = null;
