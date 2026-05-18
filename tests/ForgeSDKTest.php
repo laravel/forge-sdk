@@ -4254,7 +4254,7 @@ class ForgeSDKTest extends TestCase
 
         $this->assertSame('disk', $monitor->type);
         $this->assertSame('gte', $monitor->operator);
-        $this->assertSame(80, $monitor->threshold);
+        $this->assertSame(80.0, $monitor->threshold);
         $this->assertSame('installed', $monitor->status);
     }
 
