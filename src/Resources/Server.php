@@ -159,11 +159,6 @@ class Server extends Resource
     public ?string $localPublicKey = null;
 
     /**
-     * The tags associated with the server.
-     */
-    public array $tags = [];
-
-    /**
      * Delete the given server.
      */
     public function delete(): void
@@ -267,11 +262,4 @@ class Server extends Resource
         $this->forge->installPhpVersion($this->organizationId, $this->id, ['version' => $version]);
     }
 
-    /**
-     * Return the tags associated with the server.
-     */
-    public function tags(?string $separator = null): string
-    {
-        return $this->transformTags($this->tags, $separator);
-    }
 }

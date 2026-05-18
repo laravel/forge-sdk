@@ -149,11 +149,6 @@ class Site extends Resource
     public ?string $updatedAt = null;
 
     /**
-     * The tags associated with the site.
-     */
-    public array $tags = [];
-
-    /**
      * Delete the given site.
      */
     public function delete(): void
@@ -217,11 +212,4 @@ class Site extends Resource
         return $this->forge->deploymentLog($this->organizationId, $this->serverId, $this->id, $deploymentId);
     }
 
-    /**
-     * Return the aliases associated with the site.
-     */
-    public function tags(?string $separator = null): string
-    {
-        return $this->transformTags($this->tags, $separator);
-    }
 }

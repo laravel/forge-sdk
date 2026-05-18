@@ -117,13 +117,4 @@ class Resource
         }, $collection);
     }
 
-    /**
-     * Transform the collection of tags to a string.
-     */
-    protected function transformTags(array $tags, ?string $separator = null): string
-    {
-        $separator = $separator ?: ', ';
-
-        return implode($separator, array_column($tags ?? [], 'name'));
-    }
 }
