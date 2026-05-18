@@ -17,21 +17,6 @@ class Provider extends Resource
     public ?string $name = null;
 
     /**
-     * The label of the provider.
-     */
-    public ?string $label = null;
-
-    /**
-     * Determine if the provider supports load balancers.
-     */
-    public ?bool $supportsLoadBalancers = null;
-
-    /**
-     * Determine if the provider supports VPCs.
-     */
-    public ?bool $supportsVpcs = null;
-
-    /**
      * The slug of the provider.
      */
     public ?string $slug = null;
