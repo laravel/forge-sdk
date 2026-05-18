@@ -7,6 +7,11 @@ namespace Laravel\Forge\Resources;
 class Monitor extends Resource
 {
     /**
+     * The id of the organization.
+     */
+    public ?string $organizationId = null;
+
+    /**
      * The id of the monitor.
      */
     public ?int $id = null;
@@ -34,7 +39,7 @@ class Monitor extends Resource
     /**
      * The threshold of the monitor.
      */
-    public ?int $threshold = null;
+    public ?float $threshold = null;
 
     /**
      * The minutes of the monitor.
