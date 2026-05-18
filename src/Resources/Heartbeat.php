@@ -37,19 +37,14 @@ class Heartbeat extends Resource
     public ?string $status = null;
 
     /**
-     * The interval of the heartbeat.
-     */
-    public ?int $interval = null;
-
-    /**
-     * The grace period of the heartbeat.
+     * The grace period of the heartbeat (in minutes).
      */
     public ?int $gracePeriod = null;
 
     /**
-     * The frequency of the heartbeat.
+     * The frequency of the heartbeat (in minutes).
      */
-    public ?string $frequency = null;
+    public ?int $frequency = null;
 
     /**
      * The custom frequency of the heartbeat.
@@ -60,11 +55,6 @@ class Heartbeat extends Resource
      * The ping URL of the heartbeat.
      */
     public ?string $pingUrl = null;
-
-    /**
-     * The date/time the heartbeat was created.
-     */
-    public ?string $createdAt = null;
 
     /**
      * Delete the given heartbeat.
