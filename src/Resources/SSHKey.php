@@ -32,11 +32,6 @@ class SSHKey extends Resource
     public ?string $status = null;
 
     /**
-     * The username of the key.
-     */
-    public ?string $username = null;
-
-    /**
      * The user of the SSH key.
      */
     public ?string $user = null;
