@@ -32,11 +32,6 @@ class DatabaseUser extends Resource
     public ?string $status = null;
 
     /**
-     * The databases the user has access to.
-     */
-    public array $databases = [];
-
-    /**
      * The date/time the database user was created.
      */
     public ?string $createdAt = null;
