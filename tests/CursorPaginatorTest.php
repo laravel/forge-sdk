@@ -438,4 +438,61 @@ class CursorPaginatorTest extends TestCase
         $this->assertSame($items[0], $paginator[0]);
         $this->assertSame($items[2], $paginator[2]);
     }
+
+    public function test_to_array_returns_items()
+    {
+        $items = [
+            new Server(['id' => 1, 'name' => 'Server 1']),
+            new Server(['id' => 2, 'name' => 'Server 2']),
+        ];
+        $paginator = $this->makePaginator(items: $items);
+
+        $this->assertSame($items, $paginator->toArray());
+        $this->assertSame($paginator->items(), $paginator->toArray());
+        $this->assertTrue(is_array($paginator->toArray()));
+    }
+
+    public function test_to_array_returns_empty_array_for_empty_paginator()
+    {
+        $paginator = $this->makePaginator(items: []);
+
+        $this->assertSame([], $paginator->toArray());
+    }
+
+    public function test_json_encode_produces_array_of_items()
+    {
+        $items = [
+            new Server(['id' => 1, 'name' => 'Server 1']),
+            new Server(['id' => 2, 'name' => 'Server 2']),
+        ];
+        $paginator = $this->makePaginator(items: $items);
+
+        $json = json_encode($paginator);
+        $this->assertIsString($json);
+
+        $decoded = json_decode($json, true);
+        $this->assertIsArray($decoded);
+        $this->assertArrayNotHasKey('items', $decoded);
+        $this->assertCount(2, $decoded);
+        $this->assertSame(1, $decoded[0]['id']);
+        $this->assertSame('Server 1', $decoded[0]['name']);
+        $this->assertSame(2, $decoded[1]['id']);
+    }
+
+    public function test_json_encode_of_empty_paginator_is_empty_array()
+    {
+        $paginator = $this->makePaginator(items: []);
+
+        $this->assertSame('[]', json_encode($paginator));
+    }
+
+    public function test_json_serialize_returns_items()
+    {
+        $items = [
+            new Server(['id' => 1, 'name' => 'Server 1']),
+        ];
+        $paginator = $this->makePaginator(items: $items);
+
+        $this->assertSame($items, $paginator->jsonSerialize());
+    }
 }

@@ -9,12 +9,18 @@ use ArrayIterator;
 use Countable;
 use Generator;
 use IteratorAggregate;
+use JsonSerializable;
 
 /**
  * @implements IteratorAggregate<int, mixed>
  * @implements ArrayAccess<int, mixed>
+ *
+ * Note: `(array) $paginator` is intentionally NOT equivalent to `$paginator->toArray()`.
+ * PHP's object-to-array cast exposes the paginator's public/protected/private properties
+ * (mangling private/protected keys with NUL bytes) rather than the items collection.
+ * To obtain just the items, use `->toArray()`, `json_encode($paginator)`, or `foreach`.
  */
-class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess
+class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, JsonSerializable
 {
     /**
      * Create a new CursorPaginator instance.
@@ -37,6 +43,22 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess
      * Get the resource objects for the current page.
      */
     public function items(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * Get the current page items as a plain array.
+     */
+    public function toArray(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * Specify the data which should be serialized to JSON.
+     */
+    public function jsonSerialize(): array
     {
         return $this->items;
     }
