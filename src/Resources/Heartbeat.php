@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class Heartbeat extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the heartbeat.
@@ -61,6 +61,6 @@ class Heartbeat extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteHeartbeat($this->organizationId, $this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteHeartbeat($this->organizationSlug, $this->serverId, $this->siteId, $this->id);
     }
 }

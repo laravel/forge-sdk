@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class SecurityRule extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the rule.
@@ -56,6 +56,6 @@ class SecurityRule extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteSecurityRule($this->organizationId, $this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteSecurityRule($this->organizationSlug, $this->serverId, $this->siteId, $this->id);
     }
 }

@@ -14,9 +14,9 @@ class BackupConfiguration extends Resource
     public ?int $id = null;
 
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the server.
@@ -106,7 +106,7 @@ class BackupConfiguration extends Resource
     public function update(array $data): void
     {
         $this->forge->updateBackupConfiguration(
-            $this->organizationId,
+            $this->organizationSlug,
             $this->serverId,
             $this->id,
             $data
@@ -119,7 +119,7 @@ class BackupConfiguration extends Resource
     public function delete(): void
     {
         $this->forge->deleteBackupConfiguration(
-            $this->organizationId,
+            $this->organizationSlug,
             $this->serverId,
             $this->id
         );
@@ -131,7 +131,7 @@ class BackupConfiguration extends Resource
     public function backups(): CursorPaginator
     {
         return $this->forge->backups(
-            $this->organizationId,
+            $this->organizationSlug,
             $this->serverId,
             $this->id
         );
@@ -143,7 +143,7 @@ class BackupConfiguration extends Resource
     public function createBackup(): void
     {
         $this->forge->createBackup(
-            $this->organizationId,
+            $this->organizationSlug,
             $this->serverId,
             $this->id
         );

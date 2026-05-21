@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class Webhook extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the webhook.
@@ -46,6 +46,6 @@ class Webhook extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteWebhook($this->organizationId, $this->serverId, $this->siteId, $this->id);
+        $this->forge->deleteWebhook($this->organizationSlug, $this->serverId, $this->siteId, $this->id);
     }
 }

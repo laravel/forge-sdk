@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class NginxTemplate extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the nginx template.
@@ -46,7 +46,7 @@ class NginxTemplate extends Resource
      */
     public function update(array $data): NginxTemplate
     {
-        return $this->forge->updateNginxTemplate($this->organizationId, $this->serverId, $this->id, $data);
+        return $this->forge->updateNginxTemplate($this->organizationSlug, $this->serverId, $this->id, $data);
     }
 
     /**
@@ -54,6 +54,6 @@ class NginxTemplate extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteNginxTemplate($this->organizationId, $this->serverId, $this->id);
+        $this->forge->deleteNginxTemplate($this->organizationSlug, $this->serverId, $this->id);
     }
 }

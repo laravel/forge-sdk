@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class SSHKey extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the key.
@@ -56,6 +56,6 @@ class SSHKey extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteSshKey($this->organizationId, $this->serverId, $this->id);
+        $this->forge->deleteSshKey($this->organizationSlug, $this->serverId, $this->id);
     }
 }

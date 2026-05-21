@@ -12,9 +12,9 @@ class Recipe extends Resource
     public ?int $id = null;
 
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the team (when fetched via the team-shared endpoint).
@@ -51,7 +51,7 @@ class Recipe extends Resource
      */
     public function update(array $data): Recipe
     {
-        return $this->forge->updateRecipe($this->organizationId, $this->id, $data);
+        return $this->forge->updateRecipe($this->organizationSlug, $this->id, $data);
     }
 
     /**
@@ -59,7 +59,7 @@ class Recipe extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteRecipe($this->organizationId, $this->id);
+        $this->forge->deleteRecipe($this->organizationSlug, $this->id);
     }
 
     /**
@@ -67,6 +67,6 @@ class Recipe extends Resource
      */
     public function run(array $data): void
     {
-        $this->forge->createRecipeRun($this->organizationId, $this->id, $data);
+        $this->forge->createRecipeRun($this->organizationSlug, $this->id, $data);
     }
 }

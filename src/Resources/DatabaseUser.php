@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class DatabaseUser extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the database user.
@@ -46,7 +46,7 @@ class DatabaseUser extends Resource
      */
     public function update(array $data): void
     {
-        $this->forge->updateDatabaseUser($this->organizationId, $this->serverId, $this->id, $data);
+        $this->forge->updateDatabaseUser($this->organizationSlug, $this->serverId, $this->id, $data);
     }
 
     /**
@@ -54,6 +54,6 @@ class DatabaseUser extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteDatabaseUser($this->organizationId, $this->serverId, $this->id);
+        $this->forge->deleteDatabaseUser($this->organizationSlug, $this->serverId, $this->id);
     }
 }

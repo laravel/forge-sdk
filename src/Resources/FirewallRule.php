@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class FirewallRule extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the rule.
@@ -61,6 +61,6 @@ class FirewallRule extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteFirewallRule($this->organizationId, $this->serverId, $this->id);
+        $this->forge->deleteFirewallRule($this->organizationSlug, $this->serverId, $this->id);
     }
 }

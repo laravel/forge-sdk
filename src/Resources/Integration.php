@@ -12,9 +12,9 @@ class Integration extends Resource
     public ?int $id = null;
 
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the server.

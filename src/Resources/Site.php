@@ -9,9 +9,9 @@ use Laravel\Forge\CursorPaginator;
 class Site extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the site.
@@ -153,7 +153,7 @@ class Site extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteSite($this->organizationId, $this->serverId, $this->id);
+        $this->forge->deleteSite($this->organizationSlug, $this->serverId, $this->id);
     }
 
     /**
@@ -161,7 +161,7 @@ class Site extends Resource
      */
     public function getDeploymentScript(): string
     {
-        return $this->forge->deploymentScript($this->organizationId, $this->serverId, $this->id);
+        return $this->forge->deploymentScript($this->organizationSlug, $this->serverId, $this->id);
     }
 
     /**
@@ -169,7 +169,7 @@ class Site extends Resource
      */
     public function updateDeploymentScript(array $data): void
     {
-        $this->forge->updateDeploymentScript($this->organizationId, $this->serverId, $this->id, $data);
+        $this->forge->updateDeploymentScript($this->organizationSlug, $this->serverId, $this->id, $data);
     }
 
     /**
@@ -177,7 +177,7 @@ class Site extends Resource
      */
     public function disableQuickDeploy(): void
     {
-        $this->forge->disableQuickDeploy($this->organizationId, $this->serverId, $this->id);
+        $this->forge->disableQuickDeploy($this->organizationSlug, $this->serverId, $this->id);
     }
 
     /**
@@ -185,7 +185,7 @@ class Site extends Resource
      */
     public function deploySite(): Deployment
     {
-        return $this->forge->createDeployment($this->organizationId, $this->serverId, $this->id);
+        return $this->forge->createDeployment($this->organizationSlug, $this->serverId, $this->id);
     }
 
     /**
@@ -193,7 +193,7 @@ class Site extends Resource
      */
     public function getDeploymentHistory(): CursorPaginator
     {
-        return $this->forge->deployments($this->organizationId, $this->serverId, $this->id);
+        return $this->forge->deployments($this->organizationSlug, $this->serverId, $this->id);
     }
 
     /**
@@ -201,7 +201,7 @@ class Site extends Resource
      */
     public function getDeploymentHistoryDeployment(int $deploymentId): Deployment
     {
-        return $this->forge->deployment($this->organizationId, $this->serverId, $this->id, $deploymentId);
+        return $this->forge->deployment($this->organizationSlug, $this->serverId, $this->id, $deploymentId);
     }
 
     /**
@@ -209,7 +209,7 @@ class Site extends Resource
      */
     public function getDeploymentHistoryOutput(int $deploymentId): string
     {
-        return $this->forge->deploymentLog($this->organizationId, $this->serverId, $this->id, $deploymentId);
+        return $this->forge->deploymentLog($this->organizationSlug, $this->serverId, $this->id, $deploymentId);
     }
 
 }

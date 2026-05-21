@@ -9,9 +9,9 @@ use Laravel\Forge\CursorPaginator;
 class Server extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the server.
@@ -163,7 +163,7 @@ class Server extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteServer($this->organizationId, $this->id);
+        $this->forge->deleteServer($this->organizationSlug, $this->id);
     }
 
     /**
@@ -171,7 +171,7 @@ class Server extends Resource
      */
     public function reboot(): void
     {
-        $this->forge->createServerAction($this->organizationId, $this->id, ['action' => 'reboot']);
+        $this->forge->createServerAction($this->organizationSlug, $this->id, ['action' => 'reboot']);
     }
 
     /**
@@ -179,7 +179,7 @@ class Server extends Resource
      */
     public function rebootMysql(): void
     {
-        $this->forge->performMySQLAction($this->organizationId, $this->id, ['action' => 'restart']);
+        $this->forge->performMySQLAction($this->organizationSlug, $this->id, ['action' => 'restart']);
     }
 
     /**
@@ -187,7 +187,7 @@ class Server extends Resource
      */
     public function stopMysql(): void
     {
-        $this->forge->performMySQLAction($this->organizationId, $this->id, ['action' => 'stop']);
+        $this->forge->performMySQLAction($this->organizationSlug, $this->id, ['action' => 'stop']);
     }
 
     /**
@@ -195,7 +195,7 @@ class Server extends Resource
      */
     public function rebootPostgres(): void
     {
-        $this->forge->performPostgresAction($this->organizationId, $this->id, ['action' => 'restart']);
+        $this->forge->performPostgresAction($this->organizationSlug, $this->id, ['action' => 'restart']);
     }
 
     /**
@@ -203,7 +203,7 @@ class Server extends Resource
      */
     public function stopPostgres(): void
     {
-        $this->forge->performPostgresAction($this->organizationId, $this->id, ['action' => 'stop']);
+        $this->forge->performPostgresAction($this->organizationSlug, $this->id, ['action' => 'stop']);
     }
 
     /**
@@ -211,7 +211,7 @@ class Server extends Resource
      */
     public function rebootNginx(): void
     {
-        $this->forge->performNginxAction($this->organizationId, $this->id, ['action' => 'restart']);
+        $this->forge->performNginxAction($this->organizationSlug, $this->id, ['action' => 'restart']);
     }
 
     /**
@@ -219,7 +219,7 @@ class Server extends Resource
      */
     public function stopNginx(): void
     {
-        $this->forge->performNginxAction($this->organizationId, $this->id, ['action' => 'stop']);
+        $this->forge->performNginxAction($this->organizationSlug, $this->id, ['action' => 'stop']);
     }
 
     /**
@@ -227,7 +227,7 @@ class Server extends Resource
      */
     public function rebootPHP(): void
     {
-        $this->forge->performPHPAction($this->organizationId, $this->id, ['action' => 'restart']);
+        $this->forge->performPHPAction($this->organizationSlug, $this->id, ['action' => 'restart']);
     }
 
     /**
@@ -235,7 +235,7 @@ class Server extends Resource
      */
     public function enableOPCache(): void
     {
-        $this->forge->createPhpOpcache($this->organizationId, $this->id, []);
+        $this->forge->createPhpOpcache($this->organizationSlug, $this->id, []);
     }
 
     /**
@@ -243,7 +243,7 @@ class Server extends Resource
      */
     public function disableOPCache(): void
     {
-        $this->forge->deletePhpOpcache($this->organizationId, $this->id);
+        $this->forge->deletePhpOpcache($this->organizationSlug, $this->id);
     }
 
     /**
@@ -251,7 +251,7 @@ class Server extends Resource
      */
     public function phpVersions(): CursorPaginator
     {
-        return $this->forge->phpVersions($this->organizationId, $this->id);
+        return $this->forge->phpVersions($this->organizationSlug, $this->id);
     }
 
     /**
@@ -259,7 +259,7 @@ class Server extends Resource
      */
     public function installPHP(string $version): void
     {
-        $this->forge->installPhpVersion($this->organizationId, $this->id, ['version' => $version]);
+        $this->forge->installPhpVersion($this->organizationSlug, $this->id, ['version' => $version]);
     }
 
 }

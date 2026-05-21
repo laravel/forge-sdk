@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class Event extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the event.

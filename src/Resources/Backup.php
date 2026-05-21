@@ -12,9 +12,9 @@ class Backup extends Resource
     public ?int $id = null;
 
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the server.
@@ -52,7 +52,7 @@ class Backup extends Resource
     public function delete(): void
     {
         $this->forge->deleteBackup(
-            $this->organizationId,
+            $this->organizationSlug,
             $this->serverId,
             $this->backupConfigurationId,
             $this->id
@@ -65,7 +65,7 @@ class Backup extends Resource
     public function restore(int $databaseId): void
     {
         $this->forge->restoreBackup(
-            $this->organizationId,
+            $this->organizationSlug,
             $this->serverId,
             $this->backupConfigurationId,
             $this->id,

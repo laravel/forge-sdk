@@ -7,9 +7,9 @@ namespace Laravel\Forge\Resources;
 class Database extends Resource
 {
     /**
-     * The id of the organization.
+     * The slug of the organization.
      */
-    public ?string $organizationId = null;
+    public string $organizationSlug;
 
     /**
      * The id of the database.
@@ -46,6 +46,6 @@ class Database extends Resource
      */
     public function delete(): void
     {
-        $this->forge->deleteDatabase($this->organizationId, $this->serverId, $this->id);
+        $this->forge->deleteDatabase($this->organizationSlug, $this->serverId, $this->id);
     }
 }
