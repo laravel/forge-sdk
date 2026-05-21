@@ -165,7 +165,7 @@ class ForgeSDKTest extends TestCase
         $server = $forge->updateServer('org-123', 1, ['name' => 'renamed-server', 'tags' => ['production', 'web']]);
         $this->assertSame(1, $server->id);
         $this->assertSame('renamed-server', $server->name);
-        $this->assertSame('org-123', $server->organizationId);
+        $this->assertSame('org-123', $server->organizationSlug);
     }
 
     public function test_getting_server_network()
@@ -181,7 +181,7 @@ class ForgeSDKTest extends TestCase
         $this->assertCount(2, $network);
         $this->assertInstanceOf(Server::class, $network[0]);
         $this->assertSame(2, $network[0]->id);
-        $this->assertSame('org-123', $network[0]->organizationId);
+        $this->assertSame('org-123', $network[0]->organizationSlug);
     }
 
     public function test_updating_server_network()
@@ -3074,7 +3074,7 @@ class ForgeSDKTest extends TestCase
 
         $recipe = $forge->createTeamRecipesShare('org-123', 1, ['recipe_id' => 1]);
         $this->assertSame(1, $recipe->id);
-        $this->assertSame('org-123', $recipe->organizationId);
+        $this->assertSame('org-123', $recipe->organizationSlug);
         $this->assertSame(1, $recipe->teamId);
     }
 
@@ -4036,7 +4036,7 @@ class ForgeSDKTest extends TestCase
         $this->assertTrue($integration->enabled);
         $this->assertTrue($integration->installed);
         $this->assertSame('horizon', $integration->type);
-        $this->assertSame('org-123', $integration->organizationId);
+        $this->assertSame('org-123', $integration->organizationSlug);
         $this->assertSame(1, $integration->serverId);
         $this->assertSame(1, $integration->siteId);
     }
@@ -4351,7 +4351,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->delete();
 
         $this->assertTrue(true);
@@ -4367,7 +4367,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "reboot"}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->reboot();
 
         $this->assertTrue(true);
@@ -4383,7 +4383,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->rebootMysql();
 
         $this->assertTrue(true);
@@ -4399,7 +4399,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "stop"}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->stopMysql();
 
         $this->assertTrue(true);
@@ -4415,7 +4415,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->rebootPostgres();
 
         $this->assertTrue(true);
@@ -4431,7 +4431,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->rebootNginx();
 
         $this->assertTrue(true);
@@ -4447,7 +4447,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"action": "restart"}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->rebootPHP();
 
         $this->assertTrue(true);
@@ -4461,7 +4461,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"enabled": true}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->enableOPCache();
 
         $this->assertTrue(true);
@@ -4475,7 +4475,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->disableOPCache();
 
         $this->assertTrue(true);
@@ -4489,7 +4489,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": [{"id": 1, "version": "8.3"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $versions = $server->phpVersions();
 
         $this->assertInstanceOf(CursorPaginator::class, $versions);
@@ -4508,7 +4508,7 @@ class ForgeSDKTest extends TestCase
             new Response(202)
         );
 
-        $server = new Server(['id' => 1, 'organization_id' => 'org-123'], $forge);
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
         $server->installPHP('8.3');
     }
 
@@ -4520,7 +4520,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $site->delete();
 
         $this->assertTrue(true);
@@ -4534,7 +4534,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"type": "deployment-scripts", "id": "1", "attributes": {"content": "cd /home/forge && git pull"}}}')
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $script = $site->getDeploymentScript();
 
         $this->assertSame('cd /home/forge && git pull', $script);
@@ -4550,7 +4550,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"script": "cd /home/forge && git pull"}}')
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $site->updateDeploymentScript(['script' => 'cd /home/forge && git pull']);
 
         $this->assertTrue(true);
@@ -4564,7 +4564,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 10, "status": "deploying"}}')
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $deployment = $site->deploySite();
 
         $this->assertInstanceOf(Deployment::class, $deployment);
@@ -4578,7 +4578,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $site->disableQuickDeploy();
 
         $this->assertTrue(true);
@@ -4592,7 +4592,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": [{"id": 1, "status": "finished"}], "meta": {"next_cursor": null, "per_page": 15}}')
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $deployments = $site->getDeploymentHistory();
 
         $this->assertInstanceOf(CursorPaginator::class, $deployments);
@@ -4607,7 +4607,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"type": "deployment-outputs", "id": "10", "attributes": {"output": "Deployment output..."}}}')
         );
 
-        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $output = $site->getDeploymentHistoryOutput(10);
 
         $this->assertSame('Deployment output...', $output);
@@ -4621,7 +4621,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $database = new Database(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $database = new Database(['id' => 5, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $database->delete();
 
         $this->assertTrue(true);
@@ -4639,7 +4639,7 @@ class ForgeSDKTest extends TestCase
             new Response(202)
         );
 
-        $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $user->update(['databases' => [1, 2]]);
     }
 
@@ -4651,7 +4651,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $user = new DatabaseUser(['id' => 3, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $user->delete();
 
         $this->assertTrue(true);
@@ -4665,7 +4665,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $domain = new Domain(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $domain = new Domain(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_slug' => 'org-123'], $forge);
         $domain->delete();
 
         $this->assertTrue(true);
@@ -4679,7 +4679,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $rule = new FirewallRule(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $rule = new FirewallRule(['id' => 5, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $rule->delete();
 
         $this->assertTrue(true);
@@ -4693,7 +4693,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $heartbeat = new Heartbeat(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $heartbeat = new Heartbeat(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_slug' => 'org-123'], $forge);
         $heartbeat->delete();
 
         $this->assertTrue(true);
@@ -4709,7 +4709,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 5, "name": "custom"}}')
         );
 
-        $template = new NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $template = new NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $updated = $template->update(['content' => 'server {}']);
 
         $this->assertInstanceOf(NginxTemplate::class, $updated);
@@ -4723,7 +4723,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $template = new NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $template = new NginxTemplate(['id' => 5, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $template->delete();
 
         $this->assertTrue(true);
@@ -4739,7 +4739,7 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 5, "name": "Updated Recipe"}}')
         );
 
-        $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
+        $recipe = new Recipe(['id' => 5, 'organization_slug' => 'org-123'], $forge);
         $updated = $recipe->update(['name' => 'Updated Recipe']);
 
         $this->assertInstanceOf(Recipe::class, $updated);
@@ -4753,7 +4753,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
+        $recipe = new Recipe(['id' => 5, 'organization_slug' => 'org-123'], $forge);
         $recipe->delete();
 
         $this->assertTrue(true);
@@ -4771,7 +4771,7 @@ class ForgeSDKTest extends TestCase
             new Response(202)
         );
 
-        $recipe = new Recipe(['id' => 5, 'organization_id' => 'org-123'], $forge);
+        $recipe = new Recipe(['id' => 5, 'organization_slug' => 'org-123'], $forge);
         $recipe->run(['servers' => [1, 2]]);
     }
 
@@ -4783,7 +4783,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $rule = new RedirectRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $rule = new RedirectRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_slug' => 'org-123'], $forge);
         $rule->delete();
 
         $this->assertTrue(true);
@@ -4797,7 +4797,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $rule = new SecurityRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $rule = new SecurityRule(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_slug' => 'org-123'], $forge);
         $rule->delete();
 
         $this->assertTrue(true);
@@ -4811,7 +4811,7 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $key = new SSHKey(['id' => 5, 'server_id' => 1, 'organization_id' => 'org-123'], $forge);
+        $key = new SSHKey(['id' => 5, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
         $key->delete();
 
         $this->assertTrue(true);
@@ -4825,13 +4825,13 @@ class ForgeSDKTest extends TestCase
             new Response(204)
         );
 
-        $webhook = new Webhook(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_id' => 'org-123'], $forge);
+        $webhook = new Webhook(['id' => 3, 'server_id' => 1, 'site_id' => 2, 'organization_slug' => 'org-123'], $forge);
         $webhook->delete();
 
         $this->assertTrue(true);
     }
 
-    public function test_organization_id_hydrated_on_server_from_api()
+    public function test_organization_slug_hydrated_on_server_from_api()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
@@ -4840,10 +4840,10 @@ class ForgeSDKTest extends TestCase
         );
 
         $server = $forge->server('org-123', 1);
-        $this->assertSame('org-123', $server->organizationId);
+        $this->assertSame('org-123', $server->organizationSlug);
     }
 
-    public function test_organization_id_hydrated_on_site_from_api()
+    public function test_organization_slug_hydrated_on_site_from_api()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
@@ -4852,10 +4852,10 @@ class ForgeSDKTest extends TestCase
         );
 
         $site = $forge->organizationSite('org-123', 2);
-        $this->assertSame('org-123', $site->organizationId);
+        $this->assertSame('org-123', $site->organizationSlug);
     }
 
-    public function test_organization_id_hydrated_on_database_from_api()
+    public function test_organization_slug_hydrated_on_database_from_api()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
@@ -4864,11 +4864,11 @@ class ForgeSDKTest extends TestCase
         );
 
         $database = $forge->database('org-123', 1, 5);
-        $this->assertSame('org-123', $database->organizationId);
+        $this->assertSame('org-123', $database->organizationSlug);
         $this->assertSame(1, $database->serverId);
     }
 
-    public function test_organization_id_hydrated_on_recipe_from_api()
+    public function test_organization_slug_hydrated_on_recipe_from_api()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
@@ -4877,7 +4877,7 @@ class ForgeSDKTest extends TestCase
         );
 
         $recipe = $forge->recipe('org-123', 5);
-        $this->assertSame('org-123', $recipe->organizationId);
+        $this->assertSame('org-123', $recipe->organizationSlug);
     }
 
     public function test_post_returns_null_for_202_empty_body()
@@ -4938,7 +4938,7 @@ class ForgeSDKTest extends TestCase
 
         $role = $forge->role('org-123', 1);
         $this->assertInstanceOf(Role::class, $role);
-        $this->assertSame('org-123', $role->organizationId);
+        $this->assertSame('org-123', $role->organizationSlug);
     }
 
     public function test_update_role_injects_organization_context()
@@ -4952,7 +4952,7 @@ class ForgeSDKTest extends TestCase
         );
 
         $role = $forge->updateRole('org-123', 1, ['name' => 'Super Admin']);
-        $this->assertSame('org-123', $role->organizationId);
+        $this->assertSame('org-123', $role->organizationSlug);
     }
 
     public function test_team_injects_organization_context()
@@ -4965,7 +4965,7 @@ class ForgeSDKTest extends TestCase
 
         $team = $forge->team('org-123', 1);
         $this->assertInstanceOf(Team::class, $team);
-        $this->assertSame('org-123', $team->organizationId);
+        $this->assertSame('org-123', $team->organizationSlug);
     }
 
     public function test_update_team_injects_organization_context()
@@ -4979,7 +4979,7 @@ class ForgeSDKTest extends TestCase
         );
 
         $team = $forge->updateTeam('org-123', 1, ['name' => 'Updated']);
-        $this->assertSame('org-123', $team->organizationId);
+        $this->assertSame('org-123', $team->organizationSlug);
     }
 
     public function test_team_member_injects_team_context()
@@ -5032,7 +5032,7 @@ class ForgeSDKTest extends TestCase
 
         $credential = $forge->serverCredential('org-123', 1);
         $this->assertInstanceOf(ServerCredential::class, $credential);
-        $this->assertSame('org-123', $credential->organizationId);
+        $this->assertSame('org-123', $credential->organizationSlug);
     }
 
     public function test_storage_provider_injects_organization_context()
@@ -5045,7 +5045,7 @@ class ForgeSDKTest extends TestCase
 
         $provider = $forge->storageProvider('org-123', 1);
         $this->assertInstanceOf(StorageProvider::class, $provider);
-        $this->assertSame('org-123', $provider->organizationId);
+        $this->assertSame('org-123', $provider->organizationSlug);
     }
 
     public function test_update_storage_provider_injects_organization_context()
@@ -5059,7 +5059,7 @@ class ForgeSDKTest extends TestCase
         );
 
         $provider = $forge->updateStorageProvider('org-123', 1, ['name' => 'Updated S3']);
-        $this->assertSame('org-123', $provider->organizationId);
+        $this->assertSame('org-123', $provider->organizationSlug);
     }
 
     // Issue 4: Deployment resource should have serverId populated
@@ -5074,7 +5074,7 @@ class ForgeSDKTest extends TestCase
 
         $deployment = $forge->deployment('org-123', 1, 2, 3);
         $this->assertInstanceOf(Deployment::class, $deployment);
-        $this->assertSame('org-123', $deployment->organizationId);
+        $this->assertSame('org-123', $deployment->organizationSlug);
         $this->assertSame(1, $deployment->serverId);
         $this->assertSame(2, $deployment->siteId);
     }

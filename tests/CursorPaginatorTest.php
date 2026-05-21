@@ -365,8 +365,8 @@ class CursorPaginatorTest extends TestCase
 
         $this->assertInstanceOf(CursorPaginator::class, $nextPage);
         $this->assertCount(1, $nextPage);
-        // Verify that the organization context was preserved — the resource should have organization_id injected
-        $this->assertSame('org-123', $nextPage[0]->organizationId);
+        // Verify that the organization context was preserved — the resource should have organization_slug injected
+        $this->assertSame('org-123', $nextPage[0]->organizationSlug);
     }
 
     public function test_next_page_preserves_original_query_params()
