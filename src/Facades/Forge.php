@@ -43,7 +43,7 @@ use Laravel\Forge\ForgeManager;
  * PHP
  * @method static \Laravel\Forge\CursorPaginator phpVersions(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\PHPVersion phpVersion(string $organizationSlug, int $serverId, int $phpVersionId)
- * @method static void installPhpVersion(string $organizationSlug, int $serverId, array $data)
+ * @method static \Laravel\Forge\Resources\PHPVersion installPhpVersion(string $organizationSlug, int $serverId, array $data)
  * @method static void updatePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId, array $data)
  * @method static void deletePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId)
  * @method static array phpOpcache(string $organizationSlug, int $serverId)
@@ -56,7 +56,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Site organizationSite(string $organizationSlug, int $siteId)
  * @method static \Laravel\Forge\CursorPaginator serverSites(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\Site createSite(string $organizationSlug, int $serverId, array $data)
- * @method static void updateSite(string $organizationSlug, int $serverId, int $siteId, array $data)
+ * @method static \Laravel\Forge\Resources\Site updateSite(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static void deleteSite(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\CursorPaginator loadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $query = [])
  * @method static void updateLoadBalancingNodes(string $organizationSlug, int $serverId, int $siteId, array $data)
@@ -169,7 +169,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\Recipe updateRecipe(string $organizationSlug, int $recipeId, array $data)
  * @method static void deleteRecipe(string $organizationSlug, int $recipeId)
  * @method static \Laravel\Forge\CursorPaginator recipeRuns(string $organizationSlug, int $recipeId)
- * @method static void createRecipeRun(string $organizationSlug, int $recipeId, array $data)
+ * @method static \Laravel\Forge\Resources\RecipeRun createRecipeRun(string $organizationSlug, int $recipeId, array $data)
  * @method static \Laravel\Forge\CursorPaginator forgeRecipes()
  * @method static void createForgeRecipeRun(int $forgeRecipeId, array $data)
  *

@@ -82,9 +82,14 @@ trait ManagesSites
     /**
      * Update a site.
      */
-    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): void
+    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): Site
     {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data);
+        return $this->newResource(
+            Site::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**

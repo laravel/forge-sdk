@@ -98,9 +98,14 @@ trait ManagesRecipes
     /**
      * Create a new recipe run.
      */
-    public function createRecipeRun(string $organizationSlug, int $recipeId, array $data): void
+    public function createRecipeRun(string $organizationSlug, int $recipeId, array $data): RecipeRun
     {
-        $this->post("orgs/{$organizationSlug}/recipes/{$recipeId}/runs", $data);
+        return $this->newResource(
+            RecipeRun::class,
+            $this->post("orgs/{$organizationSlug}/recipes/{$recipeId}/runs", $data)['data'] ?? [],
+            $organizationSlug,
+            extra: ['recipe_id' => $recipeId],
+        );
     }
 
     /**

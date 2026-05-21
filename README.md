@@ -376,7 +376,7 @@ $output = $forge->serverEventOutput($organizationId, $serverId, $eventId);
 $versions = $forge->phpVersions($organizationId, $serverId);
 
 // Install a new PHP version
-$forge->installPhpVersion($organizationId, $serverId, ['version' => 'php84']);
+$phpVersion = $forge->installPhpVersion($organizationId, $serverId, ['version' => 'php84']);
 
 // Get/Update/Delete PHP version
 $version = $forge->phpVersion($organizationId, $serverId, $phpVersion);

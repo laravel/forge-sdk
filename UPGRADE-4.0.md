@@ -402,7 +402,7 @@ PHP management has been expanded:
 
 ```php
 $versions = $forge->phpVersions($organizationSlug, $serverId);
-$forge->installPhpVersion($organizationSlug, $serverId, ['version' => 'php84']);
+$phpVersion = $forge->installPhpVersion($organizationSlug, $serverId, ['version' => 'php84']);
 
 // Per-version configuration
 $forge->phpFpm($organizationSlug, $serverId, $phpVersionId);

@@ -239,17 +239,19 @@ class ForgeSDKTest extends TestCase
 
     public function test_updating_site()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1', [
             'json' => ['aliases' => ['foo.com']],
         ])->andReturn(
-            new Response(202)
+            new Response(200, [], '{"data": {"id": 1, "name": "example.com", "aliases": ["foo.com"]}}')
         );
 
-        $forge->updateSite('org-123', 1, 1, ['aliases' => ['foo.com']]);
+        $site = $forge->updateSite('org-123', 1, 1, ['aliases' => ['foo.com']]);
+
+        $this->assertInstanceOf(Site::class, $site);
+        $this->assertSame(1, $site->id);
+        $this->assertSame('org-123', $site->organizationSlug);
     }
 
     public function test_deleting_site()
@@ -1659,17 +1661,20 @@ class ForgeSDKTest extends TestCase
 
     public function test_creating_recipe_run()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/recipes/1/runs', [
             'json' => ['server_id' => 1],
         ])->andReturn(
-            new Response(202)
+            new Response(202, [], '{"data": {"id": 9, "status": "queued"}}')
         );
 
-        $forge->createRecipeRun('org-123', 1, ['server_id' => 1]);
+        $run = $forge->createRecipeRun('org-123', 1, ['server_id' => 1]);
+
+        $this->assertInstanceOf(RecipeRun::class, $run);
+        $this->assertSame(9, $run->id);
+        $this->assertSame('org-123', $run->organizationSlug);
+        $this->assertSame(1, $run->recipeId);
     }
 
     public function test_getting_server_events()
@@ -1746,17 +1751,19 @@ class ForgeSDKTest extends TestCase
 
     public function test_installing_php_version()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/versions', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(202)
+            new Response(202, [], '{"data": {"id": 7, "version": "8.3"}}')
         );
 
-        $forge->installPhpVersion('org-123', 1, ['version' => '8.3']);
+        $phpVersion = $forge->installPhpVersion('org-123', 1, ['version' => '8.3']);
+
+        $this->assertInstanceOf(PHPVersion::class, $phpVersion);
+        $this->assertSame(7, $phpVersion->id);
+        $this->assertSame('org-123', $phpVersion->organizationSlug);
     }
 
     public function test_updating_php_version()
@@ -4498,18 +4505,19 @@ class ForgeSDKTest extends TestCase
 
     public function test_server_install_php_convenience_method()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/versions', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(202)
+            new Response(202, [], '{"data": {"id": 7, "version": "8.3"}}')
         );
 
         $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
-        $server->installPHP('8.3');
+        $phpVersion = $server->installPHP('8.3');
+
+        $this->assertInstanceOf(PHPVersion::class, $phpVersion);
+        $this->assertSame(7, $phpVersion->id);
     }
 
     public function test_site_delete_convenience_method()
@@ -4551,9 +4559,10 @@ class ForgeSDKTest extends TestCase
         );
 
         $site = new Site(['id' => 2, 'server_id' => 1, 'organization_slug' => 'org-123'], $forge);
-        $site->updateDeploymentScript(['script' => 'cd /home/forge && git pull']);
+        $returned = $site->updateDeploymentScript(['script' => 'cd /home/forge && git pull']);
 
-        $this->assertTrue(true);
+        $this->assertInstanceOf(Site::class, $returned);
+        $this->assertSame($site, $returned);
     }
 
     public function test_site_deploy_convenience_method()
@@ -4761,18 +4770,20 @@ class ForgeSDKTest extends TestCase
 
     public function test_recipe_run_convenience_method()
     {
-        $this->expectNotToPerformAssertions();
-
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/recipes/5/runs', [
             'json' => ['servers' => [1, 2]],
         ])->andReturn(
-            new Response(202)
+            new Response(202, [], '{"data": {"id": 11, "status": "queued"}}')
         );
 
         $recipe = new Recipe(['id' => 5, 'organization_slug' => 'org-123'], $forge);
-        $recipe->run(['servers' => [1, 2]]);
+        $run = $recipe->run(['servers' => [1, 2]]);
+
+        $this->assertInstanceOf(RecipeRun::class, $run);
+        $this->assertSame(11, $run->id);
+        $this->assertSame(5, $run->recipeId);
     }
 
     public function test_redirect_rule_delete_convenience_method()

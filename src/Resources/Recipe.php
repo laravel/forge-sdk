@@ -65,8 +65,8 @@ class Recipe extends Resource
     /**
      * Run the given recipe.
      */
-    public function run(array $data): void
+    public function run(array $data): RecipeRun
     {
-        $this->forge->createRecipeRun($this->organizationSlug, $this->id, $data);
+        return $this->forge->createRecipeRun($this->organizationSlug, $this->id, $data);
     }
 }

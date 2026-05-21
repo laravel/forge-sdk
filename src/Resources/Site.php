@@ -167,9 +167,11 @@ class Site extends Resource
     /**
      * Update the content of the site's deployment script.
      */
-    public function updateDeploymentScript(array $data): void
+    public function updateDeploymentScript(array $data): static
     {
         $this->forge->updateDeploymentScript($this->organizationSlug, $this->serverId, $this->id, $data);
+
+        return $this;
     }
 
     /**
