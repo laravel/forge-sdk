@@ -138,11 +138,32 @@ Many Resource convenience methods have been removed because the underlying API m
 - `$server->installPHP(string $version)` → now returns `PHPVersion` instead of `void`
 
 **Site:**
-- `$site->updateDeploymentScript(string $content, bool $autoSource)` → `$site->updateDeploymentScript(array $data)` — accepts an array instead of individual params
+- `$site->updateDeploymentScript(string $content, bool $autoSource)` → `$site->updateDeploymentScript(array $data): static` — accepts an array instead of individual params and returns `$this` for chaining (the underlying API returns the deployment script body, not a `Site`, so the resource cannot be re-hydrated from the response)
 - `$site->deploySite(bool $wait = true): Site` → `$site->deploySite(): Deployment` — no longer accepts `$wait`, returns `Deployment` instead of `Site`
 
 **Recipe:**
 - `$recipe->run(array $data): void` → `$recipe->run(array $data): RecipeRun` — now returns a `RecipeRun` instance
+
+**BackupConfiguration:**
+- `$backupConfiguration->update(array $data): static` — re-fills the instance from the response when present and returns `$this`
+- `$backupConfiguration->createBackup(): Backup` — returns the created `Backup` instance
+
+### Typed Returns on Mutation Methods
+
+Several mutation methods that returned `void` in earlier drafts now return the hydrated resource so callers can chain or inspect server-side state without a follow-up `GET`:
+
+| Method | v4.0 return type |
+|--------|------------------|
+| `$forge->installPhpVersion()` | `PHPVersion` |
+| `$forge->updateSite()` | `Site` |
+| `$forge->createRecipeRun()` | `RecipeRun` |
+| `$forge->createBackupConfiguration()` | `BackupConfiguration` |
+| `$forge->updateBackupConfiguration()` | `BackupConfiguration` |
+| `$forge->createBackup()` | `Backup` |
+| `$forge->updateBackgroundProcess()` | `BackgroundProcess` |
+| `$forge->updateDatabaseUser()` | `DatabaseUser` |
+| `$forge->updateComposerCredential()` | `ComposerCredential` |
+| `$forge->updateNpmCredential()` | `NpmCredential` |
 
 ### Removed Resource Properties
 
@@ -189,7 +210,7 @@ public function server($serverId);
 public function createServer(array $data, $wait = true);
 
 // v4.0
-public function servers(string $organizationSlug): CursorPaginator;
+public function servers(string $organizationSlug, array $query = []): CursorPaginator;
 public function server(string $organizationSlug, int $serverId): Server;
 public function createServer(string $organizationSlug, array $data, bool $wait = true): Server;
 ```
@@ -432,7 +453,7 @@ v4.0 requires PHP 8.2 or higher.
 ```php
 $forge = new \Laravel\Forge\Forge($apiKey);
 $organizations = $forge->organizations();
-$organizationSlug = $organizations[0]->id;
+$organizationSlug = $organizations[0]->slug;
 ```
 
 ### 3. Add Organization Slug to All Method Calls
