@@ -97,7 +97,7 @@ class SSHKeysTest extends IntegrationTestCase
         $this->assertNotEmpty($keys);
 
         $key = $keys[0];
-        $this->assertArrayNotHasKey('relationships', $key->attributes);
-        $this->assertArrayNotHasKey('links', $key->attributes);
+        $this->assertIsArray($key->relationships);
+        $this->assertIsArray($key->links);
     }
 }

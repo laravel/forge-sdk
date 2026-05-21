@@ -49,7 +49,7 @@ class OrganizationsTest extends IntegrationTestCase
     {
         $organization = $this->forge()->organization($this->organization());
 
-        $this->assertArrayNotHasKey('relationships', $organization->attributes);
-        $this->assertArrayNotHasKey('links', $organization->attributes);
+        $this->assertIsArray($organization->relationships);
+        $this->assertIsArray($organization->links);
     }
 }

@@ -91,7 +91,7 @@ class MonitorsTest extends IntegrationTestCase
         );
 
         // Envelope keys stripped (type is kept — it's a domain attribute, not the JSON:API type)
-        $this->assertArrayNotHasKey('relationships', $monitor->attributes);
-        $this->assertArrayNotHasKey('links', $monitor->attributes);
+        $this->assertIsArray($monitor->relationships);
+        $this->assertIsArray($monitor->links);
     }
 }

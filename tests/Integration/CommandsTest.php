@@ -56,7 +56,7 @@ class CommandsTest extends IntegrationTestCase
         );
 
         // Envelope keys stripped
-        $this->assertArrayNotHasKey('relationships', $first->attributes);
-        $this->assertArrayNotHasKey('links', $first->attributes);
+        $this->assertIsArray($first->relationships);
+        $this->assertIsArray($first->links);
     }
 }

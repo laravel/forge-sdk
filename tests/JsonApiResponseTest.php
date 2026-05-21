@@ -12,8 +12,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests that verify the SDK correctly handles JSON:API formatted responses
- * where attributes are nested under an "attributes" key and envelope keys
- * (type, relationships, links) are stripped.
+ * where attributes are nested under an "attributes" key, the envelope `type`
+ * is stripped, and `relationships` / `links` are preserved as raw arrays on
+ * the hydrated resource.
  */
 class JsonApiResponseTest extends TestCase
 {
@@ -85,11 +86,15 @@ class JsonApiResponseTest extends TestCase
         $this->assertSame('2025-01-01T00:00:00.000000Z', $server->createdAt);
         $this->assertSame('2025-06-15T12:00:00.000000Z', $server->updatedAt);
 
-        // Ensure envelope keys are stripped and don't pollute the object
+        // Envelope `type` is stripped; `relationships` and `links` are preserved
+        // as raw arrays on the hydrated resource (matching JSON:API shape).
         $this->assertFalse(property_exists($server, 'type') && $server->type === 'servers');
-        $this->assertArrayNotHasKey('relationships', $server->attributes);
-        $this->assertArrayNotHasKey('links', $server->attributes);
         $this->assertArrayNotHasKey('type', $server->attributes);
+        $this->assertSame(['tags' => ['data' => []]], $server->relationships);
+        $this->assertSame(
+            ['self' => 'https://forge.laravel.com/api/orgs/my-org/servers/42'],
+            $server->links,
+        );
     }
 
     public function test_server_from_flat_response(): void
@@ -198,10 +203,13 @@ class JsonApiResponseTest extends TestCase
         $this->assertIsArray($site->repository);
         $this->assertSame('github', $site->repository['provider']);
 
-        // Envelope keys stripped
-        $this->assertArrayNotHasKey('relationships', $site->attributes);
-        $this->assertArrayNotHasKey('links', $site->attributes);
+        // `type` envelope stripped; `relationships` / `links` preserved.
         $this->assertArrayNotHasKey('type', $site->attributes);
+        $this->assertSame(['tags' => ['data' => []]], $site->relationships);
+        $this->assertSame(
+            ['self' => 'https://forge.laravel.com/api/orgs/my-org/servers/42/sites/7'],
+            $site->links,
+        );
     }
 
     public function test_organization_from_jsonapi_response(): void
@@ -237,9 +245,12 @@ class JsonApiResponseTest extends TestCase
         $this->assertSame('2025-01-01T00:00:00.000000Z', $org->createdAt);
         $this->assertSame('2025-06-15T12:00:00.000000Z', $org->updatedAt);
 
-        $this->assertArrayNotHasKey('relationships', $org->attributes);
-        $this->assertArrayNotHasKey('links', $org->attributes);
         $this->assertArrayNotHasKey('type', $org->attributes);
+        $this->assertSame([], $org->relationships);
+        $this->assertSame(
+            ['self' => 'https://forge.laravel.com/api/orgs/my-org'],
+            $org->links,
+        );
     }
 
     public function test_server_collection_from_jsonapi_response(): void
@@ -290,11 +301,14 @@ class JsonApiResponseTest extends TestCase
         $this->assertSame('Server Two', $servers[1]->name);
         $this->assertFalse($servers[1]->isReady);
 
-        // Envelope keys stripped from both
-        foreach ($servers as $server) {
-            $this->assertArrayNotHasKey('relationships', $server->attributes);
-            $this->assertArrayNotHasKey('links', $server->attributes);
+        // `type` envelope stripped from both; `relationships` / `links` preserved.
+        foreach ($servers as $i => $server) {
             $this->assertArrayNotHasKey('type', $server->attributes);
+            $this->assertSame(['tags' => ['data' => []]], $server->relationships);
+            $this->assertSame(
+                ['self' => 'https://example.com/servers/'.($i + 1)],
+                $server->links,
+            );
         }
     }
 }

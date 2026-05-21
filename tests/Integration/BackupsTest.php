@@ -68,8 +68,8 @@ class BackupsTest extends IntegrationTestCase
         }
 
         $config = $configs[0];
-        $this->assertArrayNotHasKey('relationships', $config->attributes);
-        $this->assertArrayNotHasKey('links', $config->attributes);
+        $this->assertIsArray($config->relationships);
+        $this->assertIsArray($config->links);
     }
 
     public function test_list_backups_for_configuration(): void

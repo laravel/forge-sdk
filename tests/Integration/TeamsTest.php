@@ -23,8 +23,8 @@ class TeamsTest extends IntegrationTestCase
             $this->assertNotEmpty($team->name);
 
             // Envelope keys stripped
-            $this->assertArrayNotHasKey('relationships', $team->attributes);
-            $this->assertArrayNotHasKey('links', $team->attributes);
+            $this->assertIsArray($team->relationships);
+            $this->assertIsArray($team->links);
         }
     }
 

@@ -80,8 +80,8 @@ class SecurityRulesTest extends IntegrationTestCase
             );
 
             // Envelope keys stripped
-            $this->assertArrayNotHasKey('relationships', $fetched->attributes);
-            $this->assertArrayNotHasKey('links', $fetched->attributes);
+            $this->assertIsArray($fetched->relationships);
+            $this->assertIsArray($fetched->links);
         } finally {
             usleep(500_000);
             $this->forge()->deleteSecurityRule($org, $serverId, $site->id, $rule->id);

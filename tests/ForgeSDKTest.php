@@ -4220,8 +4220,8 @@ class ForgeSDKTest extends TestCase
         $this->assertSame('192.168.1.1', $server->ipAddress);
         $this->assertTrue($server->isReady);
         $this->assertSame('2026-02-01T00:00:00Z', $server->updatedAt);
-        $this->assertArrayNotHasKey('relationships', $server->attributes);
-        $this->assertArrayNotHasKey('links', $server->attributes);
+        $this->assertSame([], $server->relationships);
+        $this->assertSame(['self' => 'https://forge.test/api/...'], $server->links);
     }
 
     public function test_database_json_api_response_hydration()
@@ -4308,7 +4308,7 @@ class ForgeSDKTest extends TestCase
         $this->assertSame('2026-01-01T00:00:00Z', $user->createdAt);
         $this->assertSame('2026-02-01T00:00:00Z', $user->updatedAt);
         $this->assertArrayNotHasKey('type', $user->attributes);
-        $this->assertArrayNotHasKey('links', $user->attributes);
+        $this->assertSame(['self' => 'https://forge.test/api/user'], $user->links);
     }
 
     public function test_storage_provider_json_api_response_hydration()

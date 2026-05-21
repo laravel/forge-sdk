@@ -24,8 +24,8 @@ class RolesTest extends IntegrationTestCase
         $this->assertNotEmpty($role->name);
 
         // Envelope keys stripped
-        $this->assertArrayNotHasKey('relationships', $role->attributes);
-        $this->assertArrayNotHasKey('links', $role->attributes);
+        $this->assertIsArray($role->relationships);
+        $this->assertIsArray($role->links);
     }
 
     public function test_list_permissions(): void
@@ -85,8 +85,8 @@ class RolesTest extends IntegrationTestCase
             $this->assertSame($role->id, $fetched->id);
 
             // Envelope keys stripped
-            $this->assertArrayNotHasKey('relationships', $fetched->attributes);
-            $this->assertArrayNotHasKey('links', $fetched->attributes);
+            $this->assertIsArray($fetched->relationships);
+            $this->assertIsArray($fetched->links);
 
             usleep(500_000);
 

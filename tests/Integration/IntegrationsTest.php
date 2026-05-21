@@ -94,7 +94,7 @@ class IntegrationsTest extends IntegrationTestCase
         $site = $this->firstSite();
         $integration = $this->forge()->getHorizon($this->organization(), $this->serverId(), $site->id);
 
-        $this->assertArrayNotHasKey('relationships', $integration->attributes);
-        $this->assertArrayNotHasKey('links', $integration->attributes);
+        $this->assertIsArray($integration->relationships);
+        $this->assertIsArray($integration->links);
     }
 }

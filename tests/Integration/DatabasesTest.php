@@ -53,8 +53,8 @@ class DatabasesTest extends IntegrationTestCase
         }
 
         $db = $databases[0];
-        $this->assertArrayNotHasKey('relationships', $db->attributes);
-        $this->assertArrayNotHasKey('links', $db->attributes);
+        $this->assertIsArray($db->relationships);
+        $this->assertIsArray($db->links);
     }
 
     public function test_list_database_users(): void

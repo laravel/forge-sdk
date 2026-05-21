@@ -71,7 +71,7 @@ class RedirectRulesTest extends IntegrationTestCase
         }
 
         $rule = $rules[0];
-        $this->assertArrayNotHasKey('relationships', $rule->attributes);
-        $this->assertArrayNotHasKey('links', $rule->attributes);
+        $this->assertIsArray($rule->relationships);
+        $this->assertIsArray($rule->links);
     }
 }

@@ -33,7 +33,7 @@ class UserTest extends IntegrationTestCase
     {
         $user = $this->forge()->user();
 
-        $this->assertArrayNotHasKey('relationships', $user->attributes);
-        $this->assertArrayNotHasKey('links', $user->attributes);
+        $this->assertIsArray($user->relationships);
+        $this->assertIsArray($user->links);
     }
 }

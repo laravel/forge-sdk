@@ -87,8 +87,8 @@ class ServersTest extends IntegrationTestCase
     {
         $server = $this->forge()->server($this->organization(), $this->serverId());
 
-        $this->assertArrayNotHasKey('relationships', $server->attributes);
-        $this->assertArrayNotHasKey('links', $server->attributes);
+        $this->assertIsArray($server->relationships);
+        $this->assertIsArray($server->links);
     }
 
     public function test_server_events(): void

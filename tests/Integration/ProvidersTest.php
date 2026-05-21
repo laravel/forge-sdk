@@ -58,8 +58,8 @@ class ProvidersTest extends IntegrationTestCase
         $providers = $this->forge()->providers();
         $provider = $providers[0];
 
-        $this->assertArrayNotHasKey('relationships', $provider->attributes);
-        $this->assertArrayNotHasKey('links', $provider->attributes);
+        $this->assertIsArray($provider->relationships);
+        $this->assertIsArray($provider->links);
     }
 
     public function test_provider_sizes(): void
@@ -111,8 +111,8 @@ class ProvidersTest extends IntegrationTestCase
         );
 
         // Envelope keys stripped
-        $this->assertArrayNotHasKey('relationships', $size->attributes);
-        $this->assertArrayNotHasKey('links', $size->attributes);
+        $this->assertIsArray($size->relationships);
+        $this->assertIsArray($size->links);
     }
 
     public function test_provider_regions(): void
@@ -149,7 +149,7 @@ class ProvidersTest extends IntegrationTestCase
         );
 
         // Envelope keys stripped
-        $this->assertArrayNotHasKey('relationships', $region->attributes);
-        $this->assertArrayNotHasKey('links', $region->attributes);
+        $this->assertIsArray($region->relationships);
+        $this->assertIsArray($region->links);
     }
 }

@@ -53,8 +53,8 @@ class RecipesTest extends IntegrationTestCase
             );
 
             // Envelope keys stripped
-            $this->assertArrayNotHasKey('relationships', $fetched->attributes);
-            $this->assertArrayNotHasKey('links', $fetched->attributes);
+            $this->assertIsArray($fetched->relationships);
+            $this->assertIsArray($fetched->links);
 
             usleep(500_000);
 

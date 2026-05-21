@@ -121,8 +121,8 @@ class SitesTest extends IntegrationTestCase
     {
         $site = $this->firstSite();
 
-        $this->assertArrayNotHasKey('relationships', $site->attributes);
-        $this->assertArrayNotHasKey('links', $site->attributes);
+        $this->assertIsArray($site->relationships);
+        $this->assertIsArray($site->links);
     }
 
     public function test_crud_site_domain(): void
@@ -177,8 +177,8 @@ class SitesTest extends IntegrationTestCase
             );
 
             // Envelope keys stripped
-            $this->assertArrayNotHasKey('relationships', $fetched->attributes);
-            $this->assertArrayNotHasKey('links', $fetched->attributes);
+            $this->assertIsArray($fetched->relationships);
+            $this->assertIsArray($fetched->links);
         } finally {
             usleep(500_000);
             $this->forge()->deleteDomain($org, $serverId, $site->id, $domain->id);

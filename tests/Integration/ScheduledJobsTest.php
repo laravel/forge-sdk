@@ -54,8 +54,8 @@ class ScheduledJobsTest extends IntegrationTestCase
         }
 
         $job = $jobs[0];
-        $this->assertArrayNotHasKey('relationships', $job->attributes);
-        $this->assertArrayNotHasKey('links', $job->attributes);
+        $this->assertIsArray($job->relationships);
+        $this->assertIsArray($job->links);
     }
 
     public function test_get_site_scheduled_jobs(): void

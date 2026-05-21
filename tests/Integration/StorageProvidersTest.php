@@ -86,8 +86,8 @@ class StorageProvidersTest extends IntegrationTestCase
         );
 
         // Envelope keys stripped
-        $this->assertArrayNotHasKey('relationships', $provider->attributes);
-        $this->assertArrayNotHasKey('links', $provider->attributes);
+        $this->assertIsArray($provider->relationships);
+        $this->assertIsArray($provider->links);
     }
 
     public function test_get_storage_provider(): void

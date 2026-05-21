@@ -56,8 +56,8 @@ class PHPVersionsTest extends IntegrationTestCase
         $versions = $this->forge()->phpVersions($this->organization(), $this->serverId());
 
         $version = $versions[0];
-        $this->assertArrayNotHasKey('relationships', $version->attributes);
-        $this->assertArrayNotHasKey('links', $version->attributes);
+        $this->assertIsArray($version->relationships);
+        $this->assertIsArray($version->links);
     }
 
     public function test_get_single_php_version(): void

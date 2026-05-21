@@ -92,8 +92,8 @@ class DeploymentsTest extends IntegrationTestCase
         }
 
         $deployment = $deployments[0];
-        $this->assertArrayNotHasKey('relationships', $deployment->attributes);
-        $this->assertArrayNotHasKey('links', $deployment->attributes);
+        $this->assertIsArray($deployment->relationships);
+        $this->assertIsArray($deployment->links);
     }
 
     public function test_get_deployment_script(): void

@@ -6,12 +6,33 @@ namespace Laravel\Forge\Resources;
 
 use Laravel\Forge\Forge;
 
+/**
+ * Base class for all hydrated Forge API resources.
+ *
+ * Hydration preserves the JSON:API `relationships` and `links` blocks as raw
+ * arrays on the resource (matching their original JSON:API shape) so callers
+ * can follow IDs and sub-resource links without re-parsing attributes or making
+ * redundant API calls. Note that the top-level `included` document is NOT
+ * auto-resolved: the SDK only consumes the `data` envelope from responses, so
+ * any references in `relationships` remain as identifier pointers rather than
+ * fully-hydrated child resources.
+ */
 class Resource
 {
     /**
      * The resource attributes.
      */
     public array $attributes;
+
+    /**
+     * The raw JSON:API `relationships` block, preserved as-is.
+     */
+    public array $relationships = [];
+
+    /**
+     * The raw JSON:API `links` block, preserved as-is.
+     */
+    public array $links = [];
 
     /**
      * The Forge SDK instance.
@@ -31,15 +52,15 @@ class Resource
 
     /**
      * Fill the resource with the array of attributes.
+     *
+     * `relationships` and `links` from a JSON:API payload are assigned to the
+     * matching public properties via the camelCase + `property_exists` loop
+     * below, preserving the raw JSON:API shape. The top-level `included`
+     * document is not consumed (the SDK only sees the `data` envelope), so
+     * relationship references remain unresolved identifier pointers.
      */
     protected function fill(): void
     {
-        // Remove JSON:API envelope keys that are not resource data.
-        // Note: relationships (e.g. tags on Server/Site) are lost because
-        // the SDK extracts ['data'] from responses, stripping the top-level
-        // "included" array needed to resolve them. This is a known limitation.
-        unset($this->attributes['relationships'], $this->attributes['links']);
-
         // Flatten JSON:API response structure where properties
         // are nested under an "attributes" key.
         if (isset($this->attributes['attributes']) && is_array($this->attributes['attributes'])) {

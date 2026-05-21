@@ -70,7 +70,7 @@ class ServerCredentialsTest extends IntegrationTestCase
         }
 
         $credential = $credentials[0];
-        $this->assertArrayNotHasKey('relationships', $credential->attributes);
-        $this->assertArrayNotHasKey('links', $credential->attributes);
+        $this->assertIsArray($credential->relationships);
+        $this->assertIsArray($credential->links);
     }
 }
