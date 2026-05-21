@@ -352,7 +352,7 @@ trait ManagesIntegrations
         $data['type'] = $type;
 
         return $data + [
-            'organization_id' => $organizationSlug,
+            'organization_slug' => $organizationSlug,
             'server_id' => $serverId,
             'site_id' => $siteId,
         ];

@@ -75,7 +75,7 @@ class Forge
         array $extra = [],
     ): array {
         $context = array_filter([
-            'organization_id' => $organizationSlug,
+            'organization_slug' => $organizationSlug,
             'server_id' => $serverId,
             'site_id' => $siteId,
         ], fn ($v) => ! is_null($v));
@@ -104,7 +104,7 @@ class Forge
         array $extra = [],
     ): mixed {
         $context = array_filter([
-            'organization_id' => $organizationSlug,
+            'organization_slug' => $organizationSlug,
             'server_id' => $serverId,
             'site_id' => $siteId,
         ], fn ($v) => ! is_null($v));
