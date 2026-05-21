@@ -515,9 +515,15 @@ trait ManagesSites
     /**
      * Update a composer credential for a site.
      */
-    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): void
+    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): ComposerCredential
     {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data);
+        return $this->newResource(
+            ComposerCredential::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**
@@ -575,9 +581,15 @@ trait ManagesSites
     /**
      * Update an npm credential for a site.
      */
-    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): void
+    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): NpmCredential
     {
-        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data);
+        return $this->newResource(
+            NpmCredential::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
     }
 
     /**

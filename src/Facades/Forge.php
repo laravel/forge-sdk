@@ -63,12 +63,12 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\ComposerCredential[] composerCredentials(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\ComposerCredential createComposerCredential(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static \Laravel\Forge\Resources\ComposerCredential composerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository)
- * @method static void updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data)
+ * @method static \Laravel\Forge\Resources\ComposerCredential updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data)
  * @method static void deleteComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository)
  * @method static \Laravel\Forge\Resources\NpmCredential[] npmCredentials(string $organizationSlug, int $serverId, int $siteId)
  * @method static \Laravel\Forge\Resources\NpmCredential createNpmCredential(string $organizationSlug, int $serverId, int $siteId, array $data)
  * @method static \Laravel\Forge\Resources\NpmCredential npmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry)
- * @method static void updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data)
+ * @method static \Laravel\Forge\Resources\NpmCredential updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data)
  * @method static void deleteNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry)
  *
  * Domains
@@ -99,7 +99,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\CursorPaginator databaseUsers(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\DatabaseUser databaseUser(string $organizationSlug, int $serverId, int $userId)
  * @method static \Laravel\Forge\Resources\DatabaseUser createDatabaseUser(string $organizationSlug, int $serverId, array $data, bool $wait = true)
- * @method static void updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data)
+ * @method static \Laravel\Forge\Resources\DatabaseUser updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data)
  * @method static void deleteDatabaseUser(string $organizationSlug, int $serverId, int $userId)
  * @method static void syncDatabases(string $organizationSlug, int $serverId, array $data = [])
  * @method static void updateDatabasePassword(string $organizationSlug, int $serverId, array $data)
@@ -183,7 +183,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\CursorPaginator backgroundProcesses(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\BackgroundProcess backgroundProcess(string $organizationSlug, int $serverId, int $processId)
  * @method static \Laravel\Forge\Resources\BackgroundProcess createBackgroundProcess(string $organizationSlug, int $serverId, array $data)
- * @method static void updateBackgroundProcess(string $organizationSlug, int $serverId, int $processId, array $data)
+ * @method static \Laravel\Forge\Resources\BackgroundProcess updateBackgroundProcess(string $organizationSlug, int $serverId, int $processId, array $data)
  * @method static void deleteBackgroundProcess(string $organizationSlug, int $serverId, int $processId)
  *
  * Commands
@@ -195,12 +195,12 @@ use Laravel\Forge\ForgeManager;
  * Backups
  * @method static \Laravel\Forge\CursorPaginator backupConfigurations(string $organizationSlug, int $serverId)
  * @method static \Laravel\Forge\Resources\BackupConfiguration backupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId)
- * @method static void createBackupConfiguration(string $organizationSlug, int $serverId, array $data)
- * @method static void updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data)
+ * @method static \Laravel\Forge\Resources\BackupConfiguration createBackupConfiguration(string $organizationSlug, int $serverId, array $data)
+ * @method static \Laravel\Forge\Resources\BackupConfiguration updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data)
  * @method static void deleteBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static \Laravel\Forge\CursorPaginator backups(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static \Laravel\Forge\Resources\Backup backup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId)
- * @method static void createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId)
+ * @method static \Laravel\Forge\Resources\Backup createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId)
  * @method static void deleteBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId)
  * @method static void restoreBackup(string $organizationSlug, int $serverId, int $backupConfigurationId, int $backupId, array $data)
  *

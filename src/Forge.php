@@ -90,6 +90,13 @@ class Forge
     /**
      * Create a new resource instance with context data.
      *
+     * Convention: action-trait methods whose OpenAPI operation declares a
+     * non-empty response body return the hydrated resource via this helper
+     * (e.g. createServer, updateBackupConfiguration). Methods whose endpoint
+     * is documented as empty (204 no content, or 202 with no schema) stay
+     * `: void` — confirmed-empty deletes/reboots/toggles such as deleteServer,
+     * disableQuickDeploy, updatePhpCliVersion, updateSiteEnvironment.
+     *
      * @template TResource of \Laravel\Forge\Resources\Resource
      *
      * @param  class-string<TResource>  $class

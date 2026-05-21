@@ -101,16 +101,23 @@ class BackupConfiguration extends Resource
     public ?string $notifyEmail = null;
 
     /**
-     * Update the backup configuration.
+     * Update the backup configuration and refresh this instance.
      */
-    public function update(array $data): void
+    public function update(array $data): static
     {
-        $this->forge->updateBackupConfiguration(
+        $updated = $this->forge->updateBackupConfiguration(
             $this->organizationSlug,
             $this->serverId,
             $this->id,
             $data
         );
+
+        if ($updated->attributes !== []) {
+            $this->attributes = $updated->attributes;
+            $this->fill();
+        }
+
+        return $this;
     }
 
     /**
@@ -140,9 +147,9 @@ class BackupConfiguration extends Resource
     /**
      * Create a new backup.
      */
-    public function createBackup(): void
+    public function createBackup(): Backup
     {
-        $this->forge->createBackup(
+        return $this->forge->createBackup(
             $this->organizationSlug,
             $this->serverId,
             $this->id
