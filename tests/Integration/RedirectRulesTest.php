@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\RedirectRule;
 use Laravel\Forge\Resources\Site;
 
@@ -25,11 +26,13 @@ class RedirectRulesTest extends IntegrationTestCase
         $site = $this->firstSite();
         $rules = $this->forge()->redirectRules($this->organization(), $this->serverId(), $site->id);
 
-        $this->assertIsArray($rules);
+        $this->assertInstanceOf(CursorPaginator::class, $rules);
 
         if (count($rules) === 0) {
             $this->markTestSkipped('No redirect rules found on the test site.');
         }
+
+        $this->assertContainsOnlyInstancesOf(RedirectRule::class, $rules);
 
         $rule = $rules[0];
         $this->assertInstanceOf(RedirectRule::class, $rule);

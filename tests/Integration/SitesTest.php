@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Domain;
 use Laravel\Forge\Resources\Heartbeat;
 use Laravel\Forge\Resources\Site;
@@ -25,11 +26,13 @@ class SitesTest extends IntegrationTestCase
     {
         $sites = $this->forge()->serverSites($this->organization(), $this->serverId());
 
-        $this->assertIsArray($sites);
+        $this->assertInstanceOf(CursorPaginator::class, $sites);
 
         if (count($sites) === 0) {
             $this->markTestSkipped('No sites found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(Site::class, $sites);
 
         $site = $sites[0];
         $this->assertInstanceOf(Site::class, $site);
@@ -148,8 +151,9 @@ class SitesTest extends IntegrationTestCase
 
             // List
             $domains = $this->forge()->domains($org, $serverId, $site->id);
-            $this->assertIsArray($domains);
+            $this->assertInstanceOf(CursorPaginator::class, $domains);
             $this->assertNotEmpty($domains);
+            $this->assertContainsOnlyInstancesOf(Domain::class, $domains);
 
             $found = array_filter($domains, fn (Domain $d) => $d->id === $domain->id);
             $this->assertNotEmpty($found, 'Created domain should appear in listing');
@@ -251,12 +255,13 @@ class SitesTest extends IntegrationTestCase
 
         $sites = $this->forge()->organizationSites($org);
 
-        $this->assertIsArray($sites);
+        $this->assertInstanceOf(CursorPaginator::class, $sites);
 
         if (count($sites) === 0) {
             $this->markTestSkipped('No sites found for the organization.');
         }
 
+        $this->assertContainsOnlyInstancesOf(Site::class, $sites);
         $this->assertInstanceOf(Site::class, $sites[0]);
         $this->assertIsInt($sites[0]->id);
         $this->assertIsString($sites[0]->name);
@@ -294,7 +299,8 @@ class SitesTest extends IntegrationTestCase
 
         $heartbeats = $this->forge()->heartbeats($org, $serverId, $site->id);
 
-        $this->assertIsArray($heartbeats, 'heartbeats() should return an array');
+        $this->assertInstanceOf(CursorPaginator::class, $heartbeats);
+        $this->assertContainsOnlyInstancesOf(Heartbeat::class, $heartbeats);
 
         foreach ($heartbeats as $heartbeat) {
             $this->assertInstanceOf(Heartbeat::class, $heartbeat);

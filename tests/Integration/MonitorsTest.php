@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Monitor;
 
 class MonitorsTest extends IntegrationTestCase
@@ -59,8 +60,9 @@ class MonitorsTest extends IntegrationTestCase
 
         $monitors = $this->forge()->monitors($this->organization(), $this->serverId());
 
-        $this->assertIsArray($monitors);
+        $this->assertInstanceOf(CursorPaginator::class, $monitors);
         $this->assertNotEmpty($monitors);
+        $this->assertContainsOnlyInstancesOf(Monitor::class, $monitors);
 
         $monitor = $monitors[0];
         $this->assertInstanceOf(Monitor::class, $monitor);

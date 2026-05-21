@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\SSHKey;
 
 class SSHKeysTest extends IntegrationTestCase
@@ -62,8 +63,9 @@ class SSHKeysTest extends IntegrationTestCase
 
         $keys = $this->forge()->sshKeys($this->organization(), $this->serverId());
 
-        $this->assertIsArray($keys);
+        $this->assertInstanceOf(CursorPaginator::class, $keys);
         $this->assertNotEmpty($keys);
+        $this->assertContainsOnlyInstancesOf(SSHKey::class, $keys);
 
         $key = $keys[0];
         $this->assertInstanceOf(SSHKey::class, $key);

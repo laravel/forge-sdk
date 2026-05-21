@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Permission;
 use Laravel\Forge\Resources\PredefinedRole;
 use Laravel\Forge\Resources\Role;
@@ -14,8 +15,9 @@ class RolesTest extends IntegrationTestCase
     {
         $roles = $this->forge()->predefinedRoles();
 
-        $this->assertIsArray($roles);
+        $this->assertInstanceOf(CursorPaginator::class, $roles);
         $this->assertNotEmpty($roles);
+        $this->assertContainsOnlyInstancesOf(PredefinedRole::class, $roles);
 
         $role = $roles[0];
         $this->assertInstanceOf(PredefinedRole::class, $role);
@@ -32,8 +34,9 @@ class RolesTest extends IntegrationTestCase
     {
         $permissions = $this->forge()->permissions();
 
-        $this->assertIsArray($permissions);
+        $this->assertInstanceOf(CursorPaginator::class, $permissions);
         $this->assertNotEmpty($permissions);
+        $this->assertContainsOnlyInstancesOf(Permission::class, $permissions);
 
         $permission = $permissions[0];
         $this->assertInstanceOf(Permission::class, $permission);
@@ -46,9 +49,11 @@ class RolesTest extends IntegrationTestCase
     {
         $roles = $this->forge()->roles($this->organization());
 
-        $this->assertIsArray($roles);
+        $this->assertInstanceOf(CursorPaginator::class, $roles);
 
         if (count($roles) > 0) {
+            $this->assertContainsOnlyInstancesOf(Role::class, $roles);
+
             $role = $roles[0];
             $this->assertInstanceOf(Role::class, $role);
             $this->assertIsInt($role->id);

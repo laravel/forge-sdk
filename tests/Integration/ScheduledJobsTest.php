@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\ScheduledJob;
 
 class ScheduledJobsTest extends IntegrationTestCase
@@ -12,11 +13,13 @@ class ScheduledJobsTest extends IntegrationTestCase
     {
         $jobs = $this->forge()->scheduledJobs($this->organization(), $this->serverId());
 
-        $this->assertIsArray($jobs);
+        $this->assertInstanceOf(CursorPaginator::class, $jobs);
 
         if (count($jobs) === 0) {
             $this->markTestSkipped('No scheduled jobs found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(ScheduledJob::class, $jobs);
 
         $job = $jobs[0];
         $this->assertInstanceOf(ScheduledJob::class, $job);
@@ -69,7 +72,7 @@ class ScheduledJobsTest extends IntegrationTestCase
         $site = $sites[0];
         $jobs = $this->forge()->siteScheduledJobs($this->organization(), $this->serverId(), $site->id);
 
-        $this->assertIsArray($jobs);
+        $this->assertInstanceOf(CursorPaginator::class, $jobs);
 
         if (count($jobs) === 0) {
             // Site scheduled jobs are optional, just verify listing works.
@@ -77,6 +80,8 @@ class ScheduledJobsTest extends IntegrationTestCase
 
             return;
         }
+
+        $this->assertContainsOnlyInstancesOf(ScheduledJob::class, $jobs);
 
         $job = $jobs[0];
         $this->assertInstanceOf(ScheduledJob::class, $job);

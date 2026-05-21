@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Organization;
 
 class OrganizationsTest extends IntegrationTestCase
@@ -12,8 +13,9 @@ class OrganizationsTest extends IntegrationTestCase
     {
         $organizations = $this->forge()->organizations();
 
-        $this->assertIsArray($organizations);
+        $this->assertInstanceOf(CursorPaginator::class, $organizations);
         $this->assertNotEmpty($organizations);
+        $this->assertContainsOnlyInstancesOf(Organization::class, $organizations);
 
         $organization = $organizations[0];
         $this->assertInstanceOf(Organization::class, $organization);

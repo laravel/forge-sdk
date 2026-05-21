@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\NginxTemplate;
 
 class NginxTest extends IntegrationTestCase
@@ -29,8 +30,9 @@ class NginxTest extends IntegrationTestCase
 
             // List
             $templates = $this->forge()->nginxTemplates($org, $serverId);
-            $this->assertIsArray($templates);
+            $this->assertInstanceOf(CursorPaginator::class, $templates);
             $this->assertNotEmpty($templates);
+            $this->assertContainsOnlyInstancesOf(NginxTemplate::class, $templates);
 
             $found = array_filter($templates, fn (NginxTemplate $t) => $t->id === $template->id);
             $this->assertNotEmpty($found, 'Created template should appear in listing');

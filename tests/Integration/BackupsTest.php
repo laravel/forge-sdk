@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
+use Laravel\Forge\Resources\Backup;
 use Laravel\Forge\Resources\BackupConfiguration;
 
 class BackupsTest extends IntegrationTestCase
@@ -12,12 +14,14 @@ class BackupsTest extends IntegrationTestCase
     {
         $configs = $this->forge()->backupConfigurations($this->organization(), $this->serverId());
 
-        $this->assertIsArray($configs);
+        $this->assertInstanceOf(CursorPaginator::class, $configs);
 
         if (count($configs) === 0) {
             // Listing works — no configurations to inspect, but endpoint is functional.
             return;
         }
+
+        $this->assertContainsOnlyInstancesOf(BackupConfiguration::class, $configs);
 
         $config = $configs[0];
         $this->assertInstanceOf(BackupConfiguration::class, $config);
@@ -82,6 +86,7 @@ class BackupsTest extends IntegrationTestCase
 
         $backups = $this->forge()->backups($this->organization(), $this->serverId(), $configs[0]->id);
 
-        $this->assertIsArray($backups);
+        $this->assertInstanceOf(CursorPaginator::class, $backups);
+        $this->assertContainsOnlyInstancesOf(Backup::class, $backups);
     }
 }

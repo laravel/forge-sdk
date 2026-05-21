@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Recipe;
 
 class RecipesTest extends IntegrationTestCase
@@ -12,7 +13,7 @@ class RecipesTest extends IntegrationTestCase
     {
         $recipes = $this->forge()->recipes($this->organization());
 
-        $this->assertIsArray($recipes);
+        $this->assertInstanceOf(CursorPaginator::class, $recipes);
     }
 
     public function test_crud_recipe(): void

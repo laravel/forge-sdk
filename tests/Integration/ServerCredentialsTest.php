@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\ServerCredential;
 
 class ServerCredentialsTest extends IntegrationTestCase
@@ -12,11 +13,13 @@ class ServerCredentialsTest extends IntegrationTestCase
     {
         $credentials = $this->forge()->serverCredentials($this->organization());
 
-        $this->assertIsArray($credentials);
+        $this->assertInstanceOf(CursorPaginator::class, $credentials);
 
         if (count($credentials) === 0) {
             $this->markTestSkipped('No server credentials available to test.');
         }
+
+        $this->assertContainsOnlyInstancesOf(ServerCredential::class, $credentials);
 
         $credential = $credentials[0];
         $this->assertInstanceOf(ServerCredential::class, $credential);

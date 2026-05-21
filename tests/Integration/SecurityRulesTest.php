@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\SecurityRule;
 use Laravel\Forge\Resources\Site;
 
@@ -48,8 +49,9 @@ class SecurityRulesTest extends IntegrationTestCase
 
             // List
             $rules = $this->forge()->securityRules($org, $serverId, $site->id);
-            $this->assertIsArray($rules);
+            $this->assertInstanceOf(CursorPaginator::class, $rules);
             $this->assertNotEmpty($rules);
+            $this->assertContainsOnlyInstancesOf(SecurityRule::class, $rules);
 
             $found = array_filter($rules, fn (SecurityRule $r) => $r->id === $rule->id);
             $this->assertNotEmpty($found, 'Created rule should appear in listing');

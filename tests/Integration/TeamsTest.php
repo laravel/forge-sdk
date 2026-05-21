@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Team;
 use Laravel\Forge\Resources\TeamMember;
 
@@ -13,9 +14,11 @@ class TeamsTest extends IntegrationTestCase
     {
         $teams = $this->forge()->teams($this->organization());
 
-        $this->assertIsArray($teams);
+        $this->assertInstanceOf(CursorPaginator::class, $teams);
 
         if (count($teams) > 0) {
+            $this->assertContainsOnlyInstancesOf(Team::class, $teams);
+
             $team = $teams[0];
             $this->assertInstanceOf(Team::class, $team);
             $this->assertIsInt($team->id);
@@ -62,9 +65,11 @@ class TeamsTest extends IntegrationTestCase
 
             // List members (should include at least the creator)
             $members = $this->forge()->teamMembers($org, $team->id);
-            $this->assertIsArray($members);
+            $this->assertInstanceOf(CursorPaginator::class, $members);
 
             if (count($members) > 0) {
+                $this->assertContainsOnlyInstancesOf(TeamMember::class, $members);
+
                 $member = $members[0];
                 $this->assertInstanceOf(TeamMember::class, $member);
                 $this->assertIsInt($member->id);

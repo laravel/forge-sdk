@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Event;
 use Laravel\Forge\Resources\Server;
 
@@ -13,8 +14,9 @@ class ServersTest extends IntegrationTestCase
     {
         $servers = $this->forge()->servers($this->organization());
 
-        $this->assertIsArray($servers);
+        $this->assertInstanceOf(CursorPaginator::class, $servers);
         $this->assertNotEmpty($servers, 'Expected at least one server in the organization.');
+        $this->assertContainsOnlyInstancesOf(Server::class, $servers);
 
         $server = $servers[0];
         $this->assertInstanceOf(Server::class, $server);
@@ -95,11 +97,13 @@ class ServersTest extends IntegrationTestCase
     {
         $events = $this->forge()->serverEvents($this->organization(), $this->serverId());
 
-        $this->assertIsArray($events);
+        $this->assertInstanceOf(CursorPaginator::class, $events);
 
         if (count($events) === 0) {
             $this->markTestSkipped('No events found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(Event::class, $events);
 
         $event = $events[0];
         $this->assertInstanceOf(Event::class, $event);
@@ -113,7 +117,7 @@ class ServersTest extends IntegrationTestCase
     {
         $events = $this->forge()->serverEvents($this->organization(), $this->serverId());
 
-        $this->assertIsArray($events);
+        $this->assertInstanceOf(CursorPaginator::class, $events);
 
         if (count($events) === 0) {
             $this->markTestSkipped('No events found on the test server.');
@@ -133,6 +137,6 @@ class ServersTest extends IntegrationTestCase
     {
         $servers = $this->forge()->archivedServers($this->organization());
 
-        $this->assertIsArray($servers);
+        $this->assertInstanceOf(CursorPaginator::class, $servers);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\PHPVersion;
 
 class PHPVersionsTest extends IntegrationTestCase
@@ -12,8 +13,9 @@ class PHPVersionsTest extends IntegrationTestCase
     {
         $versions = $this->forge()->phpVersions($this->organization(), $this->serverId());
 
-        $this->assertIsArray($versions);
+        $this->assertInstanceOf(CursorPaginator::class, $versions);
         $this->assertNotEmpty($versions, 'Expected at least one PHP version on the test server.');
+        $this->assertContainsOnlyInstancesOf(PHPVersion::class, $versions);
 
         $version = $versions[0];
         $this->assertInstanceOf(PHPVersion::class, $version);

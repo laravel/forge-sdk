@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\FirewallRule;
 
 class FirewallRulesTest extends IntegrationTestCase
@@ -12,11 +13,13 @@ class FirewallRulesTest extends IntegrationTestCase
     {
         $rules = $this->forge()->firewallRules($this->organization(), $this->serverId());
 
-        $this->assertIsArray($rules);
+        $this->assertInstanceOf(CursorPaginator::class, $rules);
 
         if (count($rules) === 0) {
             $this->markTestSkipped('No firewall rules found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(FirewallRule::class, $rules);
 
         $rule = $rules[0];
         $this->assertInstanceOf(FirewallRule::class, $rule);

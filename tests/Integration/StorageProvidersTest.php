@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\StorageProvider;
 
 class StorageProvidersTest extends IntegrationTestCase
@@ -55,8 +56,9 @@ class StorageProvidersTest extends IntegrationTestCase
 
         $providers = $this->forge()->storageProviders($this->organization());
 
-        $this->assertIsArray($providers);
+        $this->assertInstanceOf(CursorPaginator::class, $providers);
         $this->assertNotEmpty($providers);
+        $this->assertContainsOnlyInstancesOf(StorageProvider::class, $providers);
 
         $provider = $providers[0];
         $this->assertInstanceOf(StorageProvider::class, $provider);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\BackgroundProcess;
 
 class BackgroundProcessesTest extends IntegrationTestCase
@@ -30,8 +31,9 @@ class BackgroundProcessesTest extends IntegrationTestCase
 
             // List
             $processes = $this->forge()->backgroundProcesses($org, $serverId);
-            $this->assertIsArray($processes);
+            $this->assertInstanceOf(CursorPaginator::class, $processes);
             $this->assertNotEmpty($processes);
+            $this->assertContainsOnlyInstancesOf(BackgroundProcess::class, $processes);
 
             $found = array_filter($processes, fn (BackgroundProcess $p) => $p->id === $process->id);
             $this->assertNotEmpty($found, 'Created process should appear in listing');
@@ -80,11 +82,13 @@ class BackgroundProcessesTest extends IntegrationTestCase
 
         $processes = $this->forge()->backgroundProcesses($org, $serverId);
 
-        $this->assertIsArray($processes);
+        $this->assertInstanceOf(CursorPaginator::class, $processes);
 
         if (count($processes) === 0) {
             $this->markTestSkipped('No background processes found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(BackgroundProcess::class, $processes);
 
         $process = $this->forge()->backgroundProcess($org, $serverId, $processes[0]->id);
 

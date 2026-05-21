@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Deployment;
 use Laravel\Forge\Resources\Site;
 use Laravel\Forge\Resources\Webhook;
@@ -26,11 +27,13 @@ class DeploymentsTest extends IntegrationTestCase
         $site = $this->firstSite();
         $deployments = $this->forge()->deployments($this->organization(), $this->serverId(), $site->id);
 
-        $this->assertIsArray($deployments);
+        $this->assertInstanceOf(CursorPaginator::class, $deployments);
 
         if (count($deployments) === 0) {
             $this->markTestSkipped('No deployments found on the test site.');
         }
+
+        $this->assertContainsOnlyInstancesOf(Deployment::class, $deployments);
 
         $deployment = $deployments[0];
         $this->assertInstanceOf(Deployment::class, $deployment);
@@ -125,7 +128,7 @@ class DeploymentsTest extends IntegrationTestCase
         $site = $this->firstSite();
         $webhooks = $this->forge()->webhooks($this->organization(), $this->serverId(), $site->id);
 
-        $this->assertIsArray($webhooks);
+        $this->assertInstanceOf(CursorPaginator::class, $webhooks);
 
         if (count($webhooks) === 0) {
             // Webhooks are optional, just verify listing works.
@@ -133,6 +136,8 @@ class DeploymentsTest extends IntegrationTestCase
 
             return;
         }
+
+        $this->assertContainsOnlyInstancesOf(Webhook::class, $webhooks);
 
         $webhook = $webhooks[0];
         $this->assertInstanceOf(Webhook::class, $webhook);

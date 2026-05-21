@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Command;
 use Laravel\Forge\Resources\Site;
 
@@ -35,8 +36,9 @@ class CommandsTest extends IntegrationTestCase
 
         // List should now have at least one command
         $commands = $this->forge()->commands($org, $serverId, $site->id);
-        $this->assertIsArray($commands);
+        $this->assertInstanceOf(CursorPaginator::class, $commands);
         $this->assertNotEmpty($commands, 'Commands list should not be empty after creating one');
+        $this->assertContainsOnlyInstancesOf(Command::class, $commands);
 
         $first = $commands[0];
         $this->assertInstanceOf(Command::class, $first);

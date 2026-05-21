@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Database;
 use Laravel\Forge\Resources\DatabaseUser;
 
@@ -13,11 +14,13 @@ class DatabasesTest extends IntegrationTestCase
     {
         $databases = $this->forge()->databases($this->organization(), $this->serverId());
 
-        $this->assertIsArray($databases);
+        $this->assertInstanceOf(CursorPaginator::class, $databases);
 
         if (count($databases) === 0) {
             $this->markTestSkipped('No databases found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(Database::class, $databases);
 
         $db = $databases[0];
         $this->assertInstanceOf(Database::class, $db);
@@ -61,11 +64,13 @@ class DatabasesTest extends IntegrationTestCase
     {
         $users = $this->forge()->databaseUsers($this->organization(), $this->serverId());
 
-        $this->assertIsArray($users);
+        $this->assertInstanceOf(CursorPaginator::class, $users);
 
         if (count($users) === 0) {
             $this->markTestSkipped('No database users found on the test server.');
         }
+
+        $this->assertContainsOnlyInstancesOf(DatabaseUser::class, $users);
 
         $user = $users[0];
         $this->assertInstanceOf(DatabaseUser::class, $user);
