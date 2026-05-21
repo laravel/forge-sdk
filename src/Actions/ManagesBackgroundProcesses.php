@@ -52,14 +52,9 @@ trait ManagesBackgroundProcesses
     /**
      * Update a background process.
      */
-    public function updateBackgroundProcess(string $organizationSlug, int $serverId, int $processId, array $data): BackgroundProcess
+    public function updateBackgroundProcess(string $organizationSlug, int $serverId, int $processId, array $data): void
     {
-        return $this->newResource(
-            BackgroundProcess::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/background-processes/{$processId}", $data);
     }
 
     /**

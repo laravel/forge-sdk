@@ -40,27 +40,17 @@ trait ManagesBackups
     /**
      * Create a new backup configuration.
      */
-    public function createBackupConfiguration(string $organizationSlug, int $serverId, array $data): BackupConfiguration
+    public function createBackupConfiguration(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->newResource(
-            BackupConfiguration::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups", $data);
     }
 
     /**
      * Update the given backup configuration.
      */
-    public function updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data): BackupConfiguration
+    public function updateBackupConfiguration(string $organizationSlug, int $serverId, int $backupConfigurationId, array $data): void
     {
-        return $this->newResource(
-            BackupConfiguration::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}", $data);
     }
 
     /**
@@ -103,15 +93,9 @@ trait ManagesBackups
     /**
      * Create a new backup.
      */
-    public function createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId): Backup
+    public function createBackup(string $organizationSlug, int $serverId, int $backupConfigurationId): void
     {
-        return $this->newResource(
-            Backup::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances")['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            extra: ['backup_configuration_id' => $backupConfigurationId],
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/backups/{$backupConfigurationId}/instances");
     }
 
     /**

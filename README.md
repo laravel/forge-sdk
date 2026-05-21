@@ -175,7 +175,7 @@ $site = $forge->organizationSite($organizationSlug, $siteId);
 $site = $forge->createSite($organizationSlug, $serverId, $data);
 
 // Update a site
-$site = $forge->updateSite($organizationSlug, $serverId, $siteId, $data);
+$forge->updateSite($organizationSlug, $serverId, $siteId, $data);
 
 // Delete a site
 $forge->deleteSite($organizationSlug, $serverId, $siteId);
@@ -385,7 +385,7 @@ $output = $forge->serverEventOutput($organizationSlug, $serverId, $eventId);
 $versions = $forge->phpVersions($organizationSlug, $serverId);
 
 // Install a new PHP version
-$phpVersion = $forge->installPhpVersion($organizationSlug, $serverId, ['version' => 'php84']);
+$forge->installPhpVersion($organizationSlug, $serverId, ['version' => 'php84']);
 
 // Get/Update/Delete PHP version
 $version = $forge->phpVersion($organizationSlug, $serverId, $phpVersion);
@@ -524,7 +524,7 @@ $forge->deleteRecipe($organizationSlug, $recipeId);
 // Recipe runs
 $runs = $forge->recipeRuns($organizationSlug, $recipeId);
 $run = $forge->recipeRun($organizationSlug, $recipeId, $logId);
-$run = $forge->createRecipeRun($organizationSlug, $recipeId, $data);
+$forge->createRecipeRun($organizationSlug, $recipeId, $data);
 
 // Forge-provided recipes
 $forgeRecipes = $forge->forgeRecipes();

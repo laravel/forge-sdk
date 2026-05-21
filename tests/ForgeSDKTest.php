@@ -247,14 +247,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1', [
             'json' => ['aliases' => ['foo.com']],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "example.com", "aliases": ["foo.com"]}}')
+            new Response(202)
         );
 
-        $site = $forge->updateSite('org-123', 1, 1, ['aliases' => ['foo.com']]);
-
-        $this->assertInstanceOf(Site::class, $site);
-        $this->assertSame(1, $site->id);
-        $this->assertSame('org-123', $site->organizationSlug);
+        $forge->updateSite('org-123', 1, 1, ['aliases' => ['foo.com']]);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_deleting_site()
@@ -407,14 +404,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/database/users/1', [
             'json' => ['databases' => [1]],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 1, "name": "db_user"}}')
+            new Response(202)
         );
 
-        $user = $forge->updateDatabaseUser('org-123', 1, 1, ['databases' => [1]]);
-
-        $this->assertInstanceOf(DatabaseUser::class, $user);
-        $this->assertSame(1, $user->id);
-        $this->assertSame('org-123', $user->organizationSlug);
+        $forge->updateDatabaseUser('org-123', 1, 1, ['databases' => [1]]);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_getting_background_processes()
@@ -449,14 +443,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/background-processes/1', [
             'json' => ['processes' => 2],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 1, "processes": 2}}')
+            new Response(202)
         );
 
-        $process = $forge->updateBackgroundProcess('org-123', 1, 1, ['processes' => 2]);
-
-        $this->assertInstanceOf(BackgroundProcess::class, $process);
-        $this->assertSame(1, $process->id);
-        $this->assertSame(2, $process->processes);
+        $forge->updateBackgroundProcess('org-123', 1, 1, ['processes' => 2]);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_deleting_background_process()
@@ -1673,15 +1664,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/recipes/1/runs', [
             'json' => ['server_id' => 1],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 9, "status": "queued"}}')
+            new Response(202)
         );
 
-        $run = $forge->createRecipeRun('org-123', 1, ['server_id' => 1]);
-
-        $this->assertInstanceOf(RecipeRun::class, $run);
-        $this->assertSame(9, $run->id);
-        $this->assertSame('org-123', $run->organizationSlug);
-        $this->assertSame(1, $run->recipeId);
+        $forge->createRecipeRun('org-123', 1, ['server_id' => 1]);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_getting_server_events()
@@ -1763,14 +1750,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/versions', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 7, "version": "8.3"}}')
+            new Response(202)
         );
 
-        $phpVersion = $forge->installPhpVersion('org-123', 1, ['version' => '8.3']);
-
-        $this->assertInstanceOf(PHPVersion::class, $phpVersion);
-        $this->assertSame(7, $phpVersion->id);
-        $this->assertSame('org-123', $phpVersion->organizationSlug);
+        $forge->installPhpVersion('org-123', 1, ['version' => '8.3']);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_updating_php_version()
@@ -3700,14 +3684,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/composer/credentials/packagist.org', [
             'json' => ['username' => 'newuser'],
         ])->andReturn(
-            new Response(202, [], '{"data": {"repository": "packagist.org", "username": "newuser"}}')
+            new Response(202)
         );
 
-        $credential = $forge->updateComposerCredential('org-123', 1, 1, 'packagist.org', ['username' => 'newuser']);
-
-        $this->assertInstanceOf(ComposerCredential::class, $credential);
-        $this->assertSame('packagist.org', $credential->repository);
-        $this->assertSame('newuser', $credential->username);
+        $forge->updateComposerCredential('org-123', 1, 1, 'packagist.org', ['username' => 'newuser']);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_deleting_composer_credential()
@@ -3770,13 +3751,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/npm/credentials/registry.npmjs.org', [
             'json' => ['token' => 'npm_xyz789'],
         ])->andReturn(
-            new Response(202, [], '{"data": {"registry": "registry.npmjs.org", "token": "npm_xyz789"}}')
+            new Response(202)
         );
 
-        $credential = $forge->updateNpmCredential('org-123', 1, 1, 'registry.npmjs.org', ['token' => 'npm_xyz789']);
-
-        $this->assertInstanceOf(NpmCredential::class, $credential);
-        $this->assertSame('registry.npmjs.org', $credential->registry);
+        $forge->updateNpmCredential('org-123', 1, 1, 'registry.npmjs.org', ['token' => 'npm_xyz789']);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_deleting_npm_credential()
@@ -3853,15 +3832,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/database/backups', [
             'json' => ['name' => 'Daily Backup', 'provider' => 's3'],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 5, "name": "Daily Backup", "provider": "s3"}}')
+            new Response(202)
         );
 
-        $config = $forge->createBackupConfiguration('org-123', 1, ['name' => 'Daily Backup', 'provider' => 's3']);
-
-        $this->assertInstanceOf(BackupConfiguration::class, $config);
-        $this->assertSame(5, $config->id);
-        $this->assertSame('Daily Backup', $config->name);
-        $this->assertSame('org-123', $config->organizationSlug);
+        $forge->createBackupConfiguration('org-123', 1, ['name' => 'Daily Backup', 'provider' => 's3']);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_updating_backup_configuration()
@@ -3871,15 +3846,11 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/database/backups/1', [
             'json' => ['name' => 'Updated Backup'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "Updated Backup"}}')
+            new Response(202)
         );
 
-        $config = $forge->updateBackupConfiguration('org-123', 1, 1, ['name' => 'Updated Backup']);
-
-        $this->assertInstanceOf(BackupConfiguration::class, $config);
-        $this->assertSame(1, $config->id);
-        $this->assertSame('Updated Backup', $config->name);
-        $this->assertSame('org-123', $config->organizationSlug);
+        $forge->updateBackupConfiguration('org-123', 1, 1, ['name' => 'Updated Backup']);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_deleting_backup_configuration()
@@ -3922,16 +3893,11 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/database/backups/1/instances', [])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "status": "pending"}}')
+            new Response(202)
         );
 
-        $backup = $forge->createBackup('org-123', 1, 1);
-
-        $this->assertInstanceOf(Backup::class, $backup);
-        $this->assertSame(1, $backup->id);
-        $this->assertSame('pending', $backup->status);
-        $this->assertSame('org-123', $backup->organizationSlug);
-        $this->assertSame(1, $backup->backupConfigurationId);
+        $forge->createBackup('org-123', 1, 1);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_deleting_backup()
@@ -3944,50 +3910,6 @@ class ForgeSDKTest extends TestCase
 
         $forge->deleteBackup('org-123', 1, 1, 1);
         $this->assertTrue(true);
-    }
-
-    public function test_backup_configuration_resource_update_refreshes_attributes_and_returns_self()
-    {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
-
-        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/database/backups/1', [
-            'json' => ['name' => 'Renamed'],
-        ])->andReturn(
-            new Response(200, [], '{"data": {"id": 1, "name": "Renamed"}}')
-        );
-
-        $config = new BackupConfiguration([
-            'id' => 1,
-            'name' => 'Original',
-            'organization_slug' => 'org-123',
-            'server_id' => 1,
-        ], $forge);
-
-        $result = $config->update(['name' => 'Renamed']);
-
-        $this->assertSame($config, $result);
-        $this->assertSame('Renamed', $config->name);
-    }
-
-    public function test_backup_configuration_resource_create_backup_returns_backup()
-    {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
-
-        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/database/backups/1/instances', [])->andReturn(
-            new Response(200, [], '{"data": {"id": 9, "status": "pending"}}')
-        );
-
-        $config = new BackupConfiguration([
-            'id' => 1,
-            'organization_slug' => 'org-123',
-            'server_id' => 1,
-        ], $forge);
-
-        $backup = $config->createBackup();
-
-        $this->assertInstanceOf(Backup::class, $backup);
-        $this->assertSame(9, $backup->id);
-        $this->assertSame(1, $backup->backupConfigurationId);
     }
 
     public function test_restoring_backup()
@@ -4576,14 +4498,13 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/php/versions', [
             'json' => ['version' => '8.3'],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 7, "version": "8.3"}}')
+            new Response(202)
         );
 
         $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
-        $phpVersion = $server->installPHP('8.3');
+        $server->installPHP('8.3');
 
-        $this->assertInstanceOf(PHPVersion::class, $phpVersion);
-        $this->assertSame(7, $phpVersion->id);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_site_delete_convenience_method()
@@ -4841,15 +4762,13 @@ class ForgeSDKTest extends TestCase
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/recipes/5/runs', [
             'json' => ['servers' => [1, 2]],
         ])->andReturn(
-            new Response(202, [], '{"data": {"id": 11, "status": "queued"}}')
+            new Response(202)
         );
 
         $recipe = new Recipe(['id' => 5, 'organization_slug' => 'org-123'], $forge);
-        $run = $recipe->run(['servers' => [1, 2]]);
+        $recipe->run(['servers' => [1, 2]]);
 
-        $this->assertInstanceOf(RecipeRun::class, $run);
-        $this->assertSame(11, $run->id);
-        $this->assertSame(5, $run->recipeId);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     public function test_redirect_rule_delete_convenience_method()

@@ -135,35 +135,21 @@ Many Resource convenience methods have been removed because the underlying API m
 
 **Server:**
 - `$server->rebootPHP(array $data)` → `$server->rebootPHP()` — no longer accepts `$data`
-- `$server->installPHP(string $version)` → now returns `PHPVersion` instead of `void`
 
 **Site:**
-- `$site->updateDeploymentScript(string $content, bool $autoSource)` → `$site->updateDeploymentScript(array $data): static` — accepts an array instead of individual params and returns `$this` for chaining (the underlying API returns the deployment script body, not a `Site`, so the resource cannot be re-hydrated from the response)
+- `$site->updateDeploymentScript(string $content, bool $autoSource)` → `$site->updateDeploymentScript(array $data): static` — accepts an array instead of individual params and returns `$this` for chaining
 - `$site->deploySite(bool $wait = true): Site` → `$site->deploySite(): Deployment` — no longer accepts `$wait`, returns `Deployment` instead of `Site`
 
-**Recipe:**
-- `$recipe->run(array $data): void` → `$recipe->run(array $data): RecipeRun` — now returns a `RecipeRun` instance
+### Mutation Methods Return `void`
 
-**BackupConfiguration:**
-- `$backupConfiguration->update(array $data): static` — re-fills the instance from the response when present and returns `$this`
-- `$backupConfiguration->createBackup(): Backup` — returns the created `Backup` instance
+In v4, every mutation endpoint that the Forge API answers with `202 Accepted` and no body returns `void` in the SDK. To inspect the resulting resource state, issue a follow-up `GET` once the asynchronous action completes:
 
-### Typed Returns on Mutation Methods
+```php
+$forge->updateSite($organizationSlug, $serverId, $siteId, ['aliases' => ['foo.com']]);
+$site = $forge->site($organizationSlug, $serverId, $siteId);
+```
 
-Several mutation methods that returned `void` in earlier drafts now return the hydrated resource so callers can chain or inspect server-side state without a follow-up `GET`:
-
-| Method | v4.0 return type |
-|--------|------------------|
-| `$forge->installPhpVersion()` | `PHPVersion` |
-| `$forge->updateSite()` | `Site` |
-| `$forge->createRecipeRun()` | `RecipeRun` |
-| `$forge->createBackupConfiguration()` | `BackupConfiguration` |
-| `$forge->updateBackupConfiguration()` | `BackupConfiguration` |
-| `$forge->createBackup()` | `Backup` |
-| `$forge->updateBackgroundProcess()` | `BackgroundProcess` |
-| `$forge->updateDatabaseUser()` | `DatabaseUser` |
-| `$forge->updateComposerCredential()` | `ComposerCredential` |
-| `$forge->updateNpmCredential()` | `NpmCredential` |
+This applies to `updateSite`, `installPhpVersion`, `createRecipeRun`, `createBackup`, `createBackupConfiguration`, `updateBackupConfiguration`, `updateBackgroundProcess`, `updateDatabaseUser`, `updateComposerCredential`, `updateNpmCredential`, and other action methods documented as `: void`.
 
 ### Removed Resource Properties
 

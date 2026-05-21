@@ -279,14 +279,9 @@ trait ManagesServers
     /**
      * Install a new PHP version.
      */
-    public function installPhpVersion(string $organizationSlug, int $serverId, array $data): PHPVersion
+    public function installPhpVersion(string $organizationSlug, int $serverId, array $data): void
     {
-        return $this->newResource(
-            PHPVersion::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/versions", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/versions", $data);
     }
 
     /**

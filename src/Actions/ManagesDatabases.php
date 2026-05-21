@@ -119,14 +119,9 @@ trait ManagesDatabases
     /**
      * Update a database user.
      */
-    public function updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data): DatabaseUser
+    public function updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data): void
     {
-        return $this->newResource(
-            DatabaseUser::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}", $data);
     }
 
     /**

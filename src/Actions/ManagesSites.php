@@ -82,14 +82,9 @@ trait ManagesSites
     /**
      * Update a site.
      */
-    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): Site
+    public function updateSite(string $organizationSlug, int $serverId, int $siteId, array $data): void
     {
-        return $this->newResource(
-            Site::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}", $data);
     }
 
     /**
@@ -515,15 +510,9 @@ trait ManagesSites
     /**
      * Update a composer credential for a site.
      */
-    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): ComposerCredential
+    public function updateComposerCredential(string $organizationSlug, int $serverId, int $siteId, string $repository, array $data): void
     {
-        return $this->newResource(
-            ComposerCredential::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/composer/credentials/{$repository}", $data);
     }
 
     /**
@@ -581,15 +570,9 @@ trait ManagesSites
     /**
      * Update an npm credential for a site.
      */
-    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): NpmCredential
+    public function updateNpmCredential(string $organizationSlug, int $serverId, int $siteId, string $registry, array $data): void
     {
-        return $this->newResource(
-            NpmCredential::class,
-            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-            $siteId,
-        );
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/npm/credentials/{$registry}", $data);
     }
 
     /**
