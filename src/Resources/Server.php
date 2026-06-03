@@ -140,7 +140,7 @@ class Server extends Resource
     /**
      * Update the given server.
      *
-     * @return \Laravel\Forge\Resources\Server
+     * @return Server
      */
     public function update(array $data)
     {
@@ -330,7 +330,7 @@ class Server extends Resource
     /**
      * Get the collection of PHP Versions.
      *
-     * @return \Laravel\Forge\Resources\PHPVersion[]
+     * @return PHPVersion[]
      */
     public function phpVersions()
     {

@@ -11,7 +11,7 @@ trait ManagesWorkers
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Worker[]
+     * @return Worker[]
      */
     public function workers($serverId, $siteId)
     {
@@ -28,7 +28,7 @@ trait ManagesWorkers
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  int  $workerId
-     * @return \Laravel\Forge\Resources\Worker
+     * @return Worker
      */
     public function worker($serverId, $siteId, $workerId)
     {
@@ -44,7 +44,7 @@ trait ManagesWorkers
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Worker
+     * @return Worker
      */
     public function createWorker($serverId, $siteId, array $data, $wait = true)
     {

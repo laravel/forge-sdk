@@ -231,7 +231,7 @@ class Site extends Resource
      * Install a git repository on the given site.
      *
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function installGitRepository(array $data, $wait = true)
     {
@@ -325,7 +325,7 @@ class Site extends Resource
      * Deploy the given site.
      *
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function deploySite($wait = true)
     {

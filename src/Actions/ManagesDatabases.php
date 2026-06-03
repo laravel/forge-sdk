@@ -10,7 +10,7 @@ trait ManagesDatabases
      * Get the collection of Databases.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Database[]
+     * @return Database[]
      */
     public function databases($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesDatabases
      *
      * @param  int  $serverId
      * @param  int  $databaseId
-     * @return \Laravel\Forge\Resources\Database
+     * @return Database
      */
     public function database($serverId, $databaseId)
     {
@@ -40,7 +40,7 @@ trait ManagesDatabases
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Database
+     * @return Database
      */
     public function createDatabase($serverId, array $data, $wait = true)
     {
@@ -62,7 +62,7 @@ trait ManagesDatabases
      *
      * @param  int  $serverId
      * @param  int  $databaseId
-     * @return \Laravel\Forge\Resources\Database
+     * @return Database
      */
     public function updateDatabase($serverId, $databaseId, array $data)
     {

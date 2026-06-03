@@ -6,7 +6,7 @@ use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
- * @mixin \Laravel\Forge\Forge
+ * @mixin Forge
  */
 class ForgeManager
 {
@@ -15,7 +15,7 @@ class ForgeManager
     /**
      * The Forge instance.
      *
-     * @var \Laravel\Forge\Forge
+     * @var Forge
      */
     protected $forge;
 

@@ -10,7 +10,7 @@ trait ManagesNginxTemplates
      * Get the collection of Nginx Templates.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\NginxTemplate[]
+     * @return NginxTemplate[]
      */
     public function nginxTemplates($serverId)
     {
@@ -25,7 +25,7 @@ trait ManagesNginxTemplates
      *
      * @param  int  $serverId
      * @param  int  $templateId
-     * @return \Laravel\Forge\Resources\NginxTemplate
+     * @return NginxTemplate
      */
     public function nginxTemplate($serverId, $templateId)
     {
@@ -38,7 +38,7 @@ trait ManagesNginxTemplates
      * Get a Nginx Default Template instance.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\NginxTemplate
+     * @return NginxTemplate
      */
     public function nginxDefaultTemplate($serverId)
     {
@@ -52,7 +52,7 @@ trait ManagesNginxTemplates
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\NginxTemplate
+     * @return NginxTemplate
      */
     public function createNginxTemplate($serverId, array $data, $wait = true)
     {
@@ -72,7 +72,7 @@ trait ManagesNginxTemplates
      *
      * @param  int  $serverId
      * @param  int  $templateId
-     * @return \Laravel\Forge\Resources\NginxTemplate
+     * @return NginxTemplate
      */
     public function updateNginxTemplate($serverId, $templateId, array $data)
     {

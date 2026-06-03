@@ -42,7 +42,7 @@ class DatabaseUser extends Resource
     /**
      * Update the given Database User.
      *
-     * @return \Laravel\Forge\Resources\DatabaseUser
+     * @return DatabaseUser
      */
     public function update(array $data)
     {

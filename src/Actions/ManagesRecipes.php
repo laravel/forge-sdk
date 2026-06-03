@@ -9,7 +9,7 @@ trait ManagesRecipes
     /**
      * Get the collection of recipes.
      *
-     * @return \Laravel\Forge\Resources\Recipe[]
+     * @return Recipe[]
      */
     public function recipes()
     {
@@ -22,7 +22,7 @@ trait ManagesRecipes
      * Get a recipe instance.
      *
      * @param  string  $recipeId
-     * @return \Laravel\Forge\Resources\Recipe
+     * @return Recipe
      */
     public function recipe($recipeId)
     {
@@ -32,7 +32,7 @@ trait ManagesRecipes
     /**
      * Create a new recipe.
      *
-     * @return \Laravel\Forge\Resources\Recipe
+     * @return Recipe
      */
     public function createRecipe(array $data)
     {
@@ -43,7 +43,7 @@ trait ManagesRecipes
      * Update the given recipe.
      *
      * @param  string  $recipeId
-     * @return \Laravel\Forge\Resources\Recipe
+     * @return Recipe
      */
     public function updateRecipe($recipeId, array $data)
     {

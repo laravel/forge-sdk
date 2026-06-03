@@ -42,7 +42,7 @@ class Recipe extends Resource
     /**
      * Update the given recipe.
      *
-     * @return \Laravel\Forge\Resources\Recipe
+     * @return Recipe
      */
     public function update(array $data)
     {

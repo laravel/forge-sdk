@@ -11,7 +11,7 @@ trait ManagesWebhooks
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Webhook[]
+     * @return Webhook[]
      */
     public function webhooks($serverId, $siteId)
     {
@@ -28,7 +28,7 @@ trait ManagesWebhooks
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  int  $webhookId
-     * @return \Laravel\Forge\Resources\Webhook
+     * @return Webhook
      */
     public function webhook($serverId, $siteId, $webhookId)
     {
@@ -43,7 +43,7 @@ trait ManagesWebhooks
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Webhook
+     * @return Webhook
      */
     public function createWebhook($serverId, $siteId, array $data)
     {

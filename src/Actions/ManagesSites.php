@@ -10,7 +10,7 @@ trait ManagesSites
      * Get the collection of sites.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Site[]
+     * @return Site[]
      */
     public function sites($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesSites
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function site($serverId, $siteId)
     {
@@ -40,7 +40,7 @@ trait ManagesSites
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function createSite($serverId, array $data, $wait = true)
     {
@@ -62,7 +62,7 @@ trait ManagesSites
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function updateSite($serverId, $siteId, array $data)
     {
@@ -77,7 +77,7 @@ trait ManagesSites
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function addSiteAliases($serverId, $siteId, array $aliases)
     {
@@ -298,7 +298,7 @@ trait ManagesSites
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Site
+     * @return Site
      */
     public function deploySite($serverId, $siteId, $wait = true)
     {

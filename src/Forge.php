@@ -2,6 +2,7 @@
 
 namespace Laravel\Forge;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Client as HttpClient;
 use Laravel\Forge\Resources\User;
 
@@ -38,7 +39,7 @@ class Forge
     /**
      * The Guzzle HTTP Client instance.
      *
-     * @var \GuzzleHttp\Client
+     * @var Client
      */
     public $guzzle;
 
@@ -83,7 +84,7 @@ class Forge
     /**
      * Set the api key and setup the guzzle request object.
      *
-     * @param  \GuzzleHttp\Client|null  $guzzle
+     * @param  Client|null  $guzzle
      * @return $this
      */
     public function setApiKey(string $apiKey, $guzzle = null)
@@ -130,7 +131,7 @@ class Forge
     /**
      * Get an authenticated user instance.
      *
-     * @return \Laravel\Forge\Resources\User
+     * @return User
      */
     public function user()
     {

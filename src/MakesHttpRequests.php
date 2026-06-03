@@ -90,12 +90,12 @@ trait MakesHttpRequests
      *
      * @return void
      *
-     * @throws \Exception
-     * @throws \Laravel\Forge\Exceptions\FailedActionException
-     * @throws \Laravel\Forge\Exceptions\ForbiddenException
-     * @throws \Laravel\Forge\Exceptions\NotFoundException
-     * @throws \Laravel\Forge\Exceptions\ValidationException
-     * @throws \Laravel\Forge\Exceptions\RateLimitExceededException
+     * @throws Exception
+     * @throws FailedActionException
+     * @throws ForbiddenException
+     * @throws NotFoundException
+     * @throws ValidationException
+     * @throws RateLimitExceededException
      */
     protected function handleRequestError(ResponseInterface $response)
     {
@@ -134,7 +134,7 @@ trait MakesHttpRequests
      * @param  int  $sleep
      * @return mixed
      *
-     * @throws \Laravel\Forge\Exceptions\TimeoutException
+     * @throws TimeoutException
      */
     public function retry($timeout, $callback, $sleep = 5)
     {

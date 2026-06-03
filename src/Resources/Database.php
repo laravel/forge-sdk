@@ -42,7 +42,7 @@ class Database extends Resource
     /**
      * Update the given Database.
      *
-     * @return \Laravel\Forge\Resources\Database
+     * @return Database
      */
     public function update(array $data)
     {

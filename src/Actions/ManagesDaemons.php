@@ -10,7 +10,7 @@ trait ManagesDaemons
      * Get the collection of daemons.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Daemon[]
+     * @return Daemon[]
      */
     public function daemons($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesDaemons
      *
      * @param  int  $serverId
      * @param  int  $daemonId
-     * @return \Laravel\Forge\Resources\Daemon
+     * @return Daemon
      */
     public function daemon($serverId, $daemonId)
     {
@@ -40,7 +40,7 @@ trait ManagesDaemons
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Daemon
+     * @return Daemon
      */
     public function createDaemon($serverId, array $data, $wait = true)
     {

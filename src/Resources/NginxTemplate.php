@@ -35,7 +35,7 @@ class NginxTemplate extends Resource
     /**
      * Update the given nginx template.
      *
-     * @return \Laravel\Forge\Resources\NginxTemplate
+     * @return NginxTemplate
      */
     public function update(array $data)
     {

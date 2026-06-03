@@ -11,7 +11,7 @@ trait ManagesServers
     /**
      * Get the collection of servers.
      *
-     * @return \Laravel\Forge\Resources\Server[]
+     * @return Server[]
      */
     public function servers()
     {
@@ -24,7 +24,7 @@ trait ManagesServers
      * Get a server instance.
      *
      * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Server
+     * @return Server
      */
     public function server($serverId)
     {
@@ -36,7 +36,7 @@ trait ManagesServers
      *
      * @param  bool  $wait
      * @param  int  $timeout
-     * @return \Laravel\Forge\Resources\Server
+     * @return Server
      */
     public function createServer(array $data, $wait = false, $timeout = 900)
     {
@@ -72,7 +72,7 @@ trait ManagesServers
      * Update the given server.
      *
      * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Server
+     * @return Server
      */
     public function updateServer($serverId, array $data)
     {
@@ -282,7 +282,7 @@ trait ManagesServers
      * Get the collection of PHP Versions.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\PHPVersion[]
+     * @return PHPVersion[]
      */
     public function phpVersions($serverId)
     {
@@ -320,7 +320,7 @@ trait ManagesServers
      * Get recent events.
      *
      * @param  string|null  $serverId
-     * @return \Laravel\Forge\Resources\Event[]
+     * @return Event[]
      */
     public function events($serverId = null)
     {
@@ -337,7 +337,7 @@ trait ManagesServers
      *
      * @param  string  $serverId
      * @param  string  $eventId
-     * @return \Laravel\Forge\Resources\Event
+     * @return Event
      */
     public function event($serverId, $eventId)
     {

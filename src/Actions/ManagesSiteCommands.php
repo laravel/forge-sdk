@@ -11,7 +11,7 @@ trait ManagesSiteCommands
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\SiteCommand
+     * @return SiteCommand
      */
     public function executeSiteCommand($serverId, $siteId, array $data)
     {
@@ -23,7 +23,7 @@ trait ManagesSiteCommands
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\SiteCommand
+     * @return SiteCommand
      */
     public function listCommandHistory($serverId, $siteId)
     {
@@ -39,7 +39,7 @@ trait ManagesSiteCommands
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  int  $commandId
-     * @return \Laravel\Forge\Resources\SiteCommand
+     * @return SiteCommand
      */
     public function getSiteCommand($serverId, $siteId, $commandId)
     {

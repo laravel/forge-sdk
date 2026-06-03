@@ -10,7 +10,7 @@ trait ManagesDatabaseUsers
      * Get the collection of Database Users.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\DatabaseUser[]
+     * @return DatabaseUser[]
      */
     public function databaseUsers($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesDatabaseUsers
      *
      * @param  int  $serverId
      * @param  int  $userId
-     * @return \Laravel\Forge\Resources\DatabaseUser
+     * @return DatabaseUser
      */
     public function databaseUser($serverId, $userId)
     {
@@ -40,7 +40,7 @@ trait ManagesDatabaseUsers
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\DatabaseUser
+     * @return DatabaseUser
      */
     public function createDatabaseUser($serverId, array $data, $wait = true)
     {
@@ -62,7 +62,7 @@ trait ManagesDatabaseUsers
      *
      * @param  int  $serverId
      * @param  int  $userId
-     * @return \Laravel\Forge\Resources\DatabaseUser
+     * @return DatabaseUser
      */
     public function updateDatabaseUser($serverId, $userId, array $data)
     {

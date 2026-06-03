@@ -9,7 +9,7 @@ trait ManagesCredentials
     /**
      * Get the collection of recipes.
      *
-     * @return \Laravel\Forge\Resources\Credential[]
+     * @return Credential[]
      */
     public function credentials()
     {

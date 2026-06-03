@@ -10,7 +10,7 @@ trait ManagesMonitors
      * Get the collection of monitors.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Monitor[]
+     * @return Monitor[]
      */
     public function monitors($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesMonitors
      *
      * @param  int  $serverId
      * @param  int  $monitorId
-     * @return \Laravel\Forge\Resources\Monitor
+     * @return Monitor
      */
     public function monitor($serverId, $monitorId)
     {
@@ -39,7 +39,7 @@ trait ManagesMonitors
      * Create a new monitor.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Monitor
+     * @return Monitor
      */
     public function createMonitor($serverId, array $data)
     {

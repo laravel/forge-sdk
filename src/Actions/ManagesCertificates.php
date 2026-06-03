@@ -11,7 +11,7 @@ trait ManagesCertificates
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\Certificate[]
+     * @return Certificate[]
      */
     public function certificates($serverId, $siteId)
     {
@@ -28,7 +28,7 @@ trait ManagesCertificates
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  int  $certificateId
-     * @return \Laravel\Forge\Resources\Certificate
+     * @return Certificate
      */
     public function certificate($serverId, $siteId, $certificateId)
     {
@@ -44,7 +44,7 @@ trait ManagesCertificates
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Certificate
+     * @return Certificate
      */
     public function createCertificate($serverId, $siteId, array $data, $wait = true)
     {
@@ -137,7 +137,7 @@ trait ManagesCertificates
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Certificate
+     * @return Certificate
      */
     public function obtainLetsEncryptCertificate($serverId, $siteId, array $data, $wait = true)
     {

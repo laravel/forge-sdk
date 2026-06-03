@@ -10,7 +10,7 @@ trait ManagesJobs
      * Get the collection of jobs.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Job[]
+     * @return Job[]
      */
     public function jobs($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesJobs
      *
      * @param  int  $serverId
      * @param  int  $jobId
-     * @return \Laravel\Forge\Resources\Job
+     * @return Job
      */
     public function job($serverId, $jobId)
     {
@@ -40,7 +40,7 @@ trait ManagesJobs
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Job
+     * @return Job
      */
     public function createJob($serverId, array $data, $wait = true)
     {

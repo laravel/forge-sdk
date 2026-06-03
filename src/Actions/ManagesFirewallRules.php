@@ -10,7 +10,7 @@ trait ManagesFirewallRules
      * Get the collection of firewall rules.
      *
      * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\FirewallRule[]
+     * @return FirewallRule[]
      */
     public function firewallRules($serverId)
     {
@@ -26,7 +26,7 @@ trait ManagesFirewallRules
      *
      * @param  int  $serverId
      * @param  int  $ruleId
-     * @return \Laravel\Forge\Resources\FirewallRule
+     * @return FirewallRule
      */
     public function firewallRule($serverId, $ruleId)
     {
@@ -40,7 +40,7 @@ trait ManagesFirewallRules
      *
      * @param  int  $serverId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\FirewallRule
+     * @return FirewallRule
      */
     public function createFirewallRule($serverId, array $data, $wait = true)
     {

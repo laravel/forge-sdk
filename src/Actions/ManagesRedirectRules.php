@@ -11,7 +11,7 @@ trait ManagesRedirectRules
      *
      * @param  int  $serverId
      * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\RedirectRule[]
+     * @return RedirectRule[]
      */
     public function redirectRules($serverId, $siteId)
     {
@@ -28,7 +28,7 @@ trait ManagesRedirectRules
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  int  $ruleId
-     * @return \Laravel\Forge\Resources\RedirectRule
+     * @return RedirectRule
      */
     public function redirectRule($serverId, $siteId, $ruleId)
     {
@@ -44,7 +44,7 @@ trait ManagesRedirectRules
      * @param  int  $serverId
      * @param  int  $siteId
      * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\RedirectRule
+     * @return RedirectRule
      */
     public function createRedirectRule($serverId, $siteId, array $data, $wait = true)
     {

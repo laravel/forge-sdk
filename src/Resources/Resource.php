@@ -17,7 +17,7 @@ class Resource
     /**
      * The Forge SDK instance.
      *
-     * @var \Laravel\Forge\Forge|null
+     * @var Forge|null
      */
     protected $forge;
 
