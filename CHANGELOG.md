@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.24.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.25.0...3.x)
+
+## [v3.25.0](https://github.com/laravel/forge-sdk/compare/v3.24.0...v3.25.0) - 2026-02-06
+
+* Fix typo in CHANGELOG.md by [@inwall-ch](https://github.com/inwall-ch) in https://github.com/laravel/forge-sdk/pull/203
 
 ## [v4.0.0](#TBC)
 
