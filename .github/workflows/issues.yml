@@ -9,4 +9,4 @@ permissions:
 
 jobs:
   help-wanted:
-    uses: laravel/.github/.github/workflows/issues.yml@main
+    uses: laravel/.github/.github/workflows/issues.yml@c265c45c41ccb723befb7a2b807dffff4595bd39 # main
