@@ -348,7 +348,7 @@ trait ManagesSites
      */
     public function deploymentHistory($serverId, $siteId)
     {
-        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history");
+        return $this->get("servers/$serverId/sites/$siteId/deployment-history");
     }
 
     /**
@@ -361,7 +361,7 @@ trait ManagesSites
      */
     public function deploymentHistoryDeployment($serverId, $siteId, $deploymentId)
     {
-        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId");
+        return $this->get("servers/$serverId/sites/$siteId/deployment-history/$deploymentId");
     }
 
     /**
@@ -374,7 +374,7 @@ trait ManagesSites
      */
     public function deploymentHistoryOutput($serverId, $siteId, $deploymentId)
     {
-        return $this->get("/api/v1/servers/$serverId/sites/$siteId/deployment-history/$deploymentId/output");
+        return $this->get("servers/$serverId/sites/$siteId/deployment-history/$deploymentId/output");
     }
 
     /**

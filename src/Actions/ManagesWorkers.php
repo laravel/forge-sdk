@@ -81,7 +81,7 @@ trait ManagesWorkers
      * @param  int  $siteId
      * @param  int  $workerId
      * @param  bool  $wait
-     * @return void
+     * @return \Laravel\Forge\Resources\Worker
      */
     public function restartWorker($serverId, $siteId, $workerId, $wait = true)
     {
@@ -94,5 +94,7 @@ trait ManagesWorkers
                 return $key->status == 'installed';
             });
         }
+
+        return $this->worker($serverId, $siteId, $workerId);
     }
 }

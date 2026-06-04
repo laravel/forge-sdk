@@ -105,11 +105,11 @@ trait ManagesServers
      * Reconnect the server to Forge with a new key.
      *
      * @param  string  $serverId
-     * @return void
+     * @return string
      */
     public function reconnectToServer($serverId)
     {
-        $this->post("servers/$serverId/reconnect")['public_key'];
+        return $this->post("servers/$serverId/reconnect")['public_key'];
     }
 
     /**

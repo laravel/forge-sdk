@@ -94,7 +94,7 @@ trait ManagesCertificates
      * @param  int  $siteId
      * @param  int  $certificateId
      * @param  bool  $wait
-     * @return void
+     * @return \Laravel\Forge\Resources\Certificate
      */
     public function installCertificate($serverId, $siteId, $certificateId, array $data, $wait = true)
     {
@@ -107,6 +107,8 @@ trait ManagesCertificates
                 return $certificate->status == 'installed';
             });
         }
+
+        return $this->certificate($serverId, $siteId, $certificateId);
     }
 
     /**
@@ -116,7 +118,7 @@ trait ManagesCertificates
      * @param  int  $siteId
      * @param  int  $certificateId
      * @param  bool  $wait
-     * @return void
+     * @return \Laravel\Forge\Resources\Certificate
      */
     public function activateCertificate($serverId, $siteId, $certificateId, $wait = true)
     {
@@ -129,6 +131,8 @@ trait ManagesCertificates
                 return $certificate->activationStatus == 'activated';
             });
         }
+
+        return $this->certificate($serverId, $siteId, $certificateId);
     }
 
     /**
