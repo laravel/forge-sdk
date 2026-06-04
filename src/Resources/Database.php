@@ -1,61 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Database extends Resource
 {
     /**
-     * The id of the database.
-     *
-     * @var int
+     * The slug of the organization.
      */
-    public $id;
+    public string $organizationSlug;
+
+    /**
+     * The id of the database.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The name of the database.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The status of the database.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
      * The date/time the database was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
 
     /**
-     * Update the given Database.
-     *
-     * @return \Laravel\Forge\Resources\Database
+     * The date/time the database was last updated.
      */
-    public function update(array $data)
-    {
-        return $this->forge->updateDatabase($this->serverId, $this->id, $data);
-    }
+    public ?string $updatedAt = null;
 
     /**
      * Delete the given database.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteDatabase($this->serverId, $this->id);
+        $this->forge->deleteDatabase($this->organizationSlug, $this->serverId, $this->id);
     }
 }

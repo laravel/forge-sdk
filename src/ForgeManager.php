@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge;
 
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
- * @mixin \Laravel\Forge\Forge
+ * @mixin Forge
  */
 class ForgeManager
 {
@@ -14,27 +16,21 @@ class ForgeManager
 
     /**
      * The Forge instance.
-     *
-     * @var \Laravel\Forge\Forge
      */
-    protected $forge;
+    protected Forge $forge;
 
     /**
      * Create a new Forge manager instance.
-     *
-     * @param  string  $token
      */
-    public function __construct($token, ?HttpClient $guzzle = null)
+    public function __construct(string $token, ?HttpClient $guzzle = null)
     {
         $this->forge = new Forge($token, $guzzle);
     }
 
     /**
      * Dynamically pass methods to the Forge instance.
-     *
-     * @return mixed
      */
-    public function __call(string $method, array $parameters)
+    public function __call(string $method, array $parameters): mixed
     {
         return $this->forwardCallTo($this->forge, $method, $parameters);
     }

@@ -2,4 +2,9 @@
 composer.lock
 /phpunit.xml
 .phpunit.result.cache
+/.phpunit.cache
 .idea
+forge-openapi.json
+tests/Integration/.env.testing
+
+.context

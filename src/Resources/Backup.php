@@ -1,103 +1,75 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Backup extends Resource
 {
     /**
      * The id of the backup.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
+
+    /**
+     * The slug of the organization.
+     */
+    public string $organizationSlug;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
-     * The id of the database.
-     *
-     * @var int
+     * The id of the backup configuration.
      */
-    public $backupConfigurationId;
+    public ?int $backupConfigurationId = null;
 
     /**
      * The status of the backup.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
-     * The status of the restore.
-     *
-     * @var string
+     * Whether the backup is partial (the API returns a string flag).
      */
-    public $restoreStatus;
-
-    /**
-     * The archive path.
-     *
-     * @var string
-     */
-    public $archivePath;
+    public ?string $isPartial = null;
 
     /**
      * The size of the backup.
-     *
-     * @var int
      */
-    public $size;
+    public ?int $size = null;
 
     /**
-     * The uuid of this backup.
-     *
-     * @var string
+     * The date/time the backup finished.
      */
-    public $uuid;
+    public ?string $finishedAt = null;
 
     /**
-     * The duration of this backup.
-     *
-     * @var string
+     * Delete the backup.
      */
-    public $duration;
-
-    /**
-     * The backup date.
-     *
-     * @var string|null
-     */
-    public $lastBackupTime;
-
-    /**
-     * The date/time the backup was created.
-     *
-     * @var string
-     */
-    public $createdAt;
-
-    /**
-     * Restore this backup.
-     *
-     * @return void
-     */
-    public function restore()
+    public function delete(): void
     {
-        $this->forge->restoreBackup($this->serverId, $this->backupConfigurationId, $this->id);
+        $this->forge->deleteBackup(
+            $this->organizationSlug,
+            $this->serverId,
+            $this->backupConfigurationId,
+            $this->id
+        );
     }
 
     /**
-     * Delete this backup.
-     *
-     * @return void
+     * Restore the backup to a database.
      */
-    public function delete()
+    public function restore(int $databaseId): void
     {
-        $this->forge->deleteBackup($this->serverId, $this->backupConfigurationId, $this->id);
+        $this->forge->restoreBackup(
+            $this->organizationSlug,
+            $this->serverId,
+            $this->backupConfigurationId,
+            $this->id,
+            ['database_id' => $databaseId]
+        );
     }
 }

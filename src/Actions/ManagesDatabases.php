@@ -1,97 +1,142 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Database;
+use Laravel\Forge\Resources\DatabaseUser;
 
 trait ManagesDatabases
 {
     /**
-     * Get the collection of Databases.
-     *
-     * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\Database[]
+     * Get the collection of database schemas.
      */
-    public function databases($serverId)
+    public function databases(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("servers/$serverId/databases")['databases'],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/database/schemas",
             Database::class,
-            ['server_id' => $serverId]
+            $organizationSlug,
+            $serverId,
+            query: $query,
         );
     }
 
     /**
-     * Get a Database instance.
-     *
-     * @param  int  $serverId
-     * @param  int  $databaseId
-     * @return \Laravel\Forge\Resources\Database
+     * Get a database schema instance.
      */
-    public function database($serverId, $databaseId)
+    public function database(string $organizationSlug, int $serverId, int $databaseId): Database
     {
-        return new Database(
-            $this->get("servers/$serverId/databases/$databaseId")['database'] + ['server_id' => $serverId], $this
+        return $this->newResource(
+            Database::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/{$databaseId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
         );
     }
 
     /**
-     * Create a new Database.
-     *
-     * @param  int  $serverId
-     * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\Database
+     * Create a new database schema.
      */
-    public function createDatabase($serverId, array $data, $wait = true)
+    public function createDatabase(string $organizationSlug, int $serverId, array $data, bool $wait = true): Database
     {
-        $database = $this->post("servers/$serverId/databases", $data)['database'];
+        $database = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas", $data)['data'] ?? [];
 
         if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($serverId, $database) {
-                $database = $this->database($serverId, $database['id']);
+            return $this->retry($this->getTimeout(), function () use ($organizationSlug, $serverId, $database) {
+                $db = $this->database($organizationSlug, $serverId, $database['id']);
 
-                return $database->status == 'installed' ? $database : null;
+                return isset($db->status) && $db->status === 'installed' ? $db : null;
             });
         }
 
-        return new Database($database + ['server_id' => $serverId], $this);
+        return $this->newResource(Database::class, $database, $organizationSlug, $serverId);
     }
 
     /**
-     * Update the given Database.
-     *
-     * @param  int  $serverId
-     * @param  int  $databaseId
-     * @return \Laravel\Forge\Resources\Database
+     * Delete the given database schema.
      */
-    public function updateDatabase($serverId, $databaseId, array $data)
+    public function deleteDatabase(string $organizationSlug, int $serverId, int $databaseId): void
     {
-        return new Database(
-            $this->put("servers/$serverId/databases/$databaseId", $data)['database']
-            + ['server_id' => $serverId], $this
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/{$databaseId}");
+    }
+
+    /**
+     * Synchronize database schemas.
+     */
+    public function syncDatabases(string $organizationSlug, int $serverId, array $data = []): void
+    {
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/schemas/synchronizations", $data);
+    }
+
+    /**
+     * Get the collection of database users.
+     */
+    public function databaseUsers(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/database/users",
+            DatabaseUser::class,
+            $organizationSlug,
+            $serverId,
+            query: $query,
         );
     }
 
     /**
-     * Delete the given Database.
-     *
-     * @param  int  $serverId
-     * @param  int  $databaseId
-     * @return void
+     * Get a database user instance.
      */
-    public function deleteDatabase($serverId, $databaseId)
+    public function databaseUser(string $organizationSlug, int $serverId, int $userId): DatabaseUser
     {
-        $this->delete("servers/$serverId/databases/$databaseId");
+        return $this->newResource(
+            DatabaseUser::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
     }
 
     /**
-     * Sync the databases.
-     *
-     * @param  int  $serverId
-     * @return void
+     * Create a new database user.
      */
-    public function syncDatabases($serverId)
+    public function createDatabaseUser(string $organizationSlug, int $serverId, array $data, bool $wait = true): DatabaseUser
     {
-        $this->post("servers/$serverId/databases/sync");
+        $user = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/database/users", $data)['data'] ?? [];
+
+        if ($wait) {
+            return $this->retry($this->getTimeout(), function () use ($organizationSlug, $serverId, $user) {
+                $dbUser = $this->databaseUser($organizationSlug, $serverId, $user['id']);
+
+                return isset($dbUser->status) && $dbUser->status === 'installed' ? $dbUser : null;
+            });
+        }
+
+        return $this->newResource(DatabaseUser::class, $user, $organizationSlug, $serverId);
+    }
+
+    /**
+     * Update a database user.
+     */
+    public function updateDatabaseUser(string $organizationSlug, int $serverId, int $userId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}", $data);
+    }
+
+    /**
+     * Delete the given database user.
+     */
+    public function deleteDatabaseUser(string $organizationSlug, int $serverId, int $userId): void
+    {
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/database/users/{$userId}");
+    }
+
+    /**
+     * Update the database password.
+     */
+    public function updateDatabasePassword(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/database/password", $data);
     }
 }

@@ -1,58 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class SSHKey extends Resource
 {
     /**
-     * The id of the key.
-     *
-     * @var int
+     * The slug of the organization.
      */
-    public $id;
+    public string $organizationSlug;
+
+    /**
+     * The id of the key.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The name of the key.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The status of the key.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
 
     /**
-     * The username of the key.
-     *
-     * @var string
+     * The user of the SSH key.
      */
-    public $username;
+    public ?string $user = null;
+
+    /**
+     * The ID of the user who created the SSH key.
+     */
+    public ?int $createdBy = null;
 
     /**
      * The date/time the key was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the key was last updated.
+     */
+    public ?string $updatedAt = null;
 
     /**
      * Delete the given key.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteSSHKey($this->serverId, $this->id);
+        $this->forge->deleteSshKey($this->organizationSlug, $this->serverId, $this->id);
     }
 }

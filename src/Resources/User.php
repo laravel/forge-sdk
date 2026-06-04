@@ -1,125 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class User extends Resource
 {
     /**
      * The id of the user.
-     *
-     * @var int
      */
-    public $id;
+    public ?int $id = null;
 
     /**
      * The name of the user.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The E-Mail of the user.
-     *
-     * @var string
      */
-    public $email;
+    public ?string $email = null;
 
     /**
-     * Last four digits of user's card.
-     *
-     * @var string
+     * The date/time the user was created.
      */
-    public $cardLastFour;
+    public ?string $createdAt = null;
 
     /**
-     * Determines if user connected to GitHub.
-     *
-     * @var bool
+     * The date/time the user was last updated.
      */
-    public $connectedToGithub;
-
-    /**
-     * Determines if user connected to GitLab.
-     *
-     * @var bool
-     */
-    public $connectedToGitlab;
-
-    /**
-     * Determines if user connected to Bitbucket.
-     *
-     * @var bool
-     */
-    public $connectedToBitbucket;
-
-    /**
-     * Determines if user connected to Bitbucket Two.
-     *
-     * @var bool
-     */
-    public $connectedToBitbucketTwo;
-
-    /**
-     * Determines if user connected to DigitalOcean.
-     *
-     * @var bool
-     */
-    public $connectedToDigitalocean;
-
-    /**
-     * Determines if user connected to Linode.
-     *
-     * @var bool
-     */
-    public $connectedToLinode;
-
-    /**
-     * Determines if user connected to Vultr.
-     *
-     * @var bool
-     */
-    public $connectedToVultr;
-
-    /**
-     * Determines if user connected to AWS.
-     *
-     * @var bool
-     */
-    public $connectedToAws;
-
-    /**
-     * Determines if user ready for billing.
-     *
-     * @var bool
-     */
-    public $readyForBilling;
-
-    /**
-     * Determines if stripe is active.
-     *
-     * @var int
-     */
-    public $stripeIsActive;
-
-    /**
-     * Name of stripe plan.
-     *
-     * @var string
-     */
-    public $stripePlan;
-
-    /**
-     * Determines if user is subscribed.
-     *
-     * @var int
-     */
-    public $subscribed;
-
-    /**
-     * Determines if user can create servers.
-     *
-     * @var bool
-     */
-    public $canCreateServers;
+    public ?string $updatedAt = null;
 }

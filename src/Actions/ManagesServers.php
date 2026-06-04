@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\Event;
 use Laravel\Forge\Resources\PHPVersion;
 use Laravel\Forge\Resources\Server;
@@ -9,338 +12,446 @@ use Laravel\Forge\Resources\Server;
 trait ManagesServers
 {
     /**
-     * Get the collection of servers.
-     *
-     * @return \Laravel\Forge\Resources\Server[]
+     * Get the collection of servers for an organization.
      */
-    public function servers()
+    public function servers(string $organizationSlug, array $query = []): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get('servers')['servers'], Server::class
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers",
+            Server::class,
+            $organizationSlug,
+            query: $query,
         );
     }
 
     /**
      * Get a server instance.
-     *
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Server
      */
-    public function server($serverId)
+    public function server(string $organizationSlug, int $serverId): Server
     {
-        return new Server($this->get("servers/$serverId")['server'], $this);
+        return $this->newResource(
+            Server::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}")['data'] ?? [],
+            $organizationSlug,
+        );
     }
 
     /**
-     * Create a new server. API recommends a 2 minute delay between checks.
-     *
-     * @param  bool  $wait
-     * @param  int  $timeout
-     * @return \Laravel\Forge\Resources\Server
+     * Create a new server.
      */
-    public function createServer(array $data, $wait = false, $timeout = 900)
+    public function createServer(string $organizationSlug, array $data, bool $wait = true): Server
     {
-        $response = $this->post('servers', $data);
-
-        $server = $response['server'];
-        $initialSudoPassword = $response['sudo_password'] ?? null;
-        $initialDatabasePassword = $response['database_password'] ?? null;
-        $initialMeilisearchPassword = $response['meilisearch_password'] ?? null;
-        $initialProvisionCommand = $response['provision_command'] ?? null;
-
-        $server['sudo_password'] = $initialSudoPassword;
-        $server['database_password'] = $initialDatabasePassword;
-        $server['meilisearch_password'] = $initialMeilisearchPassword;
-        $server['provision_command'] = $initialProvisionCommand;
+        $server = $this->post("orgs/{$organizationSlug}/servers", $data)['data'] ?? [];
 
         if ($wait) {
-            return $this->retry($timeout, function () use ($server, $initialSudoPassword, $initialDatabasePassword, $initialMeilisearchPassword, $initialProvisionCommand) {
-                $server = $this->server($server['id']);
-                $server->sudoPassword = $initialSudoPassword;
-                $server->databasePassword = $initialDatabasePassword;
-                $server->meilisearchPassword = $initialMeilisearchPassword;
-                $server->provisionCommand = $initialProvisionCommand;
+            return $this->retry($this->getTimeout(), function () use ($organizationSlug, $server) {
+                $srv = $this->server($organizationSlug, $server['id']);
 
-                return $server->isReady ? $server : null;
-            }, 120);
+                return isset($srv->isReady) && $srv->isReady ? $srv : null;
+            });
         }
 
-        return new Server($server, $this);
+        return $this->newResource(Server::class, $server, $organizationSlug);
     }
 
     /**
-     * Update the given server.
-     *
-     * @param  string  $serverId
-     * @return \Laravel\Forge\Resources\Server
+     * Update a server.
      */
-    public function updateServer($serverId, array $data)
+    public function updateServer(string $organizationSlug, int $serverId, array $data): Server
     {
-        return $this->put("servers/$serverId", $data)['server'];
-    }
-
-    /**
-     * Delete the given server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function deleteServer($serverId)
-    {
-        $this->delete("servers/$serverId");
-    }
-
-    /**
-     * Revoke forge access to the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function revokeAccessToServer($serverId)
-    {
-        $this->post("servers/$serverId/revoke");
-    }
-
-    /**
-     * Reconnect the server to Forge with a new key.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function reconnectToServer($serverId)
-    {
-        $this->post("servers/$serverId/reconnect")['public_key'];
-    }
-
-    /**
-     * Reactivate a revoked server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function reactivateToServer($serverId)
-    {
-        $this->post("servers/$serverId/reactivate");
-    }
-
-    /**
-     * Reboot the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function rebootServer($serverId)
-    {
-        $this->post("servers/$serverId/reboot");
-    }
-
-    /**
-     * Reboot MySQL on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function rebootMysql($serverId)
-    {
-        $this->post("servers/$serverId/mysql/reboot");
-    }
-
-    /**
-     * Stop MySQL on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function stopMysql($serverId)
-    {
-        $this->post("servers/$serverId/mysql/stop");
-    }
-
-    /**
-     * Reboot Postgres on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function rebootPostgres($serverId)
-    {
-        $this->post("servers/$serverId/postgres/reboot");
-    }
-
-    /**
-     * Stop Postgres on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function stopPostgres($serverId)
-    {
-        $this->post("servers/$serverId/postgres/stop");
-    }
-
-    /**
-     * Reboot Nginx on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function rebootNginx($serverId)
-    {
-        $this->post("servers/$serverId/nginx/reboot");
-    }
-
-    /**
-     * Stop Nginx on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function stopNginx($serverId)
-    {
-        $this->post("servers/$serverId/nginx/stop");
-    }
-
-    /**
-     * Reboot PHP on the server.
-     *
-     * @param  string  $serverId
-     * @param  array  $data
-     * @return void
-     */
-    public function rebootPHP($serverId, $data)
-    {
-        $this->post("servers/$serverId/php/reboot", $data);
-    }
-
-    /**
-     * Install Blackfire on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function installBlackfire($serverId, array $data)
-    {
-        $this->post("servers/$serverId/blackfire/install", $data);
-    }
-
-    /**
-     * Remove Blackfire from the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function removeBlackfire($serverId)
-    {
-        $this->delete("servers/$serverId/blackfire/remove");
-    }
-
-    /**
-     * Install Papertrail on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function installPapertrail($serverId, array $data)
-    {
-        $this->post("servers/$serverId/papertrail/install", $data);
-    }
-
-    /**
-     * Remove Papertrail from the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function removePapertrail($serverId)
-    {
-        $this->delete("servers/$serverId/papertrail/remove");
-    }
-
-    /**
-     * Enable OPCache on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function enableOPCache($serverId)
-    {
-        $this->post("servers/$serverId/php/opcache");
-    }
-
-    /**
-     * Disable OPCache on the server.
-     *
-     * @param  string  $serverId
-     * @return void
-     */
-    public function disableOPCache($serverId)
-    {
-        $this->delete("servers/$serverId/php/opcache");
-    }
-
-    /**
-     * Get the collection of PHP Versions.
-     *
-     * @param  int  $serverId
-     * @return \Laravel\Forge\Resources\PHPVersion[]
-     */
-    public function phpVersions($serverId)
-    {
-        return $this->transformCollection(
-            $this->get("servers/$serverId/php"),
-            PHPVersion::class
+        return $this->newResource(
+            Server::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}", $data)['data'] ?? [],
+            $organizationSlug,
         );
     }
 
     /**
-     * Install a version of PHP.
-     *
-     * @param  string  $serverId
-     * @param  string  $version
-     * @return void
+     * Delete a server.
      */
-    public function installPHP($serverId, $version)
+    public function deleteServer(string $organizationSlug, int $serverId): void
     {
-        $this->post("servers/$serverId/php", ['version' => $version]);
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}");
     }
 
     /**
-     * Patch the PHP version.
+     * Get the server's network (the list of servers it can communicate with).
      *
-     * @param  string  $serverId
-     * @param  string  $version
-     * @return void
+     * @return Server[]
      */
-    public function updatePHP($serverId, $version)
+    public function network(string $organizationSlug, int $serverId): array
     {
-        $this->post("servers/$serverId/php/update", ['version' => $version]);
-    }
-
-    /**
-     * Get recent events.
-     *
-     * @param  string|null  $serverId
-     * @return \Laravel\Forge\Resources\Event[]
-     */
-    public function events($serverId = null)
-    {
-        $endpoint = is_null($serverId) ? 'servers/events' : 'servers/events?server_id='.$serverId;
-
         return $this->transformCollection(
-            $this->get($endpoint),
-            Event::class
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/network")['data'] ?? [],
+            Server::class,
+            $organizationSlug,
         );
     }
 
     /**
-     * Get event details
-     *
-     * @param  string  $serverId
-     * @param  string  $eventId
-     * @return \Laravel\Forge\Resources\Event
+     * Sync the server's network with the given list of server IDs.
      */
-    public function event($serverId, $eventId)
+    public function updateNetwork(string $organizationSlug, int $serverId, array $data): void
     {
-        return new Event($this->get("servers/$serverId/events/$eventId"), $this);
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/network", $data);
+    }
+
+    /**
+     * Get the collection of archived servers for an organization.
+     */
+    public function archivedServers(string $organizationSlug, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/archives",
+            Server::class,
+            $organizationSlug,
+            query: $query,
+        );
+    }
+
+    /**
+     * Create an archived server.
+     */
+    public function createArchivedServer(string $organizationSlug, array $data): void
+    {
+        $this->post("orgs/{$organizationSlug}/servers/archives", $data);
+    }
+
+    /**
+     * Delete an archived server.
+     */
+    public function deleteArchivedServer(string $organizationSlug, int $serverId): void
+    {
+        $this->delete("orgs/{$organizationSlug}/servers/archives/{$serverId}");
+    }
+
+    /**
+     * Create a server action.
+     */
+    public function createServerAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Perform a Nginx service action.
+     */
+    public function performNginxAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/nginx/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Perform a Postgres service action.
+     */
+    public function performPostgresAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/postgres/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Perform a Redis service action.
+     */
+    public function performRedisAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/redis/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Perform a MySQL service action.
+     */
+    public function performMySQLAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/mysql/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Perform a PHP service action.
+     */
+    public function performPHPAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/php/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Perform a Supervisor service action.
+     */
+    public function performSupervisorAction(string $organizationSlug, int $serverId, array $data): array
+    {
+        $response = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/services/supervisor/actions", $data);
+
+        return is_array($response) ? $response : [];
+    }
+
+    /**
+     * Get the collection of server events.
+     */
+    public function serverEvents(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/events",
+            Event::class,
+            $organizationSlug,
+            $serverId,
+            query: $query,
+        );
+    }
+
+    /**
+     * Get a server event instance.
+     */
+    public function serverEvent(string $organizationSlug, int $serverId, int $eventId): Event
+    {
+        return $this->newResource(
+            Event::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events/{$eventId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
+    }
+
+    /**
+     * Get the output of a server event.
+     */
+    public function serverEventOutput(string $organizationSlug, int $serverId, int $eventId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/events/{$eventId}/output")['data'] ?? [];
+    }
+
+    /**
+     * Get the PHP CLI version.
+     */
+    public function phpCliVersion(string $organizationSlug, int $serverId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version")['data'] ?? [];
+    }
+
+    /**
+     * Update the PHP CLI version.
+     */
+    public function updatePhpCliVersion(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/cli-version", $data);
+    }
+
+    /**
+     * Get the PHP site version.
+     */
+    public function phpSiteVersion(string $organizationSlug, int $serverId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version")['data'] ?? [];
+    }
+
+    /**
+     * Update the PHP site version.
+     */
+    public function updatePhpSiteVersion(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/site-version", $data);
+    }
+
+    /**
+     * Get the collection of PHP versions.
+     */
+    public function phpVersions(string $organizationSlug, int $serverId, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/php/versions",
+            PHPVersion::class,
+            $organizationSlug,
+            $serverId,
+            query: $query,
+        );
+    }
+
+    /**
+     * Install a new PHP version.
+     */
+    public function installPhpVersion(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/versions", $data);
+    }
+
+    /**
+     * Get a PHP version instance.
+     */
+    public function phpVersion(string $organizationSlug, int $serverId, int $phpVersionId): PHPVersion
+    {
+        return $this->newResource(
+            PHPVersion::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+        );
+    }
+
+    /**
+     * Update a PHP version.
+     */
+    public function updatePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}", $data);
+    }
+
+    /**
+     * Delete a PHP version.
+     */
+    public function deletePhpVersion(string $organizationSlug, int $serverId, int $phpVersionId): void
+    {
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}");
+    }
+
+    /**
+     * Get the PHP FPM configuration.
+     */
+    public function phpFpm(string $organizationSlug, int $serverId, int $phpVersionId): string
+    {
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm");
+
+        return $response['data']['attributes']['configuration'] ?? '';
+    }
+
+    /**
+     * Update the PHP FPM configuration.
+     */
+    public function updatePhpFpm(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/fpm", $data);
+    }
+
+    /**
+     * Get the PHP CLI configuration.
+     */
+    public function phpCli(string $organizationSlug, int $serverId, int $phpVersionId): string
+    {
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli");
+
+        return $response['data']['attributes']['configuration'] ?? '';
+    }
+
+    /**
+     * Update the PHP CLI configuration.
+     */
+    public function updatePhpCli(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/cli", $data);
+    }
+
+    /**
+     * Get the PHP pool configuration.
+     */
+    public function phpPool(string $organizationSlug, int $serverId, int $phpVersionId): string
+    {
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool");
+
+        return $response['data']['attributes']['configuration'] ?? '';
+    }
+
+    /**
+     * Update the PHP pool configuration.
+     */
+    public function updatePhpPool(string $organizationSlug, int $serverId, int $phpVersionId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/versions/{$phpVersionId}/configs/pool", $data);
+    }
+
+    /**
+     * Get the PHP max upload size.
+     */
+    public function phpMaxUploadSize(string $organizationSlug, int $serverId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size")['data'] ?? [];
+    }
+
+    /**
+     * Update the PHP max upload size.
+     */
+    public function updatePhpMaxUploadSize(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-upload-size", $data);
+    }
+
+    /**
+     * Get the PHP max execution time.
+     */
+    public function phpMaxExecutionTime(string $organizationSlug, int $serverId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time")['data'] ?? [];
+    }
+
+    /**
+     * Update the PHP max execution time.
+     */
+    public function updatePhpMaxExecutionTime(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/php/max-execution-time", $data);
+    }
+
+    /**
+     * Get the PHP OPcache status.
+     */
+    public function phpOpcache(string $organizationSlug, int $serverId): array
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache")['data'] ?? [];
+    }
+
+    /**
+     * Create PHP OPcache configuration.
+     */
+    public function createPhpOpcache(string $organizationSlug, int $serverId, array $data): void
+    {
+        $this->post("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache", $data);
+    }
+
+    /**
+     * Delete PHP OPcache configuration.
+     */
+    public function deletePhpOpcache(string $organizationSlug, int $serverId): void
+    {
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/php/opcache");
+    }
+
+    /**
+     * Get the collection of team servers.
+     */
+    public function teamServers(string $organizationSlug, int $teamId, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/teams/{$teamId}/servers",
+            Server::class,
+            $organizationSlug,
+            extra: ['team_id' => $teamId],
+            query: $query,
+        );
+    }
+
+    /**
+     * Share a server with a team (create team servers share).
+     */
+    public function createTeamServersShare(string $organizationSlug, int $teamId, array $data): Server
+    {
+        $server = $this->post("orgs/{$organizationSlug}/teams/{$teamId}/servers", $data)['data'] ?? [];
+
+        return $this->newResource(Server::class, $server, $organizationSlug, extra: ['team_id' => $teamId]);
+    }
+
+    /**
+     * Remove a server share from a team (delete team servers share).
+     */
+    public function deleteTeamServersShare(string $organizationSlug, int $teamId, int $serverId): void
+    {
+        $this->delete("orgs/{$organizationSlug}/teams/{$teamId}/servers/{$serverId}");
     }
 }

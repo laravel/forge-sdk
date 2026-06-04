@@ -1,48 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class Event extends Resource
 {
     /**
-     * The id of the event.
-     *
-     * @var int
+     * The slug of the organization.
      */
-    public $id;
+    public string $organizationSlug;
+
+    /**
+     * The id of the event.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server where the event occurred.
-     *
-     * @var int
      */
-    public $serverId;
-
-    /**
-     * The user that ran the event.
-     *
-     * @var string
-     */
-    public $ranAs;
-
-    /**
-     * The name of the server the event occurred.
-     *
-     * @var string
-     */
-    public $serverName;
+    public ?int $serverId = null;
 
     /**
      * The description of the event.
-     *
-     * @var string
      */
-    public $description;
+    public ?string $description = null;
 
     /**
-     * The date/time the job was created.
-     *
-     * @var string
+     * The user that ran the event.
      */
-    public $createdAt;
+    public ?string $ranAs = null;
+
+    /**
+     * The date/time the event was created.
+     */
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the event was last updated.
+     */
+    public ?string $updatedAt = null;
 }

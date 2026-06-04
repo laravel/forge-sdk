@@ -2,6 +2,8 @@
 
 ## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.24.0...3.x)
 
+## [v4.0.0](#TBC)
+
 ## [v3.24.0](https://github.com/laravel/forge-sdk/compare/v3.23.0...v3.24.0) - 2025-11-26
 
 * Adding PHP 8.5 support by [@mathiasgrimm](https://github.com/mathiasgrimm) in https://github.com/laravel/forge-sdk/pull/201

@@ -1,65 +1,66 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class FirewallRule extends Resource
 {
     /**
-     * The id of the rule.
-     *
-     * @var int
+     * The slug of the organization.
      */
-    public $id;
+    public string $organizationSlug;
+
+    /**
+     * The id of the rule.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The name of the rule.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
-     * The port number used.
-     *
-     * @var int
+     * The port number (or range) the rule applies to.
      */
-    public $port;
+    public ?string $port = null;
 
     /**
      * The IP Address.
-     *
-     * @var string
      */
-    public $ipAddress;
+    public ?string $ipAddress = null;
 
     /**
      * The status of the rule.
-     *
-     * @var string
      */
-    public $status;
+    public ?string $status = null;
+
+    /**
+     * The type of the firewall rule.
+     */
+    public ?string $type = null;
 
     /**
      * The date/time the rule was created.
-     *
-     * @var string
      */
-    public $createdAt;
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the rule was last updated.
+     */
+    public ?string $updatedAt = null;
 
     /**
      * Delete the given firewall rule.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteFirewallRule($this->serverId, $this->id);
+        $this->forge->deleteFirewallRule($this->organizationSlug, $this->serverId, $this->id);
     }
 }

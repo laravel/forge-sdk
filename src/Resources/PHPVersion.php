@@ -1,55 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class PHPVersion extends Resource
 {
     /**
-     * The id of the PHP version.
-     *
-     * @var int
+     * The slug of the organization.
      */
-    public $id;
+    public string $organizationSlug;
+
+    /**
+     * The id of the server.
+     */
+    public ?int $serverId = null;
+
+    /**
+     * The id of the PHP version.
+     */
+    public ?int $id = null;
 
     /**
      * The version of PHP.
-     *
-     * @var string
      */
-    public $version;
-
-    /**
-     * The status of the version.
-     *
-     * @var string
-     */
-    public $status;
+    public ?string $version = null;
 
     /**
      * The binary name of PHP.
-     *
-     * @var string
      */
-    public $binaryName;
+    public ?string $binaryName = null;
 
     /**
-     * The displayable version of PHP.
-     *
-     * @var string
+     * The status of the version.
      */
-    public $displayableVersion;
+    public ?string $status = null;
 
     /**
-     * Whether the version is used as the default when creating a new site.
-     *
-     * @var bool
+     * The date/time the PHP version was created.
      */
-    public $usedAsDefault;
+    public ?string $createdAt = null;
 
     /**
-     * Whether the version is used on the CLI by default.
-     *
-     * @var bool
+     * The date/time the PHP version was last updated.
      */
-    public $usedOnCli;
+    public ?string $updatedAt = null;
 }

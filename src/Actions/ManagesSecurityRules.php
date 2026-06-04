@@ -1,76 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Resources\SecurityRule;
 
 trait ManagesSecurityRules
 {
     /**
      * Get the collection of security rules.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @return \Laravel\Forge\Resources\SecurityRule[]
      */
-    public function securityRules($serverId, $siteId)
+    public function securityRules(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
     {
-        return $this->transformCollection(
-            $this->get("servers/$serverId/sites/$siteId/security-rules")['security_rules'],
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules",
             SecurityRule::class,
-            ['server_id' => $serverId, 'site_id' => $siteId]
+            $organizationSlug,
+            $serverId,
+            $siteId,
+            query: $query,
         );
     }
 
     /**
      * Get a security rule instance.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  int  $ruleId
-     * @return \Laravel\Forge\Resources\SecurityRule
      */
-    public function securityRule($serverId, $siteId, $ruleId)
+    public function securityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId): SecurityRule
     {
-        return new SecurityRule(
-            $this->get("servers/$serverId/sites/$siteId/security-rules/$ruleId")['security_rule']
-            + ['server_id' => $serverId, 'site_id' => $siteId], $this
+        return $this->newResource(
+            SecurityRule::class,
+            $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}")['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
         );
     }
 
     /**
      * Create a new security rule.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  bool  $wait
-     * @return \Laravel\Forge\Resources\SecurityRule
      */
-    public function createSecurityRule($serverId, $siteId, array $data, $wait = true)
+    public function createSecurityRule(string $organizationSlug, int $serverId, int $siteId, array $data): SecurityRule
     {
-        $securityRule = $this->post("servers/$serverId/sites/$siteId/security-rules", $data)['security_rule'];
+        return $this->newResource(
+            SecurityRule::class,
+            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
+    }
 
-        if ($wait) {
-            return $this->retry($this->getTimeout(), function () use ($serverId, $siteId, $securityRule) {
-                $securityRule = $this->securityRule($serverId, $siteId, $securityRule['id']);
-
-                return $securityRule->status == 'installed' ? $securityRule : null;
-            });
-        }
-
-        return new SecurityRule($securityRule + ['server_id' => $serverId, 'site_id' => $siteId], $this);
+    /**
+     * Update a security rule.
+     */
+    public function updateSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}", $data);
     }
 
     /**
      * Delete the given security rule.
-     *
-     * @param  int  $serverId
-     * @param  int  $siteId
-     * @param  int  $ruleId
-     * @return void
      */
-    public function deleteSecurityRule($serverId, $siteId, $ruleId)
+    public function deleteSecurityRule(string $organizationSlug, int $serverId, int $siteId, int $ruleId): void
     {
-        $this->delete("servers/$serverId/sites/$siteId/security-rules/$ruleId");
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/security-rules/{$ruleId}");
     }
 }

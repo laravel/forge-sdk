@@ -1,144 +1,151 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
-use Laravel\Forge\Forge;
+use Laravel\Forge\CursorPaginator;
 
 class BackupConfiguration extends Resource
 {
     /**
-     * The id of the backup.
-     *
-     * @var int
+     * The id of the backup configuration.
      */
-    public $id;
+    public ?int $id = null;
+
+    /**
+     * The slug of the organization.
+     */
+    public string $organizationSlug;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
-     * The day of the week: 0 (Sunday) - 6 (Saturday).
-     *
-     * @var int|null
+     * The name of the backup configuration.
      */
-    public $dayOfWeek;
+    public ?string $name = null;
 
     /**
-     * The time of the backup in 24 hour format.
-     *
-     * @var string
+     * The storage provider id.
      */
-    public $time;
+    public ?int $storageProviderId = null;
 
     /**
-     * The provider (s3 or spaces).
-     *
-     * @var bool
+     * The provider name.
      */
-    public $provider;
+    public ?string $provider = null;
 
     /**
-     * The name for the provider.
-     *
-     * @var string
+     * The bucket name.
      */
-    public $providerName;
+    public ?string $bucket = null;
 
     /**
-     * The last Backup time.
-     *
-     * @var string|null
+     * The directory path.
      */
-    public $lastBackupTime;
+    public ?string $directory = null;
 
     /**
-     * The databases for this backup.
-     *
-     * Note: this is only available when getting a single configuration.
-     *
-     * @var \Laravel\Forge\Resources\Database[]
+     * The schedule configuration.
      */
-    public $databases;
+    public ?string $schedule = null;
 
     /**
-     * The databases for this backup.
+     * The database IDs covered by this backup configuration.
      *
-     * @var \Laravel\Forge\Resources\Backup[]
+     * @var array<int>
      */
-    public $backups;
+    public array $databaseIds = [];
 
     /**
-     * The date/time the configuration was created.
-     *
-     * @var string
+     * The displayable schedule string.
      */
-    public $createdAt;
+    public ?string $displayableSchedule = null;
 
     /**
-     * Create a new BackupConfiguration instance.
-     *
-     * @return void
+     * The next run time.
      */
-    public function __construct(array $attributes, ?Forge $forge = null)
+    public ?string $nextRunTime = null;
+
+    /**
+     * The status of the backup configuration.
+     */
+    public ?string $status = null;
+
+    /**
+     * The day of week.
+     */
+    public ?int $dayOfWeek = null;
+
+    /**
+     * The time.
+     */
+    public ?string $time = null;
+
+    /**
+     * The cron schedule.
+     */
+    public ?string $cronSchedule = null;
+
+    /**
+     * The retention period.
+     */
+    public ?int $retention = null;
+
+    /**
+     * The notification email.
+     */
+    public ?string $notifyEmail = null;
+
+    /**
+     * Update the backup configuration.
+     */
+    public function update(array $data): void
     {
-        parent::__construct($attributes, $forge);
-
-        $this->databases = $this->transformCollection(
-            $this->databases ?: [],
-            Database::class,
-            ['server_id' => $this->serverId]
+        $this->forge->updateBackupConfiguration(
+            $this->organizationSlug,
+            $this->serverId,
+            $this->id,
+            $data
         );
+    }
 
-        $this->backups = $this->transformCollection(
-            $this->backups ?: [],
-            Backup::class,
-            ['server_id' => $this->serverId]
+    /**
+     * Delete the backup configuration.
+     */
+    public function delete(): void
+    {
+        $this->forge->deleteBackupConfiguration(
+            $this->organizationSlug,
+            $this->serverId,
+            $this->id
         );
     }
 
     /**
-     * Update the given configuration.
-     *
-     * @return void
+     * Get backups for this configuration.
      */
-    public function update(array $data)
+    public function backups(): CursorPaginator
     {
-        $this->forge->updateBackupConfiguration($this->serverId, $this->id, $data);
+        return $this->forge->backups(
+            $this->organizationSlug,
+            $this->serverId,
+            $this->id
+        );
     }
 
     /**
-     * Delete the given configuration.
-     *
-     * @return void
+     * Create a new backup.
      */
-    public function delete()
+    public function createBackup(): void
     {
-        $this->forge->deleteBackupConfiguration($this->serverId, $this->id);
-    }
-
-    /**
-     * Restore a backup for this configuration.
-     *
-     * @param  int  $backupId
-     * @return void
-     */
-    public function restoreBackup($backupId)
-    {
-        $this->forge->restoreBackup($this->serverId, $this->id, $backupId);
-    }
-
-    /**
-     * Delete the given backup.
-     *
-     * @param  int  $backupId
-     * @return void
-     */
-    public function deleteBackup($backupId)
-    {
-        $this->forge->deleteBackup($this->serverId, $this->id, $backupId);
+        $this->forge->createBackup(
+            $this->organizationSlug,
+            $this->serverId,
+            $this->id
+        );
     }
 }

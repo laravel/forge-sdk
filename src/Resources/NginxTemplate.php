@@ -1,54 +1,59 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Forge\Resources;
 
 class NginxTemplate extends Resource
 {
     /**
-     * The id of the nginx template.
-     *
-     * @var int
+     * The slug of the organization.
      */
-    public $id;
+    public string $organizationSlug;
+
+    /**
+     * The id of the nginx template.
+     */
+    public ?int $id = null;
 
     /**
      * The id of the server.
-     *
-     * @var int
      */
-    public $serverId;
+    public ?int $serverId = null;
 
     /**
      * The name of the nginx template.
-     *
-     * @var string
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * The content of the nginx template.
-     *
-     * @var string
      */
-    public $content;
+    public ?string $content = null;
+
+    /**
+     * The date/time the nginx template was created.
+     */
+    public ?string $createdAt = null;
+
+    /**
+     * The date/time the nginx template was last updated.
+     */
+    public ?string $updatedAt = null;
 
     /**
      * Update the given nginx template.
-     *
-     * @return \Laravel\Forge\Resources\NginxTemplate
      */
-    public function update(array $data)
+    public function update(array $data): NginxTemplate
     {
-        return $this->forge->updateNginxTemplate($this->serverId, $this->id, $data);
+        return $this->forge->updateNginxTemplate($this->organizationSlug, $this->serverId, $this->id, $data);
     }
 
     /**
      * Delete the given nginx template.
-     *
-     * @return void
      */
-    public function delete()
+    public function delete(): void
     {
-        $this->forge->deleteNginxTemplate($this->serverId, $this->id);
+        $this->forge->deleteNginxTemplate($this->organizationSlug, $this->serverId, $this->id);
     }
 }

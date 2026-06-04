@@ -23,15 +23,20 @@
         {
             "name": "James Brooks",
             "email": "james@laravel.com"
+        },
+        {
+            "name": "Pete Bishop",
+            "email": "peter.bishop@laravel.com"
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
+        "php": "^8.2",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3.1|^7.0"
     },
     "require-dev": {
         "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+        "laravel/pint": "^1.26",
         "mockery/mockery": "^1.3.1",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^8.4|^9.0|^10.4"
@@ -48,7 +53,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.x-dev"
+            "dev-master": "4.x-dev"
         },
         "laravel": {
             "providers": [
