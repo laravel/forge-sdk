@@ -2607,8 +2607,8 @@ class ForgeSDKTest extends TestCase
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/logs/nginx-error', [])->andReturn(
-            new Response(200, [], '{"data": {"type": "server-logs", "id": "1", "attributes": {"content": "2025/11/18 10:00:00 [error] 1234#1234: *1 connect() failed (111: Connection refused)\n2025/11/18 10:01:00 [warn] 1234#1234: *2 upstream server temporarily disabled\n2025/11/18 10:02:00 [error] 1234#1234: *3 open() \\"/var/www/html/favicon.ico\\" failed (2: No such file or directory)"}}}')
+        $http->shouldReceive('request')->once()->with('GET', 'v1/servers/1/logs', ['query' => ['file' => 'nginx-error']])->andReturn(
+            new Response(200, [], '{"path": "/var/log/nginx/error.log", "content": "2025/11/18 10:00:00 [error] 1234#1234: *1 connect() failed (111: Connection refused)\n2025/11/18 10:01:00 [warn] 1234#1234: *2 upstream server temporarily disabled\n2025/11/18 10:02:00 [error] 1234#1234: *3 open() \\"/var/www/html/favicon.ico\\" failed (2: No such file or directory)"}')
         );
 
         $log = $forge->serverLog('org-123', 1, 'nginx-error');

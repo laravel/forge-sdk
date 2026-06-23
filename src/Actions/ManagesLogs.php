@@ -11,9 +11,9 @@ trait ManagesLogs
      */
     public function serverLog(string $organizationSlug, int $serverId, string $logKey): string
     {
-        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
+        $response = $this->get("v1/servers/{$serverId}/logs", ['file' => $logKey]);
 
-        return $response['data']['attributes']['content'] ?? '';
+        return $response['content'] ?? '';
     }
 
     /**
