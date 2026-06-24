@@ -2798,12 +2798,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/php/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot', 'version' => 'php83'],
         ])->andReturn(
             new Response(202, [], '{"data": {"id": 7, "status": "pending"}}')
         );
 
-        $action = $forge->performPHPAction('org-123', 1, ['action' => 'restart']);
+        $action = $forge->performPHPAction('org-123', 1, ['action' => 'reboot', 'version' => 'php83']);
         $this->assertSame(7, $action['data']['id']);
         $this->assertSame('pending', $action['data']['status']);
     }
@@ -4432,18 +4432,34 @@ class ForgeSDKTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_server_reboot_php_convenience_method()
+    public function test_server_reboot_php_convenience_method_defaults_to_server_php_version()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/php/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot', 'version' => 'php83'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"action": "restart"}}')
+            new Response(200, [], '{"data": {"action": "reboot"}}')
+        );
+
+        $server = new Server(['id' => 1, 'organization_slug' => 'org-123', 'php_version' => 'php83'], $forge);
+        $server->rebootPHP();
+
+        $this->assertTrue(true);
+    }
+
+    public function test_server_reboot_php_convenience_method_with_explicit_version()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/php/actions', [
+            'json' => ['action' => 'reboot', 'version' => 'php82'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"action": "reboot"}}')
         );
 
         $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
-        $server->rebootPHP();
+        $server->rebootPHP('php82');
 
         $this->assertTrue(true);
     }
