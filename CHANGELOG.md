@@ -1,6 +1,20 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v3.25.0...3.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.0.1...4.x)
+
+## [v4.0.1](https://github.com/laravel/forge-sdk/compare/v3.25.0...v4.0.1) - 2026-06-24
+
+### What's Changed
+
+* Merge recent 3.x changes by [@PeteBishwhip](https://github.com/PeteBishwhip) in https://github.com/laravel/forge-sdk/pull/216
+* Bump shivammathur/setup-php from 2.37.1 to 2.37.2 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/forge-sdk/pull/219
+* Fix for PHP version being a required parameter by [@A5hleyRich](https://github.com/A5hleyRich) in https://github.com/laravel/forge-sdk/pull/222
+
+### New Contributors
+
+* [@A5hleyRich](https://github.com/A5hleyRich) made their first contribution in https://github.com/laravel/forge-sdk/pull/222
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.0.0...v4.0.1
 
 ## [v3.25.0](https://github.com/laravel/forge-sdk/compare/v3.24.0...v3.25.0) - 2026-02-06
 
