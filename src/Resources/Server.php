@@ -223,11 +223,16 @@ class Server extends Resource
     }
 
     /**
-     * Reboot PHP on the server.
+     * Reboot a PHP version on the server.
+     *
+     * Defaults to the server's default PHP version when no version is given.
      */
-    public function rebootPHP(): void
+    public function rebootPHP(?string $version = null): void
     {
-        $this->forge->performPHPAction($this->organizationSlug, $this->id, ['action' => 'restart']);
+        $this->forge->performPHPAction($this->organizationSlug, $this->id, [
+            'action' => 'reboot',
+            'version' => $version ?? $this->phpVersion,
+        ]);
     }
 
     /**
