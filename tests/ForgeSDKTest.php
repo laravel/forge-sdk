@@ -3206,6 +3206,19 @@ class ForgeSDKTest extends TestCase
         $this->assertSame(1, $domain->id);
     }
 
+    public function test_getting_site_certificates()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/certificates', [])->andReturn(
+            new Response(200, [], '{"data": [{"id": 1, "status": "active", "active": true}], "meta": {"next_cursor": null, "per_page": 15}}')
+        );
+
+        $certs = $forge->certificates('org-123', 1, 1);
+        $this->assertInstanceOf(CursorPaginator::class, $certs);
+        $this->assertCount(1, $certs);
+    }
+
     public function test_getting_domain_certificates()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
