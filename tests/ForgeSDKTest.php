@@ -360,6 +360,25 @@ class ForgeSDKTest extends TestCase
         $this->assertSame(1, $database->id);
     }
 
+    public function test_creating_database_waits_with_string_id()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/database/schemas', [
+            'json' => ['name' => 'my_database'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": "1", "name": "my_database", "status": "installing"}}')
+        );
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/database/schemas/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "my_database", "status": "installed"}}')
+        );
+
+        $database = $forge->createDatabase('org-123', 1, ['name' => 'my_database']);
+        $this->assertSame(1, $database->id);
+        $this->assertSame('installed', $database->status);
+    }
+
     public function test_deleting_database()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
