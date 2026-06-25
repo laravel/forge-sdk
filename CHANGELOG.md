@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.0.1...4.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.0.2...4.x)
+
+## [v4.0.2](https://github.com/laravel/forge-sdk/compare/v4.0.1...v4.0.2) - 2026-06-25
+
+### What's Changed
+
+* Fix createDatabase wait with string IDs by [@gaoflow](https://github.com/gaoflow) in https://github.com/laravel/forge-sdk/pull/218
+
+### New Contributors
+
+* [@gaoflow](https://github.com/gaoflow) made their first contribution in https://github.com/laravel/forge-sdk/pull/218
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.0.1...v4.0.2
 
 ## [v4.0.1](https://github.com/laravel/forge-sdk/compare/v3.25.0...v4.0.1) - 2026-06-24
 
