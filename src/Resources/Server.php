@@ -179,7 +179,7 @@ class Server extends Resource
      */
     public function rebootMysql(): void
     {
-        $this->forge->performMySQLAction($this->organizationSlug, $this->id, ['action' => 'restart']);
+        $this->forge->performMySQLAction($this->organizationSlug, $this->id, ['action' => 'reboot']);
     }
 
     /**
@@ -195,7 +195,7 @@ class Server extends Resource
      */
     public function rebootPostgres(): void
     {
-        $this->forge->performPostgresAction($this->organizationSlug, $this->id, ['action' => 'restart']);
+        $this->forge->performPostgresAction($this->organizationSlug, $this->id, ['action' => 'reboot']);
     }
 
     /**
@@ -211,7 +211,7 @@ class Server extends Resource
      */
     public function rebootNginx(): void
     {
-        $this->forge->performNginxAction($this->organizationSlug, $this->id, ['action' => 'restart']);
+        $this->forge->performNginxAction($this->organizationSlug, $this->id, ['action' => 'reboot']);
     }
 
     /**
