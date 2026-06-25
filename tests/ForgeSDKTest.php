@@ -2757,12 +2757,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/nginx/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
             new Response(202, [], '{"data": {"id": 3, "status": "pending"}}')
         );
 
-        $action = $forge->performNginxAction('org-123', 1, ['action' => 'restart']);
+        $action = $forge->performNginxAction('org-123', 1, ['action' => 'reboot']);
         $this->assertSame(3, $action['data']['id']);
         $this->assertSame('pending', $action['data']['status']);
     }
@@ -2772,12 +2772,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/postgres/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
             new Response(202, [], '{"data": {"id": 4, "status": "pending"}}')
         );
 
-        $action = $forge->performPostgresAction('org-123', 1, ['action' => 'restart']);
+        $action = $forge->performPostgresAction('org-123', 1, ['action' => 'reboot']);
         $this->assertSame(4, $action['data']['id']);
         $this->assertSame('pending', $action['data']['status']);
     }
@@ -2787,12 +2787,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/redis/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
             new Response(202, [], '{"data": {"id": 5, "status": "pending"}}')
         );
 
-        $action = $forge->performRedisAction('org-123', 1, ['action' => 'restart']);
+        $action = $forge->performRedisAction('org-123', 1, ['action' => 'reboot']);
         $this->assertSame(5, $action['data']['id']);
         $this->assertSame('pending', $action['data']['status']);
     }
@@ -2802,12 +2802,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/mysql/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
             new Response(202, [], '{"data": {"id": 6, "status": "pending"}}')
         );
 
-        $action = $forge->performMySQLAction('org-123', 1, ['action' => 'restart']);
+        $action = $forge->performMySQLAction('org-123', 1, ['action' => 'reboot']);
         $this->assertSame(6, $action['data']['id']);
         $this->assertSame('pending', $action['data']['status']);
     }
@@ -2832,12 +2832,12 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/supervisor/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
             new Response(202, [], '{"data": {"id": 8, "status": "pending"}}')
         );
 
-        $action = $forge->performSupervisorAction('org-123', 1, ['action' => 'restart']);
+        $action = $forge->performSupervisorAction('org-123', 1, ['action' => 'reboot']);
         $this->assertSame(8, $action['data']['id']);
         $this->assertSame('pending', $action['data']['status']);
     }
@@ -4392,9 +4392,9 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/mysql/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"action": "restart"}}')
+            new Response(200, [], '{"data": {"action": "reboot"}}')
         );
 
         $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
@@ -4424,9 +4424,9 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/postgres/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"action": "restart"}}')
+            new Response(200, [], '{"data": {"action": "reboot"}}')
         );
 
         $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
@@ -4440,9 +4440,9 @@ class ForgeSDKTest extends TestCase
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
 
         $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/services/nginx/actions', [
-            'json' => ['action' => 'restart'],
+            'json' => ['action' => 'reboot'],
         ])->andReturn(
-            new Response(200, [], '{"data": {"action": "restart"}}')
+            new Response(200, [], '{"data": {"action": "reboot"}}')
         );
 
         $server = new Server(['id' => 1, 'organization_slug' => 'org-123'], $forge);
