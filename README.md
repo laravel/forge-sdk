@@ -477,9 +477,13 @@ $forge->deleteMonitor($organizationSlug, $serverId, $monitorId);
 
 ### Server Logs
 
+The log key is a hyphenated service slug. Common keys include `nginx-access`, `nginx-error`,
+`redis-server`, and `unattended-upgrades`. PHP logs use the `php-{version}` format, such as
+`php-8.4`. The keys available for a given server depend on the services installed on it.
+
 ```php
-$log = $forge->serverLog($organizationSlug, $serverId, $logKey);
-$forge->deleteServerLog($organizationSlug, $serverId, $logKey);
+$log = $forge->serverLog($organizationSlug, $serverId, 'nginx-error');
+$forge->deleteServerLog($organizationSlug, $serverId, 'nginx-error');
 ```
 
 ### Nginx Templates
