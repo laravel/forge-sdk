@@ -195,6 +195,21 @@ trait ManagesSites
     }
 
     /**
+     * Get the collection of certificates for a site, across all of its domains.
+     */
+    public function certificates(string $organizationSlug, int $serverId, int $siteId, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/certificates",
+            Certificate::class,
+            $organizationSlug,
+            $serverId,
+            $siteId,
+            query: $query,
+        );
+    }
+
+    /**
      * Get the collection of certificates for a domain.
      */
     public function domainCertificates(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $query = []): CursorPaginator

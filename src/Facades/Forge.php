@@ -220,6 +220,7 @@ use Laravel\Forge\ForgeManager;
  * @method static void deleteDomain(string $organizationSlug, int $serverId, int $siteId, int $domainId)
  * @method static array domainConfigurations(string $organizationSlug, int $serverId, int $siteId, int $domainId)
  * @method static array createDomainAction(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data)
+ * @method static \Laravel\Forge\CursorPaginator certificates(string $organizationSlug, int $serverId, int $siteId, array $query = [])
  * @method static \Laravel\Forge\CursorPaginator domainCertificates(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $query = [])
  * @method static \Laravel\Forge\Resources\Certificate createCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId, array $data)
  * @method static \Laravel\Forge\Resources\Certificate activeDomainCertificate(string $organizationSlug, int $serverId, int $siteId, int $domainId)
