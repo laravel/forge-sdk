@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.0.2...4.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.1.0...4.x)
+
+## [v4.1.0](https://github.com/laravel/forge-sdk/compare/v4.0.2...v4.1.0) - 2026-06-26
+
+### What's Changed
+
+* Fix invalid service reboot actions by [@A5hleyRich](https://github.com/A5hleyRich) in https://github.com/laravel/forge-sdk/pull/223
+* Add method to retrieve all site certificates by [@A5hleyRich](https://github.com/A5hleyRich) in https://github.com/laravel/forge-sdk/pull/224
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.0.2...v4.1.0
 
 ## [v4.0.2](https://github.com/laravel/forge-sdk/compare/v4.0.1...v4.0.2) - 2026-06-25
 
