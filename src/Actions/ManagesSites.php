@@ -43,12 +43,15 @@ trait ManagesSites
     /**
      * Get a site instance.
      */
-    public function organizationSite(string $organizationSlug, int $siteId): Site
+    public function organizationSite(string $organizationSlug, int $siteId, array $query = []): Site
     {
+        $response = $this->get("orgs/{$organizationSlug}/sites/{$siteId}", $query);
+
         return $this->newResource(
             Site::class,
-            $this->get("orgs/{$organizationSlug}/sites/{$siteId}")['data'] ?? [],
+            $response['data'] ?? [],
             $organizationSlug,
+            included: $response['included'] ?? [],
         );
     }
 

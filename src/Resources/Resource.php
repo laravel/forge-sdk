@@ -9,13 +9,10 @@ use Laravel\Forge\Forge;
 /**
  * Base class for all hydrated Forge API resources.
  *
- * Hydration preserves the JSON:API `relationships` and `links` blocks as raw
- * arrays on the resource (matching their original JSON:API shape) so callers
- * can follow IDs and sub-resource links without re-parsing attributes or making
- * redundant API calls. Note that the top-level `included` document is NOT
- * auto-resolved: the SDK only consumes the `data` envelope from responses, so
- * any references in `relationships` remain as identifier pointers rather than
- * fully-hydrated child resources.
+ * Hydration preserves the JSON:API `relationships`, `links`, and `included`
+ * blocks as raw arrays on the resource. Use `included($name)` to resolve
+ * relationship pointers against the top-level `included` document returned
+ * when the response was fetched with an `include` query parameter.
  */
 class Resource
 {
@@ -35,6 +32,11 @@ class Resource
     public array $links = [];
 
     /**
+     * The raw JSON:API `included` document, preserved as-is.
+     */
+    public array $included = [];
+
+    /**
      * The Forge SDK instance.
      */
     protected ?Forge $forge = null;
@@ -42,22 +44,56 @@ class Resource
     /**
      * Create a new resource instance.
      */
-    public function __construct(array $attributes, ?Forge $forge = null)
+    public function __construct(array $attributes, ?Forge $forge = null, array $included = [])
     {
         $this->attributes = $attributes;
         $this->forge = $forge;
+        $this->included = $included;
 
         $this->fill();
     }
 
     /**
+     * Resolve the given relationship's pointers against the `included` document.
+     */
+    public function included(string $name): array
+    {
+        $pointers = $this->relationships[$name]['data'] ?? null;
+
+        if (! is_array($pointers) || $pointers === []) {
+            return [];
+        }
+
+        $isSingle = isset($pointers['type']);
+        $pointers = $isSingle ? [$pointers] : $pointers;
+
+        $index = [];
+
+        foreach ($this->included as $item) {
+            if (isset($item['type'], $item['id'])) {
+                $index[$item['type'].':'.$item['id']] = $item;
+            }
+        }
+
+        $matches = [];
+
+        foreach ($pointers as $pointer) {
+            if (! isset($pointer['type'], $pointer['id'])) {
+                continue;
+            }
+
+            $key = $pointer['type'].':'.$pointer['id'];
+
+            if (isset($index[$key])) {
+                $matches[] = $index[$key];
+            }
+        }
+
+        return $matches;
+    }
+
+    /**
      * Fill the resource with the array of attributes.
-     *
-     * `relationships` and `links` from a JSON:API payload are assigned to the
-     * matching public properties via the camelCase + `property_exists` loop
-     * below, preserving the raw JSON:API shape. The top-level `included`
-     * document is not consumed (the SDK only sees the `data` envelope), so
-     * relationship references remain unresolved identifier pointers.
      */
     protected function fill(): void
     {
