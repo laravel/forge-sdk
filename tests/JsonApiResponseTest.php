@@ -253,6 +253,173 @@ class JsonApiResponseTest extends TestCase
         );
     }
 
+    public function test_server_with_included_tags(): void
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $jsonApiPayload = json_encode([
+            'data' => [
+                'id' => 42,
+                'type' => 'servers',
+                'attributes' => ['name' => 'production-web'],
+                'relationships' => [
+                    'tags' => [
+                        'data' => [
+                            ['type' => 'tags', 'id' => '1'],
+                            ['type' => 'tags', 'id' => '2'],
+                        ],
+                    ],
+                ],
+            ],
+            'included' => [
+                [
+                    'id' => '1',
+                    'type' => 'tags',
+                    'attributes' => ['name' => 'production'],
+                ],
+                [
+                    'id' => '2',
+                    'type' => 'tags',
+                    'attributes' => ['name' => 'web'],
+                ],
+            ],
+        ]);
+
+        $http->shouldReceive('request')
+            ->once()
+            ->with('GET', 'orgs/org-123/servers/42', ['query' => ['include' => 'tags']])
+            ->andReturn(new Response(200, [], $jsonApiPayload));
+
+        $server = $forge->server('org-123', 42, ['include' => 'tags']);
+
+        $this->assertCount(2, $server->included);
+        $this->assertSame('tags', $server->included[0]['type']);
+
+        $tags = $server->included('tags');
+        $this->assertCount(2, $tags);
+        $this->assertSame('production', $tags[0]['attributes']['name']);
+        $this->assertSame('web', $tags[1]['attributes']['name']);
+
+        $this->assertSame([], $server->included('missing'));
+    }
+
+    public function test_site_with_included_tags(): void
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $jsonApiPayload = json_encode([
+            'data' => [
+                'id' => 7,
+                'type' => 'sites',
+                'attributes' => ['name' => 'example.com'],
+                'relationships' => [
+                    'tags' => [
+                        'data' => [['type' => 'tags', 'id' => '5']],
+                    ],
+                ],
+            ],
+            'included' => [
+                [
+                    'id' => '5',
+                    'type' => 'tags',
+                    'attributes' => ['name' => 'staging'],
+                ],
+            ],
+        ]);
+
+        $http->shouldReceive('request')
+            ->once()
+            ->with('GET', 'orgs/org-123/sites/7', ['query' => ['include' => 'tags']])
+            ->andReturn(new Response(200, [], $jsonApiPayload));
+
+        $site = $forge->organizationSite('org-123', 7, ['include' => 'tags']);
+
+        $tags = $site->included('tags');
+        $this->assertCount(1, $tags);
+        $this->assertSame('staging', $tags[0]['attributes']['name']);
+    }
+
+    public function test_site_with_included_single_relationship(): void
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $jsonApiPayload = json_encode([
+            'data' => [
+                'id' => 7,
+                'type' => 'sites',
+                'attributes' => ['name' => 'example.com'],
+                'relationships' => [
+                    'latestDeployment' => [
+                        'data' => ['type' => 'deployments', 'id' => '99'],
+                    ],
+                    'server' => ['data' => null],
+                ],
+            ],
+            'included' => [
+                [
+                    'id' => '99',
+                    'type' => 'deployments',
+                    'attributes' => ['status' => 'finished'],
+                ],
+            ],
+        ]);
+
+        $http->shouldReceive('request')
+            ->once()
+            ->with('GET', 'orgs/org-123/sites/7', ['query' => ['include' => 'latestDeployment']])
+            ->andReturn(new Response(200, [], $jsonApiPayload));
+
+        $site = $forge->organizationSite('org-123', 7, ['include' => 'latestDeployment']);
+
+        $deployments = $site->included('latestDeployment');
+        $this->assertCount(1, $deployments);
+        $this->assertSame('99', $deployments[0]['id']);
+        $this->assertSame('finished', $deployments[0]['attributes']['status']);
+
+        $this->assertSame([], $site->included('server'));
+    }
+
+    public function test_server_collection_propagates_included_document(): void
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $jsonApiPayload = json_encode([
+            'data' => [
+                [
+                    'id' => 1,
+                    'type' => 'servers',
+                    'attributes' => ['name' => 'Server One'],
+                    'relationships' => [
+                        'tags' => ['data' => [['type' => 'tags', 'id' => '10']]],
+                    ],
+                ],
+                [
+                    'id' => 2,
+                    'type' => 'servers',
+                    'attributes' => ['name' => 'Server Two'],
+                    'relationships' => [
+                        'tags' => ['data' => [['type' => 'tags', 'id' => '11']]],
+                    ],
+                ],
+            ],
+            'included' => [
+                ['id' => '10', 'type' => 'tags', 'attributes' => ['name' => 'alpha']],
+                ['id' => '11', 'type' => 'tags', 'attributes' => ['name' => 'beta']],
+            ],
+        ]);
+
+        $http->shouldReceive('request')
+            ->once()
+            ->with('GET', 'orgs/org-123/servers', ['query' => ['include' => 'tags']])
+            ->andReturn(new Response(200, [], $jsonApiPayload));
+
+        $servers = $forge->servers('org-123', ['include' => 'tags']);
+
+        $this->assertCount(1, $servers[0]->included('tags'));
+        $this->assertSame('alpha', $servers[0]->included('tags')[0]['attributes']['name']);
+        $this->assertSame('beta', $servers[1]->included('tags')[0]['attributes']['name']);
+    }
+
     public function test_server_collection_from_jsonapi_response(): void
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));

@@ -88,6 +88,27 @@ $page = $forge->servers($organizationSlug)->toArray();
 
 Each resource is represented by an instance like `Laravel\Forge\Resources\Server`, with public properties such as `$name`, `$id`, `$size`, `$region`, and others.
 
+#### Including Related Resources
+
+Some resources expose relationships (such as tags) that aren't returned by default. Pass an `include` query parameter to hydrate them, then resolve the pointers via the `included()` helper on the resource:
+
+```php
+$server = $forge->server($organizationSlug, $serverId, ['include' => 'tags']);
+
+foreach ($server->included('tags') as $tag) {
+    echo $tag['attributes']['name'];
+}
+```
+
+The same pattern works for site fetches and collection methods:
+
+```php
+$site = $forge->organizationSite($organizationSlug, $siteId, ['include' => 'tags']);
+$servers = $forge->servers($organizationSlug, ['include' => 'tags']);
+```
+
+Multiple relationships can be requested by comma-separating them (e.g. `'include' => 'tags,latestDeployment'`). The raw `included` document is also available on each resource as `$server->included`.
+
 #### Waiting for Async Operations
 
 Some methods wait for the action to complete on Forge's end by periodically checking the resource status:

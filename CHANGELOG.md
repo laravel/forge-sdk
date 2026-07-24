@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.1.0...4.x)
 
+### What's Changed
+
+* Support `include` query parameter on `server()` and `organizationSite()`, and expose the JSON:API `included` document via a new `included()` helper on resources (fixes [#228](https://github.com/laravel/forge-sdk/issues/228))
+
 ## [v4.1.0](https://github.com/laravel/forge-sdk/compare/v4.0.2...v4.1.0) - 2026-06-26
 
 ### What's Changed
