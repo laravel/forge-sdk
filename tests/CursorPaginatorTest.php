@@ -284,6 +284,99 @@ class CursorPaginatorTest extends TestCase
         $this->assertSame(3, $allItems[2]->id);
     }
 
+    public function test_lazy_yields_unique_keys_across_pages()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 3, 'name' => 'Server 3'],
+                    ['id' => 4, 'name' => 'Server 4'],
+                ],
+                'meta' => [
+                    'next_cursor' => 'cursor-3',
+                    'per_page' => 2,
+                ],
+            ]))
+        );
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-3']]])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 5, 'name' => 'Server 5'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 2,
+                ],
+            ]))
+        );
+
+        $paginator = new CursorPaginator(
+            items: [
+                new Server(['id' => 1, 'name' => 'Server 1'], $forge),
+                new Server(['id' => 2, 'name' => 'Server 2'], $forge),
+            ],
+            nextCursor: 'cursor-2',
+            perPage: 2,
+            forge: $forge,
+            uri: 'orgs/org-123/servers',
+            class: Server::class,
+            organizationSlug: 'org-123',
+        );
+
+        // Preserve the generator keys, which is what any key-aware consumer
+        // does — for example Laravel's collect() or iterator_to_array()
+        // with its default $preserve_keys of true.
+        $keys = [];
+        $ids = [];
+
+        foreach ($paginator->lazy() as $key => $item) {
+            $keys[] = $key;
+            $ids[$key] = $item->id;
+        }
+
+        $this->assertSame([0, 1, 2, 3, 4], $keys);
+        $this->assertCount(5, $ids);
+        $this->assertSame([1, 2, 3, 4, 5], array_values($ids));
+    }
+
+    public function test_lazy_survives_key_preserving_iterator_to_array()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]])->andReturn(
+            new Response(200, [], json_encode([
+                'data' => [
+                    ['id' => 3, 'name' => 'Server 3'],
+                    ['id' => 4, 'name' => 'Server 4'],
+                ],
+                'meta' => [
+                    'next_cursor' => null,
+                    'per_page' => 2,
+                ],
+            ]))
+        );
+
+        $paginator = new CursorPaginator(
+            items: [
+                new Server(['id' => 1, 'name' => 'Server 1'], $forge),
+                new Server(['id' => 2, 'name' => 'Server 2'], $forge),
+            ],
+            nextCursor: 'cursor-2',
+            perPage: 2,
+            forge: $forge,
+            uri: 'orgs/org-123/servers',
+            class: Server::class,
+            organizationSlug: 'org-123',
+        );
+
+        $allItems = iterator_to_array($paginator->lazy());
+
+        $this->assertCount(4, $allItems);
+    }
+
     public function test_lazy_yields_only_current_page_when_no_more_pages()
     {
         $paginator = $this->makePaginator(
