@@ -136,7 +136,13 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
         $page = $this;
 
         while ($page !== null) {
-            yield from $page->items();
+            // Each page's items() is a fresh zero-indexed array, so "yield from"
+            // would restart the keys at 0 on every page. Yielding each item
+            // individually keeps the generator's own auto-incrementing keys
+            // unique, so key-preserving consumers do not drop earlier pages.
+            foreach ($page->items() as $item) {
+                yield $item;
+            }
 
             $page = $page->nextPage();
         }
