@@ -416,6 +416,25 @@ class ForgeSDKTest extends TestCase
         $this->assertSame(1, $user->id);
     }
 
+    public function test_creating_database_user_waits_with_string_id()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/database/users', [
+            'json' => ['name' => 'db_user', 'password' => 'secret'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": "1", "name": "db_user", "status": "installing"}}')
+        );
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/database/users/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "db_user", "status": "installed"}}')
+        );
+
+        $user = $forge->createDatabaseUser('org-123', 1, ['name' => 'db_user', 'password' => 'secret']);
+        $this->assertSame(1, $user->id);
+        $this->assertSame('installed', $user->status);
+    }
+
     public function test_updating_database_user()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
