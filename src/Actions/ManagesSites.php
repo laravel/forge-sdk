@@ -69,14 +69,20 @@ trait ManagesSites
     /**
      * Create a new site.
      */
-    public function createSite(string $organizationSlug, int $serverId, array $data): Site
+    public function createSite(string $organizationSlug, int $serverId, array $data, bool $wait = true): Site
     {
-        return $this->newResource(
-            Site::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $site = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites", $data)['data'] ?? [];
+
+        if ($wait) {
+            return $this->retry($this->getTimeout(), function () use ($organizationSlug, $serverId, $site) {
+                $created = $this->organizationSite($organizationSlug, (int) $site['id']);
+                $created->serverId = $serverId;
+
+                return isset($created->status) && $created->status === 'installed' ? $created : null;
+            });
+        }
+
+        return $this->newResource(Site::class, $site, $organizationSlug, $serverId);
     }
 
     /**
@@ -90,14 +96,20 @@ trait ManagesSites
     /**
      * Create a new load balancer site.
      */
-    public function createBalancer(string $organizationSlug, int $serverId, array $data): Site
+    public function createBalancer(string $organizationSlug, int $serverId, array $data, bool $wait = true): Site
     {
-        return $this->newResource(
-            Site::class,
-            $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/balancer", $data)['data'] ?? [],
-            $organizationSlug,
-            $serverId,
-        );
+        $balancer = $this->post("orgs/{$organizationSlug}/servers/{$serverId}/sites/balancer", $data)['data'] ?? [];
+
+        if ($wait) {
+            return $this->retry($this->getTimeout(), function () use ($organizationSlug, $serverId, $balancer) {
+                $created = $this->organizationSite($organizationSlug, (int) $balancer['id']);
+                $created->serverId = $serverId;
+
+                return isset($created->status) && $created->status === 'installed' ? $created : null;
+            });
+        }
+
+        return $this->newResource(Site::class, $balancer, $organizationSlug, $serverId);
     }
 
     /**

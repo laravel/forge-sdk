@@ -222,8 +222,28 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 1, "domain": "example.com"}}')
         );
 
+        $site = $forge->createSite('org-123', 1, ['domain' => 'example.com'], false);
+        $this->assertSame(1, $site->id);
+    }
+
+    public function test_creating_site_waits_until_installed()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites', [
+            'json' => ['domain' => 'example.com'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": "1", "domain": "example.com", "status": "installing"}}')
+        );
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/sites/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "domain": "example.com", "status": "installed"}}')
+        );
+
         $site = $forge->createSite('org-123', 1, ['domain' => 'example.com']);
         $this->assertSame(1, $site->id);
+        $this->assertSame(1, $site->serverId);
+        $this->assertSame('installed', $site->status);
     }
 
     public function test_creating_balancer()
@@ -236,8 +256,28 @@ class ForgeSDKTest extends TestCase
             new Response(200, [], '{"data": {"id": 1, "name": "balancer"}}')
         );
 
-        $site = $forge->createBalancer('org-123', 1, ['method' => 'round_robin']);
+        $site = $forge->createBalancer('org-123', 1, ['method' => 'round_robin'], false);
         $this->assertSame(1, $site->id);
+    }
+
+    public function test_creating_balancer_waits_until_installed()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/balancer', [
+            'json' => ['method' => 'round_robin'],
+        ])->andReturn(
+            new Response(200, [], '{"data": {"id": "1", "name": "balancer", "status": "installing"}}')
+        );
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/sites/1', [])->andReturn(
+            new Response(200, [], '{"data": {"id": 1, "name": "balancer", "status": "installed"}}')
+        );
+
+        $balancer = $forge->createBalancer('org-123', 1, ['method' => 'round_robin']);
+        $this->assertSame(1, $balancer->id);
+        $this->assertSame(1, $balancer->serverId);
+        $this->assertSame('installed', $balancer->status);
     }
 
     public function test_updating_site()
