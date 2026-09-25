@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Laravel\Forge\Forge;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,14 +16,11 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonApiResponseTest extends TestCase
 {
-    protected function tearDown(): void
-    {
-        Mockery::close();
-    }
+    use FakesHttpRequests;
 
     public function test_server_from_jsonapi_response(): void
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
         $jsonApiPayload = json_encode([
             'data' => [
@@ -60,9 +55,7 @@ class JsonApiResponseTest extends TestCase
             ],
         ]);
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/42', [])->andReturn(
-            new Response(200, [], $jsonApiPayload)
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers/42', [], new Response(200, [], $jsonApiPayload));
 
         $server = $forge->server('org-123', 42);
 
@@ -99,7 +92,7 @@ class JsonApiResponseTest extends TestCase
 
     public function test_server_from_flat_response(): void
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
         $flatPayload = json_encode([
             'data' => [
@@ -112,9 +105,7 @@ class JsonApiResponseTest extends TestCase
             ],
         ]);
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/42', [])->andReturn(
-            new Response(200, [], $flatPayload)
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers/42', [], new Response(200, [], $flatPayload));
 
         $server = $forge->server('org-123', 42);
 
@@ -127,7 +118,7 @@ class JsonApiResponseTest extends TestCase
 
     public function test_site_from_jsonapi_response(): void
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
         $jsonApiPayload = json_encode([
             'data' => [
@@ -170,9 +161,7 @@ class JsonApiResponseTest extends TestCase
             ],
         ]);
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/42/sites', [])->andReturn(
-            new Response(200, [], '{"data": ['.json_encode(json_decode($jsonApiPayload, true)['data']).']}')
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers/42/sites', [], new Response(200, [], '{"data": ['.json_encode(json_decode($jsonApiPayload, true)['data']).']}'));
 
         $sites = $forge->serverSites('org-123', 42);
         $this->assertCount(1, $sites);
@@ -214,7 +203,7 @@ class JsonApiResponseTest extends TestCase
 
     public function test_organization_from_jsonapi_response(): void
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
         $jsonApiPayload = json_encode([
             'data' => [
@@ -233,9 +222,7 @@ class JsonApiResponseTest extends TestCase
             ],
         ]);
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/my-org', [])->andReturn(
-            new Response(200, [], $jsonApiPayload)
-        );
+        $this->expectRequest('GET', 'orgs/my-org', [], new Response(200, [], $jsonApiPayload));
 
         $org = $forge->organization('my-org');
 
@@ -255,7 +242,7 @@ class JsonApiResponseTest extends TestCase
 
     public function test_server_collection_from_jsonapi_response(): void
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
         $jsonApiPayload = json_encode([
             'data' => [
@@ -284,9 +271,7 @@ class JsonApiResponseTest extends TestCase
             ],
         ]);
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [])->andReturn(
-            new Response(200, [], $jsonApiPayload)
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers', [], new Response(200, [], $jsonApiPayload));
 
         $servers = $forge->servers('org-123');
 
