@@ -88,6 +88,20 @@ trait ManagesSites
     }
 
     /**
+     * Update the site's Git repository.
+     */
+    public function updateGit(string $organizationSlug, int $serverId, int $siteId, array $data): Site
+    {
+        return $this->newResource(
+            Site::class,
+            $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/git", $data)['data'] ?? [],
+            $organizationSlug,
+            $serverId,
+            $siteId,
+        );
+    }
+
+    /**
      * Create a new load balancer site.
      */
     public function createBalancer(string $organizationSlug, int $serverId, array $data): Site

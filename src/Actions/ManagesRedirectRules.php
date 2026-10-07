@@ -53,4 +53,34 @@ trait ManagesRedirectRules
     {
         $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules/{$ruleId}");
     }
+
+    /**
+     * Update the order of the site's redirect rules.
+     */
+    public function updateReorder(string $organizationSlug, int $serverId, int $siteId, array $data): void
+    {
+        $this->put("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules/reorder", $data);
+    }
+
+    /**
+     * Export the site's redirect rules as CSV.
+     */
+    public function export(string $organizationSlug, int $serverId, int $siteId): string
+    {
+        return $this->get("orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules/export");
+    }
+
+    /**
+     * Import redirect rules from CSV contents.
+     */
+    public function createImport(string $organizationSlug, int $serverId, int $siteId, string $csv, string $mode = 'append'): array
+    {
+        return $this->postMultipart(
+            "orgs/{$organizationSlug}/servers/{$serverId}/sites/{$siteId}/redirect-rules/import",
+            [
+                ['name' => 'file', 'contents' => $csv, 'filename' => 'redirects.csv'],
+                ['name' => 'mode', 'contents' => $mode],
+            ],
+        ) ?? [];
+    }
 }

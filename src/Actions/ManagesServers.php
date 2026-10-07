@@ -210,6 +210,19 @@ trait ManagesServers
     }
 
     /**
+     * Get the collection of organization events.
+     */
+    public function events(string $organizationSlug, array $query = []): CursorPaginator
+    {
+        return $this->paginatedCollection(
+            "orgs/{$organizationSlug}/events",
+            Event::class,
+            $organizationSlug,
+            query: $query,
+        );
+    }
+
+    /**
      * Get a server event instance.
      */
     public function serverEvent(string $organizationSlug, int $serverId, int $eventId): Event

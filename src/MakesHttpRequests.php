@@ -56,14 +56,26 @@ trait MakesHttpRequests
     }
 
     /**
+     * Make a multipart POST request to Forge servers and return the response.
+     */
+    public function postMultipart(string $uri, array $multipart): mixed
+    {
+        return $this->request('POST', $uri, multipart: $multipart);
+    }
+
+    /**
      * Make request to Forge servers and return the response.
      */
-    protected function request(string $verb, string $uri, array $payload = [], array $query = []): mixed
+    protected function request(string $verb, string $uri, array $payload = [], array $query = [], ?array $multipart = null): mixed
     {
         $options = empty($payload) ? [] : ['json' => $payload];
 
         if (! empty($query)) {
             $options['query'] = $query;
+        }
+
+        if (! is_null($multipart)) {
+            $options['multipart'] = $multipart;
         }
 
         $response = $this->guzzle->request($verb, $uri, $options);

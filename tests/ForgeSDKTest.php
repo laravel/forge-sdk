@@ -254,6 +254,20 @@ class ForgeSDKTest extends TestCase
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
+    public function test_updating_site_git_repository()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/git', [
+            'json' => ['source_control_provider' => 'github', 'repository' => 'laravel/forge', 'branch' => 'main'],
+        ])->andReturn(
+            new Response(202, [], '{"data": {"id": 1, "name": "example.com"}}')
+        );
+
+        $site = $forge->updateGit('org-123', 1, 1, ['source_control_provider' => 'github', 'repository' => 'laravel/forge', 'branch' => 'main']);
+        $this->assertSame(1, $site->id);
+    }
+
     public function test_deleting_site()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
@@ -1701,6 +1715,17 @@ class ForgeSDKTest extends TestCase
         $this->assertCount(1, $forge->serverEvents('org-123', 1));
     }
 
+    public function test_getting_organization_events()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/events', [])->andReturn(
+            new Response(200, [], '{"data": [{"id": 1, "description": "Server created"}], "meta": {"next_cursor": null, "per_page": 15}}')
+        );
+
+        $this->assertCount(1, $forge->events('org-123'));
+    }
+
     public function test_getting_single_server_event()
     {
         $forge = new Forge('123', $http = Mockery::mock(Client::class));
@@ -2444,7 +2469,7 @@ class ForgeSDKTest extends TestCase
         $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
-    // Redirect Rules (4 tests)
+    // Redirect Rules (7 tests)
 
     public function test_getting_redirect_rules()
     {
@@ -2494,6 +2519,48 @@ class ForgeSDKTest extends TestCase
 
         $forge->deleteRedirectRule('org-123', 1, 1, 1);
         $this->assertTrue(true); // Assertion to avoid risky test warning
+    }
+
+    public function test_updating_redirect_rules_order()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('PUT', 'orgs/org-123/servers/1/sites/1/redirect-rules/reorder', [
+            'json' => ['redirects' => [3, 1, 2]],
+        ])->andReturn(
+            new Response(202)
+        );
+
+        $forge->updateReorder('org-123', 1, 1, ['redirects' => [3, 1, 2]]);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
+    }
+
+    public function test_exporting_redirect_rules()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/sites/1/redirect-rules/export', [])->andReturn(
+            new Response(200, ['Content-Type' => 'text/csv'], "from,to,type\n/old,/new,permanent")
+        );
+
+        $this->assertSame("from,to,type\n/old,/new,permanent", $forge->export('org-123', 1, 1));
+    }
+
+    public function test_importing_redirect_rules()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('POST', 'orgs/org-123/servers/1/sites/1/redirect-rules/import', [
+            'multipart' => [
+                ['name' => 'file', 'contents' => "from,to,type\n/old,/new,permanent", 'filename' => 'redirects.csv'],
+                ['name' => 'mode', 'contents' => 'append'],
+            ],
+        ])->andReturn(
+            new Response(202, [], '{"imported": 1, "invalid": [], "duplicates": []}')
+        );
+
+        $result = $forge->createImport('org-123', 1, 1, "from,to,type\n/old,/new,permanent");
+        $this->assertSame(1, $result['imported']);
     }
 
     // Commands (5 tests)
