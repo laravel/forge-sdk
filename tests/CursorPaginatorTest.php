@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Laravel\Forge\CursorPaginator;
 use Laravel\Forge\Forge;
 use Laravel\Forge\Resources\Server;
-use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class CursorPaginatorTest extends TestCase
 {
-    protected function tearDown(): void
-    {
-        Mockery::close();
-    }
+    use FakesHttpRequests;
 
     protected function makePaginator(
         array $items = [],
@@ -28,7 +23,7 @@ class CursorPaginatorTest extends TestCase
         string $class = Server::class,
         ?string $organizationSlug = 'org-123',
     ): CursorPaginator {
-        $forge ??= new Forge('123', Mockery::mock(Client::class));
+        $forge ??= new Forge('123', $this->fakeHttpClient());
 
         return new CursorPaginator(
             items: $items,
@@ -175,20 +170,18 @@ class CursorPaginatorTest extends TestCase
 
     public function test_next_page_fetches_next_page()
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-page-2']]])->andReturn(
-            new Response(200, [], json_encode([
-                'data' => [
-                    ['id' => 3, 'name' => 'Server 3'],
-                    ['id' => 4, 'name' => 'Server 4'],
-                ],
-                'meta' => [
-                    'next_cursor' => 'cursor-page-3',
-                    'per_page' => 2,
-                ],
-            ]))
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-page-2']]], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 3, 'name' => 'Server 3'],
+                ['id' => 4, 'name' => 'Server 4'],
+            ],
+            'meta' => [
+                'next_cursor' => 'cursor-page-3',
+                'per_page' => 2,
+            ],
+        ])));
 
         $paginator = new CursorPaginator(
             items: [
@@ -215,19 +208,17 @@ class CursorPaginatorTest extends TestCase
 
     public function test_next_page_returns_paginator_with_no_cursor_on_last_page()
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-last']]])->andReturn(
-            new Response(200, [], json_encode([
-                'data' => [
-                    ['id' => 5, 'name' => 'Server 5'],
-                ],
-                'meta' => [
-                    'next_cursor' => null,
-                    'per_page' => 2,
-                ],
-            ]))
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-last']]], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 5, 'name' => 'Server 5'],
+            ],
+            'meta' => [
+                'next_cursor' => null,
+                'per_page' => 2,
+            ],
+        ])));
 
         $paginator = new CursorPaginator(
             items: [new Server(['id' => 4, 'name' => 'Server 4'], $forge)],
@@ -249,19 +240,17 @@ class CursorPaginatorTest extends TestCase
 
     public function test_lazy_yields_all_items_across_pages()
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]])->andReturn(
-            new Response(200, [], json_encode([
-                'data' => [
-                    ['id' => 3, 'name' => 'Server 3'],
-                ],
-                'meta' => [
-                    'next_cursor' => null,
-                    'per_page' => 2,
-                ],
-            ]))
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 3, 'name' => 'Server 3'],
+            ],
+            'meta' => [
+                'next_cursor' => null,
+                'per_page' => 2,
+            ],
+        ])));
 
         $paginator = new CursorPaginator(
             items: [
@@ -298,19 +287,17 @@ class CursorPaginatorTest extends TestCase
 
     public function test_lazy_pages_yields_each_page_as_paginator()
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]])->andReturn(
-            new Response(200, [], json_encode([
-                'data' => [
-                    ['id' => 3, 'name' => 'Server 3'],
-                ],
-                'meta' => [
-                    'next_cursor' => null,
-                    'per_page' => 2,
-                ],
-            ]))
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 3, 'name' => 'Server 3'],
+            ],
+            'meta' => [
+                'next_cursor' => null,
+                'per_page' => 2,
+            ],
+        ])));
 
         $paginator = new CursorPaginator(
             items: [
@@ -336,19 +323,17 @@ class CursorPaginatorTest extends TestCase
 
     public function test_next_page_preserves_context_args()
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'next']]])->andReturn(
-            new Response(200, [], json_encode([
-                'data' => [
-                    ['id' => 10, 'name' => 'Server 10'],
-                ],
-                'meta' => [
-                    'next_cursor' => null,
-                    'per_page' => 10,
-                ],
-            ]))
-        );
+        $this->expectRequest('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'next']]], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 10, 'name' => 'Server 10'],
+            ],
+            'meta' => [
+                'next_cursor' => null,
+                'per_page' => 10,
+            ],
+        ])));
 
         $paginator = new CursorPaginator(
             items: [],
@@ -371,24 +356,22 @@ class CursorPaginatorTest extends TestCase
 
     public function test_next_page_preserves_original_query_params()
     {
-        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+        $forge = new Forge('123', $this->fakeHttpClient());
 
-        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers', [
+        $this->expectRequest('GET', 'orgs/org-123/servers', [
             'query' => [
                 'page' => ['size' => 50, 'cursor' => 'cursor-2'],
                 'filter' => ['name' => 'web'],
             ],
-        ])->andReturn(
-            new Response(200, [], json_encode([
-                'data' => [
-                    ['id' => 3, 'name' => 'Server 3'],
-                ],
-                'meta' => [
-                    'next_cursor' => null,
-                    'per_page' => 50,
-                ],
-            ]))
-        );
+        ], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 3, 'name' => 'Server 3'],
+            ],
+            'meta' => [
+                'next_cursor' => null,
+                'per_page' => 50,
+            ],
+        ])));
 
         $paginator = new CursorPaginator(
             items: [
