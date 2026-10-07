@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.1.0...4.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.1.1...4.x)
+
+## [v4.1.1](https://github.com/laravel/forge-sdk/compare/v4.1.0...v4.1.1) - 2026-10-07
+
+### What's Changed
+
+* Fix test suite and remove Mockery by [@jasonmccreary](https://github.com/jasonmccreary) in https://github.com/laravel/forge-sdk/pull/237
+* Fix CursorPaginator::lazy() overwriting items across pages by [@m074554n](https://github.com/m074554n) in https://github.com/laravel/forge-sdk/pull/239
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.1.0...v4.1.1
 
 ## [v4.1.0](https://github.com/laravel/forge-sdk/compare/v4.0.2...v4.1.0) - 2026-06-26
 
