@@ -273,6 +273,42 @@ class CursorPaginatorTest extends TestCase
         $this->assertSame(3, $allItems[2]->id);
     }
 
+    public function test_lazy_yields_unique_sequential_keys_across_pages()
+    {
+        $forge = new Forge('123', $this->fakeHttpClient());
+
+        $this->expectRequest('GET', 'orgs/org-123/servers', ['query' => ['page' => ['cursor' => 'cursor-2']]], new Response(200, [], json_encode([
+            'data' => [
+                ['id' => 3, 'name' => 'Server 3'],
+            ],
+            'meta' => [
+                'next_cursor' => null,
+                'per_page' => 2,
+            ],
+        ])));
+
+        $paginator = new CursorPaginator(
+            items: [
+                new Server(['id' => 1, 'name' => 'Server 1'], $forge),
+                new Server(['id' => 2, 'name' => 'Server 2'], $forge),
+            ],
+            nextCursor: 'cursor-2',
+            perPage: 2,
+            forge: $forge,
+            uri: 'orgs/org-123/servers',
+            class: Server::class,
+            organizationSlug: 'org-123',
+        );
+
+        // Preserve keys, as `collect($paginator->lazy())` does.
+        $allItems = iterator_to_array($paginator->lazy());
+
+        $this->assertSame([0, 1, 2], array_keys($allItems));
+        $this->assertSame(1, $allItems[0]->id);
+        $this->assertSame(2, $allItems[1]->id);
+        $this->assertSame(3, $allItems[2]->id);
+    }
+
     public function test_lazy_yields_only_current_page_when_no_more_pages()
     {
         $paginator = $this->makePaginator(
