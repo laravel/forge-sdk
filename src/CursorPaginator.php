@@ -130,13 +130,21 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
 
     /**
      * Yield all items across all pages by following cursors.
+     *
+     * Items are yielded one by one so the generator assigns sequential keys
+     * across pages. Using `yield from $page->items()` would preserve each
+     * page's own 0-based keys, causing consumers that keep keys (e.g.
+     * `iterator_to_array()` or `collect()`) to overwrite earlier pages'
+     * items with later ones.
      */
     public function lazy(): Generator
     {
         $page = $this;
 
         while ($page !== null) {
-            yield from $page->items();
+            foreach ($page->items() as $item) {
+                yield $item;
+            }
 
             $page = $page->nextPage();
         }
