@@ -107,7 +107,7 @@ trait ManagesDatabases
 
         if ($wait) {
             return $this->retry($this->getTimeout(), function () use ($organizationSlug, $serverId, $user) {
-                $dbUser = $this->databaseUser($organizationSlug, $serverId, $user['id']);
+                $dbUser = $this->databaseUser($organizationSlug, $serverId, (int) $user['id']);
 
                 return isset($dbUser->status) && $dbUser->status === 'installed' ? $dbUser : null;
             });
