@@ -27,12 +27,15 @@ trait ManagesServers
     /**
      * Get a server instance.
      */
-    public function server(string $organizationSlug, int $serverId): Server
+    public function server(string $organizationSlug, int $serverId, array $query = []): Server
     {
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}", $query);
+
         return $this->newResource(
             Server::class,
-            $this->get("orgs/{$organizationSlug}/servers/{$serverId}")['data'] ?? [],
+            $response['data'] ?? [],
             $organizationSlug,
+            included: $response['included'] ?? [],
         );
     }
 

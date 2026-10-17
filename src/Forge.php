@@ -73,6 +73,7 @@ class Forge
         ?int $serverId = null,
         ?int $siteId = null,
         array $extra = [],
+        array $included = [],
     ): array {
         $context = array_filter([
             'organization_slug' => $organizationSlug,
@@ -82,8 +83,8 @@ class Forge
 
         $extraData = $context + $extra;
 
-        return array_map(function ($data) use ($class, $extraData) {
-            return new $class($data + $extraData, $this);
+        return array_map(function ($data) use ($class, $extraData, $included) {
+            return new $class($data + $extraData, $this, $included);
         }, $collection);
     }
 
@@ -107,6 +108,7 @@ class Forge
         ?int $serverId = null,
         ?int $siteId = null,
         array $extra = [],
+        array $included = [],
     ): mixed {
         $context = array_filter([
             'organization_slug' => $organizationSlug,
@@ -114,7 +116,7 @@ class Forge
             'site_id' => $siteId,
         ], fn ($v) => ! is_null($v));
 
-        return new $class($data + $context + $extra, $this);
+        return new $class($data + $context + $extra, $this, $included);
     }
 
     /**
@@ -133,6 +135,7 @@ class Forge
 
         $data = $response['data'] ?? [];
         $meta = $response['meta'] ?? [];
+        $included = $response['included'] ?? [];
 
         $items = $this->transformCollection(
             $data,
@@ -141,6 +144,7 @@ class Forge
             $serverId,
             $siteId,
             $extra,
+            $included,
         );
 
         return new CursorPaginator(
