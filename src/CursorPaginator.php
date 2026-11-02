@@ -103,6 +103,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
 
         $data = $response['data'] ?? [];
         $meta = $response['meta'] ?? [];
+        $included = $response['included'] ?? [];
 
         $items = $this->forge->transformCollection(
             $data,
@@ -111,6 +112,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
             $this->serverId,
             $this->siteId,
             $this->extra,
+            $included,
         );
 
         return new self(
