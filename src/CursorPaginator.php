@@ -103,6 +103,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
 
         $data = $response['data'] ?? [];
         $meta = $response['meta'] ?? [];
+        $included = $response['included'] ?? [];
 
         $items = $this->forge->transformCollection(
             $data,
@@ -111,6 +112,7 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
             $this->serverId,
             $this->siteId,
             $this->extra,
+            $included,
         );
 
         return new self(
@@ -130,13 +132,20 @@ class CursorPaginator implements IteratorAggregate, Countable, ArrayAccess, Json
 
     /**
      * Yield all items across all pages by following cursors.
+     *
+     * Items are yielded with sequential keys across pages. Using `yield from`
+     * here would re-use each page's 0-based keys, so consumers that preserve
+     * keys (e.g. `iterator_to_array()` or `collect()`) would overwrite earlier
+     * pages' items with later ones.
      */
     public function lazy(): Generator
     {
         $page = $this;
 
         while ($page !== null) {
-            yield from $page->items();
+            foreach ($page->items() as $item) {
+                yield $item;
+            }
 
             $page = $page->nextPage();
         }

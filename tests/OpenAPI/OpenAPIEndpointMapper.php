@@ -155,6 +155,12 @@ class OpenAPIEndpointMapper
         'GET /orgs/{organization}/teams/{team}/invites' => 'teamInvitations',
         'GET /orgs/{organization}/teams/{team}/invites/{invitation}' => 'teamInvitation',
         'DELETE /orgs/{organization}/teams/{team}/invites/{invitation}' => 'deleteTeamInvitation',
+        // Skipped - not yet implemented in the SDK
+        'GET /orgs/{organization}/events' => null,
+        'PUT /orgs/{organization}/servers/{server}/sites/{site}/git' => null,
+        'PUT /orgs/{organization}/servers/{server}/sites/{site}/redirect-rules/reorder' => null,
+        'GET /orgs/{organization}/servers/{server}/sites/{site}/redirect-rules/export' => null,
+        'POST /orgs/{organization}/servers/{server}/sites/{site}/redirect-rules/import' => null,
     ];
 
     /**

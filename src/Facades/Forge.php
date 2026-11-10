@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
 use Laravel\Forge\ForgeManager;
 
 /**
- * @method static array transformCollection(array $collection, string $class, string|null $organizationSlug = null, int|null $serverId = null, int|null $siteId = null, array $extra = [])
+ * @method static array transformCollection(array $collection, string $class, string|null $organizationSlug = null, int|null $serverId = null, int|null $siteId = null, array $extra = [], array $included = [])
  * @method static \Laravel\Forge\Forge setApiKey(string $apiKey, \GuzzleHttp\Client|null $guzzle = null)
  * @method static \Laravel\Forge\Forge setTimeout(int $timeout)
  * @method static int getTimeout()
@@ -161,7 +161,7 @@ use Laravel\Forge\ForgeManager;
  * @method static \Laravel\Forge\Resources\ServerCredential createTeamServerCredentialsShare(string $organizationSlug, int $teamId, array $data)
  * @method static void deleteTeamServerCredentialsShare(string $organizationSlug, int $teamId, int $credentialId)
  * @method static \Laravel\Forge\CursorPaginator servers(string $organizationSlug, array $query = [])
- * @method static \Laravel\Forge\Resources\Server server(string $organizationSlug, int $serverId)
+ * @method static \Laravel\Forge\Resources\Server server(string $organizationSlug, int $serverId, array $query = [])
  * @method static \Laravel\Forge\Resources\Server createServer(string $organizationSlug, array $data, bool $wait = true)
  * @method static \Laravel\Forge\Resources\Server updateServer(string $organizationSlug, int $serverId, array $data)
  * @method static void deleteServer(string $organizationSlug, int $serverId)
@@ -207,7 +207,7 @@ use Laravel\Forge\ForgeManager;
  * @method static void deleteTeamServersShare(string $organizationSlug, int $teamId, int $serverId)
  * @method static \Laravel\Forge\CursorPaginator sites(array $query = [])
  * @method static \Laravel\Forge\CursorPaginator organizationSites(string $organizationSlug, array $query = [])
- * @method static \Laravel\Forge\Resources\Site organizationSite(string $organizationSlug, int $siteId)
+ * @method static \Laravel\Forge\Resources\Site organizationSite(string $organizationSlug, int $siteId, array $query = [])
  * @method static \Laravel\Forge\CursorPaginator serverSites(string $organizationSlug, int $serverId, array $query = [])
  * @method static \Laravel\Forge\Resources\Site createSite(string $organizationSlug, int $serverId, array $data)
  * @method static void updateSite(string $organizationSlug, int $serverId, int $siteId, array $data)

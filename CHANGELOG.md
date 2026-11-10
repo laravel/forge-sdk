@@ -1,6 +1,35 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.1.0...4.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.2.0...4.x)
+
+## [v4.2.0](https://github.com/laravel/forge-sdk/compare/v4.1.1...v4.2.0) - 2026-11-06
+
+### What's Changed
+
+* Remove security policy in favor of the org-wide default by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/forge-sdk/pull/240
+* Bump shivammathur/setup-php from 2.37.2 to 2.40.0 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/forge-sdk/pull/241
+* Bump stefanzweifel/git-auto-commit-action from 7.2.0 to 7.2.1 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/forge-sdk/pull/242
+* Dependency floor bump by [@joetannenbaum](https://github.com/joetannenbaum) in https://github.com/laravel/forge-sdk/pull/243
+
+### New Contributors
+
+* [@pushpak1300](https://github.com/pushpak1300) made their first contribution in https://github.com/laravel/forge-sdk/pull/240
+* [@joetannenbaum](https://github.com/joetannenbaum) made their first contribution in https://github.com/laravel/forge-sdk/pull/243
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.1.1...v4.2.0
+
+## [v4.1.1](https://github.com/laravel/forge-sdk/compare/v4.1.0...v4.1.1) - 2026-10-07
+
+### What's Changed
+
+* Fix test suite and remove Mockery by [@jasonmccreary](https://github.com/jasonmccreary) in https://github.com/laravel/forge-sdk/pull/237
+* Fix CursorPaginator::lazy() overwriting items across pages by [@m074554n](https://github.com/m074554n) in https://github.com/laravel/forge-sdk/pull/239
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.1.0...v4.1.1
+
+### What's Changed
+
+* Support `include` query parameter on `server()` and `organizationSite()`, and expose the JSON:API `included` document via a new `included()` helper on resources (fixes [#228](https://github.com/laravel/forge-sdk/issues/228))
 
 ## [v4.1.0](https://github.com/laravel/forge-sdk/compare/v4.0.2...v4.1.0) - 2026-06-26
 
