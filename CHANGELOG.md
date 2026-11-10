@@ -1,6 +1,22 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.1.1...4.x)
+## [Unreleased](https://github.com/laravel/forge-sdk/compare/v4.2.0...4.x)
+
+## [v4.2.0](https://github.com/laravel/forge-sdk/compare/v4.1.1...v4.2.0) - 2026-11-06
+
+### What's Changed
+
+* Remove security policy in favor of the org-wide default by [@pushpak1300](https://github.com/pushpak1300) in https://github.com/laravel/forge-sdk/pull/240
+* Bump shivammathur/setup-php from 2.37.2 to 2.40.0 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/forge-sdk/pull/241
+* Bump stefanzweifel/git-auto-commit-action from 7.2.0 to 7.2.1 in the github-actions group by [@dependabot](https://github.com/dependabot)[bot] in https://github.com/laravel/forge-sdk/pull/242
+* Dependency floor bump by [@joetannenbaum](https://github.com/joetannenbaum) in https://github.com/laravel/forge-sdk/pull/243
+
+### New Contributors
+
+* [@pushpak1300](https://github.com/pushpak1300) made their first contribution in https://github.com/laravel/forge-sdk/pull/240
+* [@joetannenbaum](https://github.com/joetannenbaum) made their first contribution in https://github.com/laravel/forge-sdk/pull/243
+
+**Full Changelog**: https://github.com/laravel/forge-sdk/compare/v4.1.1...v4.2.0
 
 ## [v4.1.1](https://github.com/laravel/forge-sdk/compare/v4.1.0...v4.1.1) - 2026-10-07
 
