@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Laravel\Forge\Actions;
 
+use Laravel\Forge\Enums\LogKey;
+
 trait ManagesLogs
 {
     /**
      * Get server log content.
      */
-    public function serverLog(string $organizationSlug, int $serverId, string $logKey): string
+    public function serverLog(string $organizationSlug, int $serverId, LogKey|string $logKey): string
     {
-        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
+        $key = $logKey instanceof LogKey ? $logKey->value : $logKey;
+
+        $response = $this->get("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$key}");
 
         return $response['data']['attributes']['content'] ?? '';
     }
@@ -19,8 +23,10 @@ trait ManagesLogs
     /**
      * Delete server log content.
      */
-    public function deleteServerLog(string $organizationSlug, int $serverId, string $logKey): void
+    public function deleteServerLog(string $organizationSlug, int $serverId, LogKey|string $logKey): void
     {
-        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$logKey}");
+        $key = $logKey instanceof LogKey ? $logKey->value : $logKey;
+
+        $this->delete("orgs/{$organizationSlug}/servers/{$serverId}/logs/{$key}");
     }
 }

@@ -44,6 +44,8 @@ use Laravel\Forge\Resources\TeamInvitation;
 use Laravel\Forge\Resources\TeamMember;
 use Laravel\Forge\Resources\User;
 use Laravel\Forge\Resources\Webhook;
+use Laravel\Forge\Enums\LogKey;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class ForgeSDKTest extends TestCase
@@ -2178,6 +2180,30 @@ class ForgeSDKTest extends TestCase
         $this->expectRequest('DELETE', 'orgs/org-123/servers/1/logs/nginx-error', [], new Response(204));
 
         $forge->deleteServerLog('org-123', 1, 'nginx-error');
+    }
+
+    public function test_getting_server_log_with_enum()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('GET', 'orgs/org-123/servers/1/logs/nginx-error', [])->andReturn(
+            new Response(200, [], '{"data": {"type": "server-logs", "id": "1", "attributes": {"content": "error log content"}}}')
+        );
+
+        $log = $forge->serverLog('org-123', 1, LogKey::NginxError);
+        $this->assertStringContainsString('error log content', $log);
+    }
+
+    public function test_deleting_server_log_with_enum()
+    {
+        $forge = new Forge('123', $http = Mockery::mock(Client::class));
+
+        $http->shouldReceive('request')->once()->with('DELETE', 'orgs/org-123/servers/1/logs/nginx-error', [])->andReturn(
+            new Response(204)
+        );
+
+        $forge->deleteServerLog('org-123', 1, LogKey::NginxError);
+        $this->assertTrue(true); // Assertion to avoid risky test warning
     }
 
     // Site Logs (6 tests)
